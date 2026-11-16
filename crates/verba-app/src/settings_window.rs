@@ -28,6 +28,7 @@ pub static WINDOW: AtomicIsize = AtomicIsize::new(0);
 
 // control numbers
 const ID_ON: i32 = 2001;
+const ID_FIX: i32 = 2002;
 const ID_FOLLOW: i32 = 2010;
 const ID_EN: i32 = 2011;
 const ID_FR: i32 = 2012;
@@ -102,7 +103,7 @@ pub fn open(icon: HICON) {
 
         let dpi = GetDpiForSystem().max(96);
         SCALE.with(|s| s.set(dpi as f32 / 96.0));
-        let (client_w, client_h) = (px(480), px(578));
+        let (client_w, client_h) = (px(480), px(604));
         let style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
         // the window is bigger than its inside by the title bar and the borders
         let mut frame = RECT { left: 0, top: 0, right: client_w, bottom: client_h };
@@ -168,38 +169,39 @@ fn build_controls(win: HWND, _hinst: HINSTANCE) {
     let tab = WS_TABSTOP_;
     // Suggestions on
     child(win, button, "Suggestions on", BS_AUTOCHECKBOX | tab, 0, (20, 14, 440, 24), ID_ON);
+    child(win, button, "Fix spelling when I finish a word (Tab to apply)", BS_AUTOCHECKBOX | tab, 0, (20, 40, 440, 24), ID_FIX);
 
     // Language
-    child(win, button, "Language", BS_GROUPBOX, 0, (20, 48, 440, 126), 0);
-    child(win, button, "Follow the keyboard language", BS_AUTOCHECKBOX | tab, 0, (36, 70, 408, 22), ID_FOLLOW);
-    child(win, button, "English", BS_AUTOCHECKBOX | tab, 0, (36, 96, 124, 22), ID_EN);
-    child(win, button, "Français", BS_AUTOCHECKBOX | tab, 0, (166, 96, 124, 22), ID_FR);
-    child(win, button, "العربية", BS_AUTOCHECKBOX | tab, 0, (296, 96, 148, 22), ID_AR);
-    child(win, label, "Verba suggests in the language of the keyboard you are typing with. Turn this off to guess it from the letters instead.", 0, 0, (36, 122, 408, 44), 0);
+    child(win, button, "Language", BS_GROUPBOX, 0, (20, 74, 440, 126), 0);
+    child(win, button, "Follow the keyboard language", BS_AUTOCHECKBOX | tab, 0, (36, 96, 408, 22), ID_FOLLOW);
+    child(win, button, "English", BS_AUTOCHECKBOX | tab, 0, (36, 122, 124, 22), ID_EN);
+    child(win, button, "Français", BS_AUTOCHECKBOX | tab, 0, (166, 122, 124, 22), ID_FR);
+    child(win, button, "العربية", BS_AUTOCHECKBOX | tab, 0, (296, 122, 148, 22), ID_AR);
+    child(win, label, "Verba suggests in the language of the keyboard you are typing with. Turn this off to guess it from the letters instead.", 0, 0, (36, 148, 408, 44), 0);
 
     // Look
-    child(win, button, "Look", BS_GROUPBOX, 0, (20, 184, 440, 58), 0);
-    child(win, button, "Follow Windows", BS_AUTORADIOBUTTON | WS_GROUP_ | tab, 0, (36, 208, 140, 22), ID_THEME_AUTO);
-    child(win, button, "Light", BS_AUTORADIOBUTTON, 0, (190, 208, 100, 22), ID_THEME_LIGHT);
-    child(win, button, "Dark", BS_AUTORADIOBUTTON, 0, (300, 208, 100, 22), ID_THEME_DARK);
+    child(win, button, "Look", BS_GROUPBOX, 0, (20, 210, 440, 58), 0);
+    child(win, button, "Follow Windows", BS_AUTORADIOBUTTON | WS_GROUP_ | tab, 0, (36, 234, 140, 22), ID_THEME_AUTO);
+    child(win, button, "Light", BS_AUTORADIOBUTTON, 0, (190, 234, 100, 22), ID_THEME_LIGHT);
+    child(win, button, "Dark", BS_AUTORADIOBUTTON, 0, (300, 234, 100, 22), ID_THEME_DARK);
 
-    child(win, button, "Start Verba when Windows starts", BS_AUTOCHECKBOX | tab, 0, (20, 254, 440, 24), ID_AUTOSTART);
+    child(win, button, "Start Verba when Windows starts", BS_AUTOCHECKBOX | tab, 0, (20, 280, 440, 24), ID_AUTOSTART);
 
     // Apps
-    child(win, button, "Apps", BS_GROUPBOX, 0, (20, 290, 440, 238), 0);
-    let combo = child(win, w!("COMBOBOX"), "", CBS_DROPDOWNLIST | tab | WS_VSCROLL_, 0, (36, 314, 408, 120), ID_MODE);
+    child(win, button, "Apps", BS_GROUPBOX, 0, (20, 316, 440, 238), 0);
+    let combo = child(win, w!("COMBOBOX"), "", CBS_DROPDOWNLIST | tab | WS_VSCROLL_, 0, (36, 340, 408, 120), ID_MODE);
     unsafe {
         for item in ["Work in every app except the ones listed", "Work only in the apps listed"] {
             let text = wide(item);
             SendMessageW(combo, CB_ADDSTRING, Some(WPARAM(0)), Some(LPARAM(text.as_ptr() as isize)));
         }
     }
-    child(win, w!("LISTBOX"), "", LBS_NOTIFY | WS_VSCROLL_ | tab, WS_EX_CLIENTEDGE_, (36, 348, 262, 128), ID_LIST);
-    child(win, button, "Add a running app…", BS_PUSHBUTTON | tab, 0, (308, 348, 136, 30), ID_ADD);
-    child(win, button, "Remove", BS_PUSHBUTTON | tab, 0, (308, 386, 136, 30), ID_REMOVE);
-    child(win, label, "Password managers and Verba itself are always off, whatever you choose.", 0, 0, (36, 484, 408, 36), 0);
+    child(win, w!("LISTBOX"), "", LBS_NOTIFY | WS_VSCROLL_ | tab, WS_EX_CLIENTEDGE_, (36, 374, 262, 128), ID_LIST);
+    child(win, button, "Add a running app…", BS_PUSHBUTTON | tab, 0, (308, 374, 136, 30), ID_ADD);
+    child(win, button, "Remove", BS_PUSHBUTTON | tab, 0, (308, 412, 136, 30), ID_REMOVE);
+    child(win, label, "Password managers and Verba itself are always off, whatever you choose.", 0, 0, (36, 510, 408, 36), 0);
 
-    child(win, button, "Close", BS_DEFPUSHBUTTON | tab, 0, (360, 540, 100, 28), ID_CLOSE);
+    child(win, button, "Close", BS_DEFPUSHBUTTON | tab, 0, (360, 566, 100, 28), ID_CLOSE);
 }
 
 fn control(win: HWND, id: i32) -> HWND {
@@ -220,6 +222,7 @@ fn is_checked(win: HWND, id: i32) -> bool {
 fn refresh(win: HWND) {
     let s = crate::current_settings();
     set_check(win, ID_ON, !s.paused);
+    set_check(win, ID_FIX, s.correction);
     set_check(win, ID_FOLLOW, s.follow_keyboard);
     set_check(win, ID_EN, s.english);
     set_check(win, ID_FR, s.french);
@@ -274,6 +277,7 @@ unsafe extern "system" fn proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: LPARAM) -> 
             let note = (wp.0 >> 16) & 0xFFFF;
             match id {
                 ID_ON => crate::update_settings(|s| s.paused = !is_checked(hwnd, ID_ON)),
+                ID_FIX => crate::update_settings(|s| s.correction = is_checked(hwnd, ID_FIX)),
                 ID_FOLLOW => crate::update_settings(|s| s.follow_keyboard = is_checked(hwnd, ID_FOLLOW)),
                 ID_EN => crate::update_settings(|s| s.set_lang(Lang::En, is_checked(hwnd, ID_EN))),
                 ID_FR => crate::update_settings(|s| s.set_lang(Lang::Fr, is_checked(hwnd, ID_FR))),

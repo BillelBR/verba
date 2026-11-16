@@ -33,6 +33,18 @@ pub struct Suggestion {
     pub lang: Lang,
 }
 
+/// A correction offered for a word the user has just finished typing (`teh ` -> `the`).
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Fix {
+    /// The word as typed.
+    pub original: String,
+    /// What was typed right after it: a space, `, ` and so on. The fix replaces `original` and puts this back,
+    /// so the text after the word is left as the user typed it.
+    pub trailing: String,
+    /// The corrected spellings, best first, with the same capital letters as `original`.
+    pub candidates: Vec<Suggestion>,
+}
+
 /// What every engine can do. A local engine and an API engine implement the same thing,
 /// so the rest of the app never needs to know which one is running.
 pub trait Engine {

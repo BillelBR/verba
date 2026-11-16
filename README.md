@@ -8,7 +8,7 @@ It is built to work for every major language, to run fully on your own device, a
 ## The two features
 
 1. **Suggestions** – while you type, Verba offers the word you are likely to write. *(working, v0)*
-2. **Instant correction** – spelling and grammar fixes, applied as you type. Optional: the user turns it on. *(planned)*
+2. **Instant correction** – when you finish a word that looks misspelled (you type a space or punctuation), a small **Fix** popup offers the right spelling; **Tab** applies it and keeps your space or punctuation. It is **off by default**: turn it on in Settings. It never changes your text by itself.
 
 Translation is **not** part of the first version. It comes later, as a separate feature.
 
@@ -30,9 +30,9 @@ Type in any app: when you have typed two letters of a word, a popup appears abov
 
 | Key | What it does |
 |---|---|
-| **Tab** | accept the first suggestion (replaces what you typed, adds a space) |
+| **Tab** | accept the first suggestion (a completion replaces what you typed and adds a space; a **Fix** replaces the misspelled word) |
 | **Click** | accept the suggestion you click (the popup never takes the keyboard focus) |
-| **Esc** | close the popup |
+| **Esc** | close the popup (a dismissed fix is not offered again for that word during this session) |
 | **Ctrl+Alt+Shift+V** | turn suggestions on / off |
 | **Ctrl+Alt+Shift+A** | turn Verba off / on in the app you are in |
 | **Ctrl+Alt+Shift+Q** | quit |
@@ -41,7 +41,7 @@ Type in any app: when you have typed two letters of a word, a popup appears abov
 Another keyboard layout (German, say) falls back to guessing from the letters. You can turn this off in Settings.
 
 **Settings** (every change applies at once; saved in `%APPDATA%\Verba\settings.txt`):
-suggestions on/off · follow the keyboard language · English / Français / العربية each on its own · look (follow Windows, light or dark) ·
+suggestions on/off · **fix spelling** on/off · follow the keyboard language · English / Français / العربية each on its own · look (follow Windows, light or dark) ·
 start with Windows (installed build) · **Apps**: work everywhere except the apps you list, or only in the apps you list (pick from the running apps).
 Password managers and Verba itself are always off. For an app switched off, Verba does not read anything at all.
 
@@ -100,5 +100,9 @@ Next: instant correction, more languages, a proper settings window, Mac and Linu
 
 ## License
 
-Not chosen yet. A permissive license (MIT or Apache-2.0) is the plan.
-Word lists keep their own licenses (see docs/DATA.md). Models must allow free use; non-commercial-only models (for example NLLB-200) are not used.
+Verba's code is dual-licensed under **[MIT](LICENSE-MIT) OR [Apache-2.0](LICENSE-APACHE)**, at your choice.
+Unless you say otherwise, any contribution you submit for inclusion is licensed the same way, with no extra terms.
+
+The word lists Verba uses are separate data with their own license (CC-BY-SA-4.0) and are downloaded, not stored here;
+see [docs/DATA.md](docs/DATA.md) and [THIRD-PARTY.md](THIRD-PARTY.md). Models must allow free use:
+non-commercial-only models (for example NLLB-200) are not used.

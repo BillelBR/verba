@@ -12,10 +12,15 @@
 
 mod clean;
 mod fold;
+mod spell;
+
+#[doc(hidden)]
+pub use spell::SpellParams;
 
 use std::collections::{HashMap, HashSet};
 use std::io;
 use std::path::Path;
+use std::sync::OnceLock;
 
 use verba_core::{Engine, Lang, Suggestion, current_word, is_arabic_word, match_case, strip_arabic_marks};
 
@@ -52,6 +57,8 @@ pub struct WordList {
     entries: Vec<Entry>,
     /// Sum of all the counts, to compare lists of different sizes.
     total: f64,
+    /// The lookup tables of the spelling correction, built the first time a correction is asked for (see `spell.rs`).
+    spell: OnceLock<spell::Index>,
 }
 
 impl WordList {
@@ -103,7 +110,7 @@ impl WordList {
         let mut entries: Vec<Entry> =
             all.into_iter().map(|(word, count)| Entry { key: fold(&word), canonical: false, word, count }).collect();
         entries.sort_by(|a, b| a.key.cmp(&b.key).then_with(|| a.word.cmp(&b.word)));
-        let mut list = Self { entries, total: 1.0 };
+        let mut list = Self { entries, total: 1.0, spell: OnceLock::new() };
         list.finish();
         list
     }
@@ -124,6 +131,8 @@ impl WordList {
             i = end;
         }
         self.total = entries.iter().map(|e| e.count as f64).sum::<f64>().max(1.0);
+        // the entries may have changed: the correction tables are rebuilt when they are next needed
+        self.spell = OnceLock::new();
     }
 
     pub fn len(&self) -> usize {
@@ -132,6 +141,11 @@ impl WordList {
 
     pub fn is_empty(&self) -> bool {
         self.entries.is_empty()
+    }
+
+    /// Every word of the list with how often it occurs (in no particular order). For tools that measure the engine.
+    pub fn iter_words(&self) -> impl Iterator<Item = (&str, u64)> + '_ {
+        self.entries.iter().map(|e| (e.word.as_str(), e.count))
     }
 
     /// How often `word` occurs in the list (counting the spellings that differ only by accent or hamza as the same
@@ -207,11 +221,13 @@ const AR_PARTICLES: &[&str] = &[
 pub struct LocalEngine {
     lists: HashMap<Lang, WordList>,
     disabled: HashSet<Lang>,
+    /// Words the user dismissed (lower case): the correction leaves them alone for the rest of the session.
+    ignored: HashSet<String>,
 }
 
 impl LocalEngine {
     pub fn new() -> Self {
-        Self { lists: HashMap::new(), disabled: HashSet::new() }
+        Self { lists: HashMap::new(), disabled: HashSet::new(), ignored: HashSet::new() }
     }
 
     pub fn add(&mut self, lang: Lang, list: WordList) {
@@ -266,6 +282,12 @@ impl LocalEngine {
         let mut v: Vec<Lang> = self.lists.keys().copied().collect();
         v.sort_by_key(|l| l.code());
         v
+    }
+
+    /// The list of a language, as the engine holds it after cleaning. For tools that measure the engine.
+    #[doc(hidden)]
+    pub fn list(&self, lang: Lang) -> Option<&WordList> {
+        self.lists.get(&lang)
     }
 
     /// How many words the list of a language holds after cleaning (0 when it is not loaded).

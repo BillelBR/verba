@@ -95,6 +95,16 @@ struct App {
     dismissed: Option<String>,
     /// The text before the caret at the last reading (what Esc remembers).
     last_text: String,
+    /// Set while the popup shows a spelling fix instead of word completions.
+    fix: Option<FixState>,
+}
+
+/// What accepting a spelling fix has to replace.
+struct FixState {
+    /// The word and what followed it, in characters: all of it is erased and typed again.
+    erase: usize,
+    original: String,
+    trailing: String,
 }
 
 thread_local! {
@@ -130,7 +140,7 @@ fn main() {
 
         APP.with(|a| {
             *a.borrow_mut() =
-                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new() });
+                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None });
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
@@ -276,6 +286,10 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
         }
         WM_DISMISS => {
             with_app(|app| {
+                // Esc on a shown fix means "this word is fine": stop flagging it for the rest of the session
+                if let Some(fix) = app.fix.take() {
+                    app.engine.ignore_word(&fix.original);
+                }
                 app.dismissed = Some(app.last_text.clone());
                 hide(app);
             });
@@ -308,6 +322,7 @@ fn with_app(f: impl FnOnce(&mut App)) {
 fn hide(app: &mut App) {
     app.overlay.hide();
     app.shown.clear();
+    app.fix = None;
     POPUP_VISIBLE.store(false, Ordering::SeqCst);
 }
 
@@ -391,11 +406,29 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
     };
     log(&format!("engine: {} suggestions (keyboard: {:?})", found.len(), snap.layout));
     if found.is_empty() {
+        // no word is being typed: if the one just finished looks misspelled, offer the fix (only when the user turned it on)
+        if app.settings.correction {
+            let only = if app.settings.follow_keyboard { snap.layout } else { None };
+            if let Some(fix) = app.engine.correct(only, &snap.before_caret, 3) {
+                if !fix.candidates.is_empty() {
+                    app.fix = Some(FixState {
+                        erase: fix.original.chars().count() + fix.trailing.chars().count(),
+                        original: fix.original,
+                        trailing: fix.trailing,
+                    });
+                    app.overlay.show_with(snap.anchor, &fix.candidates, 0, look_for(&app.settings), Some("Fix"));
+                    app.shown = fix.candidates;
+                    POPUP_VISIBLE.store(true, Ordering::SeqCst);
+                    return;
+                }
+            }
+        }
         if POPUP_VISIBLE.load(Ordering::SeqCst) {
             hide(app);
         }
         return;
     }
+    app.fix = None;
     app.typed_len = current_word(&snap.before_caret).chars().count();
     app.overlay.show(snap.anchor, &found, 0, look_for(&app.settings));
     app.shown = found;
@@ -404,11 +437,16 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
 
 /// Tab, or a click: replace the typed part of the word with that suggestion, plus a space.
 fn accept(app: &mut App, index: usize) {
-    let Some(first) = app.shown.get(index).cloned() else { return };
+    let Some(chosen) = app.shown.get(index).cloned() else { return };
+    // a completion replaces the part of the word typed and adds a space; a fix replaces the whole word and puts back what followed it
+    let (erase, text) = match &app.fix {
+        Some(fix) => (fix.erase, format!("{}{}", chosen.text, fix.trailing)),
+        None => (app.typed_len, format!("{} ", chosen.text)),
+    };
     hide(app);
     unsafe {
         let mut inputs: Vec<INPUT> = Vec::new();
-        for typed in accept_keys(app.typed_len, &first.text) {
+        for typed in replace_keys(erase, &text) {
             match typed {
                 Typed::Backspace => {
                     inputs.push(key(VK_BACK, 0, KEYBD_EVENT_FLAGS(0)));
@@ -421,7 +459,7 @@ fn accept(app: &mut App, index: usize) {
             }
         }
         let sent = SendInput(&inputs, std::mem::size_of::<INPUT>() as i32);
-        log(&format!("accepted '{}': {} keys to send, {} sent, {} typed letters replaced", first.text, inputs.len(), sent, app.typed_len));
+        log(&format!("accepted '{}': {} keys to send, {} sent, {} characters replaced", chosen.text, inputs.len(), sent, erase));
     }
     // the next tick sees a fresh word: nothing to remember
     app.dismissed = None;
@@ -554,10 +592,10 @@ enum Typed {
     Unit(u16),
 }
 
-/// `typed_len` backspaces, then the suggestion and a space (as UTF-16 units, which is what Windows types).
-fn accept_keys(typed_len: usize, suggestion: &str) -> Vec<Typed> {
-    let mut keys: Vec<Typed> = (0..typed_len).map(|_| Typed::Backspace).collect();
-    keys.extend(format!("{suggestion} ").encode_utf16().map(Typed::Unit));
+/// `erase` backspaces, then `text` (as UTF-16 units, which is what Windows types).
+fn replace_keys(erase: usize, text: &str) -> Vec<Typed> {
+    let mut keys: Vec<Typed> = (0..erase).map(|_| Typed::Backspace).collect();
+    keys.extend(text.encode_utf16().map(Typed::Unit));
     keys
 }
 
@@ -596,15 +634,24 @@ mod tests {
 
     #[test]
     fn accepting_replaces_the_typed_part_and_adds_a_space() {
-        let keys = accept_keys(3, "like");
+        let keys = replace_keys(3, "like ");
         assert_eq!(&keys[..3], [Typed::Backspace, Typed::Backspace, Typed::Backspace]);
         let units: Vec<u16> = keys[3..].iter().map(|k| match k { Typed::Unit(u) => *u, Typed::Backspace => panic!("late backspace") }).collect();
         assert_eq!(String::from_utf16(&units).unwrap(), "like ");
     }
 
     #[test]
+    fn a_fix_erases_the_word_and_what_followed_and_types_them_back() {
+        // `teh ` -> `the `: four characters erased (the word and the space), the corrected word and the same space typed
+        let keys = replace_keys("teh ".chars().count(), &format!("{}{}", "the", " "));
+        assert_eq!(keys.iter().filter(|k| **k == Typed::Backspace).count(), 4);
+        let units: Vec<u16> = keys.iter().filter_map(|k| if let Typed::Unit(u) = k { Some(*u) } else { None }).collect();
+        assert_eq!(String::from_utf16(&units).unwrap(), "the ");
+    }
+
+    #[test]
     fn arabic_suggestions_type_as_their_own_letters() {
-        let keys = accept_keys(2, "مرحبا");
+        let keys = replace_keys(2, "مرحبا ");
         assert_eq!(keys.iter().filter(|k| **k == Typed::Backspace).count(), 2);
         let units: Vec<u16> = keys.iter().filter_map(|k| if let Typed::Unit(u) = k { Some(*u) } else { None }).collect();
         assert_eq!(String::from_utf16(&units).unwrap(), "مرحبا ");

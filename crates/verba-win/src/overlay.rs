@@ -132,6 +132,14 @@ struct Hint {
     th: f32,
 }
 
+/// A small label at the start of the card ("Fix"), which says what the candidates are.
+struct Lead {
+    layout: IDWriteTextLayout,
+    rect: Rf,
+    tw: f32,
+    th: f32,
+}
+
 /// A bitmap the popup is drawn into, then handed to Windows with its own transparency.
 struct Dib {
     dc: HDC,
@@ -152,6 +160,7 @@ impl Drop for Dib {
 struct Shown {
     items: Vec<Item>,
     hint: Option<Hint>,
+    lead: Option<Lead>,
     selected: usize,
     hover: Option<usize>,
     w: i32,
@@ -244,6 +253,11 @@ impl Overlay {
     /// Shows the candidates just above `anchor` (or below it when there is no room above).
     /// `selected` is the one Tab will accept.
     pub fn show(&self, anchor: Anchor, suggestions: &[Suggestion], selected: usize, look: Look) {
+        self.show_with(anchor, suggestions, selected, look, None);
+    }
+
+    /// Like `show`, with a small label before the candidates (for example "Fix" for spelling corrections).
+    pub fn show_with(&self, anchor: Anchor, suggestions: &[Suggestion], selected: usize, look: Look, lead: Option<&str>) {
         if suggestions.is_empty() {
             self.hide();
             return;
@@ -251,7 +265,7 @@ impl Overlay {
         let hwnd = self.hwnd;
         let _ = with_state(
             |st, hwnd| {
-                if let Err(_e) = build_and_present(st, hwnd, anchor, suggestions, selected, look) {
+                if let Err(_e) = build_and_present(st, hwnd, anchor, suggestions, selected, look, lead) {
                     #[cfg(debug_assertions)]
                     eprintln!("verba: popup failed: {_e}");
                 }
@@ -326,6 +340,7 @@ fn build_and_present(
     suggestions: &[Suggestion],
     selected: usize,
     look: Look,
+    lead_text: Option<&str>,
 ) -> windows::core::Result<()> {
     unsafe {
         let (s, work) = monitor_scale(&anchor.rect);
@@ -369,12 +384,23 @@ fn build_and_present(
         let (hint_layout, hint_tw, hint_th) = text_layout("Tab", false, small_px, false)?;
         let chip_w = hint_tw + 14.0 * s;
         let hint_w = gap + chip_w;
+        // the label before the candidates, in the UI language (not the language of the words)
+        let lead = match lead_text {
+            Some(text) => Some(text_layout(text, false, small_px, true)?),
+            None => None,
+        };
+        let lead_w = lead.as_ref().map_or(0.0, |(_, tw, _)| tw + 14.0 * s);
 
-        let card_w = 2.0 * margin + widths.iter().sum::<f32>() + hint_w;
+        let card_w = 2.0 * margin + lead_w + widths.iter().sum::<f32>() + hint_w;
         let card_h = item_h + 2.0 * margin;
 
         // inside the card: the first (best) candidate is on the right for Arabic, on the left otherwise
-        let mut cursor = if rtl_layout { card_w - margin } else { margin };
+        let lead_rect = if rtl_layout {
+            Rf { l: card_w - margin - lead_w, t: margin, r: card_w - margin, b: margin + item_h }
+        } else {
+            Rf { l: margin, t: margin, r: margin + lead_w, b: margin + item_h }
+        };
+        let mut cursor = if rtl_layout { card_w - margin - lead_w } else { margin + lead_w };
         for (it, w) in items.iter_mut().zip(&widths) {
             if rtl_layout {
                 it.rect = Rf { l: cursor - w, t: margin, r: cursor, b: margin + item_h };
@@ -412,6 +438,7 @@ fn build_and_present(
         }
         let chip = chip.shift(shadow, shadow);
         let divider_x = divider_x + shadow;
+        let lead = lead.map(|(layout, tw, th)| Lead { layout, rect: lead_rect.shift(shadow, shadow), tw, th });
 
         // the picture to draw into
         let screen = GetDC(None);
@@ -440,6 +467,7 @@ fn build_and_present(
         let mut shown = Shown {
             items,
             hint: Some(Hint { layout: hint_layout, chip, divider_x, tw: hint_tw, th: hint_th }),
+            lead,
             selected: selected.min(suggestions.len() - 1),
             hover: keep_hover,
             w: w_px,
@@ -509,6 +537,14 @@ fn render(gfx: &Gfx, sh: &mut Shown) -> windows::core::Result<()> {
             let x = it.rect.l + (it.rect.r - it.rect.l - it.tw) / 2.0;
             let y = it.rect.t + (it.rect.b - it.rect.t - it.th) / 2.0;
             t.DrawTextLayout(Vector2::new(x, y), &it.layout, &brush, D2D1_DRAW_TEXT_OPTIONS_NONE);
+        }
+
+        // the label ("Fix") in the accent colour, so a correction does not look like a completion
+        if let Some(l) = &sh.lead {
+            brush.SetColor(&p.accent);
+            let x = l.rect.l + (l.rect.r - l.rect.l - l.tw) / 2.0;
+            let y = l.rect.t + (l.rect.b - l.rect.t - l.th) / 2.0;
+            t.DrawTextLayout(Vector2::new(x, y), &l.layout, &brush, D2D1_DRAW_TEXT_OPTIONS_NONE);
         }
 
         // the "Tab" hint: a thin divider and a small key cap

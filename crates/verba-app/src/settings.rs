@@ -44,6 +44,8 @@ pub struct Settings {
     pub french: bool,
     pub arabic: bool,
     pub paused: bool,
+    /// Show a spelling fix when a word is finished (off until the user turns it on).
+    pub correction: bool,
     /// Suggest in the language of the keyboard layout (instead of guessing from the letters typed).
     pub follow_keyboard: bool,
     pub app_mode: AppMode,
@@ -59,6 +61,7 @@ impl Default for Settings {
             french: true,
             arabic: true,
             paused: false,
+            correction: false,
             follow_keyboard: true,
             app_mode: AppMode::AllExcept,
             apps: Vec::new(),
@@ -141,6 +144,7 @@ impl Settings {
                 "french" => s.french = on,
                 "arabic" => s.arabic = on,
                 "paused" => s.paused = on,
+                "correction" => s.correction = on,
                 "follow_keyboard" => s.follow_keyboard = on,
                 "app_mode" => s.app_mode = if value == "only" { AppMode::OnlyThese } else { AppMode::AllExcept },
                 "apps" => {
@@ -163,11 +167,12 @@ impl Settings {
         let flag = |b: bool| if b { "1" } else { "0" };
         let mode = if self.app_mode == AppMode::OnlyThese { "only" } else { "except" };
         format!(
-            "theme={theme}\nenglish={}\nfrench={}\narabic={}\npaused={}\nfollow_keyboard={}\napp_mode={mode}\napps={}\n",
+            "theme={theme}\nenglish={}\nfrench={}\narabic={}\npaused={}\ncorrection={}\nfollow_keyboard={}\napp_mode={mode}\napps={}\n",
             flag(self.english),
             flag(self.french),
             flag(self.arabic),
             flag(self.paused),
+            flag(self.correction),
             flag(self.follow_keyboard),
             self.apps.join(";")
         )
@@ -227,11 +232,17 @@ mod tests {
 
     #[test]
     fn settings_survive_a_save_and_a_load() {
-        let mut s = Settings { theme: ThemeMode::Dark, follow_keyboard: false, app_mode: AppMode::OnlyThese, ..Settings::default() };
+        let mut s = Settings { theme: ThemeMode::Dark, follow_keyboard: false, correction: true, app_mode: AppMode::OnlyThese, ..Settings::default() };
         s.set_lang(Lang::Fr, false);
         s.set_app("code.exe", true);
         s.set_app("slack.exe", true);
         assert_eq!(Settings::parse(&s.render()), s);
+    }
+
+    #[test]
+    fn correction_is_off_until_the_user_turns_it_on() {
+        assert!(!Settings::default().correction);
+        assert!(Settings::parse("correction=1").correction);
     }
 
     #[test]

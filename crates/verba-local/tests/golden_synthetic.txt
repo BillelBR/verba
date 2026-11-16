@@ -1,0 +1,3033 @@
+en	we	wenunba:en|wenkaho:en|wenkasuwen:en
+-	see we	wenunba:en|wenkaho:en|wenkasuwen:en
+en	Then We	Wenunba:en|Wenkaho:en|Wenkasuwen:en
+en	wen	wenunba:en|wenkaho:en|wenkasuwen:en
+-	see wen	wenunba:en|wenkaho:en|wenkasuwen:en
+en	Then Wen	Wenunba:en|Wenkaho:en|Wenkasuwen:en
+en	wenu	wenunba:en|wenunco:en|wenunar:en
+-	see wenu	wenunba:en|wenun:fr|wenunniri:fr
+en	Then Wenu	Wenunba:en|Wenunco:en|Wenunar:en
+en	we	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wen	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wenk	wenkaho:en|wenkasuwen:en|wenka:en
+en	ta	tato:en|tawengu:en|taselsel:en
+en	tat	tato:en|tatasel:en|tatagu:en
+en	ve	vewensuta:en|veri:en|vepi:en
+-	see ve	vewensuta:en|veri:en|vepi:en
+en	vew	vewensuta:en|vewenka:en|vewengulan:en
+-	see vew	vewensuta:en|vewenka:en|vewenlan:fr
+en	vewe	vewensuta:en|vewenka:en|vewengulan:en
+-	see vewe	vewensuta:en|vewenka:en|vewenlan:fr
+en	we	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wen	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wenk	wenkaho:en|wenkasuwen:en|wenka:en
+en	ve	vewensuta:en|veri:en|vepi:en
+en	Then Ve	Vewensuta:en|Veri:en|Vepi:en
+en	ver	veri:en|veripiren:en|verenco:en
+en	Then Ver	Veri:en|Veripiren:en|Verenco:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+-	see la	lanlandor:en|lanarmeme:en|lanfa:fr
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+-	see lan	lanlandor:en|lanarmeme:en|lanfa:fr
+en	lanl	lanlandor:en|lanlan:en|lanlanve:en
+-	see lanl	lanlandor:en|lanlan:fr|lanlanve:en
+en	to	toho:en|tounselto:en|togu:en
+en	toh	toho:en|tohomoex:en|tohome:en
+en	mo	mouncoex:en|moarmo:en|moexwenwen:en
+en	mou	mouncoex:en|mounkave:en|mounismo:en
+en	moun	mouncoex:en|mounkave:en|mounismo:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+-	see la	lanlandor:en|lanarmeme:en|lanfa:fr
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+-	see lan	lanlandor:en|lanarmeme:en|lanfa:fr
+en	lana	lanarmeme:en|lanar:en|lanarsufa:en
+-	see lana	lanarmeme:en|lanar:en|lanarsufa:en
+en	we	wenunba:en|wenkaho:en|wenkasuwen:en
+en	Then We	Wenunba:en|Wenkaho:en|Wenkasuwen:en
+en	wen	wenunba:en|wenkaho:en|wenkasuwen:en
+en	Then Wen	Wenunba:en|Wenkaho:en|Wenkasuwen:en
+en	wenl	wenlan:en|wenlanfa:en
+en	Then Wenl	Wenlan:en|Wenlanfa:en
+en	ex	exwenve:en|exren:en|exri:en
+en	exw	exwenve:en|exwen:en|exwenme:en
+en	exwe	exwenve:en|exwen:en|exwenme:en
+en	ho	hococove:en|hofa:en|homogume:en
+-	see ho	hococove:en|hodorcowen:fr|hofa:en
+en	hoc	hococove:en|hocoka:en|hoco:en
+-	see hoc	hococove:en|hocoka:en|hocoba:fr
+en	hoco	hococove:en|hocoka:en
+-	see hoco	hococove:en|hocoka:en|hocoba:fr
+en	we	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wen	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wenl	wenlan:en|wenlanfa:en
+en	su	sukataren:en|suka:en|suun:en
+en	suk	sukataren:en|suka:en|sukasu:en
+en	suka	sukataren:en|sukasu:en
+en	ta	tato:en|tawengu:en|taselsel:en
+-	see ta	tato:en|tawengu:en|taisri:fr
+en	Then Ta	Tato:en|Tawengu:en|Taselsel:en
+en	taw	tawengu:en|tawenco:en
+-	see taw	tawengu:en|tawenrenho:fr|tawensudor:fr
+en	Then Taw	Tawengu:en|Tawenco:en
+en	tawe	tawengu:en|tawenco:en
+-	see tawe	tawengu:en|tawenrenho:fr|tawensudor:fr
+en	Then Tawe	Tawengu:en|Tawenco:en
+en	su	sukataren:en|suka:en|suun:en
+en	suk	sukataren:en|suka:en|sukasu:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+en	lanp	lanpi:en|lanpika:en|lanpiexex:en
+en	gu	guarmo:en|gusuar:en|gupimoun:en
+-	see gu	guarmo:en|gusuar:en|gupimoun:en
+en	gua	guarmo:en|guarmear:en|guarpi:en
+-	see gua	guarmo:en|guarpi:fr|guarmear:en
+en	guar	guarmo:en|guarmear:en|guarpi:en
+-	see guar	guarmo:en|guarpi:fr|guarmear:en
+en	re	renfapi:en|rendorsu:en|renun:en
+en	ren	renfapi:en|rendorsu:en|renun:en
+en	renf	renfapi:en|renfa:en|renfata:en
+en	ni	niren:en|niun:en|niex:en
+en	Then Ni	Niren:en|Niun:en|Niex:en
+en	nir	niren:en|nirenho:en|nirigu:en
+en	Then Nir	Niren:en|Nirenho:en|Nirigu:en
+en	nire	niren:en|nirenho:en|nirencoun:en
+en	Then Nire	Niren:en|Nirenho:en|Nirencoun:en
+en	ex	exwenve:en|exren:en|exri:en
+-	see ex	exwenve:en|exren:en|exri:en
+en	exr	exren:en|exri:en|exrico:en
+-	see exr	exren:en|exri:en|exrico:en
+en	exre	exren:en|exrenar:en|exrenpi:en
+-	see exre	exren:en|exrenar:en|exrenpi:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+en	lanh	lanho:en|lanhomoren:en|lanhoco:en
+en	un	ununmeis:en|unmotoba:en|unsulan:en
+en	unu	ununmeis:en|ununarwen:en|ununho:en
+en	unun	ununmeis:en|ununarwen:en|ununho:en
+en	to	toho:en|tounselto:en|togu:en
+-	see to	totaho:fr|toho:en|toselcoar:fr
+en	tou	tounselto:en|tounta:en
+-	see tou	tounselto:en|tounfame:fr|toun:fr
+en	toun	tounselto:en|tounta:en
+-	see toun	tounselto:en|tounfame:fr|touncosu:fr
+en	gu	guarmo:en|gusuar:en|gupimoun:en
+en	Then Gu	Guarmo:en|Gusuar:en|Gupimoun:en
+en	gus	gusuar:en|guselislan:en|gusugugu:en
+en	Then Gus	Gusuar:en|Guselislan:en|Gusugugu:en
+en	gusu	gusuar:en|gusugugu:en|gusuunba:en
+en	Then Gusu	Gusuar:en|Gusugugu:en|Gusuunba:en
+en	mo	mouncoex:en|moarmo:en|moexwenwen:en
+en	moa	moarmo:en
+en	moar	moarmo:en
+en	ar	arbagu:en|artaun:en|arexis:en
+-	see ar	arbagu:en|arpi:fr|arto:fr
+en	arb	arbagu:en|arbarenni:en|arbaniren:en
+-	see arb	arbagu:en|arbarenni:en|arbani:fr
+en	arba	arbagu:en|arbarenni:en|arbaniren:en
+-	see arba	arbagu:en|arbarenni:en|arbani:fr
+en	is	ispiun:en|isdorto:en|isgu:en
+en	isp	ispiun:en|ispiwen:en
+en	ispi	ispiun:en|ispiwen:en
+en	to	toho:en|tounselto:en|togu:en
+en	tog	togu:en
+en	fa	faunme:en|faniho:en|faco:en
+-	see fa	faunme:en|faniho:en|fakari:fr
+en	Then Fa	Faunme:en|Faniho:en|Faco:en
+en	fau	faunme:en|faunho:en|faun:en
+-	see fau	faunme:en|faunri:fr|faunho:en
+en	Then Fau	Faunme:en|Faunho:en|Faun:en
+en	faun	faunme:en|faunho:en
+-	see faun	faunme:en|faunri:fr|faunho:en
+en	Then Faun	Faunme:en|Faunho:en
+en	ho	hococove:en|hofa:en|homogume:en
+en	hof	hofa:en|hofaveto:en|hofamo:en
+en	ex	exwenve:en|exren:en|exri:en
+en	exr	exren:en|exri:en|exrico:en
+en	fa	faunme:en|faniho:en|faco:en
+-	see fa	faunme:en|faniho:en|fakari:fr
+en	fan	faniho:en|fanifa:en|fanime:en
+-	see fan	faniho:en|fanifa:en|fanika:fr
+en	fani	faniho:en|fanifa:en|fanime:en
+-	see fani	faniho:en|fanifa:en|fanika:fr
+en	we	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wen	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wene	wenex:en|wenexvedor:en|wenexfawen:en
+en	we	wenunba:en|wenkaho:en|wenkasuwen:en
+en	Then We	Wenunba:en|Wenkaho:en|Wenkasuwen:en
+en	wen	wenunba:en|wenkaho:en|wenkasuwen:en
+en	Then Wen	Wenunba:en|Wenkaho:en|Wenkasuwen:en
+en	wenw	wenwenwen:en|wenwen:en|wenwenho:en
+en	Then Wenw	Wenwenwen:en|Wenwen:en|Wenwenho:en
+en	ni	niren:en|niun:en|niex:en
+-	see ni	nilandordor:fr|niren:en|nifakador:fr
+en	niu	niun:en
+-	see niu	niun:en|niunwen:fr|niuntoco:fr
+en	gu	guarmo:en|gusuar:en|gupimoun:en
+en	gup	gupimoun:en
+en	gupi	gupimoun:en
+en	un	ununmeis:en|unmotoba:en|unsulan:en
+en	unm	unmotoba:en|unme:en|unmome:en
+en	unmo	unmotoba:en|unmome:en|unmoguco:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+-	see ri	rihoni:fr|riwenbafa:fr|ritaisni:en
+en	rit	ritaisni:en|ritove:en|rita:en
+-	see rit	ritaisni:en|ritoarni:fr|ritove:en
+en	rita	ritaisni:en|ritatoex:en|ritatove:en
+-	see rita	ritaisni:en|ritatoex:en|ritatove:en
+en	co	coexta:en|cosunipi:en|comehoto:en
+en	Then Co	Coexta:en|Cosunipi:en|Comehoto:en
+en	coe	coexta:en
+en	Then Coe	Coexta:en
+en	coex	coexta:en
+en	Then Coex	Coexta:en
+en	me	memoho:en|metomome:en|mepiho:en
+en	mem	memoho:en|memove:en|memomomo:en
+en	memo	memoho:en|memove:en|memomomo:en
+en	se	selmehowen:en|selcocoren:en|seldor:en
+-	see se	selmehowen:en|selcocoren:en|selfa:fr
+en	sel	selmehowen:en|selcocoren:en|seldor:en
+-	see sel	selmehowen:en|selcocoren:en|selfa:fr
+en	selm	selmehowen:en|selmo:en|selme:en
+-	see selm	selmehowen:en|selme:fr|selmo:en
+en	ve	vewensuta:en|veri:en|vepi:en
+en	vep	vepi:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+en	lanr	lanrenrendor:en|lanrito:en|lanrenkagu:en
+en	ta	tato:en|tawengu:en|taselsel:en
+-	see ta	tato:en|tawengu:en|taisri:fr
+en	Then Ta	Tato:en|Tawengu:en|Taselsel:en
+en	tas	taselsel:en|tasuun:en|taselco:en
+-	see tas	taselsel:en|tasuun:en|taselco:en
+en	Then Tas	Taselsel:en|Tasuun:en|Taselco:en
+en	tase	taselsel:en|taselco:en|tasel:en
+-	see tase	taselsel:en|taselco:en|tasel:en
+en	Then Tase	Taselsel:en|Taselco:en|Tasel:en
+en	ka	katodorex:en|kacoriho:en|kadorex:en
+en	kat	katodorex:en|katomosu:en|kato:en
+en	kato	katodorex:en|katomosu:en
+en	ka	katodorex:en|kacoriho:en|kadorex:en
+en	kac	kacoriho:en|kaco:en
+en	kaco	kacoriho:en
+en	ka	katodorex:en|kacoriho:en|kadorex:en
+-	see ka	katodorex:en|kacoriho:en|kadorex:en
+en	kad	kadorex:en|kadorfa:en|kadorni:en
+-	see kad	kadorex:en|kadorfa:en|kadorni:en
+en	kado	kadorex:en|kadorfa:en|kadorni:en
+-	see kado	kadorex:en|kadorfa:en|kadorni:en
+en	ve	vewensuta:en|veri:en|vepi:en
+en	ved	vedor:en|vedorar:en|vedorsuco:en
+en	vedo	vedor:en|vedorar:en|vedorsuco:en
+en	se	selmehowen:en|selcocoren:en|seldor:en
+en	Then Se	Selmehowen:en|Selcocoren:en|Seldor:en
+en	sel	selmehowen:en|selcocoren:en|seldor:en
+en	Then Sel	Selmehowen:en|Selcocoren:en|Seldor:en
+en	selc	selcocoren:en|selco:en
+en	Then Selc	Selcocoren:en|Selco:en
+en	to	toho:en|tounselto:en|togu:en
+-	see to	totaho:fr|toho:en|toselcoar:fr
+en	tot	toto:en|tota:en|totodorgu:en
+-	see tot	totaho:fr|toto:en|tota:en
+en	gu	guarmo:en|gusuar:en|gupimoun:en
+en	guf	gufa:en|gufamo:en|gufasel:en
+en	to	toho:en|tounselto:en|togu:en
+en	tol	tolan:en
+en	tola	tolan:en
+en	re	renfapi:en|rendorsu:en|renun:en
+-	see re	renmo:fr|renbacolan:fr|renfapi:en
+en	ren	renfapi:en|rendorsu:en|renun:en
+-	see ren	renmo:fr|renbacolan:fr|renfapi:en
+en	rend	rendorsu:en|rendorme:en|rendorpi:en
+-	see rend	rendorsu:en|rendorme:en|rendor:fr
+en	ba	baho:en|baiskaex:en|batata:en
+en	Then Ba	Baho:en|Baiskaex:en|Batata:en
+en	bah	baho:en|bahopi:en|bahoex:en
+en	Then Bah	Baho:en|Bahopi:en|Bahoex:en
+en	ve	vewensuta:en|veri:en|vepi:en
+en	vew	vewensuta:en|vewenka:en|vewengulan:en
+en	vewe	vewensuta:en|vewenka:en|vewengulan:en
+en	ve	vewensuta:en|veri:en|vepi:en
+-	see ve	vewensuta:en|veri:en|vepi:en
+en	vef	vefahois:en|vefa:en|vefaex:en
+-	see vef	vefahois:en|vefalanex:fr|vefa:en
+en	vefa	vefahois:en|vefaex:en|vefamosel:en
+-	see vefa	vefahois:en|vefalanex:fr|vefaselho:fr
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+en	lant	lantaselme:en|lantounfa:en|lantogu:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+en	rie	riexkata:en|riex:en|riexisun:en
+en	riex	riexkata:en|riexisun:en
+en	pi	piwenhome:en|pirive:en|piun:en
+-	see pi	piismoex:fr|pika:fr|piexsu:fr
+en	Then Pi	Piwenhome:en|Pirive:en|Piun:en
+en	piw	piwenhome:en|piwennive:en|piwen:en
+-	see piw	piwenhome:en|piwentata:fr|piwennive:en
+en	Then Piw	Piwenhome:en|Piwennive:en|Piwen:en
+en	piwe	piwenhome:en|piwennive:en|piwen:en
+-	see piwe	piwenhome:en|piwentata:fr|piwennive:en
+en	Then Piwe	Piwenhome:en|Piwennive:en|Piwen:en
+en	su	sukataren:en|suka:en|suun:en
+en	suu	suun:en|suunlanme:en|suunlan:en
+en	to	toho:en|tounselto:en|togu:en
+en	tos	tosel:en|tosu:en|tosupisu:en
+en	tose	tosel:en|toselwen:en
+en	ex	exwenve:en|exren:en|exri:en
+-	see ex	exwenve:en|exren:en|exri:en
+en	exr	exren:en|exri:en|exrico:en
+-	see exr	exren:en|exri:en|exrico:en
+en	exri	exrico:en|exriseldor:en|exriun:en
+-	see exri	exrico:en|exriseldor:en|exriun:en
+en	ni	niren:en|niun:en|niex:en
+en	nie	niex:en|niexho:en|niexfa:en
+en	is	ispiun:en|isdorto:en|isgu:en
+en	Then Is	Ispiun:en|Isdorto:en|Isgu:en
+en	isd	isdorto:en|isdorsu:en
+en	Then Isd	Isdorto:en|Isdorsu:en
+en	isdo	isdorto:en|isdorsu:en
+en	Then Isdo	Isdorto:en|Isdorsu:en
+en	ba	baho:en|baiskaex:en|batata:en
+-	see ba	bata:fr|batari:fr|bamo:fr
+en	bai	baiskaex:en|baislanex:en|bais:en
+-	see bai	baiskaex:en|baispi:fr|baisconi:fr
+en	bais	baiskaex:en|baislanex:en|baista:en
+-	see bais	baiskaex:en|baispi:fr|baisconi:fr
+en	ri	ritaisni:en|riexkata:en|ritove:en
+en	rit	ritaisni:en|ritove:en|rita:en
+en	rito	ritove:en|ritoka:en
+en	we	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wen	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wenn	wennipi:en|wenniguco:en|wenni:en
+en	is	ispiun:en|isdorto:en|isgu:en
+-	see is	isme:fr|ispiun:en|isfasu:fr
+en	isg	isgu:en|isguholan:en|isguri:en
+-	see isg	isgu:en|isguholan:en|isguex:fr
+en	co	coexta:en|cosunipi:en|comehoto:en
+en	Then Co	Coexta:en|Cosunipi:en|Comehoto:en
+en	cos	cosunipi:en|coselriex:en|coselfa:en
+en	Then Cos	Cosunipi:en|Coselriex:en|Coselfa:en
+en	cosu	cosunipi:en
+en	Then Cosu	Cosunipi:en
+en	ni	niren:en|niun:en|niex:en
+en	nit	nito:en|nitaka:en|nitaren:en
+en	un	ununmeis:en|unmotoba:en|unsulan:en
+-	see un	ununmeis:en|unmotoba:en|unka:fr
+en	uns	unsulan:en|unsuexis:en|unselmefa:en
+-	see uns	unsulan:en|unsu:fr|unsuexis:en
+en	unsu	unsulan:en|unsuexis:en|unsudorwen:en
+-	see unsu	unsulan:en|unsuexis:en|unsudorwen:en
+en	co	coexta:en|cosunipi:en|comehoto:en
+en	com	comehoto:en|comemeta:en|come:en
+en	come	comehoto:en|comemeta:en|comeguun:en
+en	su	sukataren:en|suka:en|suun:en
+en	sub	subaun:en|suba:en
+en	suba	subaun:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+-	see ri	rihoni:fr|riwenbafa:fr|ritaisni:en
+en	Then Ri	Ritaisni:en|Riexkata:en|Ritove:en
+en	riu	riuntodor:en|riundor:en|riun:en
+-	see riu	riuntodor:en|riundor:en|riun:en
+en	Then Riu	Riuntodor:en|Riundor:en|Riun:en
+en	riun	riuntodor:en|riundor:en
+-	see riun	riuntodor:en|riundor:en
+en	Then Riun	Riuntodor:en|Riundor:en
+en	ho	hococove:en|hofa:en|homogume:en
+en	hom	homogume:en|homemo:en|home:en
+en	homo	homogume:en|homoun:en
+en	un	ununmeis:en|unmotoba:en|unsulan:en
+en	unm	unmotoba:en|unme:en|unmome:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+-	see ri	rihoni:fr|riwenbafa:fr|ritaisni:en
+en	riw	riwen:en|riwenlanni:en|riwenarba:en
+-	see riw	riwenbafa:fr|riwen:en|riwenhosel:fr
+en	riwe	riwen:en|riwenlanni:en|riwenarba:en
+-	see riwe	riwenbafa:fr|riwen:en|riwenhosel:fr
+en	re	renfapi:en|rendorsu:en|renun:en
+en	ren	renfapi:en|rendorsu:en|renun:en
+en	renu	renun:en
+en	ni	niren:en|niun:en|niex:en
+en	Then Ni	Niren:en|Niun:en|Niex:en
+en	nii	niis:en|niisrika:en|niisisni:en
+en	Then Nii	Niis:en|Niisrika:en|Niisisni:en
+en	re	renfapi:en|rendorsu:en|renun:en
+-	see re	renmo:fr|renbacolan:fr|renfapi:en
+en	ren	renfapi:en|rendorsu:en|renun:en
+-	see ren	renmo:fr|renbacolan:fr|renfapi:en
+en	renp	renpi:en|renpiexsel:en|renpiselun:en
+-	see renp	renpi:en|renpilan:fr|renpiexsel:en
+en	ta	tato:en|tawengu:en|taselsel:en
+en	tab	taba:en|tabaveco:en|tabaun:en
+en	ho	hococove:en|hofa:en|homogume:en
+en	hot	hoto:en|hotafa:en|hota:en
+en	su	sukataren:en|suka:en|suun:en
+-	see su	sumoguto:fr|suveveni:fr|sukataren:en
+en	sup	supipi:en|supipiwen:en|supi:en
+-	see sup	supipi:en|supipiwen:en|supi:en
+en	supi	supipi:en|supipiwen:en|supibave:en
+-	see supi	supipi:en|supipiwen:en|supibave:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+en	Then Ri	Ritaisni:en|Riexkata:en|Ritove:en
+en	rit	ritaisni:en|ritove:en|rita:en
+en	Then Rit	Ritaisni:en|Ritove:en|Rita:en
+en	me	memoho:en|metomome:en|mepiho:en
+en	met	metomome:en|metomois:en|meto:en
+en	meto	metomome:en|metomois:en|metoto:en
+en	fa	faunme:en|faniho:en|faco:en
+-	see fa	faunme:en|faniho:en|fakari:fr
+en	fac	faco:en|facowen:en|facoho:en
+-	see fac	faco:en|facosuwen:fr|facotani:fr
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+en	lanf	lanfa:en|lanfabaren:en|lanfafa:en
+en	ba	baho:en|baiskaex:en|batata:en
+en	bat	batata:en|bata:en|bato:en
+en	bata	batata:en
+en	me	memoho:en|metomome:en|mepiho:en
+-	see me	memoho:en|meselkawen:fr|medorlanve:fr
+en	Then Me	Memoho:en|Metomome:en|Mepiho:en
+en	mep	mepiho:en|mepiveho:en
+-	see mep	mepiho:en|mepiri:fr|mepi:fr
+en	Then Mep	Mepiho:en|Mepiveho:en
+en	mepi	mepiho:en|mepiveho:en
+-	see mepi	mepiho:en|mepiri:fr|mepigu:fr
+en	Then Mepi	Mepiho:en|Mepiveho:en
+en	me	memoho:en|metomome:en|mepiho:en
+en	meg	megucoto:en|meguar:en|megupime:en
+en	megu	megucoto:en|meguar:en|megupime:en
+en	me	memoho:en|metomome:en|mepiho:en
+en	mew	mewen:en|mewenguun:en
+en	mewe	mewen:en|mewenguun:en
+en	su	sukataren:en|suka:en|suun:en
+-	see su	sumoguto:fr|suveveni:fr|sukataren:en
+en	sua	suarri:en|suar:en|suarsu:en
+-	see sua	suarri:en|suar:en|suarun:fr
+en	suar	suarri:en|suarsu:en|suarve:en
+-	see suar	suarri:en|suarun:fr|suarsu:en
+en	gu	guarmo:en|gusuar:en|gupimoun:en
+en	guf	gufa:en|gufamo:en|gufasel:en
+en	gufa	gufamo:en|gufasel:en|gufasupi:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+en	Then Ri	Ritaisni:en|Riexkata:en|Ritove:en
+en	rir	ririco:en|ririisho:en|ririis:en
+en	Then Rir	Ririco:en|Ririisho:en|Ririis:en
+en	riri	ririco:en|ririisho:en|ririis:en
+en	Then Riri	Ririco:en|Ririisho:en|Ririis:en
+en	ba	baho:en|baiskaex:en|batata:en
+-	see ba	bata:fr|batari:fr|bamo:fr
+en	bas	basu:en|basel:en|basuguta:en
+-	see bas	basu:en|basel:fr|baseltasu:fr
+en	ta	tato:en|tawengu:en|taselsel:en
+en	tau	taunniren:en|taunco:en|taun:en
+en	taun	taunniren:en|taunco:en|taunta:en
+en	is	ispiun:en|isdorto:en|isgu:en
+en	isv	isveis:en|isvelan:en|isve:en
+en	isve	isveis:en|isvelan:en
+en	ve	vewensuta:en|veri:en|vepi:en
+-	see ve	vewensuta:en|veri:en|vepi:en
+en	vei	veisho:en|veissugu:en|veis:en
+-	see vei	veisho:en|veis:fr|veissugu:en
+en	veis	veisho:en|veissugu:en|veiscoren:en
+-	see veis	veisho:en|veissugu:en|veiscoren:en
+en	ba	baho:en|baiskaex:en|batata:en
+en	Then Ba	Baho:en|Baiskaex:en|Batata:en
+en	bav	baveexlan:en|bave:en
+en	Then Bav	Baveexlan:en|Bave:en
+en	bave	baveexlan:en
+en	Then Bave	Baveexlan:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+en	lanb	lanbari:en|lanba:en|lanbalanren:en
+en	ar	arbagu:en|artaun:en|arexis:en
+-	see ar	arbagu:en|arpi:fr|arto:fr
+en	art	artaun:en|artaren:en|arto:en
+-	see art	arto:fr|artaun:en|artaren:en
+en	arta	artaun:en|artaren:en|artabato:en
+-	see arta	artaun:en|artaren:en|artalan:fr
+en	is	ispiun:en|isdorto:en|isgu:en
+en	iss	issel:en|issuveco:en|isselrifa:en
+en	isse	issel:en|isselrifa:en
+en	ka	katodorex:en|kacoriho:en|kadorex:en
+en	kad	kadorex:en|kadorfa:en|kadorni:en
+en	kado	kadorex:en|kadorfa:en|kadorni:en
+en	ve	vewensuta:en|veri:en|vepi:en
+-	see ve	vewensuta:en|veri:en|vepi:en
+en	Then Ve	Vewensuta:en|Veri:en|Vepi:en
+en	ves	veselunve:en|veselta:en|vesugu:en
+-	see ves	veselunve:en|vesu:fr|veselta:en
+en	Then Ves	Veselunve:en|Veselta:en|Vesugu:en
+en	vese	veselunve:en|veselta:en
+-	see vese	veselunve:en|veselta:en|veselveco:fr
+en	Then Vese	Veselunve:en|Veselta:en
+en	se	selmehowen:en|selcocoren:en|seldor:en
+en	sel	selmehowen:en|selcocoren:en|seldor:en
+en	seld	seldor:en
+en	ba	baho:en|baiskaex:en|batata:en
+en	bac	baco:en|bacofa:en|bacorilan:en
+en	re	renfapi:en|rendorsu:en|renun:en
+-	see re	renmo:fr|renbacolan:fr|renfapi:en
+en	ren	renfapi:en|rendorsu:en|renun:en
+-	see ren	renmo:fr|renbacolan:fr|renfapi:en
+en	renm	renmo:en|renmounme:en|renmeka:en
+-	see renm	renmo:fr|renmounme:en|renmoex:fr
+en	pi	piwenhome:en|pirive:en|piun:en
+en	pir	pirive:en|pirenba:en|pirenvear:en
+en	piri	pirive:en
+en	ho	hococove:en|hofa:en|homogume:en
+en	Then Ho	Hococove:en|Hofa:en|Homogume:en
+en	hom	homogume:en|homemo:en|home:en
+en	Then Hom	Homogume:en|Homemo:en|Home:en
+en	home	homemo:en
+en	Then Home	Homemo:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+-	see la	lanlandor:en|lanarmeme:en|lanfa:fr
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+-	see lan	lanlandor:en|lanarmeme:en|lanfa:fr
+en	lans	lanselho:en|lansu:en|lansuisar:en
+-	see lans	lanselho:en|lansu:en|lansuisar:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+en	rib	ribave:en|ribarisel:en|ribalanwen:en
+en	riba	ribave:en|ribarisel:en|ribalanwen:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+en	rim	rimesel:en|rimelanmo:en|rimo:en
+en	rime	rimesel:en|rimelanmo:en
+en	ni	niren:en|niun:en|niex:en
+-	see ni	nilandordor:fr|niren:en|nifakador:fr
+en	nim	nimorenpi:en|nimeunho:en|nimear:en
+-	see nim	nimorenpi:en|nimeunho:en|nimewenun:fr
+en	nimo	nimorenpi:en|nimota:en|nimoho:en
+-	see nimo	nimorenpi:en|nimofaho:fr|nimota:en
+en	re	renfapi:en|rendorsu:en|renun:en
+en	Then Re	Renfapi:en|Rendorsu:en|Renun:en
+en	ren	renfapi:en|rendorsu:en|renun:en
+en	Then Ren	Renfapi:en|Rendorsu:en|Renun:en
+en	renm	renmo:en|renmounme:en|renmeka:en
+en	Then Renm	Renmo:en|Renmounme:en|Renmeka:en
+en	mo	mouncoex:en|moarmo:en|moexwenwen:en
+en	moe	moexwenwen:en|moexve:en
+en	moex	moexwenwen:en|moexve:en
+en	pi	piwenhome:en|pirive:en|piun:en
+-	see pi	piismoex:fr|pika:fr|piexsu:fr
+en	piu	piun:en|piunisex:en
+-	see piu	piununwen:fr|piun:en|piunisex:en
+en	ho	hococove:en|hofa:en|homogume:en
+en	hog	hoguexsel:en|hoguwenka:en|hogu:en
+en	hogu	hoguexsel:en|hoguwenka:en
+en	pi	piwenhome:en|pirive:en|piun:en
+en	pil	pilanba:en|pilanunka:en|pilanun:en
+en	pila	pilanba:en|pilanunka:en|pilanun:en
+en	ba	baho:en|baiskaex:en|batata:en
+-	see ba	bata:fr|batari:fr|bamo:fr
+en	Then Ba	Baho:en|Baiskaex:en|Batata:en
+en	bab	babadorco:en|babawen:en|babameri:en
+-	see bab	babadorco:en|babalan:fr|babawen:en
+en	Then Bab	Babadorco:en|Babawen:en|Babameri:en
+en	baba	babadorco:en|babawen:en|babameri:en
+-	see baba	babadorco:en|babalan:fr|babawen:en
+en	Then Baba	Babadorco:en|Babawen:en|Babameri:en
+en	ar	arbagu:en|artaun:en|arexis:en
+en	are	arexis:en|arex:en|arexnime:en
+en	arex	arexis:en|arexnime:en|arexho:en
+en	gu	guarmo:en|gusuar:en|gupimoun:en
+en	gue	guexri:en|guexwen:en
+en	guex	guexri:en|guexwen:en
+en	ve	vewensuta:en|veri:en|vepi:en
+-	see ve	vewensuta:en|veri:en|vepi:en
+en	vem	vemewenfa:en|vemo:en
+-	see vem	vemewenfa:en|veme:fr|vemedor:fr
+en	veme	vemewenfa:en
+-	see veme	vemewenfa:en|vemedor:fr
+en	fa	faunme:en|faniho:en|faco:en
+en	fas	fasuvefa:en|fasuwensu:en|faselrento:en
+en	fasu	fasuvefa:en|fasuwensu:en|fasume:en
+en	su	sukataren:en|suka:en|suun:en
+en	Then Su	Sukataren:en|Suka:en|Suun:en
+en	sur	suri:en|surenrenfa:en|surento:en
+en	Then Sur	Suri:en|Surenrenfa:en|Surento:en
+en	co	coexta:en|cosunipi:en|comehoto:en
+-	see co	coselpiwen:fr|copita:fr|coisexsu:fr
+en	coc	cocogu:en|coco:en|cocoselco:en
+-	see coc	cocosel:fr|cococo:fr|cocogu:en
+en	coco	cocogu:en|cocoselco:en
+-	see coco	cocosel:fr|cococo:fr|cocogu:en
+en	me	memoho:en|metomome:en|mepiho:en
+en	mem	memoho:en|memove:en|memomomo:en
+en	memo	memoho:en|memove:en|memomomo:en
+en	ta	tato:en|tawengu:en|taselsel:en
+en	tam	tameissel:en|tamo:en|tamemeun:en
+en	tame	tameissel:en|tamemeun:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+-	see la	lanlandor:en|lanarmeme:en|lanfa:fr
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+-	see lan	lanlandor:en|lanarmeme:en|lanfa:fr
+en	lann	lannicois:en|lanni:en
+-	see lann	lannicois:en|lannidor:fr|lanni:en
+en	is	ispiun:en|isdorto:en|isgu:en
+en	Then Is	Ispiun:en|Isdorto:en|Isgu:en
+en	isn	isniguar:en|isni:en|isniarren:en
+en	Then Isn	Isniguar:en|Isni:en|Isniarren:en
+en	isni	isniguar:en|isniarren:en
+en	Then Isni	Isniguar:en|Isniarren:en
+en	re	renfapi:en|rendorsu:en|renun:en
+en	ren	renfapi:en|rendorsu:en|renun:en
+en	rent	rentolanco:en|rentaho:en|rentounri:en
+en	ni	niren:en|niun:en|niex:en
+-	see ni	nilandordor:fr|niren:en|nifakador:fr
+en	nit	nito:en|nitaka:en|nitaren:en
+-	see nit	nito:en|nitaka:en|nitounun:fr
+en	nita	nitaka:en|nitaren:en|nitais:en
+-	see nita	nitaka:en|nitaren:en|nitais:en
+en	to	toho:en|tounselto:en|togu:en
+en	tot	toto:en|tota:en|totodorgu:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+en	lanr	lanrenrendor:en|lanrito:en|lanrenkagu:en
+en	ho	hococove:en|hofa:en|homogume:en
+-	see ho	hococove:en|hodorcowen:fr|hofa:en
+en	Then Ho	Hococove:en|Hofa:en|Homogume:en
+en	hom	homogume:en|homemo:en|home:en
+-	see hom	homogume:en|homeselsel:fr|homemo:en
+en	Then Hom	Homogume:en|Homemo:en|Home:en
+en	to	toho:en|tounselto:en|togu:en
+en	tov	toveto:en|toveni:en
+en	tove	toveto:en|toveni:en
+en	ni	niren:en|niun:en|niex:en
+en	nia	niarkapi:en|niar:en|niarmeni:en
+en	niar	niarkapi:en|niarmeni:en|niarkani:en
+en	ex	exwenve:en|exren:en|exri:en
+-	see ex	exwenve:en|exren:en|exri:en
+en	exk	exkave:en|exka:en
+-	see exk	exkave:en|exka:fr|exkalanba:fr
+en	exka	exkave:en
+-	see exka	exkave:en|exkalanba:fr
+en	un	ununmeis:en|unmotoba:en|unsulan:en
+en	una	unarexpi:en|unarlanis:en
+en	unar	unarexpi:en|unarlanis:en
+en	se	selmehowen:en|selcocoren:en|seldor:en
+en	Then Se	Selmehowen:en|Selcocoren:en|Seldor:en
+en	sel	selmehowen:en|selcocoren:en|seldor:en
+en	Then Sel	Selmehowen:en|Selcocoren:en|Seldor:en
+en	selg	selguwenmo:en|selgu:en|selguun:en
+en	Then Selg	Selguwenmo:en|Selgu:en|Selguun:en
+en	is	ispiun:en|isdorto:en|isgu:en
+-	see is	isme:fr|ispiun:en|isfasu:fr
+en	isn	isniguar:en|isni:en|isniarren:en
+-	see isn	isniguar:en|isni:en|isniarren:en
+en	su	sukataren:en|suka:en|suun:en
+en	sui	suissupi:en
+en	suis	suissupi:en
+en	do	dorlanselho:en|dorfa:en|dorren:en
+en	dor	dorlanselho:en|dorfa:en|dorren:en
+en	dorl	dorlanselho:en|dorlanmeto:en|dorlan:en
+en	ex	exwenve:en|exren:en|exri:en
+-	see ex	exwenve:en|exren:en|exri:en
+en	exs	exseldorka:en|exsuco:en|exselrive:en
+-	see exs	exselunex:fr|exseldorka:en|exsuco:en
+en	exse	exseldorka:en|exselrive:en|exselfato:en
+-	see exse	exselunex:fr|exseldorka:en|exselrive:en
+en	ve	vewensuta:en|veri:en|vepi:en
+en	Then Ve	Vewensuta:en|Veri:en|Vepi:en
+en	veb	vebadoris:en|vebalan:en
+en	Then Veb	Vebadoris:en|Vebalan:en
+en	veba	vebadoris:en|vebalan:en
+en	Then Veba	Vebadoris:en|Vebalan:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+en	lanw	lanwenwen:en
+en	co	coexta:en|cosunipi:en|comehoto:en
+-	see co	coselpiwen:fr|copita:fr|coisexsu:fr
+en	con	coni:en
+-	see con	coni:en|coniex:fr
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+en	lanl	lanlandor:en|lanlan:en|lanlanve:en
+en	co	coexta:en|cosunipi:en|comehoto:en
+en	cot	cotasel:en|cotonigu:en|cota:en
+en	cota	cotasel:en
+en	ar	arbagu:en|artaun:en|arexis:en
+-	see ar	arbagu:en|arpi:fr|arto:fr
+en	Then Ar	Arbagu:en|Artaun:en|Arexis:en
+en	aru	aruncogu:en|arunka:en|arun:en
+-	see aru	aruncogu:en|arunka:en|arun:en
+en	Then Aru	Aruncogu:en|Arunka:en|Arun:en
+en	arun	aruncogu:en|arunka:en|arunve:en
+-	see arun	aruncogu:en|arunka:en|arunpito:fr
+en	Then Arun	Aruncogu:en|Arunka:en|Arunve:en
+en	ve	vewensuta:en|veri:en|vepi:en
+en	vet	veto:en|vetove:en|vetowen:en
+en	we	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wen	wenunba:en|wenkaho:en|wenkasuwen:en
+en	weni	wenisve:en|wenisis:en|wenisba:en
+en	ar	arbagu:en|artaun:en|arexis:en
+-	see ar	arbagu:en|arpi:fr|arto:fr
+en	aru	aruncogu:en|arunka:en|arun:en
+-	see aru	aruncogu:en|arunka:en|arun:en
+en	arun	aruncogu:en|arunka:en|arunve:en
+-	see arun	aruncogu:en|arunka:en|arunpito:fr
+en	ve	vewensuta:en|veri:en|vepi:en
+en	veg	vegu:en|veguun:en|vegupi:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+en	Then Ri	Ritaisni:en|Riexkata:en|Ritove:en
+en	rii	riisri:en|riis:en|riisho:en
+en	Then Rii	Riisri:en|Riis:en|Riisho:en
+en	riis	riisri:en|riisho:en|riismefa:en
+en	Then Riis	Riisri:en|Riisho:en|Riismefa:en
+en	se	selmehowen:en|selcocoren:en|seldor:en
+-	see se	selmehowen:en|selcocoren:en|selfa:fr
+en	sel	selmehowen:en|selcocoren:en|seldor:en
+-	see sel	selmehowen:en|selcocoren:en|selfa:fr
+en	selw	selwen:en|selwenis:en
+-	see selw	selwen:en|selwenis:en
+en	pi	piwenhome:en|pirive:en|piun:en
+en	pir	pirive:en|pirenba:en|pirenvear:en
+en	pire	pirenba:en|pirenvear:en|pirenmoka:en
+en	fa	faunme:en|faniho:en|faco:en
+en	fah	fahome:en|fahoriis:en|fahobasel:en
+en	faho	fahome:en|fahoriis:en|fahobasel:en
+en	ar	arbagu:en|artaun:en|arexis:en
+-	see ar	arbagu:en|arpi:fr|arto:fr
+en	arg	argucois:en|argu:en|arguni:en
+-	see arg	argumo:fr|argucois:en|argu:en
+en	argu	argucois:en|arguni:en|argupi:en
+-	see argu	argumo:fr|argucois:en|arguni:en
+en	do	dorlanselho:en|dorfa:en|dorren:en
+en	Then Do	Dorlanselho:en|Dorfa:en|Dorren:en
+en	dor	dorlanselho:en|dorfa:en|dorren:en
+en	Then Dor	Dorlanselho:en|Dorfa:en|Dorren:en
+en	dorf	dorfa:en|dorfaisho:en|dorfaho:en
+en	Then Dorf	Dorfa:en|Dorfaisho:en|Dorfaho:en
+en	un	ununmeis:en|unmotoba:en|unsulan:en
+en	unl	unlankaho:en|unlanar:en|unlan:en
+en	unla	unlankaho:en|unlanar:en|unlan:en
+en	gu	guarmo:en|gusuar:en|gupimoun:en
+-	see gu	guarmo:en|gusuar:en|gupimoun:en
+en	gub	gubani:en|guba:en
+-	see gub	gubaho:fr|gubani:en|guba:en
+en	guba	gubani:en
+-	see guba	gubaho:fr|gubani:en|gubaco:fr
+en	ba	baho:en|baiskaex:en|batata:en
+en	bar	barika:en|baren:en|barenis:en
+en	bari	barika:en|baribaho:en|bariwenlan:en
+en	is	ispiun:en|isdorto:en|isgu:en
+en	iss	issel:en|issuveco:en|isselrifa:en
+en	issu	issuveco:en|issuwen:en|issubafa:en
+en	to	toho:en|tounselto:en|togu:en
+-	see to	totaho:fr|toho:en|toselcoar:fr
+en	Then To	Toho:en|Tounselto:en|Togu:en
+en	tow	towen:en
+-	see tow	towen:fr|towenve:fr
+en	Then Tow	Towen:en
+en	towe	towen:en
+-	see towe	towen:fr|towenve:fr
+en	Then Towe	Towen:en
+en	fa	faunme:en|faniho:en|faco:en
+en	faw	fawen:en
+en	fawe	fawen:en
+en	re	renfapi:en|rendorsu:en|renun:en
+en	ren	renfapi:en|rendorsu:en|renun:en
+en	rent	rentolanco:en|rentaho:en|rentounri:en
+en	un	ununmeis:en|unmotoba:en|unsulan:en
+-	see un	ununmeis:en|unmotoba:en|unka:fr
+en	ung	ungu:en
+-	see ung	ungu:en|unguve:fr
+en	mo	mouncoex:en|moarmo:en|moexwenwen:en
+en	mou	mouncoex:en|mounkave:en|mounismo:en
+en	moun	mouncoex:en|mounkave:en|mounismo:en
+en	ar	arbagu:en|artaun:en|arexis:en
+en	Then Ar	Arbagu:en|Artaun:en|Arexis:en
+en	arr	arriis:en|arrenselren:en|arrenme:en
+en	Then Arr	Arriis:en|Arrenselren:en|Arrenme:en
+en	arri	arriis:en|arriniri:en
+en	Then Arri	Arriis:en|Arriniri:en
+en	ni	niren:en|niun:en|niex:en
+-	see ni	nilandordor:fr|niren:en|nifakador:fr
+en	nim	nimorenpi:en|nimeunho:en|nimear:en
+-	see nim	nimorenpi:en|nimeunho:en|nimewenun:fr
+en	nime	nimeunho:en|nimear:en|nimefato:en
+-	see nime	nimeunho:en|nimewenun:fr|nimear:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+en	rif	rifa:en|rifaco:en|rifaisba:en
+en	ta	tato:en|tawengu:en|taselsel:en
+en	tae	taexselren:en
+en	taex	taexselren:en
+en	me	memoho:en|metomome:en|mepiho:en
+-	see me	memoho:en|meselkawen:fr|medorlanve:fr
+en	mea	mearriwen:en|mearfa:en|mearlanta:en
+-	see mea	mearme:fr|mearriwen:en|mearfa:en
+en	mear	mearriwen:en|mearfa:en|mearlanta:en
+-	see mear	mearme:fr|mearriwen:en|mearfa:en
+en	ka	katodorex:en|kacoriho:en|kadorex:en
+en	Then Ka	Katodorex:en|Kacoriho:en|Kadorex:en
+en	kav	kavelangu:en|kavelan:en|kavebamo:en
+en	Then Kav	Kavelangu:en|Kavelan:en|Kavebamo:en
+en	kave	kavelangu:en|kavelan:en|kavebamo:en
+en	Then Kave	Kavelangu:en|Kavelan:en|Kavebamo:en
+en	ar	arbagu:en|artaun:en|arexis:en
+en	arb	arbagu:en|arbarenni:en|arbaniren:en
+en	arba	arbagu:en|arbarenni:en|arbaniren:en
+en	ka	katodorex:en|kacoriho:en|kadorex:en
+-	see ka	katodorex:en|kacoriho:en|kadorex:en
+en	kah	kaho:en|kahofafa:en|kahomo:en
+-	see kah	kaho:en|kahowenwen:fr|kahofafa:en
+en	se	selmehowen:en|selcocoren:en|seldor:en
+en	sel	selmehowen:en|selcocoren:en|seldor:en
+en	selp	selpi:en|selpito:en|selpiislan:en
+en	ex	exwenve:en|exren:en|exri:en
+en	exr	exren:en|exri:en|exrico:en
+en	exre	exren:en|exrenar:en|exrenpi:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+-	see ri	rihoni:fr|riwenbafa:fr|ritaisni:en
+en	Then Ri	Ritaisni:en|Riexkata:en|Ritove:en
+en	rib	ribave:en|ribarisel:en|ribalanwen:en
+-	see rib	ribave:en|ribarisel:en|ribalanwen:en
+en	Then Rib	Ribave:en|Ribarisel:en|Ribalanwen:en
+en	riba	ribave:en|ribarisel:en|ribalanwen:en
+-	see riba	ribave:en|ribarisel:en|ribalanwen:en
+en	Then Riba	Ribave:en|Ribarisel:en|Ribalanwen:en
+en	ta	tato:en|tawengu:en|taselsel:en
+en	tas	taselsel:en|tasuun:en|taselco:en
+en	tasu	tasuun:en|tasuwen:en
+en	co	coexta:en|cosunipi:en|comehoto:en
+en	cor	corenka:en|coriri:en|corigu:en
+en	core	corenka:en|corenni:en
+en	ni	niren:en|niun:en|niex:en
+-	see ni	nilandordor:fr|niren:en|nifakador:fr
+en	nie	niex:en|niexho:en|niexfa:en
+-	see nie	niexmowen:fr|niex:en|niexlanren:fr
+en	niex	niexho:en|niexfa:en
+-	see niex	niexmowen:fr|niexlanren:fr|niexho:en
+en	gu	guarmo:en|gusuar:en|gupimoun:en
+en	gus	gusuar:en|guselislan:en|gusugugu:en
+en	guse	guselislan:en|gusel:en|guselrenis:en
+en	ni	niren:en|niun:en|niex:en
+en	Then Ni	Niren:en|Niun:en|Niex:en
+en	niv	nivepiren:en|nive:en|niveniis:en
+en	Then Niv	Nivepiren:en|Nive:en|Niveniis:en
+en	nive	nivepiren:en|niveniis:en|nivepiho:en
+en	Then Nive	Nivepiren:en|Niveniis:en|Nivepiho:en
+en	un	ununmeis:en|unmotoba:en|unsulan:en
+-	see un	ununmeis:en|unmotoba:en|unka:fr
+en	uns	unsulan:en|unsuexis:en|unselmefa:en
+-	see uns	unsulan:en|unsu:fr|unsuexis:en
+en	unsu	unsulan:en|unsuexis:en|unsudorwen:en
+-	see unsu	unsulan:en|unsuexis:en|unsudorwen:en
+en	ni	niren:en|niun:en|niex:en
+en	nih	nihoarsel:en|nihome:en|nihoselme:en
+en	niho	nihoarsel:en|nihome:en|nihoselme:en
+en	ta	tato:en|tawengu:en|taselsel:en
+en	tau	taunniren:en|taunco:en|taun:en
+en	taun	taunniren:en|taunco:en|taunta:en
+en	su	sukataren:en|suka:en|suun:en
+-	see su	sumoguto:fr|suveveni:fr|sukataren:en
+en	sup	supipi:en|supipiwen:en|supi:en
+-	see sup	supipi:en|supipiwen:en|supi:en
+en	supi	supipi:en|supipiwen:en|supibave:en
+-	see supi	supipi:en|supipiwen:en|supibave:en
+en	we	wenunba:en|wenkaho:en|wenkasuwen:en
+en	Then We	Wenunba:en|Wenkaho:en|Wenkasuwen:en
+en	wen	wenunba:en|wenkaho:en|wenkasuwen:en
+en	Then Wen	Wenunba:en|Wenkaho:en|Wenkasuwen:en
+en	wens	wensufa:en|wensel:en|wenselgu:en
+en	Then Wens	Wensufa:en|Wensel:en|Wenselgu:en
+en	ar	arbagu:en|artaun:en|arexis:en
+en	ark	arka:en
+en	mo	mouncoex:en|moarmo:en|moexwenwen:en
+-	see mo	moni:fr|mouncoex:en|moarmo:en
+en	mog	mogunito:en|mogu:en|mogufa:en
+-	see mog	mogunito:en|mogu:fr|mogufa:en
+en	mogu	mogunito:en|mogufa:en|mogulanmo:en
+-	see mogu	mogunito:en|mogufa:en|mogulanmo:en
+en	se	selmehowen:en|selcocoren:en|seldor:en
+en	sel	selmehowen:en|selcocoren:en|seldor:en
+en	selg	selguwenmo:en|selgu:en|selguun:en
+en	to	toho:en|tounselto:en|togu:en
+en	toa	toarnive:en|toar:en|toarsu:en
+en	toar	toarnive:en|toarsu:en
+en	mo	mouncoex:en|moarmo:en|moexwenwen:en
+-	see mo	moni:fr|mouncoex:en|moarmo:en
+en	Then Mo	Mouncoex:en|Moarmo:en|Moexwenwen:en
+en	moc	moco:en|moconimo:en|moconidor:en
+-	see moc	moco:en|mocolanka:fr|moconimo:en
+en	Then Moc	Moco:en|Moconimo:en|Moconidor:en
+en	do	dorlanselho:en|dorfa:en|dorren:en
+en	dor	dorlanselho:en|dorfa:en|dorren:en
+en	dorr	dorren:en|dorrensu:en|dorriunto:en
+en	ar	arbagu:en|artaun:en|arexis:en
+en	arh	arho:en|arhoba:en|arhoveco:en
+en	ar	arbagu:en|artaun:en|arexis:en
+-	see ar	arbagu:en|arpi:fr|arto:fr
+en	art	artaun:en|artaren:en|arto:en
+-	see art	arto:fr|artaun:en|artaren:en
+en	arta	artaun:en|artaren:en|artabato:en
+-	see arta	artaun:en|artaren:en|artalan:fr
+en	ri	ritaisni:en|riexkata:en|ritove:en
+en	riv	riveta:en|rive:en|riveun:en
+en	rive	riveta:en|riveun:en|rivegu:en
+en	we	wenunba:en|wenkaho:en|wenkasuwen:en
+en	Then We	Wenunba:en|Wenkaho:en|Wenkasuwen:en
+en	wen	wenunba:en|wenkaho:en|wenkasuwen:en
+en	Then Wen	Wenunba:en|Wenkaho:en|Wenkasuwen:en
+en	weng	wenguexfa:en|wengubafa:en|wengu:en
+en	Then Weng	Wenguexfa:en|Wengubafa:en|Wengu:en
+en	is	ispiun:en|isdorto:en|isgu:en
+-	see is	isme:fr|ispiun:en|isfasu:fr
+en	iss	issel:en|issuveco:en|isselrifa:en
+-	see iss	issel:en|issu:fr|issuveco:en
+en	isse	issel:en|isselrifa:en
+-	see isse	issel:en|isselrifa:en|isselba:fr
+en	is	ispiun:en|isdorto:en|isgu:en
+en	isn	isniguar:en|isni:en|isniarren:en
+en	isni	isniguar:en|isniarren:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+en	rie	riexkata:en|riex:en|riexisun:en
+en	co	coexta:en|cosunipi:en|comehoto:en
+-	see co	coselpiwen:fr|copita:fr|coisexsu:fr
+en	cou	coun:en
+-	see cou	coun:en|counfa:fr|counme:fr
+en	se	selmehowen:en|selcocoren:en|seldor:en
+en	Then Se	Selmehowen:en|Selcocoren:en|Seldor:en
+en	sel	selmehowen:en|selcocoren:en|seldor:en
+en	Then Sel	Selmehowen:en|Selcocoren:en|Seldor:en
+en	sele	selexmo:en|selexpi:en
+en	Then Sele	Selexmo:en|Selexpi:en
+en	se	selmehowen:en|selcocoren:en|seldor:en
+en	sel	selmehowen:en|selcocoren:en|seldor:en
+en	seln	selnipi:en|selnitari:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+-	see la	lanlandor:en|lanarmeme:en|lanfa:fr
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+-	see lan	lanlandor:en|lanarmeme:en|lanfa:fr
+en	lanp	lanpi:en|lanpika:en|lanpiexex:en
+-	see lanp	lanpi:en|lanpika:en|lanpiexex:en
+en	ka	katodorex:en|kacoriho:en|kadorex:en
+en	kai	kaisvear:en|kais:en|kaismeco:en
+en	kais	kaisvear:en|kaismeco:en|kaisunco:en
+en	we	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wen	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wenp	wenpito:en|wenpi:en
+en	mo	mouncoex:en|moarmo:en|moexwenwen:en
+-	see mo	moni:fr|mouncoex:en|moarmo:en
+en	Then Mo	Mouncoex:en|Moarmo:en|Moexwenwen:en
+en	moe	moexwenwen:en|moexve:en
+-	see moe	moexwenwen:en|moexve:en|moexka:fr
+en	Then Moe	Moexwenwen:en|Moexve:en
+en	moex	moexwenwen:en|moexve:en
+-	see moex	moexwenwen:en|moexve:en|moexka:fr
+en	Then Moex	Moexwenwen:en|Moexve:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+en	lang	langu:en|languargu:en|languto:en
+en	mo	mouncoex:en|moarmo:en|moexwenwen:en
+en	mov	move:en
+en	fa	faunme:en|faniho:en|faco:en
+-	see fa	faunme:en|faniho:en|fakari:fr
+en	fan	faniho:en|fanifa:en|fanime:en
+-	see fan	faniho:en|fanifa:en|fanika:fr
+en	fani	faniho:en|fanifa:en|fanime:en
+-	see fani	faniho:en|fanifa:en|fanika:fr
+en	fa	faunme:en|faniho:en|faco:en
+en	fab	fabasulan:en|fabagu:en
+en	faba	fabasulan:en|fabagu:en
+en	ta	tato:en|tawengu:en|taselsel:en
+en	Then Ta	Tato:en|Tawengu:en|Taselsel:en
+en	tav	tavegu:en|taveni:en|tavegume:en
+en	Then Tav	Tavegu:en|Taveni:en|Tavegume:en
+en	tave	tavegu:en|taveni:en|tavegume:en
+en	Then Tave	Tavegu:en|Taveni:en|Tavegume:en
+en	is	ispiun:en|isdorto:en|isgu:en
+-	see is	isme:fr|ispiun:en|isfasu:fr
+en	isw	iswenme:en|iswenlanfa:en|iswen:en
+-	see isw	iswenme:en|iswenrengu:fr|iswenlanfa:en
+en	iswe	iswenme:en|iswenlanfa:en|iswen:en
+-	see iswe	iswenme:en|iswenrengu:fr|iswenlanfa:en
+en	ar	arbagu:en|artaun:en|arexis:en
+en	arg	argucois:en|argu:en|arguni:en
+en	fa	faunme:en|faniho:en|faco:en
+en	far	farenren:en|farenho:en|fari:en
+en	fare	farenren:en|farenho:en|faren:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+-	see ri	rihoni:fr|riwenbafa:fr|ritaisni:en
+en	rim	rimesel:en|rimelanmo:en|rimo:en
+-	see rim	rimesel:en|rimoco:fr|rimelanmo:en
+en	rime	rimesel:en|rimelanmo:en
+-	see rime	rimesel:en|rimelanmo:en|rimeni:fr
+en	do	dorlanselho:en|dorfa:en|dorren:en
+en	Then Do	Dorlanselho:en|Dorfa:en|Dorren:en
+en	dor	dorlanselho:en|dorfa:en|dorren:en
+en	Then Dor	Dorlanselho:en|Dorfa:en|Dorren:en
+en	dord	dordorve:en|dordorwen:en|dordorren:en
+en	Then Dord	Dordorve:en|Dordorwen:en|Dordorren:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+en	land	landorkasel:en|landoris:en|landor:en
+en	ex	exwenve:en|exren:en|exri:en
+-	see ex	exwenve:en|exren:en|exri:en
+en	exd	exdorni:en|exdor:en|exdorve:en
+-	see exd	exdordor:fr|exdorni:en|exdorta:fr
+en	exdo	exdorni:en|exdor:en|exdorve:en
+-	see exdo	exdordor:fr|exdorni:en|exdorta:fr
+en	ex	exwenve:en|exren:en|exri:en
+en	exc	excoka:en|excosu:en|excoexco:en
+en	exco	excoka:en|excosu:en|excoexco:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+en	rib	ribave:en|ribarisel:en|ribalanwen:en
+en	riba	ribave:en|ribarisel:en|ribalanwen:en
+en	re	renfapi:en|rendorsu:en|renun:en
+-	see re	renmo:fr|renbacolan:fr|renfapi:en
+en	Then Re	Renfapi:en|Rendorsu:en|Renun:en
+en	ren	renfapi:en|rendorsu:en|renun:en
+-	see ren	renmo:fr|renbacolan:fr|renfapi:en
+en	Then Ren	Renfapi:en|Rendorsu:en|Renun:en
+en	rend	rendorsu:en|rendorme:en|rendorpi:en
+-	see rend	rendorsu:en|rendorme:en|rendor:fr
+en	Then Rend	Rendorsu:en|Rendorme:en|Rendorpi:en
+en	ve	vewensuta:en|veri:en|vepi:en
+en	vek	veka:en|vekaunar:en|vekaisren:en
+en	se	selmehowen:en|selcocoren:en|seldor:en
+en	sel	selmehowen:en|selcocoren:en|seldor:en
+en	sels	selsuun:en|selsudor:en|selsuselta:en
+en	we	wenunba:en|wenkaho:en|wenkasuwen:en
+-	see we	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wen	wenunba:en|wenkaho:en|wenkasuwen:en
+-	see wen	wenunba:en|wenkaho:en|wenkasuwen:en
+en	wend	wendorwen:en|wendorho:en
+-	see wend	wendorwen:en|wendor:fr|wendorfa:fr
+en	ri	ritaisni:en|riexkata:en|ritove:en
+en	riv	riveta:en|rive:en|riveun:en
+en	fa	faunme:en|faniho:en|faco:en
+en	Then Fa	Faunme:en|Faniho:en|Faco:en
+en	fal	falan:en|falanmepi:en|falanho:en
+en	Then Fal	Falan:en|Falanmepi:en|Falanho:en
+en	fala	falan:en|falanmepi:en|falanho:en
+en	Then Fala	Falan:en|Falanmepi:en|Falanho:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+-	see la	lanlandor:en|lanarmeme:en|lanfa:fr
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+-	see lan	lanlandor:en|lanarmeme:en|lanfa:fr
+en	lanv	lanveguis:en|lanvehove:en|lanvekalan:en
+-	see lanv	lanveguis:en|lanvebador:fr|lanvemome:fr
+en	ex	exwenve:en|exren:en|exri:en
+en	exr	exren:en|exri:en|exrico:en
+en	exri	exrico:en|exriseldor:en|exriun:en
+en	ho	hococove:en|hofa:en|homogume:en
+en	hob	hobaba:en|hobador:en
+en	hoba	hobaba:en|hobador:en
+en	re	renfapi:en|rendorsu:en|renun:en
+-	see re	renmo:fr|renbacolan:fr|renfapi:en
+en	ren	renfapi:en|rendorsu:en|renun:en
+-	see ren	renmo:fr|renbacolan:fr|renfapi:en
+en	renw	renwen:en|renwenfapi:en
+-	see renw	renwenrito:fr|renwendor:fr|renwen:en
+en	ar	arbagu:en|artaun:en|arexis:en
+en	Then Ar	Arbagu:en|Artaun:en|Arexis:en
+en	are	arexis:en|arex:en|arexnime:en
+en	Then Are	Arexis:en|Arex:en|Arexnime:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+en	rit	ritaisni:en|ritove:en|rita:en
+en	rito	ritove:en|ritoka:en
+en	ar	arbagu:en|artaun:en|arexis:en
+-	see ar	arbagu:en|arpi:fr|arto:fr
+en	arf	arfaguwen:en|arfaarco:en|arfapiri:en
+-	see arf	arfaguwen:en|arfaarco:en|arfapiri:en
+en	arfa	arfaguwen:en|arfaarco:en|arfapiri:en
+-	see arfa	arfaguwen:en|arfaarco:en|arfapiri:en
+en	se	selmehowen:en|selcocoren:en|seldor:en
+en	sel	selmehowen:en|selcocoren:en|seldor:en
+en	selr	selrita:en|selrenka:en|selrensu:en
+en	la	lanlandor:en|lanarmeme:en|lanpi:en
+en	lan	lanlandor:en|lanarmeme:en|lanpi:en
+en	lana	lanarmeme:en|lanar:en|lanarsufa:en
+en	ri	ritaisni:en|riexkata:en|ritove:en
+-	see ri	rihoni:fr|riwenbafa:fr|ritaisni:en
+en	Then Ri	Ritaisni:en|Riexkata:en|Ritove:en
+en	rir	ririco:en|ririisho:en|ririis:en
+-	see rir	ririco:en|riri:fr|ririisho:en
+en	Then Rir	Ririco:en|Ririisho:en|Ririis:en
+en	riri	ririco:en|ririisho:en|ririis:en
+-	see riri	ririco:en|ririisho:en|ririis:en
+en	Then Riri	Ririco:en|Ririisho:en|Ririis:en
+en	co	coexta:en|cosunipi:en|comehoto:en
+en	coa	coarrenfa:en|coarka:en|coarkamo:en
+en	coar	coarrenfa:en|coarka:en|coarkamo:en
+en	ve	vewensuta:en|veri:en|vepi:en
+en	ved	vedor:en|vedorar:en|vedorsuco:en
+en	vedo	vedor:en|vedorar:en|vedorsuco:en
+en	do	dorlanselho:en|dorfa:en|dorren:en
+-	see do	dorba:fr|dormoka:fr|dorcomori:fr
+en	dor	dorlanselho:en|dorfa:en|dorren:en
+-	see dor	dorba:fr|dormoka:fr|dorcomori:fr
+en	dort	dortawen:en|dorta:en
+-	see dort	dortawen:en|dorta:en|dortowengu:fr
+en	su	sukataren:en|suka:en|suun:en
+en	sus	susel:en|susellan:en|susulanta:en
+en	suse	susel:en|susellan:en|suselselar:en
+en	su	sukataren:en|suka:en|suun:en
+en	Then Su	Sukataren:en|Suka:en|Suun:en
+en	suc	sucoar:en|sucosu:en|sucokari:en
+en	Then Suc	Sucoar:en|Sucosu:en|Sucokari:en
+en	suco	sucoar:en|sucosu:en|sucokari:en
+en	Then Suco	Sucoar:en|Sucosu:en|Sucokari:en
+en	ta	tato:en|tawengu:en|taselsel:en
+-	see ta	tato:en|tawengu:en|taisri:fr
+en	tas	taselsel:en|tasuun:en|taselco:en
+-	see tas	taselsel:en|tasuun:en|taselco:en
+en	tase	taselsel:en|taselco:en|tasel:en
+-	see tase	taselsel:en|taselco:en|tasel:en
+en	pi	piwenhome:en|pirive:en|piun:en
+en	pic	picopi:en|picosuren:en|pico:en
+en	pico	picopi:en|picosuren:en|picoisfa:en
+en	un	ununmeis:en|unmotoba:en|unsulan:en
+en	unb	unbari:en|unbalanri:en|unba:en
+en	unba	unbari:en|unbalanri:en
+en	me	memoho:en|metomome:en|mepiho:en
+-	see me	memoho:en|meselkawen:fr|medorlanve:fr
+en	men	meni:en|menive:en|menicosel:en
+-	see men	meni:en|menime:fr|menipini:fr
+fr	su	sumoguto:fr|suveveni:fr|suselguun:fr
+-	see su	sumoguto:fr|suveveni:fr|sukataren:en
+fr	Then Su	Sumoguto:fr|Suveveni:fr|Suselguun:fr
+fr	sum	sumoguto:fr|sume:fr|sumeex:fr
+-	see sum	sumoguto:fr|sume:fr|sumeex:fr
+fr	Then Sum	Sumoguto:fr|Sume:fr|Sumeex:fr
+fr	sumo	sumoguto:fr|sumoco:fr|sumoargu:fr
+-	see sumo	sumoguto:fr|sumocowen:en|sumokave:en
+fr	Then Sumo	Sumoguto:fr|Sumoco:fr|Sumoargu:fr
+fr	to	totaho:fr|toselcoar:fr|toconini:fr
+fr	tot	totaho:fr|totaex:fr|totalan:fr
+fr	tota	totaho:fr|totaex:fr|totalan:fr
+fr	re	renmo:fr|renbacolan:fr|renun:fr
+fr	ren	renmo:fr|renbacolan:fr|renun:fr
+fr	renm	renmo:fr|renmoex:fr|renmoco:fr
+fr	mo	moni:fr|mokato:fr|mowengumo:fr
+-	see mo	moni:fr|mouncoex:en|moarmo:en
+fr	mon	moni:fr|monikasel:fr|monika:fr
+-	see mon	moni:fr|monikasel:fr|monika:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	cos	coselpiwen:fr|cosu:fr|coseltois:fr
+fr	cose	coselpiwen:fr|coseltois:fr|coselmoka:fr
+fr	su	sumoguto:fr|suveveni:fr|suselguun:fr
+fr	Then Su	Sumoguto:fr|Suveveni:fr|Suselguun:fr
+fr	suv	suveveni:fr|suveho:fr|suvenifa:fr
+fr	Then Suv	Suveveni:fr|Suveho:fr|Suvenifa:fr
+fr	suve	suveveni:fr|suveho:fr|suvenifa:fr
+fr	Then Suve	Suveveni:fr|Suveho:fr|Suvenifa:fr
+fr	ri	rihoni:fr|riwenbafa:fr|riexta:fr
+-	see ri	rihoni:fr|riwenbafa:fr|ritaisni:en
+fr	rih	rihoni:fr|riho:fr|rihoto:fr
+-	see rih	rihoni:fr|riho:fr|rihoto:fr
+fr	riho	rihoni:fr|rihoto:fr|rihome:fr
+-	see riho	rihoni:fr|rihoto:fr|rihofapi:en
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+fr	wenb	wenbais:fr
+fr	do	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dor	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dorb	dorba:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+-	see pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pii	piismoex:fr|piis:fr
+-	see pii	piismoex:fr|piis:fr|piispi:en
+fr	piis	piismoex:fr
+-	see piis	piismoex:fr|piispi:en
+fr	is	isme:fr|isfasu:fr|isren:fr
+fr	Then Is	Isme:fr|Isfasu:fr|Isren:fr
+fr	ism	isme:fr|ismeba:fr
+fr	Then Ism	Isme:fr|Ismeba:fr
+fr	re	renmo:fr|renbacolan:fr|renun:fr
+fr	ren	renmo:fr|renbacolan:fr|renun:fr
+fr	renb	renbacolan:fr|renba:fr|renbaundor:fr
+fr	ba	bata:fr|batari:fr|bamo:fr
+-	see ba	bata:fr|batari:fr|bamo:fr
+fr	bat	bata:fr|batari:fr|batawen:fr
+-	see bat	bata:fr|batari:fr|batata:en
+fr	la	lanfa:fr|lanlan:fr|lantavemo:fr
+fr	lan	lanfa:fr|lanlan:fr|lantavemo:fr
+fr	lanf	lanfa:fr|lanfaex:fr
+fr	su	sumoguto:fr|suveveni:fr|suselguun:fr
+fr	sus	suselguun:fr|suselgu:fr|susuren:fr
+fr	suse	suselguun:fr|suselgu:fr|suselri:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+-	see pi	piismoex:fr|pika:fr|piexsu:fr
+fr	Then Pi	Piismoex:fr|Pika:fr|Piexsu:fr
+fr	pik	pika:fr|pikadorme:fr|pikaex:fr
+-	see pik	pika:fr|pikaguve:en|pikadorme:fr
+fr	Then Pik	Pika:fr|Pikadorme:fr|Pikaex:fr
+fr	do	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dor	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dorm	dormoka:fr|dormofa:fr|dormoren:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	cop	copita:fr|copisel:fr|copimeco:fr
+fr	copi	copita:fr|copisel:fr|copimeco:fr
+fr	ni	nilandordor:fr|nifakador:fr|niexmowen:fr
+-	see ni	nilandordor:fr|niren:en|nifakador:fr
+fr	nil	nilandordor:fr|nilan:fr|nilantofa:fr
+-	see nil	nilandordor:fr|nilan:fr|nilanbata:en
+fr	nila	nilandordor:fr|nilan:fr|nilantofa:fr
+-	see nila	nilandordor:fr|nilan:fr|nilanbata:en
+fr	ba	bata:fr|batari:fr|bamo:fr
+fr	bat	bata:fr|batari:fr|batawen:fr
+fr	bata	batari:fr|batawen:fr|batawento:fr
+fr	to	totaho:fr|toselcoar:fr|toconini:fr
+fr	Then To	Totaho:fr|Toselcoar:fr|Toconini:fr
+fr	tos	toselcoar:fr|toselho:fr|toselwenwen:fr
+fr	Then Tos	Toselcoar:fr|Toselho:fr|Toselwenwen:fr
+fr	tose	toselcoar:fr|toselho:fr|toselwenwen:fr
+fr	Then Tose	Toselcoar:fr|Toselho:fr|Toselwenwen:fr
+fr	ni	nilandordor:fr|nifakador:fr|niexmowen:fr
+-	see ni	nilandordor:fr|niren:en|nifakador:fr
+fr	nif	nifakador:fr|nifari:fr|nifapi:fr
+-	see nif	nifakador:fr|nifaniri:en|nifari:fr
+fr	nifa	nifakador:fr|nifari:fr|nifapi:fr
+-	see nifa	nifakador:fr|nifaniri:en|nifari:fr
+fr	ho	hodorcowen:fr|hosu:fr|horito:fr
+fr	hod	hodorcowen:fr|hodoris:fr|hodor:fr
+fr	hodo	hodorcowen:fr|hodoris:fr|hodor:fr
+fr	ba	bata:fr|batari:fr|bamo:fr
+fr	bam	bamo:fr|bamefa:fr|bamearka:fr
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+-	see we	wenunba:en|wenkaho:en|wenkasuwen:en
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+-	see wen	wenunba:en|wenkaho:en|wenkasuwen:en
+fr	wens	wensel:fr|wensuhoar:fr|wensumo:fr
+-	see wens	wensel:fr|wensuhoar:fr|wensumo:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	Then Co	Coselpiwen:fr|Copita:fr|Coisexsu:fr
+fr	coi	coisexsu:fr|coisni:fr|coislan:fr
+fr	Then Coi	Coisexsu:fr|Coisni:fr|Coislan:fr
+fr	cois	coisexsu:fr|coisni:fr|coislan:fr
+fr	Then Cois	Coisexsu:fr|Coisni:fr|Coislan:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	cor	coren:fr|coritave:fr|corenbalan:fr
+fr	core	coren:fr|corenbalan:fr|corenkaren:fr
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+-	see we	wenunba:en|wenkaho:en|wenkasuwen:en
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+-	see wen	wenunba:en|wenkaho:en|wenkasuwen:en
+fr	went	wentaun:fr|wentotoni:fr|wenta:fr
+-	see went	wentaun:fr|wentotoni:fr|wentavelan:en
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	col	colanexta:fr|colan:fr|colanco:fr
+fr	cola	colanexta:fr|colan:fr|colanco:fr
+fr	mo	moni:fr|mokato:fr|mowengumo:fr
+fr	mok	mokato:fr|mokari:fr|mokani:fr
+fr	moka	mokato:fr|mokari:fr|mokani:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+-	see pi	piismoex:fr|pika:fr|piexsu:fr
+fr	Then Pi	Piismoex:fr|Pika:fr|Piexsu:fr
+fr	pie	piexsu:fr|piex:fr|piexgu:fr
+-	see pie	piexsu:fr|piex:fr|piexgu:fr
+fr	Then Pie	Piexsu:fr|Piex:fr|Piexgu:fr
+fr	piex	piexsu:fr|piexgu:fr|piexgulan:fr
+-	see piex	piexsu:fr|piexgu:fr|piexco:en
+fr	Then Piex	Piexsu:fr|Piexgu:fr|Piexgulan:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pia	piardorwen:fr|piar:fr
+fr	piar	piardorwen:fr
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+fr	wene	wenexun:fr|wenexcoren:fr|wenexve:fr
+fr	ta	taisri:fr|tamo:fr|taren:fr
+-	see ta	tato:en|tawengu:en|taisri:fr
+fr	tai	taisri:fr|taisniri:fr
+-	see tai	taisri:fr|taisniri:fr|tais:en
+fr	tais	taisri:fr|taisniri:fr
+-	see tais	taisri:fr|taisniri:fr
+fr	re	renmo:fr|renbacolan:fr|renun:fr
+fr	ren	renmo:fr|renbacolan:fr|renun:fr
+fr	renu	renun:fr|renunholan:fr
+fr	ar	arpi:fr|arto:fr|armosel:fr
+fr	Then Ar	Arpi:fr|Arto:fr|Armosel:fr
+fr	arp	arpi:fr|arpibalan:fr
+fr	Then Arp	Arpi:fr|Arpibalan:fr
+fr	do	dorba:fr|dormoka:fr|dorcomori:fr
+-	see do	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dor	dorba:fr|dormoka:fr|dorcomori:fr
+-	see dor	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dorc	dorcomori:fr|dorcosudor:fr|dorco:fr
+-	see dorc	dorcomori:fr|dorcoco:en|dorcota:en
+fr	ar	arpi:fr|arto:fr|armosel:fr
+fr	art	arto:fr|arta:fr|artowen:fr
+fr	ri	rihoni:fr|riwenbafa:fr|riexta:fr
+fr	riw	riwenbafa:fr|riwen:fr|riwenhosel:fr
+fr	riwe	riwenbafa:fr|riwen:fr|riwenhosel:fr
+fr	do	dorba:fr|dormoka:fr|dorcomori:fr
+-	see do	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dor	dorba:fr|dormoka:fr|dorcomori:fr
+-	see dor	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dorh	dorhoselex:fr|dorhotais:fr|dorhoriun:fr
+-	see dorh	dorhoselex:fr|dorhotais:fr|dorhoriun:fr
+fr	ni	nilandordor:fr|nifakador:fr|niexmowen:fr
+fr	Then Ni	Nilandordor:fr|Nifakador:fr|Niexmowen:fr
+fr	nie	niexmowen:fr|niexlanren:fr|niex:fr
+fr	Then Nie	Niexmowen:fr|Niexlanren:fr|Niex:fr
+fr	niex	niexmowen:fr|niexlanren:fr
+fr	Then Niex	Niexmowen:fr|Niexlanren:fr
+fr	ri	rihoni:fr|riwenbafa:fr|riexta:fr
+fr	rie	riexta:fr|riexba:fr|riexwen:fr
+fr	riex	riexta:fr|riexba:fr|riexwen:fr
+fr	ba	bata:fr|batari:fr|bamo:fr
+-	see ba	bata:fr|batari:fr|bamo:fr
+fr	bap	bapi:fr|bapini:fr|bapibapi:fr
+-	see bap	bapi:fr|bapini:fr|bapibapi:fr
+fr	gu	guselren:fr|guwentaho:fr|gucohoho:fr
+fr	gus	guselren:fr|gusel:fr|gusufa:fr
+fr	guse	guselren:fr|gusel:fr|guselselba:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pif	pifaguka:fr|pifaisni:fr|pifa:fr
+fr	pifa	pifaguka:fr|pifaisni:fr|pifaun:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+-	see pi	piismoex:fr|pika:fr|piexsu:fr
+fr	Then Pi	Piismoex:fr|Pika:fr|Piexsu:fr
+fr	pip	pipi:fr|pipika:fr
+-	see pip	pipi:fr|pipimo:en|pipipi:en
+fr	Then Pip	Pipi:fr|Pipika:fr
+fr	un	unka:fr|unrimesel:fr|unhorito:fr
+fr	unk	unka:fr|unkaguar:fr|unkacois:fr
+fr	ho	hodorcowen:fr|hosu:fr|horito:fr
+fr	hos	hosu:fr|hoselri:fr|hosel:fr
+fr	ho	hodorcowen:fr|hosu:fr|horito:fr
+-	see ho	hococove:en|hodorcowen:fr|hofa:en
+fr	hor	horito:fr|horen:fr|horiarar:fr
+-	see hor	horito:fr|horen:fr|horenselfa:en
+fr	hori	horito:fr|horiarar:fr|horiar:fr
+-	see hori	horito:fr|horiarar:fr|horiar:fr
+fr	ba	bata:fr|batari:fr|bamo:fr
+fr	bam	bamo:fr|bamefa:fr|bamearka:fr
+fr	bame	bamefa:fr|bamearka:fr
+fr	ba	bata:fr|batari:fr|bamo:fr
+fr	Then Ba	Bata:fr|Batari:fr|Bamo:fr
+fr	bal	balanmoni:fr|balanar:fr|balanme:fr
+fr	Then Bal	Balanmoni:fr|Balanar:fr|Balanme:fr
+fr	bala	balanmoni:fr|balanar:fr|balanme:fr
+fr	Then Bala	Balanmoni:fr|Balanar:fr|Balanme:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+-	see pi	piismoex:fr|pika:fr|piexsu:fr
+fr	piu	piununwen:fr|piun:fr|piunisho:fr
+-	see piu	piununwen:fr|piun:en|piunisex:en
+fr	piun	piununwen:fr|piunisho:fr
+-	see piun	piununwen:fr|piunisex:en|piunisho:fr
+fr	me	meselkawen:fr|medorlanve:fr|melanun:fr
+fr	mes	meselkawen:fr|mesufa:fr|mesu:fr
+fr	mese	meselkawen:fr|meselsu:fr|meselkalan:fr
+fr	re	renmo:fr|renbacolan:fr|renun:fr
+fr	ren	renmo:fr|renbacolan:fr|renun:fr
+fr	reni	renispilan:fr|renis:fr|renisnito:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+-	see pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pib	pibalanun:fr|pibalanpi:fr|pibasel:fr
+-	see pib	pibalanun:fr|pibalanpi:fr|pibasel:fr
+fr	piba	pibalanun:fr|pibalanpi:fr|pibasel:fr
+-	see piba	pibalanun:fr|pibalanpi:fr|pibasel:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+fr	Then Pi	Piismoex:fr|Pika:fr|Piexsu:fr
+fr	pif	pifaguka:fr|pifaisni:fr|pifa:fr
+fr	Then Pif	Pifaguka:fr|Pifaisni:fr|Pifa:fr
+fr	pifa	pifaguka:fr|pifaisni:fr|pifaun:fr
+fr	Then Pifa	Pifaguka:fr|Pifaisni:fr|Pifaun:fr
+fr	fa	fakari:fr|fatoco:fr|famefapi:fr
+fr	fak	fakari:fr|fakagu:fr|fakawen:fr
+fr	faka	fakari:fr|fakagu:fr|fakawen:fr
+fr	su	sumoguto:fr|suveveni:fr|suselguun:fr
+-	see su	sumoguto:fr|suveveni:fr|sukataren:en
+fr	suc	suco:fr|sucosel:fr
+-	see suc	suco:fr|sucoar:en|sucosu:en
+fr	ni	nilandordor:fr|nifakador:fr|niexmowen:fr
+fr	nir	niri:fr|niriunho:fr|nirengu:fr
+fr	ho	hodorcowen:fr|hosu:fr|horito:fr
+fr	hoe	hoexarfa:fr|hoexren:fr|hoexhoco:fr
+fr	hoex	hoexarfa:fr|hoexren:fr|hoexhoco:fr
+fr	ri	rihoni:fr|riwenbafa:fr|riexta:fr
+-	see ri	rihoni:fr|riwenbafa:fr|ritaisni:en
+fr	Then Ri	Rihoni:fr|Riwenbafa:fr|Riexta:fr
+fr	rit	ritoarni:fr|ritaholan:fr
+-	see rit	ritaisni:en|ritoarni:fr|ritove:en
+fr	Then Rit	Ritoarni:fr|Ritaholan:fr
+fr	rito	ritoarni:fr
+-	see rito	ritoarni:fr|ritove:en|ritoka:en
+fr	Then Rito	Ritoarni:fr
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+fr	wenw	wenwenis:fr|wenwenkaba:fr|wenwenpi:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pid	pidor:fr|pidorrenren:fr|pidorex:fr
+fr	pido	pidor:fr|pidorrenren:fr|pidorex:fr
+fr	is	isme:fr|isfasu:fr|isren:fr
+-	see is	isme:fr|ispiun:en|isfasu:fr
+fr	isf	isfasu:fr|isfa:fr|isfasuto:fr
+-	see isf	isfasu:fr|isfa:fr|isfamove:en
+fr	isfa	isfasu:fr|isfasuto:fr|isfaho:fr
+-	see isfa	isfasu:fr|isfamove:en|isfasuto:fr
+fr	gu	guselren:fr|guwentaho:fr|gucohoho:fr
+fr	guw	guwentaho:fr|guwenco:fr|guwen:fr
+fr	guwe	guwentaho:fr|guwenco:fr|guwen:fr
+fr	ni	nilandordor:fr|nifakador:fr|niexmowen:fr
+fr	Then Ni	Nilandordor:fr|Nifakador:fr|Niexmowen:fr
+fr	nie	niexmowen:fr|niexlanren:fr|niex:fr
+fr	Then Nie	Niexmowen:fr|Niexlanren:fr|Niex:fr
+fr	niex	niexmowen:fr|niexlanren:fr
+fr	Then Niex	Niexmowen:fr|Niexlanren:fr
+fr	to	totaho:fr|toselcoar:fr|toconini:fr
+-	see to	totaho:fr|toho:en|toselcoar:fr
+fr	toc	toconini:fr|tocolanka:fr|toco:fr
+-	see toc	toconini:fr|tocolanka:fr|toco:fr
+fr	toco	toconini:fr|tocolanka:fr
+-	see toco	toconini:fr|tocolanka:fr|tocoguba:en
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	coc	cocosel:fr|cococo:fr|cocoun:fr
+fr	coco	cocosel:fr|cococo:fr|cocoun:fr
+fr	gu	guselren:fr|guwentaho:fr|gucohoho:fr
+fr	guc	gucohoho:fr|guco:fr|gucomoun:fr
+fr	guco	gucohoho:fr|gucomoun:fr|gucoarta:fr
+fr	is	isme:fr|isfasu:fr|isren:fr
+-	see is	isme:fr|ispiun:en|isfasu:fr
+fr	isr	isren:fr|isri:fr|isrento:fr
+-	see isr	isren:fr|isri:fr|isrento:fr
+fr	isre	isren:fr|isrento:fr|isrenunpi:fr
+-	see isre	isren:fr|isrento:fr|isrenco:en
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+fr	Then We	Wenbais:fr|Wensel:fr|Wentaun:fr
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+fr	Then Wen	Wenbais:fr|Wensel:fr|Wentaun:fr
+fr	wens	wensel:fr|wensuhoar:fr|wensumo:fr
+fr	Then Wens	Wensel:fr|Wensuhoar:fr|Wensumo:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pil	pilanmowen:fr|pilanfafa:fr|pilanba:fr
+fr	pila	pilanmowen:fr|pilanfafa:fr|pilanba:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+-	see co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	cop	copita:fr|copisel:fr|copimeco:fr
+-	see cop	copita:fr|copisel:fr|copimeco:fr
+fr	copi	copita:fr|copisel:fr|copimeco:fr
+-	see copi	copita:fr|copisel:fr|copimeco:fr
+fr	me	meselkawen:fr|medorlanve:fr|melanun:fr
+fr	med	medorlanve:fr|medorfa:fr|medorto:fr
+fr	medo	medorlanve:fr|medorfa:fr|medorto:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	cor	coren:fr|coritave:fr|corenbalan:fr
+fr	cori	coritave:fr|corito:fr|corigu:fr
+fr	ta	taisri:fr|tamo:fr|taren:fr
+-	see ta	tato:en|tawengu:en|taisri:fr
+fr	Then Ta	Taisri:fr|Tamo:fr|Taren:fr
+fr	tam	tamo:fr|tamemo:fr|tamosuis:fr
+-	see tam	tamo:fr|tameissel:en|tamemo:fr
+fr	Then Tam	Tamo:fr|Tamemo:fr|Tamosuis:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pis	piselguta:fr|piselar:fr|pisel:fr
+fr	pise	piselguta:fr|piselar:fr|pisel:fr
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+fr	wenw	wenwenis:fr|wenwenkaba:fr|wenwenpi:fr
+fr	fa	fakari:fr|fatoco:fr|famefapi:fr
+-	see fa	faunme:en|faniho:en|fakari:fr
+fr	fat	fatoco:fr|fatawen:fr|fatoni:fr
+-	see fat	fatoco:fr|fatoni:en|fatove:en
+fr	fato	fatoco:fr|fatoni:fr
+-	see fato	fatoco:fr|fatoni:en|fatove:en
+fr	to	totaho:fr|toselcoar:fr|toconini:fr
+fr	tov	toveriho:fr|tovesu:fr|toveta:fr
+fr	tove	toveriho:fr|tovesu:fr|toveta:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+fr	Then Pi	Piismoex:fr|Pika:fr|Piexsu:fr
+fr	piw	piwentata:fr|piwenlanpi:fr|piwenrenren:fr
+fr	Then Piw	Piwentata:fr|Piwenlanpi:fr|Piwenrenren:fr
+fr	piwe	piwentata:fr|piwenlanpi:fr|piwenrenren:fr
+fr	Then Piwe	Piwentata:fr|Piwenlanpi:fr|Piwenrenren:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+-	see pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pib	pibalanun:fr|pibalanpi:fr|pibasel:fr
+-	see pib	pibalanun:fr|pibalanpi:fr|pibasel:fr
+fr	piba	pibalanun:fr|pibalanpi:fr|pibasel:fr
+-	see piba	pibalanun:fr|pibalanpi:fr|pibasel:fr
+fr	mo	moni:fr|mokato:fr|mowengumo:fr
+fr	mow	mowengumo:fr|mowentori:fr|mowenexho:fr
+fr	mowe	mowengumo:fr|mowentori:fr|mowenexho:fr
+fr	to	totaho:fr|toselcoar:fr|toconini:fr
+fr	tow	towen:fr|towenve:fr
+fr	towe	towen:fr|towenve:fr
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+-	see we	wenunba:en|wenkaho:en|wenkasuwen:en
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+-	see wen	wenunba:en|wenkaho:en|wenkasuwen:en
+fr	wenw	wenwenis:fr|wenwenkaba:fr|wenwenpi:fr
+-	see wenw	wenwenwen:en|wenwenis:fr|wenwenkaba:fr
+fr	ar	arpi:fr|arto:fr|armosel:fr
+fr	Then Ar	Arpi:fr|Arto:fr|Armosel:fr
+fr	arm	armosel:fr|armoarto:fr|arme:fr
+fr	Then Arm	Armosel:fr|Armoarto:fr|Arme:fr
+fr	armo	armosel:fr|armoarto:fr
+fr	Then Armo	Armosel:fr|Armoarto:fr
+fr	ho	hodorcowen:fr|hosu:fr|horito:fr
+fr	hog	hogu:fr|hogugu:fr
+fr	un	unka:fr|unrimesel:fr|unhorito:fr
+-	see un	ununmeis:en|unmotoba:en|unka:fr
+fr	unr	unrimesel:fr|unrensu:fr|unren:fr
+-	see unr	unrimesel:fr|unrensu:fr|unren:fr
+fr	unri	unrimesel:fr
+-	see unri	unrimesel:fr|unridor:en|unriun:en
+fr	ar	arpi:fr|arto:fr|armosel:fr
+fr	arg	argumo:fr
+fr	argu	argumo:fr
+fr	ta	taisri:fr|tamo:fr|taren:fr
+fr	tar	taren:fr|tari:fr|tarenex:fr
+fr	tare	taren:fr|tarenex:fr|tarengu:fr
+fr	me	meselkawen:fr|medorlanve:fr|melanun:fr
+-	see me	memoho:en|meselkawen:fr|medorlanve:fr
+fr	Then Me	Meselkawen:fr|Medorlanve:fr|Melanun:fr
+fr	mel	melanun:fr|melanto:fr
+-	see mel	melanun:fr|melanto:fr|melancopi:en
+fr	Then Mel	Melanun:fr|Melanto:fr
+fr	mela	melanun:fr|melanto:fr
+-	see mela	melanun:fr|melanto:fr|melancopi:en
+fr	Then Mela	Melanun:fr|Melanto:fr
+fr	ho	hodorcowen:fr|hosu:fr|horito:fr
+fr	hom	homeselsel:fr|homoni:fr|home:fr
+fr	home	homeselsel:fr
+fr	ta	taisri:fr|tamo:fr|taren:fr
+fr	tag	tagu:fr|tagudoris:fr|tagutogu:fr
+fr	do	dorba:fr|dormoka:fr|dorcomori:fr
+-	see do	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dor	dorba:fr|dormoka:fr|dorcomori:fr
+-	see dor	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dorw	dorwenwen:fr|dorwenun:fr|dorwenrini:fr
+-	see dorw	dorwenwen:fr|dorwenun:fr|dorwenrini:fr
+fr	la	lanfa:fr|lanlan:fr|lantavemo:fr
+fr	lan	lanfa:fr|lanlan:fr|lantavemo:fr
+fr	lanl	lanlan:fr|lanlanpi:fr|lanlanka:fr
+fr	ho	hodorcowen:fr|hosu:fr|horito:fr
+fr	Then Ho	Hodorcowen:fr|Hosu:fr|Horito:fr
+fr	hov	hove:fr|hovewen:fr
+fr	Then Hov	Hove:fr|Hovewen:fr
+fr	se	selfa:fr|selri:fr|selme:fr
+-	see se	selmehowen:en|selcocoren:en|selfa:fr
+fr	sel	selfa:fr|selri:fr|selme:fr
+-	see sel	selmehowen:en|selcocoren:en|selfa:fr
+fr	self	selfa:fr|selfarenta:fr
+-	see self	selfa:fr|selfarenta:fr|selfato:en
+fr	se	selfa:fr|selri:fr|selme:fr
+fr	sel	selfa:fr|selri:fr|selme:fr
+fr	selr	selri:fr|selritopi:fr|selriwen:fr
+fr	ex	exselunex:fr|excori:fr|exlansulan:fr
+fr	exs	exselunex:fr|exsuho:fr|exsel:fr
+fr	exse	exselunex:fr|exsel:fr
+fr	mo	moni:fr|mokato:fr|mowengumo:fr
+-	see mo	moni:fr|mouncoex:en|moarmo:en
+fr	mot	motosuka:fr|mota:fr|motounex:fr
+-	see mot	motosuka:fr|mota:fr|motounex:fr
+fr	moto	motosuka:fr|motounex:fr|motolanme:fr
+-	see moto	motosuka:fr|motounex:fr|motolanme:fr
+fr	ba	bata:fr|batari:fr|bamo:fr
+fr	Then Ba	Bata:fr|Batari:fr|Bamo:fr
+fr	bar	barenlan:fr|bariisfa:fr|baren:fr
+fr	Then Bar	Barenlan:fr|Bariisfa:fr|Baren:fr
+fr	bare	barenlan:fr|baren:fr
+fr	Then Bare	Barenlan:fr|Baren:fr
+fr	re	renmo:fr|renbacolan:fr|renun:fr
+fr	ren	renmo:fr|renbacolan:fr|renun:fr
+fr	renw	renwenrito:fr|renwendor:fr|renwenmeis:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+-	see pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pil	pilanmowen:fr|pilanfafa:fr|pilanba:fr
+-	see pil	pilanmowen:fr|pilanfafa:fr|pilanba:en
+fr	pila	pilanmowen:fr|pilanfafa:fr|pilanba:fr
+-	see pila	pilanmowen:fr|pilanfafa:fr|pilanba:en
+fr	is	isme:fr|isfasu:fr|isren:fr
+fr	isu	isun:fr
+fr	un	unka:fr|unrimesel:fr|unhorito:fr
+fr	unh	unhorito:fr|unho:fr
+fr	unho	unhorito:fr
+fr	mo	moni:fr|mokato:fr|mowengumo:fr
+-	see mo	moni:fr|mouncoex:en|moarmo:en
+fr	Then Mo	Moni:fr|Mokato:fr|Mowengumo:fr
+fr	mok	mokato:fr|mokari:fr|mokani:fr
+-	see mok	mokato:fr|mokari:fr|mokani:fr
+fr	Then Mok	Mokato:fr|Mokari:fr|Mokani:fr
+fr	moka	mokato:fr|mokari:fr|mokani:fr
+-	see moka	mokato:fr|mokari:fr|mokani:fr
+fr	Then Moka	Mokato:fr|Mokari:fr|Mokani:fr
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+fr	wenr	wenri:fr|wenriwen:fr|wenridorho:fr
+fr	fa	fakari:fr|fatoco:fr|famefapi:fr
+fr	fam	famefapi:fr|famoren:fr|fame:fr
+fr	fame	famefapi:fr
+fr	gu	guselren:fr|guwentaho:fr|gucohoho:fr
+-	see gu	guarmo:en|gusuar:en|gupimoun:en
+fr	gub	gubaho:fr|gubaco:fr
+-	see gub	gubaho:fr|gubani:en|guba:en
+fr	guba	gubaho:fr|gubaco:fr
+-	see guba	gubaho:fr|gubani:en|gubaco:fr
+fr	to	totaho:fr|toselcoar:fr|toconini:fr
+fr	tok	toka:fr|tokaunta:fr|tokari:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	Then Co	Coselpiwen:fr|Copita:fr|Coisexsu:fr
+fr	coc	cocosel:fr|cococo:fr|cocoun:fr
+fr	Then Coc	Cocosel:fr|Cococo:fr|Cocoun:fr
+fr	coco	cocosel:fr|cococo:fr|cocoun:fr
+fr	Then Coco	Cocosel:fr|Cococo:fr|Cocoun:fr
+fr	fa	fakari:fr|fatoco:fr|famefapi:fr
+-	see fa	faunme:en|faniho:en|fakari:fr
+fr	fag	fagu:fr|fagumofa:fr|faguarri:fr
+-	see fag	fagu:fr|fagumofa:fr|fagumo:en
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	cow	cowen:fr|cowengu:fr|cowenmo:fr
+fr	cowe	cowen:fr|cowengu:fr|cowenmo:fr
+fr	to	totaho:fr|toselcoar:fr|toconini:fr
+fr	tor	torenfapi:fr|torenfari:fr|toriun:fr
+fr	tore	torenfapi:fr|torenfari:fr|torenka:fr
+fr	gu	guselren:fr|guwentaho:fr|gucohoho:fr
+-	see gu	guarmo:en|gusuar:en|gupimoun:en
+fr	gut	guta:fr|gutodor:fr|gutacoco:fr
+-	see gut	guta:fr|gutodor:fr|guto:en
+fr	ve	vetogu:fr|vepiiswen:fr|veto:fr
+fr	Then Ve	Vetogu:fr|Vepiiswen:fr|Veto:fr
+fr	vet	vetogu:fr|veto:fr|vetoun:fr
+fr	Then Vet	Vetogu:fr|Veto:fr|Vetoun:fr
+fr	veto	vetogu:fr|vetoun:fr|vetois:fr
+fr	Then Veto	Vetogu:fr|Vetoun:fr|Vetois:fr
+fr	fa	fakari:fr|fatoco:fr|famefapi:fr
+fr	fal	falan:fr|falanren:fr|falanveex:fr
+fr	fala	falan:fr|falanren:fr|falanveex:fr
+fr	me	meselkawen:fr|medorlanve:fr|melanun:fr
+-	see me	memoho:en|meselkawen:fr|medorlanve:fr
+fr	mea	mearme:fr
+-	see mea	mearme:fr|mearriwen:en|mearfa:en
+fr	mear	mearme:fr
+-	see mear	mearme:fr|mearriwen:en|mearfa:en
+fr	ri	rihoni:fr|riwenbafa:fr|riexta:fr
+fr	rir	riri:fr|rirenme:fr
+fr	do	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dor	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dors	dorsudorka:fr|dorselexgu:fr|dorsel:fr
+fr	fa	fakari:fr|fatoco:fr|famefapi:fr
+-	see fa	faunme:en|faniho:en|fakari:fr
+fr	Then Fa	Fakari:fr|Fatoco:fr|Famefapi:fr
+fr	fak	fakari:fr|fakagu:fr|fakawen:fr
+-	see fak	fakari:fr|fakagu:fr|fakawen:fr
+fr	Then Fak	Fakari:fr|Fakagu:fr|Fakawen:fr
+fr	faka	fakari:fr|fakagu:fr|fakawen:fr
+-	see faka	fakari:fr|fakagu:fr|fakawen:fr
+fr	Then Faka	Fakari:fr|Fakagu:fr|Fakawen:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	cob	cobamois:fr|coba:fr|cobaka:fr
+fr	coba	cobamois:fr|cobaka:fr
+fr	re	renmo:fr|renbacolan:fr|renun:fr
+fr	ren	renmo:fr|renbacolan:fr|renun:fr
+fr	renw	renwenrito:fr|renwendor:fr|renwenmeis:fr
+fr	un	unka:fr|unrimesel:fr|unhorito:fr
+-	see un	ununmeis:en|unmotoba:en|unka:fr
+fr	unr	unrimesel:fr|unrensu:fr|unren:fr
+-	see unr	unrimesel:fr|unrensu:fr|unren:fr
+fr	unre	unrensu:fr|unren:fr|unrenguren:fr
+-	see unre	unrensu:fr|unren:fr|unrenguren:fr
+fr	la	lanfa:fr|lanlan:fr|lantavemo:fr
+fr	lan	lanfa:fr|lanlan:fr|lantavemo:fr
+fr	lant	lantavemo:fr|lanta:fr|lantocodor:fr
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+fr	Then We	Wenbais:fr|Wensel:fr|Wentaun:fr
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+fr	Then Wen	Wenbais:fr|Wensel:fr|Wentaun:fr
+fr	wenl	wenlan:fr|wenlanri:fr|wenlankasu:fr
+fr	Then Wenl	Wenlan:fr|Wenlanri:fr|Wenlankasu:fr
+fr	un	unka:fr|unrimesel:fr|unhorito:fr
+-	see un	ununmeis:en|unmotoba:en|unka:fr
+fr	unm	unmear:fr|unme:fr|unmoex:fr
+-	see unm	unmotoba:en|unme:en|unmear:fr
+fr	unme	unmear:fr
+-	see unme	unmear:fr|unmedorve:en
+fr	do	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dor	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dorl	dorlanfa:fr|dorlanarfa:fr
+fr	ba	bata:fr|batari:fr|bamo:fr
+fr	ban	bani:fr|banirita:fr|baniar:fr
+fr	fa	fakari:fr|fatoco:fr|famefapi:fr
+-	see fa	faunme:en|faniho:en|fakari:fr
+fr	fav	fave:fr|favewendor:fr|favesu:fr
+-	see fav	fave:fr|faveri:en|favewendor:fr
+fr	la	lanfa:fr|lanlan:fr|lantavemo:fr
+fr	Then La	Lanfa:fr|Lanlan:fr|Lantavemo:fr
+fr	lan	lanfa:fr|lanlan:fr|lantavemo:fr
+fr	Then Lan	Lanfa:fr|Lanlan:fr|Lantavemo:fr
+fr	lanu	lanun:fr|lanunfa:fr|lanunwenpi:fr
+fr	Then Lanu	Lanun:fr|Lanunfa:fr|Lanunwenpi:fr
+fr	ni	nilandordor:fr|nifakador:fr|niexmowen:fr
+fr	nil	nilandordor:fr|nilan:fr|nilantofa:fr
+fr	nila	nilandordor:fr|nilan:fr|nilantofa:fr
+fr	ve	vetogu:fr|vepiiswen:fr|veto:fr
+-	see ve	vewensuta:en|veri:en|vepi:en
+fr	vep	vepiiswen:fr
+-	see vep	vepi:en|vepiiswen:fr
+fr	vepi	vepiiswen:fr
+-	see vepi	vepiiswen:fr
+fr	un	unka:fr|unrimesel:fr|unhorito:fr
+fr	unh	unhorito:fr|unho:fr
+fr	ba	bata:fr|batari:fr|bamo:fr
+fr	bai	baispi:fr|baisconi:fr|baissupi:fr
+fr	bais	baispi:fr|baisconi:fr|baissupi:fr
+fr	ho	hodorcowen:fr|hosu:fr|horito:fr
+-	see ho	hococove:en|hodorcowen:fr|hofa:en
+fr	Then Ho	Hodorcowen:fr|Hosu:fr|Horito:fr
+fr	hod	hodorcowen:fr|hodoris:fr|hodor:fr
+-	see hod	hodorcowen:fr|hodoris:fr|hodor:fr
+fr	Then Hod	Hodorcowen:fr|Hodoris:fr|Hodor:fr
+fr	hodo	hodorcowen:fr|hodoris:fr|hodor:fr
+-	see hodo	hodorcowen:fr|hodoris:fr|hodor:fr
+fr	Then Hodo	Hodorcowen:fr|Hodoris:fr|Hodor:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	cog	cogutasu:fr|coguis:fr|coguwendor:fr
+fr	cogu	cogutasu:fr|coguis:fr|coguwendor:fr
+fr	ex	exselunex:fr|excori:fr|exlansulan:fr
+fr	exc	excori:fr|excorenex:fr
+fr	exco	excori:fr|excorenex:fr
+fr	is	isme:fr|isfasu:fr|isren:fr
+-	see is	isme:fr|ispiun:en|isfasu:fr
+fr	iss	issu:fr|isselba:fr
+-	see iss	issel:en|issu:fr|issuveco:en
+fr	gu	guselren:fr|guwentaho:fr|gucohoho:fr
+fr	guh	guho:fr
+fr	mo	moni:fr|mokato:fr|mowengumo:fr
+fr	Then Mo	Moni:fr|Mokato:fr|Mowengumo:fr
+fr	moa	moarmofa:fr|moar:fr
+fr	Then Moa	Moarmofa:fr|Moar:fr
+fr	moar	moarmofa:fr
+fr	Then Moar	Moarmofa:fr
+fr	ba	bata:fr|batari:fr|bamo:fr
+-	see ba	bata:fr|batari:fr|bamo:fr
+fr	baf	bafaisni:fr|bafaka:fr|bafabador:fr
+-	see baf	bafaisni:fr|bafaka:fr|bafabador:fr
+fr	bafa	bafaisni:fr|bafaka:fr|bafabador:fr
+-	see bafa	bafaisni:fr|bafaka:fr|bafabador:fr
+fr	to	totaho:fr|toselcoar:fr|toconini:fr
+fr	tom	tomewen:fr
+fr	tome	tomewen:fr
+fr	ri	rihoni:fr|riwenbafa:fr|riexta:fr
+fr	riv	rive:fr|rivebalan:fr|riveba:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+-	see pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pig	pigulan:fr|piguwen:fr
+-	see pig	pigulan:fr|pigu:en|pigudor:en
+fr	pigu	pigulan:fr|piguwen:fr
+-	see pigu	pigulan:fr|pigudor:en|pigukador:en
+fr	mo	moni:fr|mokato:fr|mowengumo:fr
+fr	Then Mo	Moni:fr|Mokato:fr|Mowengumo:fr
+fr	mof	mofa:fr
+fr	Then Mof	Mofa:fr
+fr	ta	taisri:fr|tamo:fr|taren:fr
+fr	tal	talan:fr|talandorni:fr|talanrenka:fr
+fr	tala	talan:fr|talandorni:fr|talanrenka:fr
+fr	ka	kaco:fr|kauncosu:fr|kaselren:fr
+-	see ka	katodorex:en|kacoriho:en|kadorex:en
+fr	kac	kaco:fr|kacoren:fr|kacotafa:fr
+-	see kac	kacoriho:en|kaco:fr|kacoren:fr
+fr	mo	moni:fr|mokato:fr|mowengumo:fr
+fr	mot	motosuka:fr|mota:fr|motounex:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pie	piexsu:fr|piex:fr|piexgu:fr
+fr	me	meselkawen:fr|medorlanve:fr|melanun:fr
+-	see me	memoho:en|meselkawen:fr|medorlanve:fr
+fr	Then Me	Meselkawen:fr|Medorlanve:fr|Melanun:fr
+fr	mem	memori:fr|meme:fr|memowen:fr
+-	see mem	memoho:en|memove:en|memori:fr
+fr	Then Mem	Memori:fr|Meme:fr|Memowen:fr
+fr	memo	memori:fr|memowen:fr|memonime:fr
+-	see memo	memoho:en|memove:en|memori:fr
+fr	Then Memo	Memori:fr|Memowen:fr|Memonime:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pit	pita:fr|pitopidor:fr|pitasufa:fr
+fr	is	isme:fr|isfasu:fr|isren:fr
+fr	isr	isren:fr|isri:fr|isrento:fr
+fr	me	meselkawen:fr|medorlanve:fr|melanun:fr
+-	see me	memoho:en|meselkawen:fr|medorlanve:fr
+fr	med	medorlanve:fr|medorfa:fr|medorto:fr
+-	see med	medorlanve:fr|medorfa:fr|medorto:fr
+fr	medo	medorlanve:fr|medorfa:fr|medorto:fr
+-	see medo	medorlanve:fr|medorfa:fr|medorto:fr
+fr	ba	bata:fr|batari:fr|bamo:fr
+fr	bam	bamo:fr|bamefa:fr|bamearka:fr
+fr	bame	bamefa:fr|bamearka:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	Then Co	Coselpiwen:fr|Copita:fr|Coisexsu:fr
+fr	cof	cofa:fr|cofalanho:fr
+fr	Then Cof	Cofa:fr|Cofalanho:fr
+fr	un	unka:fr|unrimesel:fr|unhorito:fr
+-	see un	ununmeis:en|unmotoba:en|unka:fr
+fr	unl	unlanveve:fr|unlan:fr
+-	see unl	unlanveve:fr|unlankaho:en|unlanar:en
+fr	unla	unlanveve:fr|unlan:fr
+-	see unla	unlanveve:fr|unlankaho:en|unlanar:en
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+fr	wenh	wenho:fr
+fr	me	meselkawen:fr|medorlanve:fr|melanun:fr
+fr	meb	meba:fr|mebaho:fr|mebawen:fr
+fr	ta	taisri:fr|tamo:fr|taren:fr
+-	see ta	tato:en|tawengu:en|taisri:fr
+fr	tar	taren:fr|tari:fr|tarenex:fr
+-	see tar	taren:fr|tari:fr|tarenex:fr
+fr	ta	taisri:fr|tamo:fr|taren:fr
+fr	Then Ta	Taisri:fr|Tamo:fr|Taren:fr
+fr	tai	taisri:fr|taisniri:fr
+fr	Then Tai	Taisri:fr|Taisniri:fr
+fr	tais	taisri:fr|taisniri:fr
+fr	Then Tais	Taisri:fr|Taisniri:fr
+fr	fa	fakari:fr|fatoco:fr|famefapi:fr
+fr	fab	fabata:fr|fabave:fr|fabameco:fr
+fr	faba	fabata:fr|fabave:fr|fabameco:fr
+fr	ba	bata:fr|batari:fr|bamo:fr
+-	see ba	bata:fr|batari:fr|bamo:fr
+fr	bai	baispi:fr|baisconi:fr|baissupi:fr
+-	see bai	baiskaex:en|baispi:fr|baisconi:fr
+fr	bais	baispi:fr|baisconi:fr|baissupi:fr
+-	see bais	baiskaex:en|baispi:fr|baisconi:fr
+fr	ho	hodorcowen:fr|hosu:fr|horito:fr
+fr	how	howenarni:fr|howen:fr|howenta:fr
+fr	howe	howenarni:fr|howen:fr|howenta:fr
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+fr	wenc	wenco:fr|wencomesu:fr
+fr	ta	taisri:fr|tamo:fr|taren:fr
+-	see ta	tato:en|tawengu:en|taisri:fr
+fr	Then Ta	Taisri:fr|Tamo:fr|Taren:fr
+fr	taa	taarri:fr|taarta:fr|taariska:fr
+-	see taa	taarri:fr|taarme:en|taar:en
+fr	Then Taa	Taarri:fr|Taarta:fr|Taariska:fr
+fr	taar	taarri:fr|taarta:fr|taariska:fr
+-	see taar	taarri:fr|taarme:en|taarta:fr
+fr	Then Taar	Taarri:fr|Taarta:fr|Taariska:fr
+fr	ar	arpi:fr|arto:fr|armosel:fr
+fr	arh	arhogu:fr|arhoridor:fr|arhove:fr
+fr	arho	arhogu:fr|arhoridor:fr|arhove:fr
+fr	ka	kaco:fr|kauncosu:fr|kaselren:fr
+fr	kau	kauncosu:fr|kaun:fr|kaunmesu:fr
+fr	kaun	kauncosu:fr|kaunmesu:fr
+fr	ri	rihoni:fr|riwenbafa:fr|riexta:fr
+-	see ri	rihoni:fr|riwenbafa:fr|ritaisni:en
+fr	rim	rimoco:fr|rimowen:fr|rimo:fr
+-	see rim	rimesel:en|rimoco:fr|rimelanmo:en
+fr	rimo	rimoco:fr|rimowen:fr|rimogu:fr
+-	see rimo	rimoco:fr|rimowen:fr|rimoto:en
+fr	re	renmo:fr|renbacolan:fr|renun:fr
+fr	ren	renmo:fr|renbacolan:fr|renun:fr
+fr	reni	renispilan:fr|renis:fr|renisnito:fr
+fr	mo	moni:fr|mokato:fr|mowengumo:fr
+fr	Then Mo	Moni:fr|Mokato:fr|Mowengumo:fr
+fr	mod	modor:fr|modorardor:fr|modorho:fr
+fr	Then Mod	Modor:fr|Modorardor:fr|Modorho:fr
+fr	modo	modor:fr|modorardor:fr|modorho:fr
+fr	Then Modo	Modor:fr|Modorardor:fr|Modorho:fr
+fr	un	unka:fr|unrimesel:fr|unhorito:fr
+-	see un	ununmeis:en|unmotoba:en|unka:fr
+fr	uns	unsu:fr|unselgu:fr|unseliska:fr
+-	see uns	unsulan:en|unsu:fr|unsuexis:en
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pir	pirenmeri:fr|piren:fr|pirenmoho:fr
+fr	pire	pirenmeri:fr|piren:fr|pirenmoho:fr
+fr	ta	taisri:fr|tamo:fr|taren:fr
+fr	tat	tata:fr|tatadorco:fr|tatodorme:fr
+fr	la	lanfa:fr|lanlan:fr|lantavemo:fr
+-	see la	lanlandor:en|lanarmeme:en|lanfa:fr
+fr	lan	lanfa:fr|lanlan:fr|lantavemo:fr
+-	see lan	lanlandor:en|lanarmeme:en|lanfa:fr
+fr	lann	lannidor:fr
+-	see lann	lannicois:en|lannidor:fr|lanni:en
+fr	ba	bata:fr|batari:fr|bamo:fr
+fr	Then Ba	Bata:fr|Batari:fr|Bamo:fr
+fr	bas	basel:fr|basu:fr|baseltasu:fr
+fr	Then Bas	Basel:fr|Basu:fr|Baseltasu:fr
+fr	base	basel:fr|baseltasu:fr|baselarsel:fr
+fr	Then Base	Basel:fr|Baseltasu:fr|Baselarsel:fr
+fr	re	renmo:fr|renbacolan:fr|renun:fr
+fr	ren	renmo:fr|renbacolan:fr|renun:fr
+fr	renh	renhoka:fr|renhota:fr|renho:fr
+fr	ho	hodorcowen:fr|hosu:fr|horito:fr
+-	see ho	hococove:en|hodorcowen:fr|hofa:en
+fr	hon	honisu:fr
+-	see hon	honisu:fr|honi:en|honiniis:en
+fr	honi	honisu:fr
+-	see honi	honisu:fr|honiniis:en|honinico:en
+fr	gu	guselren:fr|guwentaho:fr|gucohoho:fr
+fr	gui	guisto:fr|guis:fr|guiswenar:fr
+fr	guis	guisto:fr|guiswenar:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	cos	coselpiwen:fr|cosu:fr|coseltois:fr
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+-	see we	wenunba:en|wenkaho:en|wenkasuwen:en
+fr	Then We	Wenbais:fr|Wensel:fr|Wentaun:fr
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+-	see wen	wenunba:en|wenkaho:en|wenkasuwen:en
+fr	Then Wen	Wenbais:fr|Wensel:fr|Wentaun:fr
+fr	wens	wensel:fr|wensuhoar:fr|wensumo:fr
+-	see wens	wensel:fr|wensuhoar:fr|wensumo:fr
+fr	Then Wens	Wensel:fr|Wensuhoar:fr|Wensumo:fr
+fr	ar	arpi:fr|arto:fr|armosel:fr
+fr	arp	arpi:fr|arpibalan:fr
+fr	arpi	arpibalan:fr
+fr	re	renmo:fr|renbacolan:fr|renun:fr
+fr	ren	renmo:fr|renbacolan:fr|renun:fr
+fr	rens	renselpifa:fr|renselto:fr|renselguni:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+-	see pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pis	piselguta:fr|piselar:fr|pisel:fr
+-	see pis	piselguta:fr|piselar:fr|pisel:fr
+fr	pise	piselguta:fr|piselar:fr|pisel:fr
+-	see pise	piselguta:fr|piselar:fr|pisel:fr
+fr	ta	taisri:fr|tamo:fr|taren:fr
+fr	tam	tamo:fr|tamemo:fr|tamosuis:fr
+fr	tame	tamemo:fr|tamerenho:fr
+fr	ni	nilandordor:fr|nifakador:fr|niexmowen:fr
+fr	Then Ni	Nilandordor:fr|Nifakador:fr|Niexmowen:fr
+fr	nis	nisel:fr|niselfaar:fr|niselka:fr
+fr	Then Nis	Nisel:fr|Niselfaar:fr|Niselka:fr
+fr	nise	nisel:fr|niselfaar:fr|niselka:fr
+fr	Then Nise	Nisel:fr|Niselfaar:fr|Niselka:fr
+fr	un	unka:fr|unrimesel:fr|unhorito:fr
+-	see un	ununmeis:en|unmotoba:en|unka:fr
+fr	unk	unka:fr|unkaguar:fr|unkacois:fr
+-	see unk	unka:fr|unkaguar:fr|unkagu:en
+fr	unka	unkaguar:fr|unkacois:fr|unkamove:fr
+-	see unka	unkaguar:fr|unkagu:en|unkacois:fr
+fr	is	isme:fr|isfasu:fr|isren:fr
+fr	isb	isbabafa:fr|isbahoni:fr|isbaba:fr
+fr	isba	isbabafa:fr|isbahoni:fr|isbaba:fr
+fr	re	renmo:fr|renbacolan:fr|renun:fr
+fr	ren	renmo:fr|renbacolan:fr|renun:fr
+fr	renm	renmo:fr|renmoex:fr|renmoco:fr
+fr	ni	nilandordor:fr|nifakador:fr|niexmowen:fr
+-	see ni	nilandordor:fr|niren:en|nifakador:fr
+fr	niu	niunwen:fr|niuntoco:fr|niun:fr
+-	see niu	niun:en|niunwen:fr|niuntoco:fr
+fr	niun	niunwen:fr|niuntoco:fr|niunpi:fr
+-	see niun	niunwen:fr|niuntoco:fr|niunpi:fr
+fr	re	renmo:fr|renbacolan:fr|renun:fr
+fr	Then Re	Renmo:fr|Renbacolan:fr|Renun:fr
+fr	ren	renmo:fr|renbacolan:fr|renun:fr
+fr	Then Ren	Renmo:fr|Renbacolan:fr|Renun:fr
+fr	renb	renbacolan:fr|renba:fr|renbaundor:fr
+fr	Then Renb	Renbacolan:fr|Renba:fr|Renbaundor:fr
+fr	ba	bata:fr|batari:fr|bamo:fr
+fr	baf	bafaisni:fr|bafaka:fr|bafabador:fr
+fr	bafa	bafaisni:fr|bafaka:fr|bafabador:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+-	see co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	coh	cohoho:fr|coho:fr|cohocoho:fr
+-	see coh	cohoho:fr|coho:fr|cohocoho:fr
+fr	coho	cohoho:fr|cohocoho:fr|cohoisren:fr
+-	see coho	cohoho:fr|cohocoho:fr|cohoisren:fr
+fr	ar	arpi:fr|arto:fr|armosel:fr
+fr	arn	arni:fr|arnimoba:fr|arnifaex:fr
+fr	mo	moni:fr|mokato:fr|mowengumo:fr
+fr	mov	move:fr|movetosel:fr|movedor:fr
+fr	la	lanfa:fr|lanlan:fr|lantavemo:fr
+-	see la	lanlandor:en|lanarmeme:en|lanfa:fr
+fr	Then La	Lanfa:fr|Lanlan:fr|Lantavemo:fr
+fr	lan	lanfa:fr|lanlan:fr|lantavemo:fr
+-	see lan	lanlandor:en|lanarmeme:en|lanfa:fr
+fr	Then Lan	Lanfa:fr|Lanlan:fr|Lantavemo:fr
+fr	lanm	lanmo:fr|lanmebawen:fr|lanmoriex:fr
+-	see lanm	lanmo:fr|lanmokasu:en|lanmebawen:fr
+fr	Then Lanm	Lanmo:fr|Lanmebawen:fr|Lanmoriex:fr
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+fr	wenr	wenri:fr|wenriwen:fr|wenridorho:fr
+fr	ka	kaco:fr|kauncosu:fr|kaselren:fr
+fr	kas	kaselren:fr|kasellan:fr|kasuhoco:fr
+fr	kase	kaselren:fr|kasellan:fr|kaselba:fr
+fr	ve	vetogu:fr|vepiiswen:fr|veto:fr
+-	see ve	vewensuta:en|veri:en|vepi:en
+fr	vet	vetogu:fr|veto:fr|vetoun:fr
+-	see vet	vetogu:fr|veto:en|vetove:en
+fr	su	sumoguto:fr|suveveni:fr|suselguun:fr
+fr	sug	suguwenri:fr|sugu:fr|suguta:fr
+fr	sugu	suguwenri:fr|suguta:fr|suguisba:fr
+fr	ta	taisri:fr|tamo:fr|taren:fr
+fr	Then Ta	Taisri:fr|Tamo:fr|Taren:fr
+fr	tam	tamo:fr|tamemo:fr|tamosuis:fr
+fr	Then Tam	Tamo:fr|Tamemo:fr|Tamosuis:fr
+fr	tamo	tamosuis:fr|tamofa:fr|tamota:fr
+fr	Then Tamo	Tamosuis:fr|Tamofa:fr|Tamota:fr
+fr	un	unka:fr|unrimesel:fr|unhorito:fr
+-	see un	ununmeis:en|unmotoba:en|unka:fr
+fr	unt	untohoar:fr|unta:fr|untador:fr
+-	see unt	untohoar:fr|unto:en|untois:en
+fr	unto	untohoar:fr|untotoren:fr
+-	see unto	untohoar:fr|untois:en|untotoren:fr
+fr	re	renmo:fr|renbacolan:fr|renun:fr
+fr	ren	renmo:fr|renbacolan:fr|renun:fr
+fr	renh	renhoka:fr|renhota:fr|renho:fr
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+fr	wena	wenarfani:fr|wenar:fr|wenarve:fr
+fr	is	isme:fr|isfasu:fr|isren:fr
+-	see is	isme:fr|ispiun:en|isfasu:fr
+fr	isl	islan:fr|islantawen:fr|islanmeba:fr
+-	see isl	islan:fr|islantawen:fr|islanmeba:fr
+fr	isla	islan:fr|islantawen:fr|islanmeba:fr
+-	see isla	islan:fr|islantawen:fr|islanmeba:fr
+fr	me	meselkawen:fr|medorlanve:fr|melanun:fr
+fr	Then Me	Meselkawen:fr|Medorlanve:fr|Melanun:fr
+fr	mem	memori:fr|meme:fr|memowen:fr
+fr	Then Mem	Memori:fr|Meme:fr|Memowen:fr
+fr	ta	taisri:fr|tamo:fr|taren:fr
+fr	tad	tadorniis:fr|tador:fr|tadorar:fr
+fr	tado	tadorniis:fr|tador:fr|tadorar:fr
+fr	ex	exselunex:fr|excori:fr|exlansulan:fr
+-	see ex	exwenve:en|exren:en|exri:en
+fr	exl	exlansulan:fr|exlanista:fr
+-	see exl	exlansulan:fr|exlanni:en|exlan:en
+fr	exla	exlansulan:fr|exlanista:fr
+-	see exla	exlansulan:fr|exlanni:en|exlan:en
+fr	ho	hodorcowen:fr|hosu:fr|horito:fr
+fr	hos	hosu:fr|hoselri:fr|hosel:fr
+fr	hose	hoselri:fr|hosel:fr|hoselni:fr
+fr	we	wenbais:fr|wensel:fr|wentaun:fr
+fr	wen	wenbais:fr|wensel:fr|wentaun:fr
+fr	wenu	wenun:fr|wenunniri:fr|wenunlanho:fr
+fr	un	unka:fr|unrimesel:fr|unhorito:fr
+-	see un	ununmeis:en|unmotoba:en|unka:fr
+fr	Then Un	Unka:fr|Unrimesel:fr|Unhorito:fr
+fr	unr	unrimesel:fr|unrensu:fr|unren:fr
+-	see unr	unrimesel:fr|unrensu:fr|unren:fr
+fr	Then Unr	Unrimesel:fr|Unrensu:fr|Unren:fr
+fr	unre	unrensu:fr|unren:fr|unrenguren:fr
+-	see unre	unrensu:fr|unren:fr|unrenguren:fr
+fr	Then Unre	Unrensu:fr|Unren:fr|Unrenguren:fr
+fr	su	sumoguto:fr|suveveni:fr|suselguun:fr
+fr	suf	sufa:fr|sufame:fr|sufalan:fr
+fr	ar	arpi:fr|arto:fr|armosel:fr
+fr	arm	armosel:fr|armoarto:fr|arme:fr
+fr	armo	armosel:fr|armoarto:fr
+fr	ba	bata:fr|batari:fr|bamo:fr
+-	see ba	bata:fr|batari:fr|bamo:fr
+fr	bac	bacoseldor:fr|bacoholan:fr
+-	see bac	baco:en|bacoseldor:fr|bacoholan:fr
+fr	baco	bacoseldor:fr|bacoholan:fr
+-	see baco	bacoseldor:fr|bacoholan:fr|bacofa:en
+fr	is	isme:fr|isfasu:fr|isren:fr
+fr	ist	istafaren:fr|istasu:fr|istois:fr
+fr	ista	istafaren:fr|istasu:fr|istaren:fr
+fr	se	selfa:fr|selri:fr|selme:fr
+fr	Then Se	Selfa:fr|Selri:fr|Selme:fr
+fr	sel	selfa:fr|selri:fr|selme:fr
+fr	Then Sel	Selfa:fr|Selri:fr|Selme:fr
+fr	selm	selme:fr|selmo:fr|selmoun:fr
+fr	Then Selm	Selme:fr|Selmo:fr|Selmoun:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+-	see co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	coh	cohoho:fr|coho:fr|cohocoho:fr
+-	see coh	cohoho:fr|coho:fr|cohocoho:fr
+fr	to	totaho:fr|toselcoar:fr|toconini:fr
+fr	tog	toguba:fr|togu:fr
+fr	togu	toguba:fr
+fr	ex	exselunex:fr|excori:fr|exlansulan:fr
+fr	exd	exdordor:fr|exdorta:fr|exdorsuba:fr
+fr	exdo	exdordor:fr|exdorta:fr|exdorsuba:fr
+fr	fa	fakari:fr|fatoco:fr|famefapi:fr
+-	see fa	faunme:en|faniho:en|fakari:fr
+fr	far	farenve:fr|farini:fr|farenpi:fr
+-	see far	farenren:en|farenve:fr|farenho:en
+fr	fare	farenve:fr|farenpi:fr|farenni:fr
+-	see fare	farenren:en|farenve:fr|farenho:en
+fr	ex	exselunex:fr|excori:fr|exlansulan:fr
+fr	Then Ex	Exselunex:fr|Excori:fr|Exlansulan:fr
+fr	exf	exfafagu:fr|exfa:fr
+fr	Then Exf	Exfafagu:fr|Exfa:fr
+fr	exfa	exfafagu:fr
+fr	Then Exfa	Exfafagu:fr
+fr	do	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dor	dorba:fr|dormoka:fr|dorcomori:fr
+fr	dorw	dorwenwen:fr|dorwenun:fr|dorwenrini:fr
+fr	ta	taisri:fr|tamo:fr|taren:fr
+-	see ta	tato:en|tawengu:en|taisri:fr
+fr	tau	taunve:fr
+-	see tau	taunniren:en|taunco:en|taunve:fr
+fr	taun	taunve:fr
+-	see taun	taunniren:en|taunco:en|taunve:fr
+fr	is	isme:fr|isfasu:fr|isren:fr
+fr	isa	isar:fr
+fr	me	meselkawen:fr|medorlanve:fr|melanun:fr
+fr	mep	mepiri:fr|mepi:fr|mepigu:fr
+fr	mepi	mepiri:fr|mepigu:fr
+fr	se	selfa:fr|selri:fr|selme:fr
+-	see se	selmehowen:en|selcocoren:en|selfa:fr
+fr	Then Se	Selfa:fr|Selri:fr|Selme:fr
+fr	sel	selfa:fr|selri:fr|selme:fr
+-	see sel	selmehowen:en|selcocoren:en|selfa:fr
+fr	Then Sel	Selfa:fr|Selri:fr|Selme:fr
+fr	sels	selsurimo:fr|selsuexto:fr|selsuis:fr
+-	see sels	selsurimo:fr|selsuun:en|selsudor:en
+fr	Then Sels	Selsurimo:fr|Selsuexto:fr|Selsuis:fr
+fr	to	totaho:fr|toselcoar:fr|toconini:fr
+fr	tov	toveriho:fr|tovesu:fr|toveta:fr
+fr	tove	toveriho:fr|tovesu:fr|toveta:fr
+fr	ka	kaco:fr|kauncosu:fr|kaselren:fr
+fr	kal	kalanrenun:fr|kalantoren:fr|kalanto:fr
+fr	kala	kalanrenun:fr|kalantoren:fr|kalanto:fr
+fr	gu	guselren:fr|guwentaho:fr|gucohoho:fr
+-	see gu	guarmo:en|gusuar:en|gupimoun:en
+fr	gur	guri:fr|gurifa:fr|gurenmelan:fr
+-	see gur	guri:fr|gurisel:en|gurifa:fr
+fr	un	unka:fr|unrimesel:fr|unhorito:fr
+fr	uns	unsu:fr|unselgu:fr|unseliska:fr
+fr	unse	unselgu:fr|unseliska:fr|unselfaba:fr
+fr	ho	hodorcowen:fr|hosu:fr|horito:fr
+fr	Then Ho	Hodorcowen:fr|Hosu:fr|Horito:fr
+fr	hos	hosu:fr|hoselri:fr|hosel:fr
+fr	Then Hos	Hosu:fr|Hoselri:fr|Hosel:fr
+fr	hose	hoselri:fr|hosel:fr|hoselni:fr
+fr	Then Hose	Hoselri:fr|Hosel:fr|Hoselni:fr
+fr	me	meselkawen:fr|medorlanve:fr|melanun:fr
+-	see me	memoho:en|meselkawen:fr|medorlanve:fr
+fr	meb	meba:fr|mebaho:fr|mebawen:fr
+-	see meb	meba:fr|mebaho:fr|mebame:en
+fr	meba	mebaho:fr|mebawen:fr|mebavegu:fr
+-	see meba	mebaho:fr|mebame:en|mebawen:fr
+fr	ve	vetogu:fr|vepiiswen:fr|veto:fr
+fr	vei	veis:fr|veisba:fr|veisdor:fr
+fr	mo	moni:fr|mokato:fr|mowengumo:fr
+fr	mom	mometaex:fr|momofasel:fr|momoka:fr
+fr	mome	mometaex:fr|momemo:fr|momelansel:fr
+fr	to	totaho:fr|toselcoar:fr|toconini:fr
+-	see to	totaho:fr|toho:en|toselcoar:fr
+fr	tol	tolanrensu:fr|tolanve:fr|tolanba:fr
+-	see tol	tolan:en|tolanrensu:fr|tolanve:fr
+fr	tola	tolanrensu:fr|tolanve:fr|tolanba:fr
+-	see tola	tolan:en|tolanrensu:fr|tolanve:fr
+fr	mo	moni:fr|mokato:fr|mowengumo:fr
+fr	Then Mo	Moni:fr|Mokato:fr|Mowengumo:fr
+fr	mot	motosuka:fr|mota:fr|motounex:fr
+fr	Then Mot	Motosuka:fr|Mota:fr|Motounex:fr
+fr	moto	motosuka:fr|motounex:fr|motolanme:fr
+fr	Then Moto	Motosuka:fr|Motounex:fr|Motolanme:fr
+fr	ka	kaco:fr|kauncosu:fr|kaselren:fr
+fr	kar	karenguren:fr|karen:fr|karenexka:fr
+fr	kare	karenguren:fr|karen:fr|karenexka:fr
+fr	ho	hodorcowen:fr|hosu:fr|horito:fr
+-	see ho	hococove:en|hodorcowen:fr|hofa:en
+fr	hot	hota:fr|hotaba:fr|hotoren:fr
+-	see hot	hoto:en|hota:fr|hotaba:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	cot	cotame:fr|cotacowen:fr|cotapi:fr
+fr	cota	cotame:fr|cotacowen:fr|cotapi:fr
+fr	co	coselpiwen:fr|copita:fr|coisexsu:fr
+fr	col	colanexta:fr|colan:fr|colanco:fr
+fr	cola	colanexta:fr|colan:fr|colanco:fr
+fr	la	lanfa:fr|lanlan:fr|lantavemo:fr
+-	see la	lanlandor:en|lanarmeme:en|lanfa:fr
+fr	Then La	Lanfa:fr|Lanlan:fr|Lantavemo:fr
+fr	lan	lanfa:fr|lanlan:fr|lantavemo:fr
+-	see lan	lanlandor:en|lanarmeme:en|lanfa:fr
+fr	Then Lan	Lanfa:fr|Lanlan:fr|Lantavemo:fr
+fr	lanr	lanrimo:fr|lanri:fr|lanriar:fr
+-	see lanr	lanrenrendor:en|lanrito:en|lanrimo:fr
+fr	Then Lanr	Lanrimo:fr|Lanri:fr|Lanriar:fr
+fr	mo	moni:fr|mokato:fr|mowengumo:fr
+fr	moc	mocolanka:fr
+fr	moco	mocolanka:fr
+fr	ar	arpi:fr|arto:fr|armosel:fr
+fr	arc	arcopi:fr|arcodorsu:fr
+fr	arco	arcopi:fr|arcodorsu:fr
+fr	to	totaho:fr|toselcoar:fr|toconini:fr
+-	see to	totaho:fr|toho:en|toselcoar:fr
+fr	toi	toiskador:fr|tois:fr
+-	see toi	toiskador:fr|toismeho:en|toismo:en
+fr	tois	toiskador:fr
+-	see tois	toiskador:fr|toismeho:en|toismo:en
+fr	ex	exselunex:fr|excori:fr|exlansulan:fr
+fr	exw	exwenfa:fr|exwento:fr|exwenren:fr
+fr	exwe	exwenfa:fr|exwento:fr|exwenren:fr
+fr	ka	kaco:fr|kauncosu:fr|kaselren:fr
+fr	Then Ka	Kaco:fr|Kauncosu:fr|Kaselren:fr
+fr	kah	kaho:fr|kahowenwen:fr
+fr	Then Kah	Kaho:fr|Kahowenwen:fr
+fr	un	unka:fr|unrimesel:fr|unhorito:fr
+-	see un	ununmeis:en|unmotoba:en|unka:fr
+fr	unv	unve:fr|unveveis:fr
+-	see unv	unve:fr|unvedorfa:en|unveho:en
+fr	ar	arpi:fr|arto:fr|armosel:fr
+fr	arl	arlansu:fr
+fr	arla	arlansu:fr
+fr	ri	rihoni:fr|riwenbafa:fr|riexta:fr
+fr	rig	rigu:fr|riguka:fr
+fr	pi	piismoex:fr|pika:fr|piexsu:fr
+-	see pi	piismoex:fr|pika:fr|piexsu:fr
+fr	pib	pibalanun:fr|pibalanpi:fr|pibasel:fr
+-	see pib	pibalanun:fr|pibalanpi:fr|pibasel:fr
+fr	piba	pibalanun:fr|pibalanpi:fr|pibasel:fr
+-	see piba	pibalanun:fr|pibalanpi:fr|pibasel:fr
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+-	see سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمه	سمهذمناب:ar|سمهذلىال:ar|سمهذ:ar
+-	see سمه	سمهذمناب:ar|سمهذلىال:ar|سمهذ:ar
+ar	سمهذ	سمهذمناب:ar|سمهذلىال:ar|سمهذهذسم:ar
+-	see سمهذ	سمهذمناب:ar|سمهذلىال:ar|سمهذهذسم:ar
+ar	ال	الكتومر:ar|الفيوم:ar|الينعلعل:ar
+ar	الك	الكتومر:ar|الكتكت:ar|الكت:ar
+ar	الكت	الكتومر:ar|الكتكت:ar|الكتال:ar
+ar	رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+ar	رسم	رسمدمد:ar|رسمد:ar|رسمكتقا:ar
+ar	رسمد	رسمدمد:ar|رسمدلتبح:ar|رسمدسممد:ar
+ar	ةه	ةهذ:ar|ةهذلى:ar|ةهذمنفي:ar
+-	see ةه	ةهذ:ar|ةهذلى:ar|ةهذمنفي:ar
+ar	في	فيقا:ar|فيمد:ar|فيبح:ar
+ar	فيق	فيقا:ar|فيقابح:ar|فيقارسر:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+ar	لىر	لىركت:ar|لىرسلت:ar|لىرسينمن:ar
+ar	لىرك	لىركت:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+-	see لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتع	لتعلسمبح:ar|لتعللتة:ar|لتعلسم:ar
+-	see لتع	لتعلسمبح:ar|لتعللتة:ar|لتعلسم:ar
+ar	لتعل	لتعلسمبح:ar|لتعللتة:ar|لتعلسم:ar
+-	see لتعل	لتعلسمبح:ar|لتعللتة:ar|لتعلسم:ar
+ar	رو	رومعل:ar|روم:ar|رومةاب:ar
+ar	روم	رومعل:ar|رومةاب:ar|رومكتهذ:ar
+ar	رومع	رومعل:ar
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمس	سمسمبح:ar|سمسم:ar|سمسماب:ar
+ar	سمسم	سمسمبح:ar|سمسماب:ar|سمسمرسوم:ar
+ar	ال	الكتومر:ar|الفيوم:ar|الينعلعل:ar
+-	see ال	الكتومر:ar|الفيوم:ar|الينعلعل:ar
+ar	الف	الفيوم:ar|الفيعل:ar|الفيلىلت:ar
+-	see الف	الفيوم:ar|الفيعل:ar|الفيلىلت:ar
+ar	الفي	الفيوم:ar|الفيعل:ar|الفيلىلت:ar
+-	see الفي	الفيوم:ar|الفيعل:ar|الفيلىلت:ar
+ar	ال	الكتومر:ar|الفيوم:ar|الينعلعل:ar
+ar	الي	الينعلعل:ar|الينفير:ar|الين:ar
+ar	الين	الينعلعل:ar|الينفير:ar|الينقا:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	علي	علين:ar|علينمداب:ar|علينفي:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+-	see عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	علل	عللت:ar|عللىسمكت:ar|عللىهذكت:ar
+-	see علل	عللت:ar|عللىسمكت:ar|عللىهذكت:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدي	مدينلىة:ar|مدينينمن:ar|مدين:ar
+ar	مدين	مدينلىة:ar|مدينينمن:ar|مدينقا:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتل	لتلى:ar|لتلتكتبح:ar|لتلتالهذ:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+-	see وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	ومس	ومسملت:ar|ومسمهذ:ar|ومسم:ar
+-	see ومس	ومسملت:ar|ومسمهذ:ar|ومسم:ar
+ar	ومسم	ومسملت:ar|ومسمهذ:ar
+-	see ومسم	ومسملت:ar|ومسمهذ:ar
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمك	سمكتمنين:ar|سمكتاب:ar|سمكت:ar
+ar	سمكت	سمكتمنين:ar|سمكتاب:ar|سمكترسوم:ar
+ar	رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+ar	رسم	رسمدمد:ar|رسمد:ar|رسمكتقا:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+-	see اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابة	ابةبحلت:ar|ابةالوم:ar|ابةكت:ar
+-	see ابة	ابةبحلت:ar|ابةالوم:ar|ابةكت:ar
+ar	ابةب	ابةبحلت:ar
+-	see ابةب	ابةبحلت:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدل	مدلتلت:ar|مدلت:ar|مدلىعلمد:ar
+ar	مدلت	مدلتلت:ar|مدلتهذقا:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	علك	علكتوممن:ar|علكتقا:ar|علكتفير:ar
+ar	علكت	علكتوممن:ar|علكتقا:ar|علكتفير:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+-	see وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	ومق	ومقاومبح:ar|ومقااللت:ar|ومقاين:ar
+-	see ومق	ومقاومبح:ar|ومقااللت:ar|ومقاين:ar
+ar	ومقا	ومقاومبح:ar|ومقااللت:ar|ومقاين:ar
+-	see ومقا	ومقاومبح:ar|ومقااللت:ar|ومقاين:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابا	ابال:ar|اباب:ar|ابابلى:ar
+ar	ةم	ةمنفي:ar|ةمدال:ar|ةمدبح:ar
+ar	ةمن	ةمنفي:ar|ةمنابين:ar|ةمنقا:ar
+ar	ةمنف	ةمنفي:ar
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+-	see سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمم	سممد:ar|سممنسم:ar|سممن:ar
+-	see سمم	سممد:ar|سممنسم:ar|سممن:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحي	بحينلىلى:ar|بحين:ar|بحينلىمد:ar
+ar	بحين	بحينلىلى:ar|بحينلىمد:ar|بحينهذ:ar
+ar	في	فيقا:ar|فيمد:ar|فيبح:ar
+ar	فيم	فيمد:ar|فيمدكت:ar|فيمداللت:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+-	see من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	منل	منلىلتمد:ar|منلت:ar|منلىبح:ar
+-	see منل	منلىلتمد:ar|منلت:ar|منلىبح:ar
+ar	منلى	منلىلتمد:ar|منلىبح:ar|منلىال:ar
+-	see منلى	منلىلتمد:ar|منلىبح:ar|منلىال:ar
+ar	كت	كتينقا:ar|كتالرسسم:ar|كتر:ar
+ar	كتي	كتينقا:ar|كتين:ar|كتينلى:ar
+ar	كتين	كتينقا:ar|كتينلى:ar|كتينرس:ar
+ar	قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+ar	قاس	قاسمعلر:ar|قاسمكتال:ar|قاسمينسم:ar
+ar	قاسم	قاسمعلر:ar|قاسمكتال:ar|قاسمينسم:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+-	see مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدك	مدكت:ar|مدكتينر:ar|مدكترس:ar
+-	see مدك	مدكت:ar|مدكتينر:ar|مدكترس:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدس	مدسمبحر:ar|مدسم:ar|مدسمة:ar
+ar	مدسم	مدسمبحر:ar|مدسمة:ar|مدسمسم:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابه	ابهذقابح:ar|ابةبحلت:ar|ابهذقا:ar
+ar	ابهذ	ابهذقابح:ar|ابهذقا:ar|ابهذمدلى:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+-	see بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحل	بحلىعلين:ar|بحلتةكت:ar|بحلى:ar
+-	see بحل	بحلىعلين:ar|بحلتةكت:ar|بحلى:ar
+ar	بحلى	بحلىعلين:ar
+-	see بحلى	بحلىعلين:ar
+ar	في	فيقا:ar|فيمد:ar|فيبح:ar
+ar	فيب	فيبح:ar|فيبحكتبح:ar|فيبحمدلت:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحب	بحبحكت:ar|بحبحبحال:ar|بحبح:ar
+ar	بحبح	بحبحكت:ar|بحبحبحال:ar|بحبحبح:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+-	see من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	منا	منابة:ar|مناب:ar|مناباب:ar
+-	see منا	منابة:ar|مناب:ar|مناباب:ar
+ar	مناب	منابة:ar|مناباب:ar|منابمن:ar
+-	see مناب	منابة:ar|مناباب:ar|منابمن:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابل	ابلىلىهذ:ar|ابلتومال:ar|ابلت:ar
+ar	ابلى	ابلىلىهذ:ar|ابلىرسرس:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحم	بحمدومين:ar|بحمن:ar|بحمنفي:ar
+ar	بحمد	بحمدومين:ar|بحمدومبح:ar|بحمدمد:ar
+ar	هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+-	see هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+ar	هذس	هذسمينرس:ar|هذسم:ar|هذسممنهذ:ar
+-	see هذس	هذسمينرس:ar|هذسم:ar|هذسممنهذ:ar
+ar	هذسم	هذسمينرس:ar|هذسممنهذ:ar|هذسمين:ar
+-	see هذسم	هذسمينرس:ar|هذسممنهذ:ar|هذسمين:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+ar	ةك	ةكتفيكت:ar|ةكتابر:ar|ةكت:ar
+ar	ةكت	ةكتفيكت:ar|ةكتابر:ar|ةكتينة:ar
+ar	ةكتف	ةكتفيكت:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+-	see عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحا	بحالرس:ar|بحابعلعل:ar|بحال:ar
+ar	بحال	بحالرس:ar|بحالكت:ar|بحالبح:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابل	ابلىلىهذ:ar|ابلتومال:ar|ابلت:ar
+ar	ابلت	ابلتومال:ar|ابلتبحسم:ar|ابلتينبح:ar
+ar	في	فيقا:ar|فيمد:ar|فيبح:ar
+-	see في	فيقا:ar|فيمد:ar|فيبح:ar
+ar	فير	فيركتة:ar|فيرال:ar|فيرسهذ:ar
+-	see فير	فيركتة:ar|فيرال:ar|فيرسهذ:ar
+ar	فيرك	فيركتة:ar
+-	see فيرك	فيركتة:ar
+ar	كت	كتينقا:ar|كتالرسسم:ar|كتر:ar
+ar	كتا	كتالرسسم:ar|كتالهذفي:ar|كتابلتة:ar
+ar	كتال	كتالرسسم:ar|كتالهذفي:ar|كتاللتهذ:ar
+ar	رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+ar	رسف	رسفيرس:ar|رسفيبحة:ar|رسفيلى:ar
+ar	رسفي	رسفيرس:ar|رسفيبحة:ar|رسفيلى:ar
+ar	رل	رلىمدكت:ar|رلتينكت:ar|رلىةعل:ar
+-	see رل	رلىمدكت:ar|رلتينكت:ar|رلىةعل:ar
+ar	رلى	رلىمدكت:ar|رلىةعل:ar|رلىال:ar
+-	see رلى	رلىمدكت:ar|رلىةعل:ar|رلىال:ar
+ar	رلىم	رلىمدكت:ar
+-	see رلىم	رلىمدكت:ar
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمس	سمسمبح:ar|سمسم:ar|سمسماب:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	ومل	وملىقا:ar|وملت:ar|وملتعل:ar
+ar	وملى	وملىقا:ar|وملىال:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+-	see لى	لىركت:ar|لىة:ar|لىين:ar
+ar	لىي	لىين:ar|لىينمن:ar|لىينهذسم:ar
+-	see لىي	لىين:ar|لىينمن:ar|لىينهذسم:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	مني	منين:ar|منينمنهذ:ar
+ar	ةم	ةمنفي:ar|ةمدال:ar|ةمدبح:ar
+ar	ةمد	ةمدال:ar|ةمدبح:ar|ةمدمدمن:ar
+ar	ةمدا	ةمدال:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+-	see اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابف	ابفيمدر:ar|ابفيفي:ar|ابفيعل:ar
+-	see ابف	ابفيمدر:ar|ابفيفي:ar|ابفيعل:ar
+ar	ابفي	ابفيمدر:ar|ابفيفي:ar|ابفيعل:ar
+-	see ابفي	ابفيمدر:ar|ابفيفي:ar|ابفيعل:ar
+ar	ال	الكتومر:ar|الفيوم:ar|الينعلعل:ar
+ar	الع	العل:ar|العلابرس:ar
+ar	في	فيقا:ar|فيمد:ar|فيبح:ar
+ar	فيع	فيعلقا:ar|فيعل:ar|فيعلوم:ar
+ar	فيعل	فيعلقا:ar|فيعلوم:ar|فيعلمنال:ar
+ar	رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+-	see رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+ar	رسم	رسمدمد:ar|رسمد:ar|رسمكتقا:ar
+-	see رسم	رسمدمد:ar|رسمد:ar|رسمكتقا:ar
+ar	رسمك	رسمكتقا:ar
+-	see رسمك	رسمكتقا:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+ar	لىا	لىالمنمن:ar|لىالالبح:ar|لىاب:ar
+ar	لىال	لىالمنمن:ar|لىالالبح:ar|لىالابفي:ar
+ar	كت	كتينقا:ar|كتالرسسم:ar|كتر:ar
+ar	هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+-	see هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+ar	هذل	هذلت:ar|هذلىال:ar|هذلىةلت:ar
+-	see هذل	هذلت:ar|هذلىال:ar|هذلىةلت:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	منل	منلىلتمد:ar|منلت:ar|منلىبح:ar
+ar	ين	ينقار:ar|ينمد:ar|ينين:ar
+ar	ينق	ينقار:ar|ينقا:ar|ينقاين:ar
+ar	ينقا	ينقار:ar|ينقاين:ar|ينقااب:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+-	see من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	منف	منفيسم:ar|منفيكتاب:ar|منفيلتال:ar
+-	see منف	منفيسم:ar|منفيكتاب:ar|منفيلتال:ar
+ar	منفي	منفيسم:ar|منفيكتاب:ar|منفيلتال:ar
+-	see منفي	منفيسم:ar|منفيكتاب:ar|منفيلتال:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدق	مدقا:ar|مدقاقالى:ar|مدقامد:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدو	مدومومعل:ar|مدوم:ar
+ar	مدوم	مدومومعل:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+-	see وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	ومر	ومرسرلت:ar|ومرينين:ar|ومرسةفي:ar
+-	see ومر	ومرسرلت:ar|ومرينين:ar|ومرسةفي:ar
+ar	ومرس	ومرسرلت:ar|ومرسةفي:ar|ومرسهذ:ar
+-	see ومرس	ومرسرلت:ar|ومرسةفي:ar|ومرسهذ:ar
+ar	رو	رومعل:ar|روم:ar|رومةاب:ar
+ar	قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+ar	قاق	قاقاعلفي:ar|قاقارلت:ar|قاقالت:ar
+ar	قاقا	قاقاعلفي:ar|قاقارلت:ar|قاقالت:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+-	see لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتل	لتلى:ar|لتلتكتبح:ar|لتلتالهذ:ar
+-	see لتل	لتلى:ar|لتلتكتبح:ar|لتلتالهذ:ar
+ar	لتلت	لتلتكتبح:ar|لتلتالهذ:ar|لتلتينفي:ar
+-	see لتلت	لتلتكتبح:ar|لتلتالهذ:ar|لتلتينفي:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	ومس	ومسملت:ar|ومسمهذ:ar|ومسم:ar
+ar	ومسم	ومسملت:ar|ومسمهذ:ar
+ar	ةف	ةفيرسقا:ar|ةفيعلعل:ar|ةفيمد:ar
+ar	ةفي	ةفيرسقا:ar|ةفيعلعل:ar|ةفيمد:ar
+ar	ةفير	ةفيرسقا:ar
+ar	ين	ينقار:ar|ينمد:ar|ينين:ar
+-	see ين	ينقار:ar|ينمد:ar|ينين:ar
+ar	ينم	ينمد:ar|ينمدلىفي:ar|ينمدوملت:ar
+-	see ينم	ينمد:ar|ينمدلىفي:ar|ينمدوملت:ar
+ar	رب	ربح:ar|ربحومعل:ar|ربحعل:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابك	ابكتابسم:ar|ابكت:ar|ابكتعل:ar
+ar	ابكت	ابكتابسم:ar|ابكتعل:ar|ابكتفي:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+-	see وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	ومم	وممنرساب:ar|وممدة:ar|وممنبحفي:ar
+-	see ومم	وممنرساب:ar|وممدة:ar|وممنبحفي:ar
+ar	وممن	وممنرساب:ar|وممنبحفي:ar|وممنوماب:ar
+-	see وممن	وممنرساب:ar|وممنبحفي:ar|وممنوماب:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدف	مدفيمد:ar|مدفيلى:ar|مدفيهذاب:ar
+ar	مدفي	مدفيمد:ar|مدفيلى:ar|مدفيهذاب:ar
+ar	ال	الكتومر:ar|الفيوم:ar|الينعلعل:ar
+ar	الو	الوملى:ar|الوم:ar
+ar	الوم	الومسملت:ar|الومقاومبح:ar|الوملى:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+-	see عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	عله	علهذ:ar|علهذفي:ar|علةر:ar
+-	see عله	علهذ:ar|علهذفي:ar|علةر:ar
+ar	هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+ar	هذق	هذقافيبح:ar|هذقامن:ar|هذقا:ar
+ar	هذقا	هذقافيبح:ar|هذقامن:ar|هذقابحال:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحع	بحعلبح:ar|بحعلعلسم:ar|بحعل:ar
+ar	بحعل	بحعلبح:ar|بحعلعلسم:ar|بحعلمد:ar
+ar	قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+-	see قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+ar	قاه	قاهذمناب:ar|قاة:ar|قاهذابلى:ar
+-	see قاه	قاهذمناب:ar|قاة:ar|قاهذابلى:ar
+ar	قاهذ	قاهذمناب:ar|قاهذابلى:ar|قاهذر:ar
+-	see قاهذ	قاهذمناب:ar|قاهذابلى:ar|قاهذر:ar
+ar	ين	ينقار:ar|ينمد:ar|ينين:ar
+ar	يني	ينين:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	وما	ومابلى:ar|وماببحلى:ar|ومال:ar
+ar	وماب	ومابلى:ar|وماببحلى:ar|وماببح:ar
+ar	رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+-	see رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+ar	رسو	رسوم:ar|رسوموملى:ar|رسوملت:ar
+-	see رسو	رسوم:ar|رسوموملى:ar|رسوملت:ar
+ar	رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتا	لتاب:ar|لتالرهذ:ar|لتابفي:ar
+ar	ةم	ةمنفي:ar|ةمدال:ar|ةمدبح:ar
+-	see ةم	ةمنفي:ar|ةمدال:ar|ةمدبح:ar
+ar	ةمد	ةمدال:ar|ةمدبح:ar|ةمدمدمن:ar
+-	see ةمد	ةمدال:ar|ةمدبح:ar|ةمدمدمن:ar
+ar	ةمدب	ةمدبح:ar
+-	see ةمدب	ةمدبح:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتر	لترلتة:ar|لترسفيلى:ar|لترسفيقا:ar
+ar	لترل	لترلتة:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	علم	علمدةين:ar|علمن:ar|علمد:ar
+ar	علمد	علمدةين:ar|علمدقا:ar
+ar	في	فيقا:ar|فيمد:ar|فيبح:ar
+-	see في	فيقا:ar|فيمد:ar|فيبح:ar
+ar	فيل	فيلتلىهذ:ar|فيلىين:ar|فيلتكتبح:ar
+-	see فيل	فيلتلىهذ:ar|فيلىين:ar|فيلتكتبح:ar
+ar	فيلت	فيلتلىهذ:ar|فيلتكتبح:ar|فيلتلىكت:ar
+-	see فيلت	فيلتلىهذ:ar|فيلتكتبح:ar|فيلتلىكت:ar
+ar	ين	ينقار:ar|ينمد:ar|ينين:ar
+ar	ينق	ينقار:ar|ينقا:ar|ينقاين:ar
+ar	ين	ينقار:ar|ينمد:ar|ينين:ar
+ar	ينس	ينسمقالى:ar|ينسم:ar|ينسمسمر:ar
+ar	ينسم	ينسمقالى:ar|ينسمسمر:ar|ينسمابر:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+-	see لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتع	لتعلسمبح:ar|لتعللتة:ar|لتعلسم:ar
+-	see لتع	لتعلسمبح:ar|لتعللتة:ar|لتعلسم:ar
+ar	لتعل	لتعلسمبح:ar|لتعللتة:ar|لتعلسم:ar
+-	see لتعل	لتعلسمبح:ar|لتعللتة:ar|لتعلسم:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	منم	منمدابهذ:ar|منمدلتمن:ar|منمدكتلى:ar
+ar	منمد	منمدابهذ:ar|منمدلتمن:ar|منمدكتلى:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحي	بحينلىلى:ar|بحين:ar|بحينلىمد:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+-	see وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	ومو	وموم:ar|وموممن:ar
+-	see ومو	وموم:ar|وموممن:ar
+ar	كت	كتينقا:ar|كتالرسسم:ar|كتر:ar
+ar	كتف	كتفيمن:ar|كتفيعلاب:ar|كتفي:ar
+ar	كتفي	كتفيمن:ar|كتفيعلاب:ar|كتفيهذبح:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتو	لتوممد:ar|لتوممدقا:ar|لتومعللت:ar
+ar	لتوم	لتوممد:ar|لتوممدقا:ar|لتومعللت:ar
+ar	ين	ينقار:ar|ينمد:ar|ينين:ar
+-	see ين	ينقار:ar|ينمد:ar|ينين:ar
+ar	ينا	ينالومسم:ar|ينال:ar|ينالاللى:ar
+-	see ينا	ينالومسم:ar|ينال:ar|ينالاللى:ar
+ar	ينال	ينالومسم:ar|ينالاللى:ar|ينالة:ar
+-	see ينال	ينالومسم:ar|ينالاللى:ar|ينالة:ar
+ar	رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+ar	رسر	رسررلت:ar|رسرسركت:ar|رسرهذ:ar
+ar	رسرر	رسررلت:ar
+ar	في	فيقا:ar|فيمد:ar|فيبح:ar
+ar	فيع	فيعلقا:ar|فيعل:ar|فيعلوم:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+-	see لى	لىركت:ar|لىة:ar|لىين:ar
+ar	لىم	لىمد:ar|لىمن:ar|لىمدبحين:ar
+-	see لىم	لىمد:ar|لىمن:ar|لىمدبحين:ar
+ar	رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+ar	رسم	رسمدمد:ar|رسمد:ar|رسمكتقا:ar
+ar	رسمن	رسمنكتكت:ar|رسمنبحال:ar|رسمنفيال:ar
+ar	ين	ينقار:ar|ينمد:ar|ينين:ar
+ar	ينل	ينلتلىقا:ar|ينلىين:ar|ينلى:ar
+ar	ينلت	ينلتلىقا:ar|ينلتين:ar|ينلتابال:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+-	see اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابه	ابهذقابح:ar|ابةبحلت:ar|ابهذقا:ar
+-	see ابه	ابهذقابح:ar|ابةبحلت:ar|ابهذقا:ar
+ar	ابهذ	ابهذقابح:ar|ابهذقا:ar|ابهذمدلى:ar
+-	see ابهذ	ابهذقابح:ar|ابهذقا:ar|ابهذمدلى:ar
+ar	هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+ar	هذف	هذفي:ar|هذفيوم:ar|هذفيكت:ar
+ar	ةر	ةرسال:ar|ةرينهذ:ar|ةرس:ar
+ar	ةرس	ةرسال:ar|ةرسمنال:ar|ةرسة:ar
+ar	ةرسا	ةرسال:ar|ةرسالين:ar|ةرسابمد:ar
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+-	see سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمل	سملتسم:ar|سملتمد:ar|سملتعلمن:ar
+-	see سمل	سملتسم:ar|سملتمد:ar|سملتعلمن:ar
+ar	سملت	سملتسم:ar|سملتمد:ar|سملتعلمن:ar
+-	see سملت	سملتسم:ar|سملتمد:ar|سملتعلمن:ar
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمق	سمقا:ar|سمقاينوم:ar|سمقاالين:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	منر	منرفيعل:ar|منرسفير:ar|منرسمد:ar
+ar	منرف	منرفيعل:ar|منرفي:ar
+ar	ين	ينقار:ar|ينمد:ar|ينين:ar
+-	see ين	ينقار:ar|ينمد:ar|ينين:ar
+ar	ينه	ينهذسمر:ar|ينهذ:ar|ينةقا:ar
+-	see ينه	ينهذسمر:ar|ينهذ:ar|ينةقا:ar
+ar	ينهذ	ينهذسمر:ar|ينهذسمة:ar|ينهذلتلت:ar
+-	see ينهذ	ينهذسمر:ar|ينهذسمة:ar|ينهذلتلت:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	علس	علسمسملى:ar|علسمبح:ar|علسمرر:ar
+ar	علسم	علسمسملى:ar|علسمبح:ar|علسمرر:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدع	مدعللىاب:ar|مدعلقاال:ar|مدعل:ar
+ar	مدعل	مدعللىاب:ar|مدعلقاال:ar|مدعلمنعل:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+-	see اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابع	ابعلرس:ar|ابعلر:ar|ابعلهذ:ar
+-	see ابع	ابعلرس:ar|ابعلر:ar|ابعلهذ:ar
+ar	ابعل	ابعلرس:ar|ابعلر:ar|ابعلهذ:ar
+-	see ابعل	ابعلرس:ar|ابعلر:ar|ابعلهذ:ar
+ar	ةر	ةرسال:ar|ةرينهذ:ar|ةرس:ar
+ar	ةري	ةرينهذ:ar
+ar	ةرين	ةرينهذ:ar
+ar	ين	ينقار:ar|ينمد:ar|ينين:ar
+ar	ينك	ينكت:ar|ينكتر:ar|ينكتمن:ar
+ar	رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+-	see رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+ar	رسم	رسمدمد:ar|رسمد:ar|رسمكتقا:ar
+-	see رسم	رسمدمد:ar|رسمد:ar|رسمكتقا:ar
+ar	رسمد	رسمدمد:ar|رسمدلتبح:ar|رسمدسممد:ar
+-	see رسمد	رسمدمد:ar|رسمدلتبح:ar|رسمدسممد:ar
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمو	سمومفي:ar|سموملتسم:ar|سمومعل:ar
+ar	سموم	سمومفي:ar|سموملتسم:ar|سمومعل:ar
+ar	في	فيقا:ar|فيمد:ar|فيبح:ar
+ar	فيس	فيسم:ar|فيسمال:ar|فيسمر:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+-	see عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	علب	علبح:ar|علبحلىاب:ar|علبحمن:ar
+-	see علب	علبح:ar|علبحلىاب:ar|علبحمن:ar
+ar	ين	ينقار:ar|ينمد:ar|ينين:ar
+ar	ينر	ينرابكت:ar|ينرينلى:ar|ينرلت:ar
+ar	ينرا	ينرابكت:ar
+ar	هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+ar	هذي	هذين:ar|هذينسمرس:ar
+ar	را	رالهذة:ar|رابمد:ar|راب:ar
+-	see را	رالهذة:ar|رابمد:ar|راب:ar
+ar	رال	رالهذة:ar|رالهذين:ar|رالكت:ar
+-	see رال	رالهذة:ar|رالهذين:ar|رالكت:ar
+ar	راله	رالهذة:ar|رالهذين:ar
+-	see راله	رالهذة:ar|رالهذين:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+ar	لىم	لىمد:ar|لىمن:ar|لىمدبحين:ar
+ar	قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+ar	قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+-	see قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+ar	قاع	قاعل:ar|قاعلابر:ar|قاعلبحرس:ar
+-	see قاع	قاعل:ar|قاعلابر:ar|قاعلبحرس:ar
+ar	كت	كتينقا:ar|كتالرسسم:ar|كتر:ar
+ar	كتل	كتلى:ar|كتلتهذوم:ar|كتلىرس:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	علب	علبح:ar|علبحلىاب:ar|علبحمن:ar
+ar	علبح	علبحلىاب:ar|علبحمن:ar|علبحرس:ar
+ar	قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+-	see قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+ar	قار	قارسوم:ar|قارس:ar|قارابسم:ar
+-	see قار	قارسوم:ar|قارس:ar|قارابسم:ar
+ar	قارس	قارسوم:ar|قارسمر:ar|قارسمسم:ar
+-	see قارس	قارسوم:ar|قارسمر:ar|قارسمسم:ar
+ar	في	فيقا:ar|فيمد:ar|فيبح:ar
+ar	فيا	فيابسمر:ar|فيالسمال:ar|فياب:ar
+ar	فياب	فيابسمر:ar|فيابرس:ar|فيابلتبح:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+ar	لىا	لىالمنمن:ar|لىالالبح:ar|لىاب:ar
+ar	لىال	لىالمنمن:ar|لىالالبح:ar|لىالابفي:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+-	see اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابل	ابلىلىهذ:ar|ابلتومال:ar|ابلت:ar
+-	see ابل	ابلىلىهذ:ar|ابلتومال:ar|ابلت:ar
+ar	كت	كتينقا:ar|كتالرسسم:ar|كتر:ar
+ar	كتة	كتةهذ:ar|كتةةوم:ar
+ar	كتةه	كتةهذ:ar|كتةةوم:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+ar	لىف	لىفي:ar|لىفيبحبح:ar|لىفيةة:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+-	see مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدل	مدلتلت:ar|مدلت:ar|مدلىعلمد:ar
+-	see مدل	مدلتلت:ar|مدلت:ar|مدلىعلمد:ar
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمع	سمعلسم:ar|سمعلين:ar|سمعلبحفي:ar
+ar	سمعل	سمعلسم:ar|سمعلين:ar|سمعلبحفي:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	منم	منمدابهذ:ar|منمدلتمن:ar|منمدكتلى:ar
+ar	منمد	منمدابهذ:ar|منمدلتمن:ar|منمدكتلى:ar
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+-	see سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمب	سمبح:ar|سمبحفي:ar|سمبحكتكت:ar
+-	see سمب	سمبح:ar|سمبحفي:ar|سمبحكتكت:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحو	بحومين:ar|بحومكتال:ar|بحومعلرس:ar
+ar	بحوم	بحومين:ar|بحومكتال:ar|بحومعلرس:ar
+ar	قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+ar	قاا	قاالسموم:ar|قاالاب:ar|قاال:ar
+ar	قاال	قاالسموم:ar|قاالاب:ar|قاالررس:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+-	see من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	منو	منوملىمن:ar|منوم:ar|منوممنين:ar
+-	see منو	منوملىمن:ar|منوم:ar|منوممنين:ar
+ar	منوم	منوملىمن:ar|منوممنين:ar|منومهذ:ar
+-	see منوم	منوملىمن:ar|منوممنين:ar|منومهذ:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتف	لتفيفي:ar|لتفيمن:ar|لتفي:ar
+ar	لتفي	لتفيفي:ar|لتفيمن:ar|لتفيين:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	ومع	ومعلفي:ar|ومعلال:ar|ومعللى:ar
+ar	ومعل	ومعلفي:ar|ومعلال:ar|ومعللى:ar
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+-	see سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمه	سمهذمناب:ar|سمهذلىال:ar|سمهذ:ar
+-	see سمه	سمهذمناب:ar|سمهذلىال:ar|سمهذ:ar
+ar	سمهذ	سمهذمناب:ar|سمهذلىال:ar|سمهذهذسم:ar
+-	see سمهذ	سمهذمناب:ar|سمهذلىال:ar|سمهذهذسم:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابع	ابعلرس:ar|ابعلر:ar|ابعلهذ:ar
+ar	ابعل	ابعلرس:ar|ابعلر:ar|ابعلهذ:ar
+ar	كت	كتينقا:ar|كتالرسسم:ar|كتر:ar
+ar	كتم	كتمنسم:ar|كتمدين:ar|كتمن:ar
+ar	كتمن	كتمنسم:ar|كتمنعلمن:ar|كتمنمدين:ar
+ar	را	رالهذة:ar|رابمد:ar|راب:ar
+-	see را	رالهذة:ar|رابمد:ar|راب:ar
+ar	راب	رابمد:ar|راببح:ar|رابسمرس:ar
+-	see راب	رابمد:ar|راببح:ar|رابسمرس:ar
+ar	رابم	رابمد:ar
+-	see رابم	رابمد:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+ar	لىر	لىركت:ar|لىرسلت:ar|لىرسينمن:ar
+ar	لىرس	لىرسلت:ar|لىرسينمن:ar|لىرسهذلى:ar
+ar	قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+ar	قاب	قابح:ar|قابحة:ar|قابحاب:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+-	see مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدب	مدبحسم:ar|مدبحرس:ar|مدبحفية:ar
+-	see مدب	مدبحسم:ar|مدبحرس:ar|مدبحفية:ar
+ar	مدبح	مدبحسم:ar|مدبحرس:ar|مدبحفية:ar
+-	see مدبح	مدبحسم:ar|مدبحرس:ar|مدبحفية:ar
+ar	كت	كتينقا:ar|كتالرسسم:ar|كتر:ar
+ar	كتل	كتلى:ar|كتلتهذوم:ar|كتلىرس:ar
+ar	كتلت	كتلتهذوم:ar|كتلتفيال:ar|كتلتلىهذ:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+ar	لىا	لىالمنمن:ar|لىالالبح:ar|لىاب:ar
+ar	ين	ينقار:ar|ينمد:ar|ينين:ar
+-	see ين	ينقار:ar|ينمد:ar|ينين:ar
+ar	ينف	ينفيراب:ar|ينفي:ar|ينفيمن:ar
+-	see ينف	ينفيراب:ar|ينفي:ar|ينفيمن:ar
+ar	ينفي	ينفيراب:ar|ينفيمن:ar|ينفيرس:ar
+-	see ينفي	ينفيراب:ar|ينفيمن:ar|ينفيرس:ar
+ar	قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+ar	قار	قارسوم:ar|قارس:ar|قارابسم:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتا	لتاب:ar|لتالرهذ:ar|لتابفي:ar
+ar	لتال	لتالرهذ:ar|لتالسماب:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+-	see من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدس	مدسمبحر:ar|مدسم:ar|مدسمة:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	منم	منمدابهذ:ar|منمدلتمن:ar|منمدكتلى:ar
+ar	منمد	منمدابهذ:ar|منمدلتمن:ar|منمدكتلى:ar
+ar	كت	كتينقا:ar|كتالرسسم:ar|كتر:ar
+-	see كت	كتينقا:ar|كتالرسسم:ar|كتر:ar
+ar	كتا	كتالرسسم:ar|كتالهذفي:ar|كتابلتة:ar
+-	see كتا	كتالرسسم:ar|كتالهذفي:ar|كتابلتة:ar
+ar	كتال	كتالرسسم:ar|كتالهذفي:ar|كتاللتهذ:ar
+-	see كتال	كتالرسسم:ar|كتالهذفي:ar|كتاللتهذ:ar
+ar	ال	الكتومر:ar|الفيوم:ar|الينعلعل:ar
+ar	الم	المن:ar|المنلى:ar|المنرسين:ar
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمو	سمومفي:ar|سموملتسم:ar|سمومعل:ar
+ar	سموم	سمومفي:ar|سموملتسم:ar|سمومعل:ar
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+-	see سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمع	سمعلسم:ar|سمعلين:ar|سمعلبحفي:ar
+-	see سمع	سمعلسم:ar|سمعلين:ar|سمعلبحفي:ar
+ar	سمعل	سمعلسم:ar|سمعلين:ar|سمعلبحفي:ar
+-	see سمعل	سمعلسم:ar|سمعلين:ar|سمعلبحفي:ar
+ar	هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+ar	هذا	هذابعل:ar|هذابقااب:ar|هذالة:ar
+ar	هذاب	هذابعل:ar|هذابقااب:ar|هذابرمن:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مده	مدهذر:ar|مدهذبح:ar|مدةاب:ar
+ar	مدهذ	مدهذر:ar|مدهذبح:ar|مدهذيناب:ar
+ar	في	فيقا:ar|فيمد:ar|فيبح:ar
+-	see في	فيقا:ar|فيمد:ar|فيبح:ar
+ar	فيل	فيلتلىهذ:ar|فيلىين:ar|فيلتكتبح:ar
+-	see فيل	فيلتلىهذ:ar|فيلىين:ar|فيلتكتبح:ar
+ar	فيلى	فيلىين:ar|فيلىفي:ar|فيلىمدبح:ar
+-	see فيلى	فيلىين:ar|فيلىفي:ar|فيلىمدبح:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدي	مدينلىة:ar|مدينينمن:ar|مدين:ar
+ar	مدين	مدينلىة:ar|مدينينمن:ar|مدينقا:ar
+ar	ةو	ةومسم:ar|ةوملت:ar|ةوممنوم:ar
+ar	ةوم	ةومسم:ar|ةوملت:ar|ةوممنوم:ar
+ar	ةومس	ةومسم:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+-	see عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	علل	عللت:ar|عللىسمكت:ar|عللىهذكت:ar
+-	see علل	عللت:ar|عللىسمكت:ar|عللىهذكت:ar
+ar	عللى	عللىسمكت:ar|عللىهذكت:ar
+-	see عللى	عللىسمكت:ar|عللىهذكت:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابم	ابمنلىلى:ar|ابمد:ar|ابمدلىلت:ar
+ar	ابمن	ابمنلىلى:ar|ابمنبح:ar|ابمنسمعل:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	ومي	ومينكتبح:ar|ومينلى:ar|ومينهذ:ar
+ar	ومين	ومينكتبح:ar|ومينلى:ar|ومينهذ:ar
+ar	ره	رهذقاوم:ar|رهذ:ar|رهذكتبح:ar
+-	see ره	رهذقاوم:ar|رهذ:ar|رهذكتبح:ar
+ar	رهذ	رهذقاوم:ar|رهذكتبح:ar|رهذابفي:ar
+-	see رهذ	رهذقاوم:ar|رهذكتبح:ar|رهذابفي:ar
+ar	رهذق	رهذقاوم:ar
+-	see رهذق	رهذقاوم:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابي	ابينهذ:ar|ابيناب:ar|ابين:ar
+ar	ابين	ابينهذ:ar|ابيناب:ar|ابينلت:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدس	مدسمبحر:ar|مدسم:ar|مدسمة:ar
+ar	مدسم	مدسمبحر:ar|مدسمة:ar|مدسمسم:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+-	see وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	ومم	وممنرساب:ar|وممدة:ar|وممنبحفي:ar
+-	see ومم	وممنرساب:ar|وممدة:ar|وممنبحفي:ar
+ar	وممد	وممدة:ar|وممدينال:ar|وممدمنسم:ar
+-	see وممد	وممدة:ar|وممدينال:ar|وممدمنسم:ar
+ar	قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+ar	قال	قالترسم:ar|قالتلتسم:ar|قالىكتقا:ar
+ar	قالت	قالترسم:ar|قالتلتسم:ar|قالتكتقا:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	علل	عللت:ar|عللىسمكت:ar|عللىهذكت:ar
+ar	عللى	عللىسمكت:ar|عللىهذكت:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+-	see لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتب	لتبحقا:ar|لتبحين:ar|لتبحبحال:ar
+-	see لتب	لتبحقا:ar|لتبحين:ar|لتبحبحال:ar
+ar	لتبح	لتبحقا:ar|لتبحين:ar|لتبحبحال:ar
+-	see لتبح	لتبحقا:ar|لتبحين:ar|لتبحبحال:ar
+ar	رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+ar	رسس	رسسم:ar|رسسمقاقا:ar|رسسمفيال:ar
+ar	ال	الكتومر:ar|الفيوم:ar|الينعلعل:ar
+ar	الا	الالوممن:ar|الابمد:ar|الاب:ar
+ar	الال	الالوممن:ar|الالرسسم:ar|الالفياب:ar
+ar	رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+-	see رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+ar	رسر	رسررلت:ar|رسرسركت:ar|رسرهذ:ar
+-	see رسر	رسررلت:ar|رسرسركت:ar|رسرهذ:ar
+ar	رسرس	رسرسركت:ar|رسرسعللت:ar|رسرسعلرس:ar
+-	see رسرس	رسرسركت:ar|رسرسعللت:ar|رسرسعلرس:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	منب	منبح:ar|منبحمدبح:ar|منبحال:ar
+ar	هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+ar	هذم	هذمداب:ar|هذمنعل:ar|هذمدسم:ar
+ar	هذمد	هذمداب:ar|هذمدسم:ar|هذمدعلمد:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+-	see لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتف	لتفيفي:ar|لتفيمن:ar|لتفي:ar
+-	see لتف	لتفيفي:ar|لتفيمن:ar|لتفي:ar
+ar	لتفي	لتفيفي:ar|لتفيمن:ar|لتفيين:ar
+-	see لتفي	لتفيفي:ar|لتفيمن:ar|لتفيين:ar
+ar	في	فيقا:ar|فيمد:ar|فيبح:ar
+ar	فية	فيةقا:ar
+ar	فيةق	فيةقا:ar
+ar	قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+ar	قاي	قاينرعل:ar|قاينقا:ar|قاين:ar
+ar	قاين	قاينرعل:ar|قاينقا:ar
+ar	ين	ينقار:ar|ينمد:ar|ينين:ar
+-	see ين	ينقار:ar|ينمد:ar|ينين:ar
+ar	ينع	ينعل:ar|ينعلعل:ar|ينعلوم:ar
+-	see ينع	ينعل:ar|ينعلعل:ar|ينعلوم:ar
+ar	رم	رمن:ar|رمنلتلى:ar|رمداب:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحع	بحعلبح:ar|بحعلعلسم:ar|بحعل:ar
+ar	بحعل	بحعلبح:ar|بحعلعلسم:ar|بحعلمد:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+-	see لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتم	لتمنبح:ar|لتمدرمن:ar|لتمدةال:ar
+-	see لتم	لتمنبح:ar|لتمدرمن:ar|لتمدةال:ar
+ar	لتمن	لتمنبح:ar|لتمنفيفي:ar|لتمنينعل:ar
+-	see لتمن	لتمنبح:ar|لتمنفيفي:ar|لتمنينعل:ar
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمس	سمسمبح:ar|سمسم:ar|سمسماب:ar
+ar	سمسم	سمسمبح:ar|سمسماب:ar|سمسمرسوم:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	منر	منرفيعل:ar|منرسفير:ar|منرسمد:ar
+ar	منرس	منرسفير:ar|منرسمد:ar|منرسسمين:ar
+ar	كت	كتينقا:ar|كتالرسسم:ar|كتر:ar
+-	see كت	كتينقا:ar|كتالرسسم:ar|كتر:ar
+ar	كتل	كتلى:ar|كتلتهذوم:ar|كتلىرس:ar
+-	see كتل	كتلى:ar|كتلتهذوم:ar|كتلىرس:ar
+ar	كتلى	كتلىرس:ar|كتلىين:ar|كتلىلىعل:ar
+-	see كتلى	كتلىرس:ar|كتلىين:ar|كتلىلىعل:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	منم	منمدابهذ:ar|منمدلتمن:ar|منمدكتلى:ar
+ar	منمد	منمدابهذ:ar|منمدلتمن:ar|منمدكتلى:ar
+ar	ره	رهذقاوم:ar|رهذ:ar|رهذكتبح:ar
+ar	قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+-	see قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+ar	قاس	قاسمعلر:ar|قاسمكتال:ar|قاسمينسم:ar
+-	see قاس	قاسمعلر:ar|قاسمكتال:ar|قاسمينسم:ar
+ar	قاسم	قاسمعلر:ar|قاسمكتال:ar|قاسمينسم:ar
+-	see قاسم	قاسمعلر:ar|قاسمكتال:ar|قاسمينسم:ar
+ar	رر	ررمنوم:ar|ررس:ar|ررينفي:ar
+ar	ررم	ررمنوم:ar
+ar	ررمن	ررمنوم:ar
+ar	ال	الكتومر:ar|الفيوم:ar|الينعلعل:ar
+ar	الس	السمقافي:ar|السمقا:ar|السمفي:ar
+ar	السم	السمقافي:ar|السمقا:ar|السمفي:ar
+ar	هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+-	see هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+ar	رب	ربح:ar|ربحومعل:ar|ربحعل:ar
+ar	ربح	ربحومعل:ar|ربحعل:ar|ربحلىلى:ar
+ar	ربحو	ربحومعل:ar|ربحومر:ar
+ar	رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+ar	رسق	رسقاوموم:ar|رسقاكتسم:ar|رسقا:ar
+ar	رسقا	رسقاوموم:ar|رسقاكتسم:ar|رسقاال:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+-	see لى	لىركت:ar|لىة:ar|لىين:ar
+ar	لىة	لىةالمد:ar|لىةلىلت:ar
+-	see لىة	لىةالمد:ar|لىةلىلت:ar
+ar	لىةا	لىةالمد:ar
+-	see لىةا	لىةالمد:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	علل	عللت:ar|عللىسمكت:ar|عللىهذكت:ar
+ar	عللت	عللتكت:ar|عللتلت:ar|عللتمدمن:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+ar	لىك	لىكتومفي:ar|لىكت:ar|لىكتالبح:ar
+ar	لىكت	لىكتومفي:ar|لىكتالبح:ar|لىكترة:ar
+ar	ري	رينةلت:ar|رين:ar|رينبحمن:ar
+-	see ري	رينةلت:ar|رين:ar|رينبحمن:ar
+ar	رين	رينةلت:ar|رينبحمن:ar|رينوم:ar
+-	see رين	رينةلت:ar|رينبحمن:ar|رينوم:ar
+ar	رينة	رينةلت:ar
+-	see رينة	رينةلت:ar
+ar	في	فيقا:ar|فيمد:ar|فيبح:ar
+ar	فيا	فيابسمر:ar|فيالسمال:ar|فياب:ar
+ar	فيال	فيالسمال:ar|فيالهذ:ar|فيالسملى:ar
+ar	ين	ينقار:ar|ينمد:ar|ينين:ar
+ar	ينه	ينهذسمر:ar|ينهذ:ar|ينةقا:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+-	see وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	ومم	وممنرساب:ar|وممدة:ar|وممنبحفي:ar
+-	see ومم	وممنرساب:ar|وممدة:ar|وممنبحفي:ar
+ar	وممن	وممنرساب:ar|وممنبحفي:ar|وممنوماب:ar
+-	see وممن	وممنرساب:ar|وممنبحفي:ar|وممنوماب:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+ar	لىا	لىالمنمن:ar|لىالالبح:ar|لىاب:ar
+ar	لىال	لىالمنمن:ar|لىالالبح:ar|لىالابفي:ar
+ar	هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+ar	هذع	هذعل:ar|هذعلوم:ar|هذعلرسلى:ar
+ar	في	فيقا:ar|فيمد:ar|فيبح:ar
+-	see في	فيقا:ar|فيمد:ar|فيبح:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	علل	عللت:ar|عللىسمكت:ar|عللىهذكت:ar
+ar	سم	سمهذمناب:ar|سمسمبح:ar|سمكتمنين:ar
+ar	سمع	سمعلسم:ar|سمعلين:ar|سمعلبحفي:ar
+ar	سمعل	سمعلسم:ar|سمعلين:ar|سمعلبحفي:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+-	see لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتا	لتاب:ar|لتالرهذ:ar|لتابفي:ar
+-	see لتا	لتاب:ar|لتالرهذ:ar|لتابفي:ar
+ar	لتاب	لتابفي:ar|لتاباب:ar|لتابهذ:ar
+-	see لتاب	لتابفي:ar|لتاباب:ar|لتابهذ:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحا	بحالرس:ar|بحابعلعل:ar|بحال:ar
+ar	بحاب	بحابعلعل:ar|بحابهذة:ar|بحابمنمد:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدي	مدينلىة:ar|مدينينمن:ar|مدين:ar
+ar	هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+-	see هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+ar	هذو	هذومومرس:ar|هذوم:ar|هذومين:ar
+-	see هذو	هذومومرس:ar|هذوم:ar|هذومين:ar
+ar	هذوم	هذومومرس:ar|هذومين:ar
+-	see هذوم	هذومومرس:ar|هذومين:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	وما	ومابلى:ar|وماببحلى:ar|ومال:ar
+ar	وماب	ومابلى:ar|وماببحلى:ar|وماببح:ar
+ar	هذ	هذسمينرس:ar|هذلت:ar|هذقافيبح:ar
+ar	هذر	هذرقا:ar|هذرسمدال:ar|هذرس:ar
+ar	هذرق	هذرقا:ar
+ar	قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+-	see قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+ar	قال	قالترسم:ar|قالتلتسم:ar|قالىكتقا:ar
+-	see قال	قالترسم:ar|قالتلتسم:ar|قالىكتقا:ar
+ar	قالت	قالترسم:ar|قالتلتسم:ar|قالتكتقا:ar
+-	see قالت	قالترسم:ar|قالتلتسم:ar|قالتكتقا:ar
+ar	ةي	ةين:ar|ةينهذ:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتل	لتلى:ar|لتلتكتبح:ar|لتلتالهذ:ar
+ar	لتلت	لتلتكتبح:ar|لتلتالهذ:ar|لتلتينفي:ar
+ar	ره	رهذقاوم:ar|رهذ:ar|رهذكتبح:ar
+-	see ره	رهذقاوم:ar|رهذ:ar|رهذكتبح:ar
+ar	رهذ	رهذقاوم:ar|رهذكتبح:ar|رهذابفي:ar
+-	see رهذ	رهذقاوم:ar|رهذكتبح:ar|رهذابفي:ar
+ar	رهذك	رهذكتبح:ar|رهذكتاب:ar
+-	see رهذك	رهذكتبح:ar|رهذكتاب:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابع	ابعلرس:ar|ابعلر:ar|ابعلهذ:ar
+ar	ابعل	ابعلرس:ar|ابعلر:ar|ابعلهذ:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	منا	منابة:ar|مناب:ar|مناباب:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+-	see لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتك	لتكترسفي:ar|لتكت:ar|لتكتلترس:ar
+-	see لتك	لتكترسفي:ar|لتكت:ar|لتكتلترس:ar
+ar	لتكت	لتكترسفي:ar|لتكتلترس:ar|لتكتقا:ar
+-	see لتكت	لتكترسفي:ar|لتكتلترس:ar|لتكتقا:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	لتق	لتقا:ar|لتقاةقا:ar|لتقابحلى:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+ar	لىل	لىلتهذ:ar|لىلتلتال:ar|لىلتمن:ar
+ar	لىلت	لىلتهذ:ar|لىلتلتال:ar|لىلتمن:ar
+ar	مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+-	see مد	مدينلىة:ar|مدلتلت:ar|مدكت:ar
+ar	مدر	مدرس:ar|مدرسرسرس:ar|مدرسالعل:ar
+-	see مدر	مدرس:ar|مدرسرسرس:ar|مدرسالعل:ar
+ar	رق	رقابحلى:ar|رقاسمة:ar|رقا:ar
+ar	رقا	رقابحلى:ar|رقاسمة:ar|رقالتر:ar
+ar	رقاب	رقابحلى:ar
+ar	اب	ابةبحلت:ar|ابال:ar|ابهذقابح:ar
+ar	ابع	ابعلرس:ar|ابعلر:ar|ابعلهذ:ar
+ar	ابعل	ابعلرس:ar|ابعلر:ar|ابعلهذ:ar
+ar	رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+-	see رس	رسمدمد:ar|رسمد:ar|رسفيرس:ar
+ar	رسل	رسلت:ar|رسلى:ar|رسلتوم:ar
+-	see رسل	رسلت:ar|رسلى:ar|رسلتوم:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	علف	علفيينين:ar|علفي:ar|علفيالمد:ar
+ar	علفي	علفيينين:ar|علفيالمد:ar|علفيلتهذ:ar
+ar	ال	الكتومر:ar|الفيوم:ar|الينعلعل:ar
+ar	الر	الرسمدقا:ar|الرهذ:ar|الرس:ar
+ar	الرس	الرسمدقا:ar|الرسرقا:ar|الرسال:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+-	see عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	علا	علالبحمن:ar|علاب:ar|علابكتهذ:ar
+-	see علا	علالبحمن:ar|علاب:ar|علابكتهذ:ar
+ar	علال	علالبحمن:ar|علالمنكت:ar
+-	see علال	علالبحمن:ar|علالمنكت:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحا	بحالرس:ar|بحابعلعل:ar|بحال:ar
+ar	لت	لتعلسمبح:ar|لتلى:ar|لتلتكتبح:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+-	see بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحم	بحمدومين:ar|بحمن:ar|بحمنفي:ar
+-	see بحم	بحمدومين:ar|بحمن:ar|بحمنفي:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحر	بحرس:ar|بحرسمد:ar|بحرسمنال:ar
+ar	لى	لىركت:ar|لىة:ar|لىين:ar
+ar	لىك	لىكتومفي:ar|لىكت:ar|لىكتالبح:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+-	see وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	وما	ومابلى:ar|وماببحلى:ar|ومال:ar
+-	see وما	ومابلى:ar|وماببحلى:ar|ومال:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحك	بحكتال:ar|بحكت:ar|بحكتمدهذ:ar
+ar	بحكت	بحكتال:ar|بحكتمدهذ:ar|بحكتقا:ar
+ar	في	فيقا:ar|فيمد:ar|فيبح:ar
+ar	فيك	فيكتهذ:ar|فيكت:ar|فيكتسم:ar
+ar	فيكت	فيكتهذ:ar|فيكتسم:ar|فيكتكتوم:ar
+ar	وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+-	see وم	ومسملت:ar|ومقاومبح:ar|وملىقا:ar
+ar	ومق	ومقاومبح:ar|ومقااللت:ar|ومقاين:ar
+-	see ومق	ومقاومبح:ar|ومقااللت:ar|ومقاين:ar
+ar	ومقا	ومقاومبح:ar|ومقااللت:ar|ومقاين:ar
+-	see ومقا	ومقاومبح:ar|ومقااللت:ar|ومقاين:ar
+ar	قا	قاسمعلر:ar|قاقاعلفي:ar|قاهذمناب:ar
+ar	قاي	قاينرعل:ar|قاينقا:ar|قاين:ar
+ar	قاين	قاينرعل:ar|قاينقا:ar
+ar	ةر	ةرسال:ar|ةرينهذ:ar|ةرس:ar
+ar	من	منلىلتمد:ar|منابة:ar|منين:ar
+-	see من	منلىلتمد:ar|منابة:ar|منين:ar
+ar	منق	منقاقامن:ar|منقاعل:ar|منقالت:ar
+-	see منق	منقاقامن:ar|منقاعل:ar|منقالت:ar
+ar	منقا	منقاقامن:ar|منقاعل:ar|منقالت:ar
+-	see منقا	منقاقامن:ar|منقاعل:ar|منقالت:ar
+ar	عل	علين:ar|عللت:ar|علكتوممن:ar
+ar	علب	علبح:ar|علبحلىاب:ar|علبحمن:ar
+ar	علبح	علبحلىاب:ar|علبحمن:ar|علبحرس:ar
+ar	بح	بحينلىلى:ar|بحلىعلين:ar|بحبحكت:ar
+ar	بحه	بحهذوم:ar|بحهذ:ar|بحهذراب:ar
+ar	بحهذ	بحهذوم:ar|بحهذراب:ar|بحهذال:ar
+ar	ال	الكتومر:ar|الفيوم:ar|الينعلعل:ar
+-	see ال	الكتومر:ar|الفيوم:ar|الينعلعل:ar
+ar	الل	اللتلىين:ar|اللتمدلى:ar|اللىلىعل:ar
+-	see الل	اللتلىين:ar|اللتمدلى:ar|اللىلىعل:ar
+ar	اللت	اللتلىين:ar|اللتمدلى:ar|اللتسمهذ:ar
+-	see اللت	اللتلىين:ar|اللتمدلى:ar|اللتسمهذ:ar

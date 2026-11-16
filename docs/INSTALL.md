@@ -52,7 +52,12 @@ It sends nothing over the network: it has no network code.
 
 Two options, both **off** until you turn them on in the settings, keep something on your own PC:
 
-- **Learn the words I use:** Verba counts the words you type and the pairs of neighbouring words, to offer your own words and better next-word suggestions. It never stores a sentence, never three words in a row, no numbers, addresses, e-mails or paths, and nothing from the programs you excluded or from password boxes. The files are plain text in `%APPDATA%\Verba` (`learned.txt`, readable by anyone who can open your user folder). *Forget what it learned* in the settings, or deleting `learned.txt`, erases it all.
+- **Learn the words I use:** Verba keeps three lists of counts, so that it can offer your own words, rank the words you write most often higher, and suggest better next words:
+  1. the words you type that are in no dictionary (a name, a term of your trade), with how often; after 3 times they become your words;
+  2. **the ordinary words you type too, common ones included** (`the`, `agency`), with how often. The count fades slowly as you keep writing, so old habits fade, and it is used only to put the words you write more often higher in the suggestions;
+  3. pairs of neighbouring words (two words, never more), with how often.
+
+  It never stores a sentence, never three words in a row, no dates or times, no numbers, addresses, e-mails or paths, and nothing from the programs you excluded or from password boxes. At most 5 000 words of each kind and 20 000 pairs are kept. Someone who opens the file sees which words and pairs you write most, not what you wrote. The files are plain text in `%APPDATA%\Verba` (`learned.txt`, readable by anyone who can open your user folder). *Forget what it learned* in the settings, or deleting `learned.txt`, erases it all.
 - **My words:** `personal.txt` in the same folder, one word per line. You can edit it (the settings open it in Notepad) to add words Verba must never flag as typos and should offer as suggestions.
 
 ## For maintainers

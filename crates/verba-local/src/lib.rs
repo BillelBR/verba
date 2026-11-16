@@ -27,6 +27,8 @@ pub use nextword::{BuildParams, NextBuilder, NextParams, word_runs};
 pub use nextword::NextTable;
 pub use personal::PersonalDict;
 #[doc(hidden)]
+pub use personal::UsageParams;
+#[doc(hidden)]
 pub use spell::SpellParams;
 
 use std::collections::{HashMap, HashSet};
@@ -490,6 +492,8 @@ impl LocalEngine {
         let own = self.personal_completions(typed, arabic, max, &langs, &bias);
         let verbatim: HashSet<String> = own.iter().map(|o| o.0.clone()).collect();
         found.extend(own);
+        // dictionary words the user writes more often than the dictionary says
+        found.extend(self.usage_completions(&typed_key, max, &langs, &bias));
         if !arabic {
             self.dz_merge(only, before_caret, typed, &langs, max, &mut found);
         }

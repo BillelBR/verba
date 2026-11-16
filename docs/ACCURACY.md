@@ -630,3 +630,114 @@ linear over the list; a list of 50 000 words would need an index.
 - **Mixed Darija and French** is the norm in Algeria; a word known to both counts for no side in the context vote, so a mostly French sentence with a few Darija words stays French.
 - **Vulgar words are not in the seed** on purpose.
 - Regional and dialect mix: the seed is Algerian; words shared with Moroccan or Tunisian Arabic (`dyal`, `bahi`, `sir`, `kach`) and western-only forms (`dorka`) are in `UNSURE`.
+
+## Usage of dictionary words (learning ranks the words you write most higher)
+
+The learning used to keep only words that are in no dictionary. It now also counts the words the user writes that ARE in a dictionary
+(`PersonalDict` "usage", code in `crates/verba-local/src/personal.rs`, tests in `tests/usage.rs`), and `suggest` ranks a word higher the more the user
+writes it **beyond what the dictionary leads one to expect**. Nothing changes until `learn_text` has been used.
+
+### What is counted
+
+Every word the user writes with the same refusals as before (digits, URLs, e-mails, paths, identifiers, hex strings, acronyms, under 3 or over 24 letters,
+words the user removed), common words included. Counts are keyed by the word without accents or hamza, fade with a half-life of 4 000 `learn_text`
+calls (about one per sentence), and are capped at 5 000 words (the least written, then the oldest, go first; counts that faded under 0.2 go too).
+The total of words written is kept (faded the same way) to know what the dictionary leads one to expect. `learned.txt` gets two new line kinds,
+`utotal` and `u`; the old files load unchanged, damaged lines are skipped, and a program that does not know the lines ignores them.
+A word the spelling correction takes for a typo (the subtitle lists hold `wich`, `seperate`) is counted but flagged and never boosted; it is asked once, when
+the count reaches 2.
+
+### How the ranking works
+
+For each counted word that starts like what was typed (leniently: accents and hamza may be left out, as for the ordinary completions), its dictionary score
+is multiplied by a boost `1 + 3 * ln(r)`, bounded by **12**, where `r = count / (expected + 2)` and `expected = words written * share of the word in the
+dictionary`. The word is boosted only when its count exceeds `expected` by 6 standard deviations (`(count - expected) / sqrt(expected + 2) >= 6`), so
+chance repeats of a word do not count; a rare word needs about 9 writings, a common one several times what the dictionary predicts. The boosted copy is
+added to the candidates next to the ordinary ones (the ordinary list is not touched), so a boosted word is never lost. The same boost applies at every length of
+prefix, so two words keep their order while the user types; and the boost is bounded, so a word `x` times rarer than another can never pass it unless
+`x <= 12` (a test checks that a word 1 300 times rarer stays behind however often it is written). The engine of a user who never used learning is
+**byte for byte the engine of 0.4.0**: `tests/golden_suggest.rs` holds 3 000 questions on made-up lists and 4 100 on the real lists, answered by the code before this
+change (commit e80bf34), and compares the answers now.
+
+### Simulation
+
+`cargo run --release -p verba-local --example usage_simulation [-- --lang en|fr|ar] [--tune] [--drift] [--nextword]`. A synthetic user has a core of 300
+words drawn from a band of the dictionary's frequency ranks (so the vocabulary is skewed away from the dictionary) and writes a fraction of their words from it with
+a Zipf law; the rest are drawn by the dictionary's own frequency. **Specialist**: core from ranks 300-15 000, 35% of the words; **mixed**: ranks 50-3 000, 20%;
+**dictionary**: no core, writes as the dictionary says. The user's text goes to `learn_text` one sentence of 12 words at a time; the held-out text is
+new draws from the same habits, never learned. Each word is typed 2, 3 and 4 letters deep (the engine shows nothing for 1) and the engine is asked for 3
+completions. The dials were tuned on users with seeds 1-4 (the table below) and the results are on users with seeds 101-106.
+
+**Result: top-3 hit rate, mean of prefixes of 2, 3 and 4 letters (top-1 in the last column), learning off, then after 2 000 and 10 000 words learned**
+
+| | user | off | 2 000 words | 10 000 words | gain at prefix 2 / 3 / 4 (10 000) | top-1 off -> 10 000 |
+|---|---|---|---|---|---|---|
+| English | specialist | 60.1% | 67.6% (+7.5) | 70.8% (**+10.8**) | +7.9 / +14.3 / +10.0 | 38.6% -> 50.4% (+11.8) |
+| English | mixed | 73.4% | 75.8% (+2.4) | 77.1% (+3.6) | +5.3 / +5.0 / +0.6 | 49.9% -> 56.3% (+6.3) |
+| English | dictionary | 76.4% | 76.4% (0.0) | 76.4% (**0.0**) | 0.0 / 0.0 / 0.0 | 56.0% -> 56.0% (0.0) |
+| French | specialist | 56.0% | 61.6% (+5.6) | 64.5% (**+8.5**) | +7.1 / +10.6 / +7.9 | 37.4% -> 44.0% (+6.6) |
+| French | mixed | 66.8% | 69.6% (+2.8) | 71.2% (+4.4) | +5.6 / +5.8 / +1.8 | 44.5% -> 49.9% (+5.4) |
+| French | dictionary | 70.5% | 70.5% (0.0) | 70.5% (**0.0**) | 0.0 / 0.0 / 0.0 | 48.3% -> 48.3% (0.0) |
+| Arabic | specialist | 58.4% | 64.8% (+6.4) | 67.1% (**+8.8**) | +10.7 / +8.2 / +7.4 | 37.8% -> 48.0% (+10.2) |
+| Arabic | mixed | 65.1% | 66.7% (+1.7) | 67.6% (+2.6) | +2.9 / +2.9 / +1.9 | 44.4% -> 47.9% (+3.6) |
+| Arabic | dictionary | 66.3% | 66.3% (0.0) | 66.2% (**-0.1**) | -0.3 / 0.0 / 0.0 | 45.8% -> 45.7% (-0.1) |
+
+- **The regression is nil to negligible**: a user who writes exactly as the dictionary says loses nothing in English and French, and 0.1 point (one hit in
+  a thousand) in Arabic, on 6 users each. The dial that buys this is the significance gate (below); without it the same users lose 0.1 to 0.4 point.
+- **The gain grows with what has been written** (2 000 words: about 2/3 of the 10 000 gain), is largest where the first letters leave many candidates (3 letters), and is
+  small at 4 letters, where the dictionary already finds the word. A user whose habits are moderate (`mixed`) gains 2.6-4.4 points; one with a strong personal vocabulary 8.5-10.8.
+- These are synthetic users: real people have habits of this kind (a trade, a project, names) but the sizes of the gains are those of the model, not a promise.
+  The held-out words are drawn from the same unigram habits as the training text, which is what the ranking can learn; topics that change from day to day gain less.
+
+**The dials, tuned on seeds 1-4 (change in top-3 after 10 000 words: specialist / mixed / dictionary)**
+
+| Setting | English | French | Arabic |
+|---|---|---|---|
+| boost `1 + 0.9 ln(count)`, bound 8 | +8.6 / +3.0 / -0.3 | +5.8 / +2.5 / -0.2 | +5.8 / +2.2 / -0.5 |
+| `r` = count over the expected count, `k` 0.9, bound 8 | +8.6 / +3.4 / -0.2 | +5.9 / +3.2 / -0.1 | +5.9 / +2.4 / -0.2 |
+| same, `k` 1.8, bound 12, from 2 writings | +11.5 / +4.4 / -0.2 | +9.5 / +4.2 / -0.3 | +8.7 / +3.3 / -0.4 |
+| same, padded expectation (2), `k` 2.4, no gate | +11.4 / +4.3 / -0.1 | +9.4 / +4.7 / -0.2 | +8.6 / +3.3 / -0.2 |
+| gate at 4 standard deviations, `k` 3 | +11.7 / +4.7 / -0.1 | +9.5 / +5.1 / 0.0 | +8.5 / +3.4 / -0.1 |
+| **gate at 6 standard deviations, `k` 3, bound 12 (shipped)** | **+11.1 / +4.5 / 0.0** | **+9.2 / +4.8 / 0.0** | **+8.0 / +3.3 / -0.1** |
+
+- The bound: 2 loses about half of the gain and 4 loses 15-20%; 8 to 16 gain the same (a boost above 8 is rare), so 12 leaves room without letting a rare word
+  pass a clearly better one. With the bound, "clearly better" means a word 12 times more frequent in the dictionary.
+- Logarithm of the count alone and the count over the expected count differ little in the gain; the second is kept because it also protects the common words
+  (a word the user writes as often as expected gets no boost). The significance gate is what removes the regression.
+- The minimum count (2 or 3) made no difference (0.1 point or less) in the runs without the gate, and with the gate a rare word needs about 9 writings anyway; 2 is used, so the typo check is made early. (The shipped combination was only run on seeds 101-106, the table above.)
+- **Fading.** A user who changes vocabulary after 10 000 words (new job, new project) and writes 4 000 words of a new one: on the new words the gain is +6.3 / +6.9 / +7.5
+  (English / French / Arabic) with a half-life of 4 000 sentences and +6.3 / +6.9 / +7.6 without any fading; with a half-life of 100 sentences it is +4.6 / +5.2 / +6.4. **The
+  simulation cannot show that fading helps**: old habits cost nothing here, because the new words overtake them quickly; a short half-life only forgets habits that are still real
+  (the first vocabulary drops from 69.0% to 65.3% right after its 10 000 words with a half-life of 100). The 4 000 (about a month of writing) is kept as gentle, so that counts
+  and the file do not grow for ever; it is a safety, not a measured gain.
+
+### Cost
+
+On the real English list, 2 500 random sentences of 12 words from a 20 000-word vocabulary (the worst case for the typo check, which runs when a word reaches 2 writings):
+`learn_text` 400 µs per sentence; `suggest_in` with 4 700 counted words 19 µs per call (the 2 to 4 letter prefixes of the 3 000 commonest words); `save` 14 ms, 576 KB for 4 700 words
+and their pairs; `load` 42 ms.
+
+### Next words
+
+The user's own pairs already come first once seen twice (`MIN_PAIR_USE`, now the dial `pair_min` of `UsageParams`; `tests/usage.rs::pairs_the_user_repeats_come_first`
+and `tests/nextword.rs`). Simulation (`--nextword`; users with 300 core words, each with 2 favourite followers used 45% of the time; text followed the bundled
+table otherwise, which makes the table's own predictions the "off" reference and flatters the table side; 10 000 words learned; top-3 of `next_words`, after a core word):
+
+| pair used at | habits, English | habits, French | habits, Arabic | dictionary-like, English | French | Arabic |
+|---|---|---|---|---|---|---|
+| 1 | +18.1 | +11.1 | +9.5 | +7.4 | -0.1 | -2.8 |
+| **2 (kept)** | +13.7 | +5.2 | +5.7 | +10.0 | +2.9 | +0.1 |
+| 3 | +13.2 | +4.0 | +4.6 | +9.8 | +3.0 | +0.7 |
+| 4 | +12.7 | +3.7 | +3.6 | +9.8 | +3.0 | +0.9 |
+
+Using a pair after one sighting helps people with real habits by 5 points more but costs people without habits up to 3 points (a pair seen once is often chance and pushes out the
+table's answer). The threshold of 2 is the compromise and **should stay**; if habits must be caught faster, a pair seen once could be offered after the table's first
+answer instead of before it (not done: it needs a change of the ordering in `next_words`, measured only here). Raising it to 3 gains almost nothing for either.
+Over all positions, learning gains 13-15 points in English and French and 7 in Arabic in this simulation, mostly from sentence openings and pairs of the user's core words.
+
+### Privacy: what is stored now
+
+`learned.txt` holds: single words that are in no dictionary with a count (`w`), single words that are in a dictionary, common ones included, with a faded count (`u`), the number of
+words written in all (`utotal`), a counter that goes up by one per `learn_text` (not a date), and pairs of two neighbouring words with a count (`b`). **Never**: a sentence, three words in a
+row, a date, the program, the place. At most 5 000 words of each kind and 20 000 pairs. Someone who reads the file learns which words and pairs the user writes most, and roughly how much they wrote
+(the total), which is why it is a plain file that *Forget what it learned* or deleting it erases; `docs/INSTALL.md` says the same in the user's words.

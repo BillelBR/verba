@@ -1,7 +1,7 @@
 # Verba - Algerian Darija written in Latin letters ("Arabizi"): SEED word list.
 #
 # Written by the Verba authors from their own knowledge of how Algerians type. It is NOT taken from any corpus.
-# License: MIT OR Apache-2.0 (same as the code). It is an estimate, not a measurement: see docs/ACCURACY.md.
+# License: PolyForm Noncommercial 1.0.0, like the rest of the project (see LICENSE). It is an estimate, not a measurement: see docs/ACCURACY.md.
 #
 # Format (read by crates/verba-local/src/dz.rs):
 #   - lines starting with '#' are comments;

@@ -25,7 +25,7 @@ use verba_core::{Lang, Suggestion, current_word_dz, is_dz_digit, match_case};
 use crate::fold::fold;
 use crate::{LocalEngine, MIN_PREFIX, WordList};
 
-/// The seed list, written by the Verba authors (MIT OR Apache-2.0). One `word weight` pair after another.
+/// The seed list, written by the Verba authors (PolyForm Noncommercial 1.0.0, like the code). One `word weight` pair after another.
 pub const DZ_SEED: &str = include_str!("../seed/dz-seed.txt");
 
 /// How much a Dz candidate counts next to an English or French one when nothing says the text is Darija.

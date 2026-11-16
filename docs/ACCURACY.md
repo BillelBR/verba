@@ -514,7 +514,7 @@ Measured on 2026-11-16 with `cargo run --release -p verba-local --example dz_acc
 ### Read this first: the seed list is written by the authors
 
 Algerian Arabizi has no standard spelling and there is no large free frequency list of it. The program ships a **seed list of 2476 words**
-(`crates/verba-local/seed/dz-seed.txt`, MIT OR Apache-2.0), written from the authors' knowledge, with weights that are estimates. So:
+(`crates/verba-local/seed/dz-seed.txt`, PolyForm Noncommercial 1.0.0), written from the authors' knowledge, with weights that are estimates. So:
 
 - Every number measured on the seed's own words (sections 1 and 1b) is **optimistic**: the list knows the words it is asked about.
 - The honest number is section 3, on real text that nobody wrote the list from (the NArabizi treebank). There the seed knows **55%** of the

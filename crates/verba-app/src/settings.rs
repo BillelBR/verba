@@ -43,6 +43,8 @@ pub struct Settings {
     pub english: bool,
     pub french: bool,
     pub arabic: bool,
+    /// Algerian Darija written in Latin letters (off until the user turns it on).
+    pub darija: bool,
     pub paused: bool,
     /// Show a spelling fix when a word is finished (off until the user turns it on).
     pub correction: bool,
@@ -64,6 +66,7 @@ impl Default for Settings {
             english: true,
             french: true,
             arabic: true,
+            darija: false,
             paused: false,
             correction: false,
             predict_next: false,
@@ -81,7 +84,7 @@ impl Settings {
             Lang::En => self.english,
             Lang::Fr => self.french,
             Lang::Ar => self.arabic,
-            Lang::Dz => false, // not in the settings window yet
+            Lang::Dz => self.darija,
         }
     }
 
@@ -90,7 +93,7 @@ impl Settings {
             Lang::En => self.english = on,
             Lang::Fr => self.french = on,
             Lang::Ar => self.arabic = on,
-            Lang::Dz => {} // not in the settings window yet
+            Lang::Dz => self.darija = on,
         }
     }
 
@@ -156,6 +159,7 @@ impl Settings {
                 "english" => s.english = on,
                 "french" => s.french = on,
                 "arabic" => s.arabic = on,
+                "darija" => s.darija = on,
                 "paused" => s.paused = on,
                 "correction" => s.correction = on,
                 "predict_next" => s.predict_next = on,
@@ -182,10 +186,11 @@ impl Settings {
         let flag = |b: bool| if b { "1" } else { "0" };
         let mode = if self.app_mode == AppMode::OnlyThese { "only" } else { "except" };
         format!(
-            "theme={theme}\nenglish={}\nfrench={}\narabic={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\nfollow_keyboard={}\napp_mode={mode}\napps={}\n",
+            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\nfollow_keyboard={}\napp_mode={mode}\napps={}\n",
             flag(self.english),
             flag(self.french),
             flag(self.arabic),
+            flag(self.darija),
             flag(self.paused),
             flag(self.correction),
             flag(self.predict_next),
@@ -268,6 +273,16 @@ mod tests {
         assert!(!d.predict_next && !d.learn);
         let s = Settings::parse("predict_next=1\nlearn=1");
         assert!(s.predict_next && s.learn);
+    }
+
+    #[test]
+    fn darija_is_off_until_the_user_turns_it_on() {
+        assert!(!Settings::default().darija && !Settings::default().lang_on(Lang::Dz));
+        let mut s = Settings::parse("darija=1");
+        assert!(s.lang_on(Lang::Dz));
+        s.set_lang(Lang::Dz, false);
+        assert!(!s.darija);
+        assert_eq!(Settings::parse(&Settings { darija: true, ..Settings::default() }.render()).darija, true);
     }
 
     #[test]

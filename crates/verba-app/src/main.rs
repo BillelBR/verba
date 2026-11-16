@@ -23,7 +23,7 @@ mod settings;
 mod settings_window;
 
 use settings::{Settings, ThemeMode};
-use verba_core::{Engine, Lang, Suggestion, current_word};
+use verba_core::{Engine, Lang, Suggestion, current_word, current_word_dz};
 use verba_local::{LocalEngine, PersonalDict};
 use verba_win::{Locator, Look, Overlay, Snapshot, Theme, foreground_app};
 use windows::Win32::Foundation::{ERROR_ALREADY_EXISTS, GetLastError, HINSTANCE, HWND, LPARAM, LRESULT, POINT, WPARAM};
@@ -135,7 +135,8 @@ fn main() {
             engine.set_personal(PersonalDict::load(words, learned));
         }
         let words_stamp = files.as_ref().and_then(|(w, _)| stamp_of(w));
-        for lang in [Lang::En, Lang::Fr, Lang::Ar] {
+        engine.add_dz_seed();
+        for lang in [Lang::En, Lang::Fr, Lang::Ar, Lang::Dz] {
             engine.set_enabled(lang, settings.lang_on(lang));
         }
         PAUSED.store(settings.paused, Ordering::SeqCst);
@@ -473,7 +474,9 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
         return;
     }
     app.fix = None;
-    app.typed_len = current_word(&snap.before_caret).chars().count();
+    // with Darija on, digit-letters (sa7, 3la) belong to the word
+    let typed = if app.settings.darija { current_word_dz(&snap.before_caret) } else { current_word(&snap.before_caret) };
+    app.typed_len = typed.chars().count();
     app.overlay.show(snap.anchor, &found, 0, look_for(&app.settings));
     app.shown = found;
     POPUP_VISIBLE.store(true, Ordering::SeqCst);
@@ -587,7 +590,7 @@ pub(crate) fn current_settings() -> Settings {
 pub(crate) fn update_settings(change: impl FnOnce(&mut Settings)) {
     with_app(|app| {
         change(&mut app.settings);
-        for lang in [Lang::En, Lang::Fr, Lang::Ar] {
+        for lang in [Lang::En, Lang::Fr, Lang::Ar, Lang::Dz] {
             app.engine.set_enabled(lang, app.settings.lang_on(lang));
         }
         PAUSED.store(app.settings.paused, Ordering::SeqCst);

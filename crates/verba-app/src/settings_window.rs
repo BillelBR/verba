@@ -37,6 +37,7 @@ const ID_FOLLOW: i32 = 2010;
 const ID_EN: i32 = 2011;
 const ID_FR: i32 = 2012;
 const ID_AR: i32 = 2013;
+const ID_DZ: i32 = 2014;
 const ID_THEME_AUTO: i32 = 2021;
 const ID_THEME_LIGHT: i32 = 2022;
 const ID_THEME_DARK: i32 = 2023;
@@ -107,7 +108,7 @@ pub fn open(icon: HICON) {
 
         let dpi = GetDpiForSystem().max(96);
         SCALE.with(|s| s.set(dpi as f32 / 96.0));
-        let (client_w, client_h) = (px(480), px(688));
+        let (client_w, client_h) = (px(480), px(698));
         let style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
         // the window is bigger than its inside by the title bar and the borders
         let mut frame = RECT { left: 0, top: 0, right: client_w, bottom: client_h };
@@ -180,36 +181,37 @@ fn build_controls(win: HWND, _hinst: HINSTANCE) {
     child(win, button, "Forget what it learned", BS_PUSHBUTTON | tab, 0, (196, 122, 180, 28), ID_FORGET);
 
     // Language
-    child(win, button, "Language", BS_GROUPBOX, 0, (20, 158, 440, 126), 0);
+    child(win, button, "Language", BS_GROUPBOX, 0, (20, 158, 440, 136), 0);
     child(win, button, "Follow the keyboard language", BS_AUTOCHECKBOX | tab, 0, (36, 180, 408, 22), ID_FOLLOW);
     child(win, button, "English", BS_AUTOCHECKBOX | tab, 0, (36, 206, 124, 22), ID_EN);
     child(win, button, "Français", BS_AUTOCHECKBOX | tab, 0, (166, 206, 124, 22), ID_FR);
     child(win, button, "العربية", BS_AUTOCHECKBOX | tab, 0, (296, 206, 148, 22), ID_AR);
-    child(win, label, "Verba suggests in the language of the keyboard you are typing with. Turn this off to guess it from the letters instead.", 0, 0, (36, 232, 408, 44), 0);
+    child(win, button, "Algerian Darija in Latin letters (wach, kifach, 3lach…)", BS_AUTOCHECKBOX | tab, 0, (36, 232, 408, 22), ID_DZ);
+    child(win, label, "Verba suggests in the language of the keyboard you are typing with. Turn this off to guess it from the letters instead.", 0, 0, (36, 256, 408, 34), 0);
 
     // Look
-    child(win, button, "Look", BS_GROUPBOX, 0, (20, 294, 440, 58), 0);
-    child(win, button, "Follow Windows", BS_AUTORADIOBUTTON | WS_GROUP_ | tab, 0, (36, 318, 140, 22), ID_THEME_AUTO);
-    child(win, button, "Light", BS_AUTORADIOBUTTON, 0, (190, 318, 100, 22), ID_THEME_LIGHT);
-    child(win, button, "Dark", BS_AUTORADIOBUTTON, 0, (300, 318, 100, 22), ID_THEME_DARK);
+    child(win, button, "Look", BS_GROUPBOX, 0, (20, 304, 440, 58), 0);
+    child(win, button, "Follow Windows", BS_AUTORADIOBUTTON | WS_GROUP_ | tab, 0, (36, 328, 140, 22), ID_THEME_AUTO);
+    child(win, button, "Light", BS_AUTORADIOBUTTON, 0, (190, 328, 100, 22), ID_THEME_LIGHT);
+    child(win, button, "Dark", BS_AUTORADIOBUTTON, 0, (300, 328, 100, 22), ID_THEME_DARK);
 
-    child(win, button, "Start Verba when Windows starts", BS_AUTOCHECKBOX | tab, 0, (20, 364, 440, 24), ID_AUTOSTART);
+    child(win, button, "Start Verba when Windows starts", BS_AUTOCHECKBOX | tab, 0, (20, 374, 440, 24), ID_AUTOSTART);
 
     // Apps
-    child(win, button, "Apps", BS_GROUPBOX, 0, (20, 400, 440, 238), 0);
-    let combo = child(win, w!("COMBOBOX"), "", CBS_DROPDOWNLIST | tab | WS_VSCROLL_, 0, (36, 424, 408, 120), ID_MODE);
+    child(win, button, "Apps", BS_GROUPBOX, 0, (20, 410, 440, 238), 0);
+    let combo = child(win, w!("COMBOBOX"), "", CBS_DROPDOWNLIST | tab | WS_VSCROLL_, 0, (36, 434, 408, 120), ID_MODE);
     unsafe {
         for item in ["Work in every app except the ones listed", "Work only in the apps listed"] {
             let text = wide(item);
             SendMessageW(combo, CB_ADDSTRING, Some(WPARAM(0)), Some(LPARAM(text.as_ptr() as isize)));
         }
     }
-    child(win, w!("LISTBOX"), "", LBS_NOTIFY | WS_VSCROLL_ | tab, WS_EX_CLIENTEDGE_, (36, 458, 262, 128), ID_LIST);
-    child(win, button, "Add a running app…", BS_PUSHBUTTON | tab, 0, (308, 458, 136, 30), ID_ADD);
-    child(win, button, "Remove", BS_PUSHBUTTON | tab, 0, (308, 496, 136, 30), ID_REMOVE);
-    child(win, label, "Password managers and Verba itself are always off, whatever you choose.", 0, 0, (36, 594, 408, 36), 0);
+    child(win, w!("LISTBOX"), "", LBS_NOTIFY | WS_VSCROLL_ | tab, WS_EX_CLIENTEDGE_, (36, 468, 262, 128), ID_LIST);
+    child(win, button, "Add a running app…", BS_PUSHBUTTON | tab, 0, (308, 468, 136, 30), ID_ADD);
+    child(win, button, "Remove", BS_PUSHBUTTON | tab, 0, (308, 506, 136, 30), ID_REMOVE);
+    child(win, label, "Password managers and Verba itself are always off, whatever you choose.", 0, 0, (36, 604, 408, 36), 0);
 
-    child(win, button, "Close", BS_DEFPUSHBUTTON | tab, 0, (360, 650, 100, 28), ID_CLOSE);
+    child(win, button, "Close", BS_DEFPUSHBUTTON | tab, 0, (360, 660, 100, 28), ID_CLOSE);
 }
 
 fn control(win: HWND, id: i32) -> HWND {
@@ -237,6 +239,7 @@ fn refresh(win: HWND) {
     set_check(win, ID_EN, s.english);
     set_check(win, ID_FR, s.french);
     set_check(win, ID_AR, s.arabic);
+    set_check(win, ID_DZ, s.darija);
     set_check(win, ID_THEME_AUTO, s.theme == ThemeMode::Auto);
     set_check(win, ID_THEME_LIGHT, s.theme == ThemeMode::Light);
     set_check(win, ID_THEME_DARK, s.theme == ThemeMode::Dark);
@@ -303,6 +306,7 @@ unsafe extern "system" fn proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: LPARAM) -> 
                 ID_EN => crate::update_settings(|s| s.set_lang(Lang::En, is_checked(hwnd, ID_EN))),
                 ID_FR => crate::update_settings(|s| s.set_lang(Lang::Fr, is_checked(hwnd, ID_FR))),
                 ID_AR => crate::update_settings(|s| s.set_lang(Lang::Ar, is_checked(hwnd, ID_AR))),
+                ID_DZ => crate::update_settings(|s| s.set_lang(Lang::Dz, is_checked(hwnd, ID_DZ))),
                 ID_THEME_AUTO => crate::update_settings(|s| s.theme = ThemeMode::Auto),
                 ID_THEME_LIGHT => crate::update_settings(|s| s.theme = ThemeMode::Light),
                 ID_THEME_DARK => crate::update_settings(|s| s.theme = ThemeMode::Dark),

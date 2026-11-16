@@ -9,6 +9,8 @@
 //! - Dz is OFF until `set_enabled(Lang::Dz, true)`. When it is on it is an extra pool next to English and French
 //!   (`dz_merge`), the spelling correction never writes a Dz word and never touches one (`dz_knows`).
 //!
+//! The same list type also holds Darija written in ARABIC letters (`seed/dz-ar-seed.txt`, `DzList::seed_ar`): see `dz_ar_merge`.
+//!
 //! How Dz is merged with English and French in a Latin context (the keyboard is English or French there):
 //! 1. a word with digit-letters (`sa7`, `3la`, `9ah`) can only be Dz: English and French are not asked;
 //! 2. otherwise Dz candidates compete with the English and French ones by frequency share, times `DZ_PRIOR` (a small
@@ -20,13 +22,16 @@ use std::collections::{HashMap, HashSet};
 use std::io;
 use std::path::Path;
 
-use verba_core::{Lang, Suggestion, current_word_dz, is_dz_digit, match_case};
+use verba_core::{Lang, Suggestion, current_word, current_word_dz, is_arabic_word, is_dz_digit, match_case, strip_arabic_marks};
 
 use crate::fold::fold;
-use crate::{LocalEngine, MIN_PREFIX, WordList};
+use crate::{AR_PARTICLES, LocalEngine, MIN_PREFIX, STEM_PENALTY, WordList};
 
 /// The seed list, written by the Verba authors (PolyForm Noncommercial 1.0.0, like the code). One `word weight` pair after another.
 pub const DZ_SEED: &str = include_str!("../seed/dz-seed.txt");
+
+/// The seed list of Darija written in Arabic letters, written by the Verba authors (PolyForm Noncommercial 1.0.0).
+pub const DZ_AR_SEED: &str = include_str!("../seed/dz-ar-seed.txt");
 
 /// How much a Dz candidate counts next to an English or French one when nothing says the text is Darija.
 /// (Measured: see docs/ACCURACY.md. Higher means more Dz suggestions in ordinary English and French.)
@@ -41,6 +46,21 @@ const TIER_SOUND: f64 = 0.5;
 const TIER_SKELETON: f64 = 0.15;
 /// The last words that decide whether the text is Darija.
 const CONTEXT_WORDS: usize = 3;
+
+// ---- Arabic script (see `ar_key`)
+/// Like `DZ_PRIOR`, for Darija in Arabic letters next to the Arabic (Modern Standard Arabic) list.
+const DZ_AR_PRIOR: f64 = 0.05;
+/// When the words just before are Darija: Darija counts this much, and the Arabic list is multiplied by `AR_IN_DZ_CONTEXT`.
+const DZ_AR_IN_CONTEXT: f64 = 1.5;
+const AR_IN_DZ_CONTEXT: f64 = 0.3;
+/// A Darija word the Arabic list also holds counts as Darija in a sentence only when the Arabic list has it this many times less often (share of the list).
+const AR_CONTEXT_RATIO: f64 = 0.1;
+
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+enum Script {
+    Latin,
+    Arabic,
+}
 
 /// The comparison key of a Darija word: sounds, not letters. `kifach` / `kifech` / `kifesh`, `bezzaf` / `bezaf`,
 /// `7bibi` / `hbibi`, `9ahwa` / `qahwa`, `khouya` / `5ouya` / `khoya` have the same key.
@@ -98,6 +118,67 @@ pub(crate) fn skeleton(soft: &str) -> String {
     soft.chars().filter(|c| !matches!(c, 'a' | 'i' | 'u' | '3')).collect()
 }
 
+/// The comparison key of a Darija word in Arabic letters: what a typist may spell differently is one letter.
+/// Short vowels, hamza on alef, ta marbuta, alef maqsura (see `fold`), `ڨ گ` = `ق`, `ڤ` = `ف`, `پ` = `ب`, `چ` = `ش`, the interdental letters
+/// said as stops (`ث` = `ت`, `ذ` = `د`, `ظ` = `ض`), a lone hamza dropped.
+pub(crate) fn ar_key(word: &str) -> String {
+    let mut out = String::with_capacity(word.len());
+    for c in ar_strict_key(word).chars() {
+        if c != 'ء' {
+            out.push(c);
+        }
+    }
+    out
+}
+
+/// The key used to decide that a word IS Darija (so that the spelling correction leaves it alone): the same letters as `ar_key`, but no hamza
+/// dropped. Modern Standard Arabic words (`النساء`) must not be taken for Darija words (`نسا`) because the loose key makes them look alike.
+pub(crate) fn ar_strict_key(word: &str) -> String {
+    let mut out = String::with_capacity(word.len());
+    for c in fold(&strip_arabic_marks(word)).chars() {
+        let c = match c {
+            'ڨ' | 'گ' | 'ڭ' => 'ق',
+            'ڤ' => 'ف',
+            'پ' => 'ب',
+            'چ' => 'ش',
+            'ک' => 'ك',
+            'ی' => 'ي',
+            'ث' => 'ت',
+            'ذ' => 'د',
+            'ظ' => 'ض',
+            c => c,
+        };
+        out.push(c);
+    }
+    out
+}
+
+/// The consonants of an Arabic key: the long-vowel letters `ا و ي` dropped, except at the start (`واش` -> `وش`, `بزاف` -> `بزف`).
+pub(crate) fn ar_skeleton(key: &str) -> String {
+    key.chars().enumerate().filter(|(i, c)| *i == 0 || !matches!(c, 'ا' | 'و' | 'ي')).map(|(_, c)| c).collect()
+}
+
+/// The sound / spelling key of a Darija word in Arabic letters, for tools that measure the engine.
+#[doc(hidden)]
+pub fn dz_ar_key(word: &str) -> String {
+    ar_key(word)
+}
+
+/// The key of a word in the script of the list.
+fn key_of(script: Script, word: &str) -> String {
+    match script {
+        Script::Latin => soft_key(word),
+        Script::Arabic => ar_key(word),
+    }
+}
+
+fn skeleton_of(script: Script, key: &str) -> String {
+    match script {
+        Script::Latin => skeleton(key),
+        Script::Arabic => ar_skeleton(key),
+    }
+}
+
 struct DzEntry {
     word: String,
     count: u64,
@@ -109,6 +190,7 @@ struct DzEntry {
 
 /// The Darija word list: words with weights, grouped by sound.
 pub struct DzList {
+    script: Script,
     entries: Vec<DzEntry>,
     /// Sum of the weights of the group, by group.
     group_total: Vec<f64>,
@@ -118,6 +200,8 @@ pub struct DzList {
     groups: HashMap<String, u32>,
     /// Group -> its entries.
     members: Vec<Vec<u32>>,
+    /// Arabic lists: strict key (see `ar_strict_key`) -> its entries.
+    strict: HashMap<String, Vec<u32>>,
     total: f64,
 }
 
@@ -131,16 +215,38 @@ fn valid_word(w: &str) -> bool {
         && !w.as_bytes().windows(3).any(|p| p[0] == p[1] && p[1] == p[2])
 }
 
+/// A Darija word in Arabic letters: 2 to 24 letters of the Arabic alphabet (and `ڨ ڤ پ چ گ`), no letter three times in a row.
+fn valid_word_ar(w: &str) -> bool {
+    let n = w.chars().count();
+    (2..=24).contains(&n)
+        && w.chars().all(|c| matches!(c as u32, 0x0621..=0x063A | 0x0641..=0x064A | 0x0671) || "ڨڤپچگ".contains(c))
+        && !w.chars().collect::<Vec<_>>().windows(3).any(|p| p[0] == p[1] && p[1] == p[2])
+}
+
 impl DzList {
     /// The seed list embedded in the program.
     pub fn seed() -> Self {
         Self::parse(DZ_SEED)
     }
 
+    /// The seed list of Darija written in Arabic letters, embedded in the program.
+    pub fn seed_ar() -> Self {
+        Self::parse_ar(DZ_AR_SEED)
+    }
+
+    /// Like `parse`, for Darija written in Arabic letters. Short vowels are dropped; a word with anything but Arabic letters is skipped.
+    pub fn parse_ar(text: &str) -> Self {
+        Self::parse_script(Script::Arabic, text)
+    }
+
     /// Reads a list: `#` comments, `word weight` pairs (several to a line), `@N` sets the weight of the words that follow
     /// without one. A line of the usual `word count` format works too. A word seen twice keeps its larger weight.
     /// Anything that is not a Darija word (accents, apostrophes, digits other than 2 3 5 6 7 8 9) is skipped.
     pub fn parse(text: &str) -> Self {
+        Self::parse_script(Script::Latin, text)
+    }
+
+    fn parse_script(script: Script, text: &str) -> Self {
         let mut counts: HashMap<String, u64> = HashMap::new();
         let mut default = 100u64;
         for line in text.lines() {
@@ -164,25 +270,26 @@ impl DzList {
                     }
                     None => default,
                 };
-                let word = t.to_lowercase();
-                if weight > 0 && valid_word(&word) {
+                let word = if script == Script::Arabic { strip_arabic_marks(t) } else { t.to_lowercase() };
+                if weight > 0 && if script == Script::Arabic { valid_word_ar(&word) } else { valid_word(&word) } {
                     let c = counts.entry(word).or_insert(0);
                     *c = (*c).max(weight);
                 }
             }
         }
-        Self::from_counts(counts)
+        Self::from_counts(script, counts)
     }
 
-    fn from_counts(counts: HashMap<String, u64>) -> Self {
+    fn from_counts(script: Script, counts: HashMap<String, u64>) -> Self {
         let mut all: Vec<(String, u64)> = counts.into_iter().collect();
         all.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0)));
         let mut entries = Vec::with_capacity(all.len());
         let (mut words, mut groups) = (HashMap::new(), HashMap::new());
         let mut group_total: Vec<f64> = Vec::new();
         let mut members: Vec<Vec<u32>> = Vec::new();
+        let mut strict: HashMap<String, Vec<u32>> = HashMap::new();
         for (word, count) in all {
-            let soft = soft_key(&word);
+            let soft = key_of(script, &word);
             let next = group_total.len() as u32;
             let group = *groups.entry(soft.clone()).or_insert(next);
             if group == next {
@@ -190,12 +297,15 @@ impl DzList {
                 members.push(Vec::new());
             }
             members[group as usize].push(entries.len() as u32);
+            if script == Script::Arabic {
+                strict.entry(ar_strict_key(&word)).or_default().push(entries.len() as u32);
+            }
             group_total[group as usize] += count as f64;
             words.insert(word.clone(), entries.len() as u32);
-            entries.push(DzEntry { skel: skeleton(&soft), soft, word, count, group });
+            entries.push(DzEntry { skel: skeleton_of(script, &soft), soft, word, count, group });
         }
         let total = entries.iter().map(|e| e.count as f64).sum::<f64>().max(1.0);
-        Self { entries, group_total, words, groups, members, total }
+        Self { script, entries, group_total, words, groups, members, strict, total }
     }
 
     /// Adds the words of a downloaded list (`dz.txt`) to this one. Its counts are corpus counts, not the seed's estimates, so they
@@ -206,7 +316,7 @@ impl DzList {
         for e in &extra.entries {
             *counts.entry(e.word.clone()).or_insert(0) += ((e.count as f64 * scale).round() as u64).max(1);
         }
-        *self = Self::from_counts(counts);
+        *self = Self::from_counts(self.script, counts);
     }
 
     pub fn len(&self) -> usize {
@@ -232,6 +342,9 @@ impl DzList {
     /// `foreign` tells the words that are plain English or French (`normal`, `master`: Darija speakers use them, but they are
     /// not Darija spellings): another spelling of one of those is a typo, not Darija.
     pub fn knows(&self, word: &str, foreign: impl Fn(&str) -> bool) -> bool {
+        if self.script == Script::Arabic {
+            return self.knows_ar(word, foreign);
+        }
         let w = word.to_lowercase();
         if self.words.contains_key(&w) {
             return true;
@@ -271,15 +384,71 @@ impl DzList {
         false
     }
 
+    /// Arabic letters: the word, or another spelling of it (same key), or a listed word with a particle, a negation, a verb prefix or a pronoun around it.
+    /// `foreign` tells the words the Arabic (Modern Standard Arabic) list holds too: another spelling of one of those is for the Arabic list to judge.
+    fn knows_ar(&self, word: &str, foreign: impl Fn(&str) -> bool) -> bool {
+        let w = strip_arabic_marks(word);
+        if self.words.contains_key(&w) {
+            return true;
+        }
+        let key = ar_strict_key(&w);
+        let sounds = |k: &str| {
+            k.chars().count() >= 2 && self.strict.get(k).is_some_and(|ids| ids.iter().any(|i| !foreign(&self.entries[*i as usize].word)))
+        };
+        if sounds(&key) {
+            return true;
+        }
+        // particle (and, so, with, to, like, the) + `ما` (not) + `ن ت ي` (I, you, he) + a word of the list + `ش` (not) + a pronoun, all as keys
+        const PARTICLE: &[&str] = &["", "و", "ف", "ب", "ل", "ك", "ال", "وال", "فال", "بال", "كال", "ول", "وب"];
+        const NOT_PREFIX: &[&str] = &["", "ما", "م"];
+        const PERSON: &[&str] = &["", "ن", "ت", "ي"];
+        const NOT_SUFFIX: &[&str] = &["", "ش"];
+        const PRONOUN: &[&str] = &["", "ي", "ك", "ه", "و", "ها", "نا", "كم", "هم", "ني", "لي", "لك", "له", "لو", "لها", "لنا", "لهم", "وا", "ت", "تي"];
+        for pa in PARTICLE {
+            let Some(r0) = key.strip_prefix(pa) else { continue };
+            for np in NOT_PREFIX {
+                let Some(r1) = r0.strip_prefix(np) else { continue };
+                for pp in PERSON {
+                    let Some(r2) = r1.strip_prefix(pp) else { continue };
+                    for ns in NOT_SUFFIX {
+                        let Some(r3) = r2.strip_suffix(ns) else { continue };
+                        for pr in PRONOUN {
+                            if pa.is_empty() && np.is_empty() && pp.is_empty() && ns.is_empty() && pr.is_empty() {
+                                continue;
+                            }
+                            let Some(stem) = r3.strip_suffix(pr) else { continue };
+                            if stem.chars().count() >= 3 && sounds(stem) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        false
+    }
+
+    /// True when the word, or another spelling with the same strict key, is in the list.
+    fn is_listed(&self, word: &str) -> bool {
+        self.words.contains_key(word) || self.strict.contains_key(&ar_strict_key(word))
+    }
+
+    /// How much of the list this word is (any spelling with the same key), as a share; 0 when it is not there.
+    fn share_of(&self, word: &str) -> f64 {
+        self.groups.get(&key_of(self.script, word)).map_or(0.0, |g| self.group_total[*g as usize] / self.total)
+    }
+
     /// The best words for what is typed (lower case): (word, score), best first, with the score a share of the list.
     /// `typed` must be 2 characters or more. The word itself, or another spelling of it, is not offered.
     fn complete(&self, typed: &str, limit: usize) -> Vec<(&str, f64)> {
         if typed.chars().count() < MIN_PREFIX {
             return Vec::new();
         }
-        let soft = soft_key(typed);
-        let skel = skeleton(&soft);
+        let soft = key_of(self.script, typed);
+        let skel = skeleton_of(self.script, &soft);
         let first = soft.chars().next();
+        // Latin: the typed consonants alone are a spelling of their own (`bzaf`); Arabic: the same letters without the long vowels (`بزف`) are a slip of the full word
+        let strictly_longer = self.script == Script::Latin;
         // for each group of spellings: the best tier it matches at, and the commonest spelling at that tier
         let mut best: HashMap<u32, (u8, &DzEntry)> = HashMap::new();
         let mut done: HashSet<u32> = HashSet::new();
@@ -292,7 +461,7 @@ impl DzList {
                 0
             } else if soft.chars().count() >= MIN_PREFIX && e.soft.starts_with(&soft) {
                 1
-            } else if skel.chars().count() >= 2 && e.soft.chars().next() == first && e.skel.starts_with(&skel) && e.skel.len() > skel.len() {
+            } else if skel.chars().count() >= 2 && e.soft.chars().next() == first && e.skel.starts_with(&skel) && (!strictly_longer || e.skel.chars().count() > skel.chars().count()) {
                 2
             } else {
                 continue;
@@ -319,21 +488,51 @@ impl DzList {
 }
 
 impl LocalEngine {
-    /// Gives the engine the embedded Darija seed list. Dz stays switched off until `set_enabled(Lang::Dz, true)`.
+    /// Gives the engine the embedded Darija seed lists, in Latin and in Arabic letters. Dz stays switched off until `set_enabled(Lang::Dz, true)`:
+    /// the one switch covers both scripts.
     pub fn add_dz_seed(&mut self) {
         self.dz = Some(DzList::seed());
+        self.dz_ar = Some(DzList::seed_ar());
     }
 
-    /// The seed list, plus `dz.txt` of the folder when it is there (a missing file only means the seed alone).
+    /// The seed lists, plus `dz.txt` (Latin letters) and `dz-ar.txt` (Arabic letters) of the folder when they are there
+    /// (a missing file only means the seed alone).
     pub fn load_dz(&mut self, dir: &Path) -> io::Result<()> {
         let mut list = DzList::seed();
+        let mut list_ar = DzList::seed_ar();
         match std::fs::read_to_string(dir.join("dz.txt")) {
             Ok(text) => list.merge_extra(&DzList::parse(&text)),
             Err(e) if e.kind() == io::ErrorKind::NotFound => {}
             Err(e) => return Err(e),
         }
+        match std::fs::read_to_string(dir.join("dz-ar.txt")) {
+            Ok(text) => list_ar.merge_extra(&DzList::parse_ar(&text)),
+            Err(e) if e.kind() == io::ErrorKind::NotFound => {}
+            Err(e) => return Err(e),
+        }
         self.dz = Some(list);
+        self.dz_ar = Some(list_ar);
         Ok(())
+    }
+
+    /// Replaces the Darija list in Arabic letters.
+    pub fn set_dz_ar(&mut self, list: DzList) {
+        self.dz_ar = Some(list);
+    }
+
+    /// The Darija list in Arabic letters. For tools that measure the engine.
+    #[doc(hidden)]
+    pub fn dz_list_ar(&self) -> Option<&DzList> {
+        self.dz_ar.as_ref()
+    }
+
+    /// The Arabic-letters Darija list when it is loaded, switched on, and `only` (the keyboard language) allows it:
+    /// the Arabic keyboard types it, so it is an extra pool next to the Arabic list; a French or English keyboard does not.
+    fn dz_ar_pool(&self, only: Option<Lang>) -> Option<&DzList> {
+        if !self.is_enabled(Lang::Dz) || !only.is_none_or(|o| matches!(o, Lang::Ar | Lang::Dz)) {
+            return None;
+        }
+        self.dz_ar.as_ref()
     }
 
     /// Replaces the Darija list.
@@ -356,9 +555,17 @@ impl LocalEngine {
         self.dz.as_ref()
     }
 
-    /// True when Dz is on and knows this word: the spelling correction must not touch it.
+    /// True when Dz is on and knows this word, in Latin or in Arabic letters: the spelling correction must not touch it.
     pub fn dz_knows(&self, word: &str) -> bool {
+        if is_arabic_word(word) {
+            return self.dz_ar_pool(None).is_some_and(|l| l.knows(word, |w| self.is_in_arabic_list(w)));
+        }
         self.dz_pool(None).is_some_and(|l| l.knows(word, |w| self.is_plain_en_fr(w)))
+    }
+
+    /// True when the Arabic (Modern Standard Arabic) list is on and holds this word, whatever its hamza or dots.
+    fn is_in_arabic_list(&self, word: &str) -> bool {
+        self.is_enabled(Lang::Ar) && self.lists.get(&Lang::Ar).is_some_and(|l| l.share_of(word) > 0.0)
     }
 
     /// True when the word is spelled the English or French way (a word of a list that is on).
@@ -430,6 +637,83 @@ impl LocalEngine {
         }
         dz >= 2.0 && dz > other
     }
+
+    /// Darija in Arabic letters: adds the candidates for the Arabic word being typed (`typed_key`: marks stripped) to the Arabic ones in `found`.
+    /// The suggestions carry `Lang::Ar`, not `Lang::Dz`: they are written right to left, and the popup lays out text by the language of the suggestion.
+    pub(crate) fn dz_ar_merge(&self, only: Option<Lang>, before_caret: &str, typed: &str, typed_key: &str, ar: Option<&WordList>, max: usize, found: &mut Vec<(String, f64, Lang)>) {
+        let Some(list) = self.dz_ar_pool(only) else { return };
+        let mut hits: Vec<(String, f64)> = list.complete(typed_key, max.max(3) * 2).into_iter().map(|(w, s)| (w.to_string(), s)).collect();
+        // an attached article or particle (`وكيف`, `بالدار`): the stem is completed and dressed again, like the Arabic list does
+        if hits.len() < max && !list.is_listed(typed_key) {
+            let folded = fold(typed_key);
+            let mut tried = 0;
+            for particle in AR_PARTICLES {
+                if tried == 3 {
+                    break;
+                }
+                let len = particle.chars().count();
+                if !folded.starts_with(particle) || typed_key.chars().count() < len + MIN_PREFIX {
+                    continue;
+                }
+                tried += 1;
+                let head: String = typed_key.chars().take(len).collect();
+                let stem: String = typed_key.chars().skip(len).collect();
+                let with_article = particle.ends_with("ال") || *particle == "لل";
+                for (word, score) in list.complete(&stem, max) {
+                    if with_article && word.starts_with("ال") {
+                        continue;
+                    }
+                    hits.push((format!("{head}{word}"), score * STEM_PENALTY));
+                }
+            }
+        }
+        if hits.is_empty() {
+            return;
+        }
+        let before = &before_caret[..before_caret.len() - typed.len()];
+        let in_context = self.is_darija_context_ar(list, before, ar);
+        if in_context {
+            for f in found.iter_mut().filter(|f| f.2 == Lang::Ar) {
+                f.1 *= AR_IN_DZ_CONTEXT;
+            }
+        }
+        let factor = if in_context { DZ_AR_IN_CONTEXT } else { DZ_AR_PRIOR };
+        // outside a Darija text a Darija word is offered only when it beats the best Arabic candidate: it never fills the free places
+        let top = if in_context { 0.0 } else { found.iter().map(|f| f.1).fold(0.0, f64::max) };
+        found.extend(hits.into_iter().map(|(w, s)| (w, s * factor, Lang::Ar)).filter(|(_, s, _)| *s >= top));
+    }
+
+    /// Whether the Arabic words just before the one being typed are Darija: a word of the Darija list that the Arabic list holds much less
+    /// often votes for it, a word of the Arabic list that Darija does not know votes against; the nearest words weigh most.
+    fn is_darija_context_ar(&self, list: &DzList, before: &str, ar: Option<&WordList>) -> bool {
+        let mut words: Vec<String> = Vec::new();
+        let mut rest = before;
+        while words.len() < CONTEXT_WORDS {
+            let trimmed = rest.trim_end_matches(|c: char| !c.is_alphabetic());
+            let w = current_word(trimmed);
+            if w.is_empty() || trimmed.is_empty() {
+                break;
+            }
+            if !is_arabic_word(w) {
+                break;
+            }
+            words.push(strip_arabic_marks(w));
+            rest = &trimmed[..trimmed.len() - w.len()];
+        }
+        let (mut dz, mut other) = (0.0f64, 0.0f64);
+        for (i, w) in words.iter().enumerate() {
+            let weight = (CONTEXT_WORDS - i) as f64;
+            let ar_share = ar.map_or(0.0, |l| l.share_of(w));
+            let in_dz = list.contains(w) || list.knows(w, |x| self.is_in_arabic_list(x));
+            let dz_share = list.share_of(w);
+            if in_dz && ar_share < dz_share * AR_CONTEXT_RATIO {
+                dz += weight;
+            } else if !in_dz && ar_share > 0.0 {
+                other += weight;
+            }
+        }
+        dz >= 2.0 && dz > other
+    }
 }
 
 #[cfg(test)]
@@ -460,6 +744,20 @@ mod tests {
         }
         assert_ne!(soft_key("wach"), soft_key("wahed"));
         assert_ne!(soft_key("3la"), soft_key("la"), "the ain is a letter for the sound key");
+    }
+
+    #[test]
+    fn arabic_spellings_of_one_word_share_a_key() {
+        assert_eq!(ar_key("ڨاع"), ar_key("قاع"));
+        assert_eq!(ar_key("يحفظك"), ar_key("يحفضك"));
+        assert_eq!(ar_key("مَلِيح"), ar_key("مليح"));
+        assert_eq!(ar_key("تلاتة"), ar_key("ثلاثه"));
+        assert_ne!(ar_key("واش"), ar_key("اش"));
+        // the loose key drops a lone hamza (`نساء` = `نسا`), the strict one does not: Modern Standard words are not taken for Darija words
+        assert_eq!(ar_key("نساء"), ar_key("نسا"));
+        assert_ne!(ar_strict_key("نساء"), ar_strict_key("نسا"));
+        assert_eq!(ar_skeleton(&ar_key("بزاف")), ar_skeleton(&ar_key("بزف")));
+        assert_eq!(ar_skeleton(&ar_key("واش")), "وش");
     }
 
     #[test]

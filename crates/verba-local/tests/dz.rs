@@ -120,8 +120,8 @@ fn darija_is_an_extra_pool_next_to_english_and_french() {
     }
     // asking for Darija only leaves English and French out
     assert!(e.suggest_in(Lang::Dz, "wha", 3).iter().all(|s| s.lang == Lang::Dz));
-    // an Arabic word is not Darija
-    assert!(e.suggest("مرح", 3).is_empty());
+    // Arabic letters that no Darija word starts with: nothing (Darija in Arabic letters is in tests/dz_arabic.rs)
+    assert!(e.suggest("ظظظ", 3).is_empty());
 }
 
 #[test]
@@ -294,14 +294,14 @@ fn a_downloaded_list_is_merged_with_the_seed() {
     e.load_dz(&dir).unwrap();
     e.set_enabled(Lang::Dz, true);
     assert_eq!(texts(e.suggest_in(Lang::Dz, "zazo", 1)), ["zazouzi"]);
-    assert!(e.word_count(Lang::Dz) > DzList::seed().len());
+    assert!(e.word_count(Lang::Dz) > DzList::seed().len() + DzList::seed_ar().len());
     assert!(e.dz_knows("zazouzi") && e.dz_knows("wach"));
     // no dz.txt: the seed alone
     let empty = std::env::temp_dir().join(format!("verba-dz-test-empty-{}", std::process::id()));
     std::fs::create_dir_all(&empty).unwrap();
     let mut e = LocalEngine::new();
     e.load_dz(&empty).unwrap();
-    assert_eq!(e.word_count(Lang::Dz), DzList::seed().len());
+    assert_eq!(e.word_count(Lang::Dz), DzList::seed().len() + DzList::seed_ar().len());
     let _ = std::fs::remove_dir_all(&dir);
     let _ = std::fs::remove_dir_all(&empty);
 }

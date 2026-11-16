@@ -41,7 +41,7 @@ impl Rng {
 
 fn rows(lang: Lang) -> &'static [&'static str; 3] {
     match lang {
-        Lang::En => &QWERTY,
+        Lang::En | Lang::Dz => &QWERTY,
         Lang::Fr => &AZERTY,
         Lang::Ar => &ARABIC_KEYS,
     }
@@ -298,6 +298,7 @@ fn made_forms(lang: Lang, head: &[String], present: &HashSet<String>) -> Vec<Str
             }
             Lang::En => vec![format!("{w}s"), format!("{w}ed"), format!("{w}ing")],
             Lang::Fr => vec![format!("{w}s"), format!("{w}e"), format!("{w}es")],
+            Lang::Dz => Vec::new(),
         };
         out.extend(forms.into_iter().filter(|f| !present.contains(&if lang == Lang::Ar { afold(f) } else { f.clone() })));
     }
@@ -362,6 +363,7 @@ fn name(l: Lang) -> &'static str {
         Lang::En => "English",
         Lang::Fr => "French",
         Lang::Ar => "Arabic",
+        Lang::Dz => "Darija",
     }
 }
 

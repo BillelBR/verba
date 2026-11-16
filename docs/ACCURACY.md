@@ -338,3 +338,128 @@ punctuation typed after the word and the capital letter. Seven right fixes canno
 2. Word pairs (bigrams) to tell `their` from `there` and to rank candidates by the sentence.
 3. Hunspell dictionaries (each with its license) as a second opinion on what is a word, so that a rare valid word stops being flagged.
 4. An Arabic stemmer or dictionary, then retune the Arabic ratios.
+
+## Algerian Darija in Latin letters ("Arabizi")
+
+Measured on 2026-11-16 with `cargo run --release -p verba-local --example dz_accuracy` (add `-- --misses 30` to list misses). Tests:
+`crates/verba-local/tests/dz.rs`. How the feature is wired: `crates/verba-local/src/dz.rs`.
+
+### Read this first: the seed list is written by the authors
+
+Algerian Arabizi has no standard spelling and there is no large free frequency list of it. The program ships a **seed list of 2476 words**
+(`crates/verba-local/seed/dz-seed.txt`, MIT OR Apache-2.0), written from the authors' knowledge, with weights that are estimates. So:
+
+- Every number measured on the seed's own words (sections 1 and 1b) is **optimistic**: the list knows the words it is asked about.
+- The honest number is section 3, on real text that nobody wrote the list from (the NArabizi treebank). There the seed knows **55%** of the
+  words, and the right word is in the popup for **17%** of the words after 3 characters (44% when the word is one the list knows).
+- No Algerian reviewer has checked the list yet. The words the authors are unsure of are in the `UNSURE` section at the end of the file.
+
+### What was checked, and why no corpus is in the program
+
+NArabizi (Seddah et al., "Building a user-generated content North-African Arabizi treebank", ACL 2020; Universal Dependencies release
+`UD_Maghrebi_Arabic_French-Arabizi`) is a treebank of 1 287 sentences (18 561 tokens) of Algerian newspaper forum comments and song lyrics,
+written in Latin letters, each token labelled Algerian or French. Its license, from its `LICENSE.txt` and the UD metadata:
+*"The treebank is licensed under the Creative Commons License Attribution-ShareAlike 4.0 International."* (CC BY-SA 4.0). That allows use,
+so it is used **as a separate download only** (`scripts/fetch-dz.ps1` builds `data/words/dz.txt`; nothing is copied into the repository), like the
+other lists, and to **measure** the seed. It is too small to be the only source (about 3 900 distinct Algerian words in 1 003 sentences) and it
+is forum and lyric text with much Modern Standard Arabic and politics. Other corpora seen and not used: ELNER-DZ (CC BY 4.0, named entities) and a
+45 000-comment YouTube sentiment set on Mendeley Data (CC BY 4.0, mostly Arabic script). Neither is a word list.
+
+### How Dz is merged with English and French
+
+Decision, in `dz.rs`. Dz is off until `set_enabled(Lang::Dz, true)`. When it is on, in a Latin context (English or French keyboard, or no hint):
+
+1. A word with digit-letters (`sa7`, `3la`, `9ah`) can only be Darija: Dz alone answers.
+2. Otherwise Dz is an extra pool next to English and French. Its candidates are multiplied by `DZ_PRIOR = 0.01` (the seed is small, so its
+   words would otherwise outrank real English words), and **a Dz candidate is shown only if it beats the best English or French one**, so it
+   never fills the free places of the popup in an English sentence.
+3. When the words just before are clearly Darija (words of the Dz list that English and French do not know, and no English or French word nearer),
+   Dz counts in full (x1.5) and English and French are held back (x0.3).
+4. The Arabic keyboard does not get Dz. `suggest_in(Lang::Dz, ...)` gives Darija only.
+
+Matching has three tiers: exact prefix (`bez` -> `bezzaf`), the same sounds spelled another way (`kifech` for `kifach`, `7bibi` / `hbibi`,
+`9ahwa` / `qahwa`, `5ouya` / `khouya`: see `soft_key`), and the consonants only (`bez` -> `bzaf`). Several spellings of one word are one suggestion:
+the one that looks like what is being typed.
+
+The spelling correction never writes a Darija word (Dz is not one of its lists) and leaves alone a word Dz knows: listed, another spelling of a
+listed word (but not of a plain English or French word: `masster` is still a typo), or a listed word with a negation or pronoun attached
+(`makhdemtch`, `choufek`). Words with digit-letters are never corrected anyway.
+
+### 1. The seed's own words (optimistic)
+
+2296 seed words of 4+ characters, typed letter by letter into the engine with English, French and Dz on, 3 suggestions. top-1 / top-3:
+
+| context | 2 characters | 3 characters | 4 characters |
+|---|---|---|---|
+| nothing before | 5.6% / 12.9% | 23.0% / 39.9% | 49.6% / 70.7% |
+| `wach rani` before (Darija) | 9.1% / 23.3% | 33.7% / 62.0% | 56.8% / 81.4% |
+| `i think` before (English) | 5.1% / 11.9% | 21.0% / 36.1% | 47.2% / 67.3% |
+
+Low at 2 and 3 characters because many words share a prefix in a list of 2 500 words, and English and French hold some places. A hit is this exact
+spelling; counting another spelling of the same word as right, top-3 @3 is 46.6% (nothing before) and 70.3% (Darija before).
+
+**Spelling held out (1b):** 400 spellings that have a sibling spelling were removed from the list one at a time and typed to 3 characters (Dz alone):
+a sibling is in the top 3 for **61.5%**. This is the part of the matching that does not depend on the list holding the exact word.
+
+### 2. False alarms: normal English and French typed with Dz on
+
+The 3000 most frequent plain words (4+ letters) of each list, typed letter by letter (2, 3 and 4 characters, 3 suggestions). A false alarm is any
+Darija word in the popup (it is then always the first suggestion: a Dz word must beat the best English or French one). English or French words before make no difference:
+a context only ever helps Dz when it is Darija.
+
+| language | 2 characters | 3 characters | 4 characters |
+|---|---|---|---|
+| English | 0.13% | **0.90%** | 0.25% |
+| French | 0.40% | **0.80%** | 0.15% |
+
+Typical cases: `wel` -> `wellah`, `bee` -> `bezzaf`, `oua` -> `ouach`, `sal` -> `salam`, where the English or French candidates are rare. These are the
+commonest words, which is where people type; for rare words the prefix is less often the start of a common word, so more Darija shows up.
+Dz loaded but switched off: output identical to an engine without Dz on 2000 prefixes and typos (the tool, and the test `with_darija_off_nothing_changes`).
+Guard in the tests: under 1.5% of the prefixes of ordinary words may show a Darija word.
+
+**Spelling correction with Dz on, against no Dz** (5+ letter words of the same lists, synthetic typos, first fix right, `correct(Some(lang))`):
+
+| language | two letters swapped | a letter missing | a letter doubled | correct words wrongly fixed |
+|---|---|---|---|---|
+| English with / without Dz | 97.2% / 97.3% | 71.7% / 72.2% | 93.9% / 94.5% | 0.00% / 0.00% |
+| French with / without Dz | 93.8% / 93.8% | 68.7% / 69.1% | 89.9% / 90.6% | 0.08% / 0.08% |
+
+So Dz on costs 0 to 0.7 points of typo recovery (a typo that sounds like a Darija word is no longer fixed). The English and French cases of
+`tests/spell.rs` still pass, and `english_and_french_typos_are_still_fixed_with_darija_on` repeats 25 of them with Dz on.
+
+### 3. Real text: NArabizi (CC BY-SA 4.0, measured on, not copied)
+
+Tokens labelled Algerian (`LangO=ar_dz`), names left out, each typed as a prefix after the words before it in its sentence.
+**dev** = the two small files (284 sentences): they were read while the seed was being finished, and the plainly missing frequent words
+(`el`, `rana`, `ra7`, `kount`...) were added after looking, so dev is not independent. **sealed** = the large file (1003 sentences), not read while writing.
+
+| set | Darija tokens | the list knows the token | right word in the top 3 after 2 / 3 characters | same, tokens the list knows | any Darija word shown |
+|---|---|---|---|---|---|
+| dev | 2 324 | 57.0% | 11.2% / 16.6% | 24% / 42% | 51% / 63% |
+| **sealed** | 7 855 | **55.4%** | **9.8% / 16.6%** | 22% / 44% | 52% / 60% |
+
+"Right word" counts another spelling of the word as right (same sound key). The exact spelling the writer used is in the top 3 for 10.1% (sealed, 3 characters).
+"Knows" counts a listed word, another spelling of one, and a listed word with a negation or pronoun.
+
+Why it is low: about half the words of real forum text are not in a 2 500-word list (verbs with clitics, Modern Standard Arabic words in Latin letters, names,
+French); no list of this size has them.
+
+**With the optional list** (`scripts/fetch-dz.ps1` -> `data/words/dz.txt`, merged by `load_dz`; built here from the sealed file only and measured on
+the dev files, so not on its own text): the list knows 63.8% of the tokens (+6.8 points) and the right word is in the top 3 for 13.0% / 21.2% (+1.8 / +4.6 points).
+A real but modest gain; a bigger corpus would give more.
+
+### Speed
+
+One `suggest()` call with Dz on: about 50 to 70 microseconds on average (release build) with the seed and the English and French lists. The Dz scan is
+linear over the list; a list of 50 000 words would need an index.
+
+### Known weaknesses and what to check
+
+- **The numbers on the seed's own words are optimistic**; only section 3 says something about real writing: about 55% of the words known, the right one offered for 17%.
+- **No standard spelling.** A variant the list does not hold is found through the sound key only if its sounds are the same; otherwise only by the consonants after 2 or 3 characters.
+  Digit-letters vary a lot (`3` ain; `7` or `h`; `9` or `q`; `5` or `kh`; `8` or `gh`; `2` hamza; `6` is rare).
+- **Dz-looking words nobody listed** (a verb with a new combination of clitics) are treated like any word by the spelling correction and may get a Fix to an English or French word.
+  Dz protects only what it knows.
+- **Mixed Darija and French** is the norm in Algeria; a word known to both counts for no side in the context vote, so a mostly French sentence with a few Darija words stays French.
+- **Vulgar words are not in the seed** on purpose.
+- Regional and dialect mix: the seed is Algerian; words shared with Moroccan or Tunisian Arabic (`dyal`, `bahi`, `sir`, `kach`) and western-only forms (`dorka`) are in `UNSURE`.

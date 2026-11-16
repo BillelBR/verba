@@ -100,6 +100,6 @@ pub(crate) fn special(lang: Lang, raw: &str) -> Special {
                 Special::None
             }
         }
-        Lang::Ar => Special::None,
+        Lang::Ar | Lang::Dz => Special::None,
     }
 }

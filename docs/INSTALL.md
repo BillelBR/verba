@@ -21,7 +21,11 @@ To be sure the file is the one the project published, compare its SHA-256 with t
 Get-FileHash .\Verba-Setup-0.3.0.exe -Algorithm SHA256
 ```
 
-The two hashes must be identical. The source code is public in this repository, and the Releases are built by GitHub Actions from it.
+The two hashes must be identical. The source code is in this repository, and the Releases are built by GitHub Actions from it.
+
+Some antivirus programs are also wary of any program that watches the keyboard (Verba needs this to read Tab and Esc while its popup is shown). If yours blocks Verba, you can check the code yourself and add an exception for the Verba folder. Never turn SmartScreen or your antivirus off for this.
+
+How the warning will go away (free signing for open-source projects, once the repository is public): [SIGNING.md](SIGNING.md).
 
 ### What the installer does
 

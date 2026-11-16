@@ -2,6 +2,8 @@
 name = "verba-app"
 version.workspace = true
 edition.workspace = true
+license.workspace = true
+repository.workspace = true
 description = "Verba for Windows: the tray program that shows suggestions while you type"
 
 [[bin]]

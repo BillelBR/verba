@@ -2,6 +2,8 @@
 name = "verba-win"
 version.workspace = true
 edition.workspace = true
+license.workspace = true
+repository.workspace = true
 description = "Verba on Windows: finds where you are typing and shows the suggestion popup"
 
 [dependencies]

@@ -69,6 +69,9 @@ Source: "..\target\release\verba.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\data\words\*.txt"; DestDir: "{app}\data\words"; Flags: ignoreversion
 Source: "word-lists-notice.txt"; DestDir: "{app}"; DestName: "WORD-LISTS-LICENSE.txt"; Flags: ignoreversion
 Source: "..\README.md"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\LICENSE-MIT"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\LICENSE-APACHE"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\THIRD-PARTY.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\docs\DATA.md"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]

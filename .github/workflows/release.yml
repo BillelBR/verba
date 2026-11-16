@@ -1,0 +1,69 @@
+name: Release
+
+# Push a tag such as v0.2.0 and this builds Verba-Setup-<version>.exe and publishes it on the Releases page.
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+
+      # the tag and the version in Cargo.toml must agree, or the file name and the release would not match
+      - name: Check the tag against the version
+        id: meta
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $toml = Get-Content Cargo.toml -Raw
+          if ($toml -notmatch '(?ms)\[workspace\.package\].*?^\s*version\s*=\s*"([^"]+)"') { throw "could not read the version from Cargo.toml" }
+          $version = $Matches[1]
+          if ($tag -ne "v$version") { throw "tag $tag does not match the version $version in Cargo.toml" }
+          # a hyphen in the tag (v0.3.0-beta1) or a 0.x version means "not final yet"
+          $pre = $tag.Contains("-") -or $tag.StartsWith("v0.")
+          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "prerelease=$($pre.ToString().ToLower())" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Download the word lists
+        shell: pwsh
+        run: ./scripts/fetch-data.ps1
+
+      # Inno Setup 6 is on the windows-latest image; install it only if it is missing
+      - name: Make sure Inno Setup is installed
+        shell: pwsh
+        run: |
+          $known = @(
+            "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+            "$env:ProgramFiles\Inno Setup 6\ISCC.exe"
+          )
+          if (-not (Get-Command ISCC.exe -ErrorAction SilentlyContinue) -and -not ($known | Where-Object { Test-Path $_ })) {
+            choco install innosetup -y --no-progress
+          }
+
+      - name: Build the installer
+        shell: pwsh
+        run: ./scripts/build-installer.ps1
+
+      - name: Publish the release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Verba ${{ steps.meta.outputs.version }}
+          prerelease: ${{ steps.meta.outputs.prerelease }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: |
+            dist/Verba-Setup-${{ steps.meta.outputs.version }}.exe
+            dist/Verba-Setup-${{ steps.meta.outputs.version }}.exe.sha256

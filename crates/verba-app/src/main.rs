@@ -18,11 +18,12 @@ use std::sync::Mutex;
 use std::sync::atomic::{AtomicBool, AtomicIsize, AtomicU32, Ordering};
 
 mod settings;
+mod settings_window;
 
 use settings::{Settings, ThemeMode};
 use verba_core::{Engine, Lang, Suggestion, current_word};
 use verba_local::LocalEngine;
-use verba_win::{Locator, Look, Overlay, Snapshot, Theme};
+use verba_win::{Locator, Look, Overlay, Snapshot, Theme, foreground_app};
 use windows::Win32::Foundation::{ERROR_ALREADY_EXISTS, GetLastError, HINSTANCE, HWND, LPARAM, LRESULT, POINT, WPARAM};
 use windows::Win32::Graphics::Gdi::{CreateBitmap, DeleteObject};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
@@ -39,7 +40,7 @@ use windows::Win32::UI::Shell::{
 use windows::Win32::UI::WindowsAndMessaging::{
     AppendMenuW, CallNextHookEx, CreateIconIndirect, CreatePopupMenu, CreateWindowExW, DefWindowProcW,
     DestroyMenu, DispatchMessageW, GetCursorPos, GetMessageW, HHOOK, HICON, ICONINFO, KBDLLHOOKSTRUCT,
-    MF_CHECKED, MF_GRAYED, MF_POPUP, MF_SEPARATOR, MF_STRING, MSG, PostMessageW, PostQuitMessage, RegisterClassW, RegisterWindowMessageW,
+    IsDialogMessageW, MF_GRAYED, MF_SEPARATOR, MF_STRING, MSG, PostMessageW, PostQuitMessage, RegisterClassW, RegisterWindowMessageW,
     SetForegroundWindow, SetWindowsHookExW, TPM_BOTTOMALIGN, TPM_RIGHTBUTTON, TrackPopupMenu, TranslateMessage,
     UnhookWindowsHookEx, WH_KEYBOARD_LL, WM_APP, WM_COMMAND, WM_DESTROY, WM_HOTKEY, WM_KEYDOWN, WM_KEYUP, WM_LBUTTONUP,
     WM_NULL, WM_RBUTTONUP, WM_SYSKEYDOWN, WNDCLASSW, WS_EX_TOOLWINDOW, WS_POPUP,
@@ -55,15 +56,11 @@ const WM_SNAPSHOT: u32 = WM_APP + 4;
 const POLL_MS: u64 = 120;
 const HOTKEY_QUIT: i32 = 1;
 const HOTKEY_PAUSE: i32 = 2;
+const HOTKEY_APP: i32 = 3;
 const CMD_PAUSE: usize = 1001;
 const CMD_QUIT: usize = 1002;
-const CMD_LANG_EN: usize = 1011;
-const CMD_LANG_FR: usize = 1012;
-const CMD_LANG_AR: usize = 1013;
-const CMD_THEME_AUTO: usize = 1021;
-const CMD_THEME_LIGHT: usize = 1022;
-const CMD_THEME_DARK: usize = 1023;
-const CMD_AUTOSTART: usize = 1031;
+const CMD_APP: usize = 1003;
+const CMD_SETTINGS: usize = 1004;
 const TRAY_ID: u32 = 1;
 /// Stamped on the keys Verba itself sends, so its own keyboard hook can tell them from anyone else's
 /// (remote-desktop tools and accessibility programs also send keys, and those must still work).
@@ -78,12 +75,18 @@ static PAUSED: AtomicBool = AtomicBool::new(false);
 static QUITTING: AtomicBool = AtomicBool::new(false);
 /// What the worker thread last read (outer `Some` = new, not yet taken; inner `None` = no text field has the focus).
 static LATEST: Mutex<Option<Option<Snapshot>>> = Mutex::new(None);
+/// A copy of the settings for the reader thread (which decides, before reading anything, whether the app in front is allowed).
+static RULES: Mutex<Option<Settings>> = Mutex::new(None);
+/// The last program the user was working in (not the taskbar, not Verba): what "Turn off in this app" means in the tray menu.
+static LAST_APP: Mutex<String> = Mutex::new(String::new());
 
 struct App {
     overlay: Overlay,
     engine: LocalEngine,
     settings: Settings,
-    icon: HICON,
+    /// The tray icon when suggestions are on, and the dimmed one when they are off.
+    icon_on: HICON,
+    icon_off: HICON,
     /// What the popup shows now.
     shown: Vec<Suggestion>,
     /// How many characters of the word are typed already (they are replaced when a suggestion is accepted).
@@ -112,8 +115,9 @@ fn main() {
             engine.set_enabled(lang, settings.lang_on(lang));
         }
         PAUSED.store(settings.paused, Ordering::SeqCst);
+        share_rules(&settings);
         let overlay = Overlay::new().expect("could not make the popup window");
-        let icon = make_icon();
+        let (icon_on, icon_off) = (make_icon(false), make_icon(true));
 
         let hinst: HINSTANCE = GetModuleHandleW(None).expect("module handle").into();
         let class = w!("VerbaController");
@@ -126,7 +130,7 @@ fn main() {
 
         APP.with(|a| {
             *a.borrow_mut() =
-                Some(App { overlay, engine, settings, icon, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new() });
+                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new() });
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
@@ -134,6 +138,7 @@ fn main() {
             log("could not register Ctrl+Alt+Shift+Q (another program uses it); use the tray menu to quit");
         }
         let _ = RegisterHotKey(Some(hwnd), HOTKEY_PAUSE, mods, 'V' as u32);
+        let _ = RegisterHotKey(Some(hwnd), HOTKEY_APP, mods, 'A' as u32);
 
         with_app(|app| app.overlay.set_click_target(hwnd, WM_ACCEPT));
         add_tray(hwnd);
@@ -145,6 +150,11 @@ fn main() {
 
         let mut msg = MSG::default();
         while GetMessageW(&mut msg, None, 0, 0).as_bool() {
+            // Tab, arrows and Enter work inside the settings window
+            let settings_window = HWND(settings_window::WINDOW.load(Ordering::SeqCst) as *mut _);
+            if !settings_window.is_invalid() && IsDialogMessageW(settings_window, &msg).as_bool() {
+                continue;
+            }
             let _ = TranslateMessage(&msg);
             DispatchMessageW(&msg);
         }
@@ -154,6 +164,7 @@ fn main() {
         }
         let _ = UnregisterHotKey(Some(hwnd), HOTKEY_QUIT);
         let _ = UnregisterHotKey(Some(hwnd), HOTKEY_PAUSE);
+        let _ = UnregisterHotKey(Some(hwnd), HOTKEY_APP);
     }
 }
 
@@ -199,12 +210,12 @@ fn look_for(settings: &Settings) -> Look {
 
 const RUN_KEY: windows::core::PCWSTR = w!(r"Software\Microsoft\Windows\CurrentVersion\Run");
 
-fn autostart_enabled() -> bool {
+pub(crate) fn autostart_enabled() -> bool {
     unsafe { RegGetValueW(HKEY_CURRENT_USER, RUN_KEY, w!("Verba"), RRF_RT_REG_SZ, None, None, None).is_ok() }
 }
 
 /// Start with Windows: one value in the user's Run key (no admin rights, nothing installed).
-fn set_autostart(on: bool) {
+pub(crate) fn set_autostart(on: bool) {
     unsafe {
         if on {
             let Ok(exe) = std::env::current_exe() else { return };
@@ -230,45 +241,30 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
         WM_HOTKEY => {
             match wp.0 as i32 {
                 HOTKEY_QUIT => quit(),
-                HOTKEY_PAUSE => with_app(|app| toggle_pause(app, hwnd)),
+                HOTKEY_PAUSE => update_settings(|s| s.paused = !s.paused),
+                // the app the user is in right now (the hotkey does not move the focus)
+                HOTKEY_APP => toggle_app(foreground_app()),
                 _ => {}
             }
             LRESULT(0)
         }
         WM_TRAY => {
             let event = (lp.0 as u32) & 0xFFFF;
-            if event == WM_RBUTTONUP || event == WM_LBUTTONUP {
+            if event == WM_RBUTTONUP {
                 show_menu(hwnd);
+            } else if event == WM_LBUTTONUP {
+                // a click on the icon opens the settings; the menu is on the right button
+                open_settings();
             }
             LRESULT(0)
         }
         WM_COMMAND => {
-            let cmd = wp.0 & 0xFFFF;
-            match cmd {
-                CMD_PAUSE => with_app(|app| toggle_pause(app, hwnd)),
+            match wp.0 & 0xFFFF {
+                CMD_PAUSE => update_settings(|s| s.paused = !s.paused),
+                // the tray menu took the focus, so "this app" is the last one the reader saw in front
+                CMD_APP => toggle_app(LAST_APP.lock().ok().map(|a| a.clone()).filter(|a| !a.is_empty())),
+                CMD_SETTINGS => open_settings(),
                 CMD_QUIT => quit(),
-                CMD_LANG_EN | CMD_LANG_FR | CMD_LANG_AR => with_app(|app| {
-                    let lang = match cmd {
-                        CMD_LANG_EN => Lang::En,
-                        CMD_LANG_FR => Lang::Fr,
-                        _ => Lang::Ar,
-                    };
-                    let on = !app.settings.lang_on(lang);
-                    app.settings.set_lang(lang, on);
-                    app.engine.set_enabled(lang, on);
-                    app.settings.save();
-                    hide(app);
-                }),
-                CMD_THEME_AUTO | CMD_THEME_LIGHT | CMD_THEME_DARK => with_app(|app| {
-                    app.settings.theme = match cmd {
-                        CMD_THEME_LIGHT => ThemeMode::Light,
-                        CMD_THEME_DARK => ThemeMode::Dark,
-                        _ => ThemeMode::Auto,
-                    };
-                    app.settings.save();
-                    hide(app);
-                }),
-                CMD_AUTOSTART => set_autostart(!autostart_enabled()),
                 _ => {}
             }
             LRESULT(0)
@@ -326,14 +322,25 @@ fn quit() {
 fn spawn_reader() {
     std::thread::spawn(|| {
         let Ok(locator) = Locator::new() else { return };
-        let mut last: Option<(i32, i32, i32, i32, String)> = None;
+        let mut last: Option<(i32, i32, i32, i32, String, Option<Lang>)> = None;
         let mut was_paused = false;
         while !QUITTING.load(Ordering::SeqCst) {
             std::thread::sleep(std::time::Duration::from_millis(POLL_MS));
             let paused = PAUSED.load(Ordering::SeqCst);
-            let snap = if paused { None } else { locator.snapshot(48) };
+            // which program is in front: remembered for the tray menu, and checked BEFORE reading anything,
+            // so a program the user switched Verba off in is never read at all
+            let app_name = foreground_app();
+            if let Some(name) = &app_name {
+                if let Ok(mut last_app) = LAST_APP.lock() {
+                    if last_app.as_str() != name.as_str() {
+                        *last_app = name.clone();
+                    }
+                }
+            }
+            let allowed = RULES.lock().ok().and_then(|r| r.as_ref().map(|s| s.allows_app(app_name.as_deref().unwrap_or("")))).unwrap_or(true);
+            let snap = if paused || !allowed { None } else { locator.snapshot(48) };
             // wake the main thread only when something changed
-            let key = snap.as_ref().map(|s| (s.anchor.rect.left, s.anchor.rect.top, s.anchor.rect.right, s.anchor.rect.bottom, s.before_caret.clone()));
+            let key = snap.as_ref().map(|s| (s.anchor.rect.left, s.anchor.rect.top, s.anchor.rect.right, s.anchor.rect.bottom, s.before_caret.clone(), s.layout));
             if key == last && paused == was_paused {
                 continue;
             }
@@ -369,8 +376,20 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
         Some(_) => app.dismissed = None,              // the user typed on: allowed again
         None => {}
     }
-    let found = app.engine.suggest(&snap.before_caret, 3);
-    log(&format!("engine: {} suggestions", found.len()));
+    // the program may have changed since the reading was taken
+    if !app.settings.allows_app(&snap.app) {
+        if POPUP_VISIBLE.load(Ordering::SeqCst) {
+            hide(app);
+        }
+        return;
+    }
+    let found = match snap.layout {
+        // the keyboard says which language is being typed: suggest in that one only
+        Some(lang) if app.settings.follow_keyboard => app.engine.suggest_in(lang, &snap.before_caret, 3),
+        // another layout (German, say), or "guess from the letters" is chosen
+        _ => app.engine.suggest(&snap.before_caret, 3),
+    };
+    log(&format!("engine: {} suggestions (keyboard: {:?})", found.len(), snap.layout));
     if found.is_empty() {
         if POPUP_VISIBLE.load(Ordering::SeqCst) {
             hide(app);
@@ -415,14 +434,49 @@ fn key(vk: VIRTUAL_KEY, scan: u16, flags: KEYBD_EVENT_FLAGS) -> INPUT {
     }
 }
 
-fn toggle_pause(app: &mut App, hwnd: HWND) {
-    app.settings.paused = !app.settings.paused;
-    PAUSED.store(app.settings.paused, Ordering::SeqCst);
-    if app.settings.paused {
+/// A copy of the settings, for the settings window.
+pub(crate) fn current_settings() -> Settings {
+    APP.with(|a| a.try_borrow().ok().and_then(|b| b.as_ref().map(|app| app.settings.clone()))).unwrap_or_default()
+}
+
+/// Changes the settings and makes the change take effect everywhere at once: engine, reader thread, popup, tray icon, file.
+pub(crate) fn update_settings(change: impl FnOnce(&mut Settings)) {
+    with_app(|app| {
+        change(&mut app.settings);
+        for lang in [Lang::En, Lang::Fr, Lang::Ar] {
+            app.engine.set_enabled(lang, app.settings.lang_on(lang));
+        }
+        PAUSED.store(app.settings.paused, Ordering::SeqCst);
+        share_rules(&app.settings);
+        // what is on the screen may no longer be allowed or in the right language: let the next reading decide
         hide(app);
+        app.settings.save();
+        let controller = HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _);
+        modify_tray(controller, app);
+    });
+}
+
+fn share_rules(settings: &Settings) {
+    if let Ok(mut rules) = RULES.lock() {
+        *rules = Some(settings.clone());
     }
-    app.settings.save();
-    modify_tray(hwnd, app);
+}
+
+/// Switches Verba off in a program, or back on if it was off there. `None`: there is no program to act on.
+fn toggle_app(app_name: Option<String>) {
+    let Some(name) = app_name else { return };
+    update_settings(|s| {
+        let allowed = s.allows_app(&name);
+        // for a program on the always-off list there is nothing to change
+        if allowed || !settings::ALWAYS_OFF.contains(&name.as_str()) {
+            s.set_app(&name, !allowed);
+        }
+    });
+}
+
+fn open_settings() {
+    let icon = APP.with(|a| a.try_borrow().ok().and_then(|b| b.as_ref().map(|app| app.icon_on))).unwrap_or_default();
+    settings_window::open(icon);
 }
 
 // ───────────── the keyboard hook ─────────────
@@ -577,22 +631,27 @@ fn tray_data(hwnd: HWND, icon: HICON, tip: &str) -> NOTIFYICONDATAW {
 
 fn tip_for(paused: bool) -> &'static str {
     if paused {
-        "Verba: paused (Ctrl+Alt+Shift+V to resume)"
+        "Verba: off (click for settings, right-click for the menu)"
     } else {
-        "Verba: on (Ctrl+Alt+Shift+Q to quit)"
+        "Verba: on (click for settings, right-click for the menu)"
     }
+}
+
+/// The dimmed icon says at a glance that suggestions are off.
+fn icon_for(app: &App) -> HICON {
+    if app.settings.paused { app.icon_off } else { app.icon_on }
 }
 
 fn add_tray(hwnd: HWND) {
     with_app(|app| unsafe {
-        let nid = tray_data(hwnd, app.icon, tip_for(app.settings.paused));
+        let nid = tray_data(hwnd, icon_for(app), tip_for(app.settings.paused));
         let _ = Shell_NotifyIconW(NIM_ADD, &nid);
     });
 }
 
 fn modify_tray(hwnd: HWND, app: &App) {
     unsafe {
-        let nid = tray_data(hwnd, app.icon, tip_for(app.settings.paused));
+        let nid = tray_data(hwnd, icon_for(app), tip_for(app.settings.paused));
         let _ = Shell_NotifyIconW(NIM_MODIFY, &nid);
     }
 }
@@ -605,29 +664,30 @@ fn remove_tray(hwnd: HWND) {
 }
 
 fn show_menu(hwnd: HWND) {
-    let Some(settings) = APP.with(|a| a.try_borrow().ok().and_then(|b| b.as_ref().map(|app| app.settings.clone()))) else { return };
+    let settings = current_settings();
+    // the program the user was working in before they reached for the tray
+    let last_app = LAST_APP.lock().ok().map(|a| a.clone()).unwrap_or_default();
     unsafe {
         let Ok(menu) = CreatePopupMenu() else { return };
-        let check = |on: bool| if on { MF_STRING | MF_CHECKED } else { MF_STRING };
 
-        let _ = AppendMenuW(menu, check(!settings.paused), CMD_PAUSE, w!("Suggestions on\tCtrl+Alt+Shift+V"));
+        let toggle = if settings.paused { w!("Turn Verba on\tCtrl+Alt+Shift+V") } else { w!("Turn Verba off\tCtrl+Alt+Shift+V") };
+        let _ = AppendMenuW(menu, MF_STRING, CMD_PAUSE, toggle);
 
-        if let Ok(langs) = CreatePopupMenu() {
-            let _ = AppendMenuW(langs, check(settings.english), CMD_LANG_EN, w!("English"));
-            let _ = AppendMenuW(langs, check(settings.french), CMD_LANG_FR, w!("Français"));
-            let _ = AppendMenuW(langs, check(settings.arabic), CMD_LANG_AR, w!("العربية  (Arabic)"));
-            let _ = AppendMenuW(menu, MF_POPUP, langs.0 as usize, w!("Languages"));
-        }
-        if let Ok(theme) = CreatePopupMenu() {
-            let _ = AppendMenuW(theme, check(settings.theme == ThemeMode::Auto), CMD_THEME_AUTO, w!("Follow Windows"));
-            let _ = AppendMenuW(theme, check(settings.theme == ThemeMode::Light), CMD_THEME_LIGHT, w!("Light"));
-            let _ = AppendMenuW(theme, check(settings.theme == ThemeMode::Dark), CMD_THEME_DARK, w!("Dark"));
-            let _ = AppendMenuW(menu, MF_POPUP, theme.0 as usize, w!("Theme"));
-        }
-        // starting with Windows points at this program's file: only for the real (release) build, not a test build
-        let auto_flags = if cfg!(debug_assertions) { MF_STRING | MF_GRAYED } else { check(autostart_enabled()) };
-        let _ = AppendMenuW(menu, auto_flags, CMD_AUTOSTART, w!("Start with Windows"));
+        // per app: "Turn off in chrome.exe" or "Turn on in chrome.exe"
+        let (label, flags) = if last_app.is_empty() {
+            ("Turn off in this app\tCtrl+Alt+Shift+A".to_string(), MF_STRING | MF_GRAYED)
+        } else if settings::ALWAYS_OFF.contains(&last_app.as_str()) {
+            (format!("{last_app} is always off"), MF_STRING | MF_GRAYED)
+        } else if settings.allows_app(&last_app) {
+            (format!("Turn off in {last_app}\tCtrl+Alt+Shift+A"), MF_STRING)
+        } else {
+            (format!("Turn on in {last_app}\tCtrl+Alt+Shift+A"), MF_STRING)
+        };
+        let label: Vec<u16> = label.encode_utf16().chain(std::iter::once(0)).collect();
+        let _ = AppendMenuW(menu, flags, CMD_APP, PCWSTR(label.as_ptr()));
 
+        let _ = AppendMenuW(menu, MF_SEPARATOR, 0, PCWSTR::null());
+        let _ = AppendMenuW(menu, MF_STRING, CMD_SETTINGS, w!("Settings…"));
         let _ = AppendMenuW(menu, MF_SEPARATOR, 0, PCWSTR::null());
         let _ = AppendMenuW(menu, MF_STRING, CMD_QUIT, w!("Quit Verba\tCtrl+Alt+Shift+Q"));
         let mut pt = POINT::default();
@@ -641,7 +701,8 @@ fn show_menu(hwnd: HWND) {
 }
 
 /// A round blue icon with a white V, drawn here so the program needs no resource file.
-fn make_icon() -> HICON {
+/// With `off` the disc is grey, so the tray shows at a glance that suggestions are off.
+fn make_icon(off: bool) -> HICON {
     const N: usize = 32;
     let mut bgra = vec![0u8; N * N * 4];
     let segment_distance = |px: f32, py: f32, ax: f32, ay: f32, bx: f32, by: f32| {
@@ -656,7 +717,8 @@ fn make_icon() -> HICON {
             let alpha = circle.clamp(0.0, 1.0);
             let v = segment_distance(px, py, 9.0, 10.0, 16.0, 23.0).min(segment_distance(px, py, 23.0, 10.0, 16.0, 23.0));
             let white = (2.4 - v).clamp(0.0, 1.0);
-            let (r, g, b) = (0.0 + 255.0 * white, 120.0 + 135.0 * white, 215.0 + 40.0 * white);
+            let disc = if off { (140.0, 140.0, 146.0) } else { (0.0, 120.0, 215.0) };
+            let (r, g, b) = (disc.0 + (255.0 - disc.0) * white, disc.1 + (255.0 - disc.1) * white, disc.2 + (255.0 - disc.2) * white);
             let i = (y * N + x) * 4;
             // premultiplied by the alpha of the circle's edge
             bgra[i] = (b * alpha) as u8;

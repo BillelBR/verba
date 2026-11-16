@@ -382,6 +382,18 @@ impl Default for LocalEngine {
 
 impl Engine for LocalEngine {
     fn suggest(&self, before_caret: &str, max: usize) -> Vec<Suggestion> {
+        self.suggest_filtered(None, before_caret, max)
+    }
+}
+
+impl LocalEngine {
+    /// Suggestions in one language only, for when the keyboard layout says which language is being typed.
+    /// A word written in the other script (Arabic letters while the keyboard is French, say) gets nothing.
+    pub fn suggest_in(&self, lang: Lang, before_caret: &str, max: usize) -> Vec<Suggestion> {
+        self.suggest_filtered(Some(lang), before_caret, max)
+    }
+
+    fn suggest_filtered(&self, only: Option<Lang>, before_caret: &str, max: usize) -> Vec<Suggestion> {
         let typed = current_word(before_caret);
         let arabic = is_arabic_word(typed);
         // short vowels do not count as letters, and an Arabic word is matched without them
@@ -394,7 +406,7 @@ impl Engine for LocalEngine {
         // an Arabic word is looked up in Arabic; a Latin word in every Latin list that is on
         let mut langs: Vec<(Lang, &WordList)> = Vec::new();
         for lang in [Lang::En, Lang::Fr, Lang::Ar] {
-            if lang.is_rtl() == arabic && self.is_enabled(lang) {
+            if lang.is_rtl() == arabic && self.is_enabled(lang) && only.is_none_or(|o| o == lang) {
                 if let Some(list) = self.lists.get(&lang) {
                     langs.push((lang, list));
                 }
@@ -449,6 +461,26 @@ mod tests {
 
     fn texts(v: Vec<Suggestion>) -> Vec<String> {
         v.into_iter().map(|s| s.text).collect()
+    }
+
+    #[test]
+    fn follows_the_keyboard_language_when_asked() {
+        let e = engine();
+        // the same letters, two keyboards: English words on an English keyboard, French on a French one
+        assert_eq!(texts(e.suggest_in(Lang::Fr, "bon", 3)), ["bonjour", "bonsoir"]);
+        assert!(!texts(e.suggest_in(Lang::En, "hel", 3)).is_empty());
+        assert!(e.suggest_in(Lang::Fr, "hel", 3).is_empty(), "no French word starts with hel in this list");
+        // Arabic letters never come from a French keyboard, and the other way round
+        assert!(e.suggest_in(Lang::Fr, "مرح", 3).is_empty());
+        assert!(e.suggest_in(Lang::Ar, "hel", 3).is_empty());
+        assert_eq!(texts(e.suggest_in(Lang::Ar, "مرح", 3)), ["مرحبا", "مرحبتين"]);
+    }
+
+    #[test]
+    fn a_language_that_is_off_gives_nothing_even_when_the_keyboard_asks_for_it() {
+        let mut e = engine();
+        e.set_enabled(Lang::Fr, false);
+        assert!(e.suggest_in(Lang::Fr, "bon", 3).is_empty());
     }
 
     #[test]

@@ -1,10 +1,24 @@
-//! What the user can change from the tray menu, kept in a small text file (`%APPDATA%\Verba\settings.txt`).
+//! What the user can change, kept in a small text file (`%APPDATA%\Verba\settings.txt`).
 //!
 //! One `key=value` per line. Nothing else is stored: no text, no history.
 
 use std::path::PathBuf;
 
 use verba_core::Lang;
+
+/// Programs where Verba is always off, whatever the user chose: it must never read what is typed into a vault.
+pub const ALWAYS_OFF: &[&str] = &[
+    "verba.exe",
+    "keepass.exe",
+    "keepassxc.exe",
+    "1password.exe",
+    "bitwarden.exe",
+    "lastpass.exe",
+    "dashlane.exe",
+    "enpass.exe",
+    "nordpass.exe",
+    "roboform.exe",
+];
 
 /// Follow Windows (light or dark), or always one of them.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -14,6 +28,15 @@ pub enum ThemeMode {
     Dark,
 }
 
+/// What the list of programs means.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum AppMode {
+    /// Verba works everywhere except in the listed programs.
+    AllExcept,
+    /// Verba works only in the listed programs.
+    OnlyThese,
+}
+
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Settings {
     pub theme: ThemeMode,
@@ -21,11 +44,25 @@ pub struct Settings {
     pub french: bool,
     pub arabic: bool,
     pub paused: bool,
+    /// Suggest in the language of the keyboard layout (instead of guessing from the letters typed).
+    pub follow_keyboard: bool,
+    pub app_mode: AppMode,
+    /// Program file names, lower case (`chrome.exe`).
+    pub apps: Vec<String>,
 }
 
 impl Default for Settings {
     fn default() -> Self {
-        Self { theme: ThemeMode::Auto, english: true, french: true, arabic: true, paused: false }
+        Self {
+            theme: ThemeMode::Auto,
+            english: true,
+            french: true,
+            arabic: true,
+            paused: false,
+            follow_keyboard: true,
+            app_mode: AppMode::AllExcept,
+            apps: Vec::new(),
+        }
     }
 }
 
@@ -46,20 +83,55 @@ impl Settings {
         }
     }
 
+    /// Whether Verba may work in this program. An unknown program (empty name) is allowed unless the list is "only these".
+    pub fn allows_app(&self, exe: &str) -> bool {
+        let exe = exe.to_lowercase();
+        if ALWAYS_OFF.contains(&exe.as_str()) {
+            return false;
+        }
+        let listed = self.apps.iter().any(|a| *a == exe);
+        match self.app_mode {
+            AppMode::AllExcept => !listed,
+            AppMode::OnlyThese => listed,
+        }
+    }
+
+    /// Turns Verba on or off for one program, whatever the mode means for the list.
+    pub fn set_app(&mut self, exe: &str, on: bool) {
+        let exe = exe.trim().to_lowercase();
+        if exe.is_empty() {
+            return;
+        }
+        // in "all except" the list holds the programs that are off; in "only these" it holds the ones that are on
+        let on_the_list = match self.app_mode {
+            AppMode::AllExcept => !on,
+            AppMode::OnlyThese => on,
+        };
+        self.apps.retain(|a| *a != exe);
+        if on_the_list {
+            self.apps.push(exe);
+            self.apps.sort();
+        }
+    }
+
     fn path() -> Option<PathBuf> {
         std::env::var_os("APPDATA").map(|a| PathBuf::from(a).join("Verba").join("settings.txt"))
     }
 
     /// Reads the file; anything missing or unreadable keeps its default.
     pub fn load() -> Self {
+        Self::parse(&Self::path().and_then(|p| std::fs::read_to_string(p).ok()).unwrap_or_default())
+    }
+
+    fn parse(text: &str) -> Self {
         let mut s = Self::default();
-        let Some(text) = Self::path().and_then(|p| std::fs::read_to_string(p).ok()) else { return s };
         for line in text.lines() {
             let Some((key, value)) = line.split_once('=') else { continue };
-            let on = value.trim() == "1";
-            match key.trim() {
+            let (key, value) = (key.trim(), value.trim());
+            let on = value == "1";
+            match key {
                 "theme" => {
-                    s.theme = match value.trim() {
+                    s.theme = match value {
                         "light" => ThemeMode::Light,
                         "dark" => ThemeMode::Dark,
                         _ => ThemeMode::Auto,
@@ -69,10 +141,36 @@ impl Settings {
                 "french" => s.french = on,
                 "arabic" => s.arabic = on,
                 "paused" => s.paused = on,
+                "follow_keyboard" => s.follow_keyboard = on,
+                "app_mode" => s.app_mode = if value == "only" { AppMode::OnlyThese } else { AppMode::AllExcept },
+                "apps" => {
+                    s.apps = value.split(';').map(|a| a.trim().to_lowercase()).filter(|a| !a.is_empty()).collect();
+                    s.apps.sort();
+                    s.apps.dedup();
+                }
                 _ => {}
             }
         }
         s
+    }
+
+    fn render(&self) -> String {
+        let theme = match self.theme {
+            ThemeMode::Auto => "auto",
+            ThemeMode::Light => "light",
+            ThemeMode::Dark => "dark",
+        };
+        let flag = |b: bool| if b { "1" } else { "0" };
+        let mode = if self.app_mode == AppMode::OnlyThese { "only" } else { "except" };
+        format!(
+            "theme={theme}\nenglish={}\nfrench={}\narabic={}\npaused={}\nfollow_keyboard={}\napp_mode={mode}\napps={}\n",
+            flag(self.english),
+            flag(self.french),
+            flag(self.arabic),
+            flag(self.paused),
+            flag(self.follow_keyboard),
+            self.apps.join(";")
+        )
     }
 
     pub fn save(&self) {
@@ -80,20 +178,7 @@ impl Settings {
         if let Some(dir) = path.parent() {
             let _ = std::fs::create_dir_all(dir);
         }
-        let theme = match self.theme {
-            ThemeMode::Auto => "auto",
-            ThemeMode::Light => "light",
-            ThemeMode::Dark => "dark",
-        };
-        let flag = |b: bool| if b { "1" } else { "0" };
-        let text = format!(
-            "theme={theme}\nenglish={}\nfrench={}\narabic={}\npaused={}\n",
-            flag(self.english),
-            flag(self.french),
-            flag(self.arabic),
-            flag(self.paused)
-        );
-        let _ = std::fs::write(path, text);
+        let _ = std::fs::write(path, self.render());
     }
 }
 
@@ -107,5 +192,51 @@ mod tests {
         assert!(s.lang_on(Lang::Ar));
         s.set_lang(Lang::Ar, false);
         assert!(!s.lang_on(Lang::Ar) && s.lang_on(Lang::En) && s.lang_on(Lang::Fr));
+    }
+
+    #[test]
+    fn by_default_every_app_is_allowed_except_password_managers_and_verba() {
+        let s = Settings::default();
+        assert!(s.allows_app("chrome.exe") && s.allows_app("notepad.exe") && s.allows_app(""));
+        assert!(!s.allows_app("KeePass.exe"), "a password manager is never read, and names are not case sensitive");
+        assert!(!s.allows_app("verba.exe"));
+    }
+
+    #[test]
+    fn turning_an_app_off_and_on_in_all_except_mode() {
+        let mut s = Settings::default();
+        s.set_app("Chrome.exe", false);
+        assert!(!s.allows_app("chrome.exe") && s.allows_app("code.exe"));
+        assert_eq!(s.apps, ["chrome.exe"]);
+        s.set_app("chrome.exe", true);
+        assert!(s.allows_app("chrome.exe") && s.apps.is_empty());
+    }
+
+    #[test]
+    fn only_these_mode_allows_just_the_listed_apps() {
+        let mut s = Settings { app_mode: AppMode::OnlyThese, ..Settings::default() };
+        assert!(!s.allows_app("chrome.exe"));
+        s.set_app("chrome.exe", true);
+        assert!(s.allows_app("chrome.exe") && !s.allows_app("code.exe"));
+        s.set_app("chrome.exe", false);
+        assert!(!s.allows_app("chrome.exe"));
+        // the always-off programs stay off even when listed
+        s.set_app("keepass.exe", true);
+        assert!(!s.allows_app("keepass.exe"));
+    }
+
+    #[test]
+    fn settings_survive_a_save_and_a_load() {
+        let mut s = Settings { theme: ThemeMode::Dark, follow_keyboard: false, app_mode: AppMode::OnlyThese, ..Settings::default() };
+        s.set_lang(Lang::Fr, false);
+        s.set_app("code.exe", true);
+        s.set_app("slack.exe", true);
+        assert_eq!(Settings::parse(&s.render()), s);
+    }
+
+    #[test]
+    fn a_damaged_file_falls_back_to_the_defaults() {
+        assert_eq!(Settings::parse("nonsense\n=\ntheme\napps"), Settings::default());
+        assert!(Settings::parse("follow_keyboard=0").follow_keyboard == false);
     }
 }

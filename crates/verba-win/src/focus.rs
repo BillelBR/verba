@@ -72,7 +72,7 @@ impl Locator {
             // modern fields answer through UI Automation; the classic Windows edit boxes only through their own messages
             let before_caret = text_before_caret(&el, max_chars).or_else(|| classic_edit_before_caret(max_chars))?;
             let anchor = classic_caret().map(|rect| Anchor { rect, kind: AnchorKind::Caret }).or_else(|| uia_anchor(&el))?;
-            Some(Snapshot { anchor, before_caret })
+            Some(Snapshot { anchor, before_caret, layout: crate::apps::keyboard_lang(), app: crate::apps::foreground_app().unwrap_or_default() })
         }
     }
 }
@@ -132,6 +132,10 @@ pub struct Snapshot {
     pub anchor: Anchor,
     /// The last few characters before the caret.
     pub before_caret: String,
+    /// The language of the keyboard in use (English, French or Arabic), `None` for any other layout.
+    pub layout: Option<verba_core::Lang>,
+    /// The program in front, as its file name (`chrome.exe`); empty when unknown.
+    pub app: String,
 }
 
 unsafe fn is_password(el: &IUIAutomationElement) -> bool {

@@ -21,7 +21,11 @@ powershell -ExecutionPolicy Bypass -File scripts\fetch-data.ps1   # downloads th
 cargo run -p verba-app
 ```
 
-Verba lives in the **system tray** (the `^` arrow at the bottom right, by the clock). Click its icon for the menu.
+Verba lives in the **system tray** (the `^` arrow at the bottom right, by the clock): a blue **V**, grey when suggestions are off.
+
+- **Click the icon:** opens the **Settings** window.
+- **Right-click the icon:** *Turn Verba on/off*, *Turn off in `<the app you were in>`* (or *on*), *Settings…*, *Quit*.
+
 Type in any app: when you have typed two letters of a word, a popup appears above it.
 
 | Key | What it does |
@@ -29,11 +33,17 @@ Type in any app: when you have typed two letters of a word, a popup appears abov
 | **Tab** | accept the first suggestion (replaces what you typed, adds a space) |
 | **Click** | accept the suggestion you click (the popup never takes the keyboard focus) |
 | **Esc** | close the popup |
-| **Ctrl+Alt+Shift+V** | pause / resume |
+| **Ctrl+Alt+Shift+V** | turn suggestions on / off |
+| **Ctrl+Alt+Shift+A** | turn Verba off / on in the app you are in |
 | **Ctrl+Alt+Shift+Q** | quit |
 
-**Tray menu:** suggestions on/off, **Languages** (English, Français, العربية, each on its own), **Theme** (follow Windows, light or dark),
-**Start with Windows** (release build), Quit. Choices are saved in `%APPDATA%\Verba\settings.txt`.
+**Language follows your keyboard.** With the English keyboard you get English words, with the French keyboard French, with the Arabic keyboard Arabic.
+Another keyboard layout (German, say) falls back to guessing from the letters. You can turn this off in Settings.
+
+**Settings** (every change applies at once; saved in `%APPDATA%\Verba\settings.txt`):
+suggestions on/off · follow the keyboard language · English / Français / العربية each on its own · look (follow Windows, light or dark) ·
+start with Windows (installed build) · **Apps**: work everywhere except the apps you list, or only in the apps you list (pick from the running apps).
+Password managers and Verba itself are always off. For an app switched off, Verba does not read anything at all.
 
 **Look:** a rounded card with a soft shadow, drawn with Direct2D/DirectWrite. It follows Windows' light or dark mode and
 accent colour, scales per monitor (high-DPI), fades in, highlights the candidate under the mouse, and lays Arabic out from the right.
@@ -82,7 +92,7 @@ Early. Windows only. Verba reads the word before the caret in two ways:
 
 Fields that give neither show nothing. Popup position is exact when the app tells us where the caret is, otherwise it sits above the field.
 
-Checked so far: 39 automated tests (engine accuracy, key rules, word cleaning, settings), the popup's look in light/dark and Arabic, and
+Checked so far: 46 automated tests (engine accuracy, key rules, word cleaning, settings), the popup's look in light/dark and Arabic, and
 the tray commands. **Not yet checked by an automatic end-to-end test**: pressing Tab in a real app. Keystroke injection on a desktop in use
 is unreliable (focus moves, the keyboard layout changes the letters), so that last check is manual: open Notepad, type `hel`, press Tab.
 

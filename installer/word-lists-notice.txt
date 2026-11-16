@@ -1,0 +1,22 @@
+Verba - word lists and their license
+
+Verba suggests words from frequency lists that are installed in the "data\words" folder next to the program:
+
+    en.txt   English
+    fr.txt   French
+    ar.txt   Arabic (Modern Standard Arabic and everyday speech)
+
+These lists come from the project "FrequencyWords" by hermitdave
+(https://github.com/hermitdave/FrequencyWords, 2018 lists), which builds them from the
+OpenSubtitles corpus (https://opus.nlpl.eu/OpenSubtitles2018.php).
+
+    License of the lists: Creative Commons Attribution-ShareAlike 4.0 (CC-BY-SA-4.0)
+    https://creativecommons.org/licenses/by-sa/4.0/
+
+The lists are separate files, and they keep that license. Verba's own program is not covered by it.
+You may replace them with your own lists in the same "word count" format.
+
+Privacy: Verba reads only the few letters before the caret in the text box you are typing in, never in password
+boxes, keeps nothing, and sends nothing over the network.
+
+More details: DATA.md in the installation folder.

@@ -57,6 +57,17 @@ pub fn foreground_app() -> Option<String> {
     }
 }
 
+/// The program and the window class in front, for the field check (no title, nothing typed).
+pub fn describe_foreground() -> String {
+    unsafe {
+        let hwnd = GetForegroundWindow();
+        if hwnd.is_invalid() {
+            return "no window in front".to_string();
+        }
+        format!("program {}, window class {}", exe_of_window(hwnd).unwrap_or_else(|| "?".into()), class_of(hwnd))
+    }
+}
+
 /// The language of the keyboard layout in use in the front window, when it is one Verba has a list for.
 /// This is what the user's keys mean, which is a better guide than guessing from the letters.
 pub fn keyboard_lang() -> Option<Lang> {

@@ -25,7 +25,7 @@ mod settings_window;
 use settings::{Settings, ThemeMode};
 use verba_core::{Engine, Lang, Suggestion, current_word, current_word_dz};
 use verba_local::{LocalEngine, PersonalDict};
-use verba_win::{Locator, Look, Overlay, Snapshot, Theme, foreground_app};
+use verba_win::{Locator, Look, Overlay, Snapshot, Theme, describe_foreground, foreground_app};
 use windows::Win32::Foundation::{ERROR_ALREADY_EXISTS, GetLastError, HINSTANCE, HWND, LPARAM, LRESULT, POINT, WPARAM};
 use windows::Win32::Graphics::Gdi::{CreateBitmap, DeleteObject};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
@@ -42,7 +42,7 @@ use windows::Win32::UI::Shell::{
 use windows::Win32::UI::WindowsAndMessaging::{
     AppendMenuW, CallNextHookEx, CreateIconIndirect, CreatePopupMenu, CreateWindowExW, DefWindowProcW,
     DestroyMenu, DispatchMessageW, GetCursorPos, GetMessageW, HHOOK, HICON, ICONINFO, KBDLLHOOKSTRUCT,
-    IsDialogMessageW, MF_GRAYED, MF_SEPARATOR, MF_STRING, MSG, PostMessageW, PostQuitMessage, RegisterClassW, RegisterWindowMessageW,
+    IsDialogMessageW, MB_ICONINFORMATION, MB_OK, MessageBoxW, MF_GRAYED, MF_SEPARATOR, MF_STRING, MSG, PostMessageW, PostQuitMessage, RegisterClassW, RegisterWindowMessageW,
     SetForegroundWindow, SetWindowsHookExW, TPM_BOTTOMALIGN, TPM_RIGHTBUTTON, TrackPopupMenu, TranslateMessage,
     UnhookWindowsHookEx, WH_KEYBOARD_LL, WM_APP, WM_COMMAND, WM_DESTROY, WM_HOTKEY, WM_KEYDOWN, WM_KEYUP, WM_LBUTTONUP,
     WM_NULL, WM_RBUTTONUP, WM_SYSKEYDOWN, WNDCLASSW, WS_EX_TOOLWINDOW, WS_POPUP,
@@ -63,6 +63,7 @@ const CMD_PAUSE: usize = 1001;
 const CMD_QUIT: usize = 1002;
 const CMD_APP: usize = 1003;
 const CMD_SETTINGS: usize = 1004;
+const CMD_CHECK: usize = 1005;
 const TRAY_ID: u32 = 1;
 /// Stamped on the keys Verba itself sends, so its own keyboard hook can tell them from anyone else's
 /// (remote-desktop tools and accessibility programs also send keys, and those must still work).
@@ -289,6 +290,7 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
                 // the tray menu took the focus, so "this app" is the last one the reader saw in front
                 CMD_APP => toggle_app(LAST_APP.lock().ok().map(|a| a.clone()).filter(|a| !a.is_empty())),
                 CMD_SETTINGS => open_settings(),
+                CMD_CHECK => field_check(),
                 CMD_QUIT => quit(),
                 _ => {}
             }
@@ -625,6 +627,37 @@ fn toggle_app(app_name: Option<String>) {
     });
 }
 
+/// "Why does Verba not work in this field?": after 3 seconds (time to click in the field) reports which steps of reading it worked.
+/// The report holds program and class names and step results, never the text.
+fn field_check() {
+    std::thread::spawn(|| {
+        std::thread::sleep(Duration::from_secs(3));
+        let front = describe_foreground();
+        let report = match Locator::new() {
+            Ok(locator) => {
+                let result = match locator.snapshot(48) {
+                    Some(s) => format!("READABLE: {:?} anchor, {} letters read, keyboard {:?}", s.anchor.kind, s.before_caret.chars().count(), s.layout),
+                    None => "NOT READABLE by Verba".to_string(),
+                };
+                format!("{front}
+
+{result}
+
+Steps: {}
+
+This report contains no typed text.", locator.diagnose())
+            }
+            Err(e) => format!("{front}
+
+UI Automation could not start: {e}"),
+        };
+        let text: Vec<u16> = report.encode_utf16().chain(std::iter::once(0)).collect();
+        unsafe {
+            MessageBoxW(None, PCWSTR(text.as_ptr()), w!("Verba: field check"), MB_OK | MB_ICONINFORMATION);
+        }
+    });
+}
+
 fn open_settings() {
     let icon = APP.with(|a| a.try_borrow().ok().and_then(|b| b.as_ref().map(|app| app.icon_on))).unwrap_or_default();
     settings_window::open(icon);
@@ -848,6 +881,7 @@ fn show_menu(hwnd: HWND) {
 
         let _ = AppendMenuW(menu, MF_SEPARATOR, 0, PCWSTR::null());
         let _ = AppendMenuW(menu, MF_STRING, CMD_SETTINGS, w!("Settings…"));
+        let _ = AppendMenuW(menu, MF_STRING, CMD_CHECK, w!("Check a text field (3 s)…"));
         let _ = AppendMenuW(menu, MF_SEPARATOR, 0, PCWSTR::null());
         let _ = AppendMenuW(menu, MF_STRING, CMD_QUIT, w!("Quit Verba\tCtrl+Alt+Shift+Q"));
         let mut pt = POINT::default();

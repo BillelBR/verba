@@ -41,6 +41,10 @@ jobs:
         shell: pwsh
         run: ./scripts/fetch-data.ps1
 
+      - name: Build the next-word tables
+        shell: pwsh
+        run: ./scripts/fetch-bigrams.ps1 -Clean
+
       # Inno Setup 6 is on the windows-latest image; install it only if it is missing
       - name: Make sure Inno Setup is installed
         shell: pwsh

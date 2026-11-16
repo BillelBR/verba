@@ -15,7 +15,7 @@ use windows::Win32::UI::HiDpi::{GetDpiForSystem, SystemParametersInfoForDpi};
 use windows::Win32::UI::WindowsAndMessaging::{
     AppendMenuW, CreatePopupMenu, CreateWindowExW, DefWindowProcW, DestroyMenu, DestroyWindow, GetSystemMetrics, GetWindowRect,
     HICON, HMENU, IsWindow, MF_GRAYED, MF_STRING, NONCLIENTMETRICSW, RegisterClassW, SM_CXSCREEN, SM_CYSCREEN, SPI_GETNONCLIENTMETRICS,
-    SW_SHOW, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, SWP_SHOWWINDOW, SendMessageW, SetForegroundWindow, SetWindowPos, ShowWindow, TPM_LEFTALIGN, TPM_RETURNCMD, TPM_TOPALIGN, TrackPopupMenu, WINDOW_EX_STYLE,
+    IDYES, MB_ICONQUESTION, MB_YESNO, MessageBoxW, SW_SHOW, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, SWP_SHOWWINDOW, SendMessageW, SetForegroundWindow, SetWindowPos, ShowWindow, TPM_LEFTALIGN, TPM_RETURNCMD, TPM_TOPALIGN, TrackPopupMenu, WINDOW_EX_STYLE,
     WINDOW_STYLE, WM_CLOSE, WM_COMMAND, WM_DESTROY, WM_SETFONT, WNDCLASSW, WS_CAPTION, WS_CHILD, WS_MINIMIZEBOX, WS_OVERLAPPED,
     WS_SYSMENU, WS_VISIBLE, WM_CTLCOLORBTN, WM_CTLCOLORSTATIC,
 };
@@ -29,6 +29,10 @@ pub static WINDOW: AtomicIsize = AtomicIsize::new(0);
 // control numbers
 const ID_ON: i32 = 2001;
 const ID_FIX: i32 = 2002;
+const ID_NEXT: i32 = 2003;
+const ID_LEARN: i32 = 2004;
+const ID_MYWORDS: i32 = 2005;
+const ID_FORGET: i32 = 2006;
 const ID_FOLLOW: i32 = 2010;
 const ID_EN: i32 = 2011;
 const ID_FR: i32 = 2012;
@@ -103,7 +107,7 @@ pub fn open(icon: HICON) {
 
         let dpi = GetDpiForSystem().max(96);
         SCALE.with(|s| s.set(dpi as f32 / 96.0));
-        let (client_w, client_h) = (px(480), px(604));
+        let (client_w, client_h) = (px(480), px(688));
         let style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
         // the window is bigger than its inside by the title bar and the borders
         let mut frame = RECT { left: 0, top: 0, right: client_w, bottom: client_h };
@@ -170,38 +174,42 @@ fn build_controls(win: HWND, _hinst: HINSTANCE) {
     // Suggestions on
     child(win, button, "Suggestions on", BS_AUTOCHECKBOX | tab, 0, (20, 14, 440, 24), ID_ON);
     child(win, button, "Fix spelling when I finish a word (Tab to apply)", BS_AUTOCHECKBOX | tab, 0, (20, 40, 440, 24), ID_FIX);
+    child(win, button, "Suggest the next word after a space (Tab to accept)", BS_AUTOCHECKBOX | tab, 0, (20, 66, 440, 24), ID_NEXT);
+    child(win, button, "Learn the words I use (kept on this PC only)", BS_AUTOCHECKBOX | tab, 0, (20, 92, 440, 24), ID_LEARN);
+    child(win, button, "My words…", BS_PUSHBUTTON | tab, 0, (36, 122, 150, 28), ID_MYWORDS);
+    child(win, button, "Forget what it learned", BS_PUSHBUTTON | tab, 0, (196, 122, 180, 28), ID_FORGET);
 
     // Language
-    child(win, button, "Language", BS_GROUPBOX, 0, (20, 74, 440, 126), 0);
-    child(win, button, "Follow the keyboard language", BS_AUTOCHECKBOX | tab, 0, (36, 96, 408, 22), ID_FOLLOW);
-    child(win, button, "English", BS_AUTOCHECKBOX | tab, 0, (36, 122, 124, 22), ID_EN);
-    child(win, button, "Français", BS_AUTOCHECKBOX | tab, 0, (166, 122, 124, 22), ID_FR);
-    child(win, button, "العربية", BS_AUTOCHECKBOX | tab, 0, (296, 122, 148, 22), ID_AR);
-    child(win, label, "Verba suggests in the language of the keyboard you are typing with. Turn this off to guess it from the letters instead.", 0, 0, (36, 148, 408, 44), 0);
+    child(win, button, "Language", BS_GROUPBOX, 0, (20, 158, 440, 126), 0);
+    child(win, button, "Follow the keyboard language", BS_AUTOCHECKBOX | tab, 0, (36, 180, 408, 22), ID_FOLLOW);
+    child(win, button, "English", BS_AUTOCHECKBOX | tab, 0, (36, 206, 124, 22), ID_EN);
+    child(win, button, "Français", BS_AUTOCHECKBOX | tab, 0, (166, 206, 124, 22), ID_FR);
+    child(win, button, "العربية", BS_AUTOCHECKBOX | tab, 0, (296, 206, 148, 22), ID_AR);
+    child(win, label, "Verba suggests in the language of the keyboard you are typing with. Turn this off to guess it from the letters instead.", 0, 0, (36, 232, 408, 44), 0);
 
     // Look
-    child(win, button, "Look", BS_GROUPBOX, 0, (20, 210, 440, 58), 0);
-    child(win, button, "Follow Windows", BS_AUTORADIOBUTTON | WS_GROUP_ | tab, 0, (36, 234, 140, 22), ID_THEME_AUTO);
-    child(win, button, "Light", BS_AUTORADIOBUTTON, 0, (190, 234, 100, 22), ID_THEME_LIGHT);
-    child(win, button, "Dark", BS_AUTORADIOBUTTON, 0, (300, 234, 100, 22), ID_THEME_DARK);
+    child(win, button, "Look", BS_GROUPBOX, 0, (20, 294, 440, 58), 0);
+    child(win, button, "Follow Windows", BS_AUTORADIOBUTTON | WS_GROUP_ | tab, 0, (36, 318, 140, 22), ID_THEME_AUTO);
+    child(win, button, "Light", BS_AUTORADIOBUTTON, 0, (190, 318, 100, 22), ID_THEME_LIGHT);
+    child(win, button, "Dark", BS_AUTORADIOBUTTON, 0, (300, 318, 100, 22), ID_THEME_DARK);
 
-    child(win, button, "Start Verba when Windows starts", BS_AUTOCHECKBOX | tab, 0, (20, 280, 440, 24), ID_AUTOSTART);
+    child(win, button, "Start Verba when Windows starts", BS_AUTOCHECKBOX | tab, 0, (20, 364, 440, 24), ID_AUTOSTART);
 
     // Apps
-    child(win, button, "Apps", BS_GROUPBOX, 0, (20, 316, 440, 238), 0);
-    let combo = child(win, w!("COMBOBOX"), "", CBS_DROPDOWNLIST | tab | WS_VSCROLL_, 0, (36, 340, 408, 120), ID_MODE);
+    child(win, button, "Apps", BS_GROUPBOX, 0, (20, 400, 440, 238), 0);
+    let combo = child(win, w!("COMBOBOX"), "", CBS_DROPDOWNLIST | tab | WS_VSCROLL_, 0, (36, 424, 408, 120), ID_MODE);
     unsafe {
         for item in ["Work in every app except the ones listed", "Work only in the apps listed"] {
             let text = wide(item);
             SendMessageW(combo, CB_ADDSTRING, Some(WPARAM(0)), Some(LPARAM(text.as_ptr() as isize)));
         }
     }
-    child(win, w!("LISTBOX"), "", LBS_NOTIFY | WS_VSCROLL_ | tab, WS_EX_CLIENTEDGE_, (36, 374, 262, 128), ID_LIST);
-    child(win, button, "Add a running app…", BS_PUSHBUTTON | tab, 0, (308, 374, 136, 30), ID_ADD);
-    child(win, button, "Remove", BS_PUSHBUTTON | tab, 0, (308, 412, 136, 30), ID_REMOVE);
-    child(win, label, "Password managers and Verba itself are always off, whatever you choose.", 0, 0, (36, 510, 408, 36), 0);
+    child(win, w!("LISTBOX"), "", LBS_NOTIFY | WS_VSCROLL_ | tab, WS_EX_CLIENTEDGE_, (36, 458, 262, 128), ID_LIST);
+    child(win, button, "Add a running app…", BS_PUSHBUTTON | tab, 0, (308, 458, 136, 30), ID_ADD);
+    child(win, button, "Remove", BS_PUSHBUTTON | tab, 0, (308, 496, 136, 30), ID_REMOVE);
+    child(win, label, "Password managers and Verba itself are always off, whatever you choose.", 0, 0, (36, 594, 408, 36), 0);
 
-    child(win, button, "Close", BS_DEFPUSHBUTTON | tab, 0, (360, 566, 100, 28), ID_CLOSE);
+    child(win, button, "Close", BS_DEFPUSHBUTTON | tab, 0, (360, 650, 100, 28), ID_CLOSE);
 }
 
 fn control(win: HWND, id: i32) -> HWND {
@@ -223,6 +231,8 @@ fn refresh(win: HWND) {
     let s = crate::current_settings();
     set_check(win, ID_ON, !s.paused);
     set_check(win, ID_FIX, s.correction);
+    set_check(win, ID_NEXT, s.predict_next);
+    set_check(win, ID_LEARN, s.learn);
     set_check(win, ID_FOLLOW, s.follow_keyboard);
     set_check(win, ID_EN, s.english);
     set_check(win, ID_FR, s.french);
@@ -278,6 +288,17 @@ unsafe extern "system" fn proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: LPARAM) -> 
             match id {
                 ID_ON => crate::update_settings(|s| s.paused = !is_checked(hwnd, ID_ON)),
                 ID_FIX => crate::update_settings(|s| s.correction = is_checked(hwnd, ID_FIX)),
+                ID_NEXT => crate::update_settings(|s| s.predict_next = is_checked(hwnd, ID_NEXT)),
+                ID_LEARN => crate::update_settings(|s| s.learn = is_checked(hwnd, ID_LEARN)),
+                ID_MYWORDS => crate::open_my_words(),
+                ID_FORGET => {
+                    let ask = wide("Forget every word Verba learned from what you typed? The words you added yourself stay.");
+                    let title = wide("Verba");
+                    let answer = unsafe { MessageBoxW(Some(hwnd), PCWSTR(ask.as_ptr()), PCWSTR(title.as_ptr()), MB_YESNO | MB_ICONQUESTION) };
+                    if answer == IDYES {
+                        crate::forget_learned();
+                    }
+                }
                 ID_FOLLOW => crate::update_settings(|s| s.follow_keyboard = is_checked(hwnd, ID_FOLLOW)),
                 ID_EN => crate::update_settings(|s| s.set_lang(Lang::En, is_checked(hwnd, ID_EN))),
                 ID_FR => crate::update_settings(|s| s.set_lang(Lang::Fr, is_checked(hwnd, ID_FR))),

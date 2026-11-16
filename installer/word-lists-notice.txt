@@ -16,6 +16,10 @@ OpenSubtitles corpus (https://opus.nlpl.eu/OpenSubtitles2018.php).
 The lists are separate files, and they keep that license. Verba's own program is not covered by it.
 You may replace them with your own lists in the same "word count" format.
 
+The next-word tables (en.bigrams.txt, fr.bigrams.txt, ar.bigrams.txt) count which word follows which. They were built
+from sentences of Tatoeba (https://tatoeba.org), (c) Tatoeba contributors, license Creative Commons Attribution 2.0 France
+(CC BY 2.0 FR, https://creativecommons.org/licenses/by/2.0/fr/). The tables hold counts of word pairs only, no sentence.
+
 Privacy: Verba reads only the few letters before the caret in the text box you are typing in, never in password
 boxes, keeps nothing, and sends nothing over the network.
 

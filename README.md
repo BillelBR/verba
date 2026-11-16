@@ -96,7 +96,9 @@ Checked so far: 46 automated tests (engine accuracy, key rules, word cleaning, s
 the tray commands. **Not yet checked by an automatic end-to-end test**: pressing Tab in a real app. Keystroke injection on a desktop in use
 is unreliable (focus moves, the keyboard layout changes the letters), so that last check is manual: open Notepad, type `hel`, press Tab.
 
-Next: instant correction, more languages, a proper settings window, Mac and Linux.
+Also available (off until you turn them on in the settings): spelling fixes when you finish a word, the likely next word after a space, and a personal dictionary that can learn the words you use, on your PC only (see Privacy in [docs/INSTALL.md](docs/INSTALL.md)).
+
+Next: Algerian Darija in Latin letters, more languages, Mac and Linux.
 
 ## License
 

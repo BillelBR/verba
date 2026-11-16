@@ -46,6 +46,10 @@ pub struct Settings {
     pub paused: bool,
     /// Show a spelling fix when a word is finished (off until the user turns it on).
     pub correction: bool,
+    /// Offer the likely next word after a finished word and a space (off until the user turns it on).
+    pub predict_next: bool,
+    /// Learn the words the user types, on this PC only, to offer them later (off until the user turns it on).
+    pub learn: bool,
     /// Suggest in the language of the keyboard layout (instead of guessing from the letters typed).
     pub follow_keyboard: bool,
     pub app_mode: AppMode,
@@ -62,6 +66,8 @@ impl Default for Settings {
             arabic: true,
             paused: false,
             correction: false,
+            predict_next: false,
+            learn: false,
             follow_keyboard: true,
             app_mode: AppMode::AllExcept,
             apps: Vec::new(),
@@ -117,8 +123,13 @@ impl Settings {
         }
     }
 
+    /// The Verba folder in the user's AppData: where the settings, the personal words and what was learned are kept.
+    pub fn dir() -> Option<PathBuf> {
+        std::env::var_os("APPDATA").map(|a| PathBuf::from(a).join("Verba"))
+    }
+
     fn path() -> Option<PathBuf> {
-        std::env::var_os("APPDATA").map(|a| PathBuf::from(a).join("Verba").join("settings.txt"))
+        Self::dir().map(|d| d.join("settings.txt"))
     }
 
     /// Reads the file; anything missing or unreadable keeps its default.
@@ -145,6 +156,8 @@ impl Settings {
                 "arabic" => s.arabic = on,
                 "paused" => s.paused = on,
                 "correction" => s.correction = on,
+                "predict_next" => s.predict_next = on,
+                "learn" => s.learn = on,
                 "follow_keyboard" => s.follow_keyboard = on,
                 "app_mode" => s.app_mode = if value == "only" { AppMode::OnlyThese } else { AppMode::AllExcept },
                 "apps" => {
@@ -167,12 +180,14 @@ impl Settings {
         let flag = |b: bool| if b { "1" } else { "0" };
         let mode = if self.app_mode == AppMode::OnlyThese { "only" } else { "except" };
         format!(
-            "theme={theme}\nenglish={}\nfrench={}\narabic={}\npaused={}\ncorrection={}\nfollow_keyboard={}\napp_mode={mode}\napps={}\n",
+            "theme={theme}\nenglish={}\nfrench={}\narabic={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\nfollow_keyboard={}\napp_mode={mode}\napps={}\n",
             flag(self.english),
             flag(self.french),
             flag(self.arabic),
             flag(self.paused),
             flag(self.correction),
+            flag(self.predict_next),
+            flag(self.learn),
             flag(self.follow_keyboard),
             self.apps.join(";")
         )
@@ -232,7 +247,7 @@ mod tests {
 
     #[test]
     fn settings_survive_a_save_and_a_load() {
-        let mut s = Settings { theme: ThemeMode::Dark, follow_keyboard: false, correction: true, app_mode: AppMode::OnlyThese, ..Settings::default() };
+        let mut s = Settings { theme: ThemeMode::Dark, follow_keyboard: false, correction: true, predict_next: true, learn: true, app_mode: AppMode::OnlyThese, ..Settings::default() };
         s.set_lang(Lang::Fr, false);
         s.set_app("code.exe", true);
         s.set_app("slack.exe", true);
@@ -243,6 +258,14 @@ mod tests {
     fn correction_is_off_until_the_user_turns_it_on() {
         assert!(!Settings::default().correction);
         assert!(Settings::parse("correction=1").correction);
+    }
+
+    #[test]
+    fn next_word_and_learning_are_off_until_the_user_turns_them_on() {
+        let d = Settings::default();
+        assert!(!d.predict_next && !d.learn);
+        let s = Settings::parse("predict_next=1\nlearn=1");
+        assert!(s.predict_next && s.learn);
     }
 
     #[test]

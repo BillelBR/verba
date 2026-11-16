@@ -47,8 +47,13 @@ Why the warning exists and what can remove it: [SIGNING.md](SIGNING.md).
 
 ### Privacy
 
-Verba reads only the few letters before the caret in the text box you are typing in, never in password boxes, and it keeps nothing.
+Verba reads only the few letters before the caret in the text box you are typing in, never in password boxes, and by default it keeps nothing.
 It sends nothing over the network: it has no network code.
+
+Two options, both **off** until you turn them on in the settings, keep something on your own PC:
+
+- **Learn the words I use:** Verba counts the words you type and the pairs of neighbouring words, to offer your own words and better next-word suggestions. It never stores a sentence, never three words in a row, no numbers, addresses, e-mails or paths, and nothing from the programs you excluded or from password boxes. The files are plain text in `%APPDATA%\Verba` (`learned.txt`, readable by anyone who can open your user folder). *Forget what it learned* in the settings, or deleting `learned.txt`, erases it all.
+- **My words:** `personal.txt` in the same folder, one word per line. You can edit it (the settings open it in Notepad) to add words Verba must never flag as typos and should offer as suggestions.
 
 ## For maintainers
 

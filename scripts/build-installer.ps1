@@ -46,6 +46,12 @@ if (-not ((Test-Path (Join-Path $words "en.txt")) -and (Test-Path (Join-Path $wo
     & (Join-Path $PSScriptRoot "fetch-data.ps1")
     if (-not (Test-Path (Join-Path $words "ar.txt"))) { Fail "the word lists could not be downloaded (data\words\*.txt)" }
 }
+# the next-word tables (built from Tatoeba sentences; needs Python 3, bzip2 or 7-Zip to open the downloads)
+if (-not ((Test-Path (Join-Path $words "en.bigrams.txt")) -and (Test-Path (Join-Path $words "fr.bigrams.txt")) -and (Test-Path (Join-Path $words "ar.bigrams.txt")))) {
+    Write-Host "building the next-word tables ..."
+    & (Join-Path $PSScriptRoot "fetch-bigrams.ps1") -Clean
+    if (-not (Test-Path (Join-Path $words "ar.bigrams.txt"))) { Fail "the next-word tables could not be built (data\words\*.bigrams.txt)" }
+}
 
 # 4. Inno Setup
 function Find-Iscc {

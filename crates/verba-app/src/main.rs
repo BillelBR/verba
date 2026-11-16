@@ -13,16 +13,18 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::cell::RefCell;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
+use std::time::{Duration, Instant, SystemTime};
 use std::sync::Mutex;
 use std::sync::atomic::{AtomicBool, AtomicIsize, AtomicU32, Ordering};
 
+mod learning;
 mod settings;
 mod settings_window;
 
 use settings::{Settings, ThemeMode};
 use verba_core::{Engine, Lang, Suggestion, current_word};
-use verba_local::LocalEngine;
+use verba_local::{LocalEngine, PersonalDict};
 use verba_win::{Locator, Look, Overlay, Snapshot, Theme, foreground_app};
 use windows::Win32::Foundation::{ERROR_ALREADY_EXISTS, GetLastError, HINSTANCE, HWND, LPARAM, LRESULT, POINT, WPARAM};
 use windows::Win32::Graphics::Gdi::{CreateBitmap, DeleteObject};
@@ -97,6 +99,13 @@ struct App {
     last_text: String,
     /// Set while the popup shows a spelling fix instead of word completions.
     fix: Option<FixState>,
+    /// The words typed since the last end of a sentence, waiting to be learned (only collected when the user turned learning on).
+    learn_buf: String,
+    learn_words: usize,
+    /// The personal dictionary files, the time `personal.txt` was last changed (a person may edit it), and when it was last looked at.
+    files: Option<(PathBuf, PathBuf)>,
+    words_stamp: Option<SystemTime>,
+    last_check: Instant,
 }
 
 /// What accepting a spelling fix has to replace.
@@ -121,6 +130,11 @@ fn main() {
 
         let settings = Settings::load();
         let mut engine = load_engine();
+        let files = Settings::dir().map(|d| (d.join("personal.txt"), d.join("learned.txt")));
+        if let Some((words, learned)) = &files {
+            engine.set_personal(PersonalDict::load(words, learned));
+        }
+        let words_stamp = files.as_ref().and_then(|(w, _)| stamp_of(w));
         for lang in [Lang::En, Lang::Fr, Lang::Ar] {
             engine.set_enabled(lang, settings.lang_on(lang));
         }
@@ -140,7 +154,7 @@ fn main() {
 
         APP.with(|a| {
             *a.borrow_mut() =
-                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None });
+                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, learn_buf: String::new(), learn_words: 0, files, words_stamp, last_check: Instant::now() });
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
@@ -296,6 +310,10 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
             LRESULT(0)
         }
         WM_DESTROY => {
+            with_app(|app| {
+                flush_learning(app);
+                save_personal(app);
+            });
             remove_tray(hwnd);
             quit();
             LRESULT(0)
@@ -378,14 +396,27 @@ fn spawn_reader() {
 
 /// A new reading: ask the engine about the word before the caret and show, move or hide the popup.
 fn apply(app: &mut App, snap: Option<Snapshot>) {
+    reload_personal_if_edited(app);
     let Some(snap) = snap else {
+        // no text field any more (another window, a password box): what was collected is learned now, not carried over
+        flush_learning(app);
         app.last_text.clear();
         if POPUP_VISIBLE.load(Ordering::SeqCst) {
             hide(app);
         }
         return;
     };
-    app.last_text = snap.before_caret.clone();
+    let previous = std::mem::replace(&mut app.last_text, snap.before_caret.clone());
+    if app.settings.learn && app.settings.allows_app(&snap.app) {
+        if let Some((word, separators)) = learning::finished_word(&previous, &snap.before_caret) {
+            app.learn_buf.push_str(&word);
+            app.learn_buf.push_str(&separators);
+            app.learn_words += 1;
+            if learning::ends_sentence(&separators) || app.learn_words >= 25 {
+                flush_learning(app);
+            }
+        }
+    }
     match &app.dismissed {
         Some(d) if *d == snap.before_caret => return, // Esc was pressed for this text: stay closed
         Some(_) => app.dismissed = None,              // the user typed on: allowed again
@@ -421,6 +452,19 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
                     POPUP_VISIBLE.store(true, Ordering::SeqCst);
                     return;
                 }
+            }
+        }
+        // after a finished word and a space: the likely next word (only when the user turned it on)
+        if app.settings.predict_next {
+            let only = if app.settings.follow_keyboard { snap.layout } else { None };
+            let next = app.engine.next_words(only, &snap.before_caret, 3);
+            if !next.is_empty() {
+                app.fix = None;
+                app.typed_len = 0;
+                app.overlay.show_with(snap.anchor, &next, 0, look_for(&app.settings), None);
+                app.shown = next;
+                POPUP_VISIBLE.store(true, Ordering::SeqCst);
+                return;
             }
         }
         if POPUP_VISIBLE.load(Ordering::SeqCst) {
@@ -465,6 +509,68 @@ fn accept(app: &mut App, index: usize) {
     app.dismissed = None;
 }
 
+// ───────────── the personal dictionary ─────────────
+
+fn stamp_of(path: &Path) -> Option<SystemTime> {
+    std::fs::metadata(path).and_then(|m| m.modified()).ok()
+}
+
+/// Learns what was collected (one sentence at most) and writes the files.
+fn flush_learning(app: &mut App) {
+    if app.learn_buf.is_empty() {
+        return;
+    }
+    let text = std::mem::take(&mut app.learn_buf);
+    app.learn_words = 0;
+    if app.settings.learn {
+        app.engine.learn_text(&text);
+        save_personal(app);
+    }
+}
+
+fn save_personal(app: &mut App) {
+    let Some((words, learned)) = &app.files else { return };
+    if app.engine.personal().is_dirty() {
+        let _ = app.engine.personal_mut().save(words, learned);
+        app.words_stamp = stamp_of(words);
+    }
+}
+
+/// A person may edit `personal.txt` (the settings window opens it in Notepad): read it again when it changed.
+fn reload_personal_if_edited(app: &mut App) {
+    if app.last_check.elapsed() < Duration::from_secs(2) {
+        return;
+    }
+    app.last_check = Instant::now();
+    let Some((words, learned)) = app.files.clone() else { return };
+    let stamp = stamp_of(&words);
+    if stamp != app.words_stamp && !app.engine.personal().is_dirty() {
+        app.engine.set_personal(PersonalDict::load(&words, &learned));
+        app.words_stamp = stamp;
+    }
+}
+
+/// Opens `personal.txt` in Notepad (made with its explanation when it does not exist yet).
+pub(crate) fn open_my_words() {
+    let Some(dir) = Settings::dir() else { return };
+    let path = dir.join("personal.txt");
+    if !path.exists() {
+        let _ = std::fs::create_dir_all(&dir);
+        let _ = std::fs::write(&path, "# Verba personal dictionary: one word per line. You can edit this file.\n# A line that starts with - is a word that must never be learned automatically.\n");
+    }
+    let _ = std::process::Command::new("notepad.exe").arg(&path).spawn();
+}
+
+/// Forgets every word and word pair that was learned. The words the user added by hand stay.
+pub(crate) fn forget_learned() {
+    with_app(|app| {
+        app.learn_buf.clear();
+        app.learn_words = 0;
+        app.engine.personal_mut().clear_learned();
+        save_personal(app);
+    });
+}
+
 fn key(vk: VIRTUAL_KEY, scan: u16, flags: KEYBD_EVENT_FLAGS) -> INPUT {
     INPUT {
         r#type: INPUT_KEYBOARD,
@@ -485,6 +591,10 @@ pub(crate) fn update_settings(change: impl FnOnce(&mut Settings)) {
             app.engine.set_enabled(lang, app.settings.lang_on(lang));
         }
         PAUSED.store(app.settings.paused, Ordering::SeqCst);
+        if !app.settings.learn {
+            app.learn_buf.clear();
+            app.learn_words = 0;
+        }
         share_rules(&app.settings);
         // what is on the screen may no longer be allowed or in the right language: let the next reading decide
         hide(app);

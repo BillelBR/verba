@@ -1,6 +1,6 @@
 name: Release
 
-# Push a tag such as v0.3.0 and this builds Verba-Setup-<version>.exe and publishes it on the Releases page.
+# Push a tag such as v0.4.0 and this builds Verba-Setup-<version>.exe and publishes it on the Releases page.
 on:
   push:
     tags:
@@ -32,7 +32,7 @@ jobs:
           if ($toml -notmatch '(?ms)\[workspace\.package\].*?^\s*version\s*=\s*"([^"]+)"') { throw "could not read the version from Cargo.toml" }
           $version = $Matches[1]
           if ($tag -ne "v$version") { throw "tag $tag does not match the version $version in Cargo.toml" }
-          # a hyphen in the tag (v0.3.0-beta1) or a 0.x version means "not final yet"
+          # a hyphen in the tag (v0.4.0-beta1) or a 0.x version means "not final yet"
           $pre = $tag.Contains("-") -or $tag.StartsWith("v0.")
           "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           "prerelease=$($pre.ToString().ToLower())" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8

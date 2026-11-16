@@ -14,15 +14,19 @@
 
 use std::cell::RefCell;
 use std::path::PathBuf;
+use std::sync::Mutex;
 use std::sync::atomic::{AtomicBool, AtomicIsize, AtomicU32, Ordering};
 
-use verba_core::{Engine, Suggestion, current_word};
+mod settings;
+
+use settings::{Settings, ThemeMode};
+use verba_core::{Engine, Lang, Suggestion, current_word};
 use verba_local::LocalEngine;
-use verba_win::{Locator, Overlay, Theme};
+use verba_win::{Locator, Look, Overlay, Snapshot, Theme};
 use windows::Win32::Foundation::{ERROR_ALREADY_EXISTS, GetLastError, HINSTANCE, HWND, LPARAM, LRESULT, POINT, WPARAM};
 use windows::Win32::Graphics::Gdi::{CreateBitmap, DeleteObject};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
-use windows::Win32::System::Registry::{HKEY_CURRENT_USER, RRF_RT_REG_DWORD, RegGetValueW};
+use windows::Win32::System::Registry::{HKEY_CURRENT_USER, REG_SZ, RRF_RT_REG_SZ, RegDeleteKeyValueW, RegGetValueW, RegSetKeyValueW};
 use windows::Win32::System::Threading::CreateMutexW;
 use windows::Win32::UI::Input::KeyboardAndMouse::{
     GetKeyState, INPUT, INPUT_0, INPUT_KEYBOARD, KEYBD_EVENT_FLAGS, KEYBDINPUT, KEYEVENTF_KEYUP, KEYEVENTF_UNICODE, MOD_ALT,
@@ -33,38 +37,52 @@ use windows::Win32::UI::Shell::{
     NIF_ICON, NIF_MESSAGE, NIF_TIP, NIM_ADD, NIM_DELETE, NIM_MODIFY, NOTIFYICONDATAW, Shell_NotifyIconW,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
-    AppendMenuW, CallNextHookEx, CreateIconIndirect, CreatePopupMenu, CreateWindowExW, DefWindowProcW, DestroyIcon,
-    DestroyMenu, DispatchMessageW, GetCursorPos, GetMessageW, HHOOK, HICON, ICONINFO, KBDLLHOOKSTRUCT, KillTimer,
-    MF_CHECKED, MF_SEPARATOR, MF_STRING, MSG, PostMessageW, PostQuitMessage, RegisterClassW, RegisterWindowMessageW,
-    SetForegroundWindow, SetTimer, SetWindowsHookExW, TPM_BOTTOMALIGN, TPM_RIGHTBUTTON, TrackPopupMenu, TranslateMessage,
+    AppendMenuW, CallNextHookEx, CreateIconIndirect, CreatePopupMenu, CreateWindowExW, DefWindowProcW,
+    DestroyMenu, DispatchMessageW, GetCursorPos, GetMessageW, HHOOK, HICON, ICONINFO, KBDLLHOOKSTRUCT,
+    MF_CHECKED, MF_GRAYED, MF_POPUP, MF_SEPARATOR, MF_STRING, MSG, PostMessageW, PostQuitMessage, RegisterClassW, RegisterWindowMessageW,
+    SetForegroundWindow, SetWindowsHookExW, TPM_BOTTOMALIGN, TPM_RIGHTBUTTON, TrackPopupMenu, TranslateMessage,
     UnhookWindowsHookEx, WH_KEYBOARD_LL, WM_APP, WM_COMMAND, WM_DESTROY, WM_HOTKEY, WM_KEYDOWN, WM_KEYUP, WM_LBUTTONUP,
-    WM_NULL, WM_RBUTTONUP, WM_SYSKEYDOWN, WM_TIMER, WNDCLASSW, WS_EX_TOOLWINDOW, WS_POPUP,
+    WM_NULL, WM_RBUTTONUP, WM_SYSKEYDOWN, WNDCLASSW, WS_EX_TOOLWINDOW, WS_POPUP,
 };
 use windows::core::{PCWSTR, w};
 
 const WM_TRAY: u32 = WM_APP + 1;
 const WM_ACCEPT: u32 = WM_APP + 2;
 const WM_DISMISS: u32 = WM_APP + 3;
-const TIMER_TICK: usize = 1;
-const TICK_MS: u32 = 150;
+/// A fresh reading from the worker thread is waiting in `LATEST`.
+const WM_SNAPSHOT: u32 = WM_APP + 4;
+/// How often the worker thread looks at the app being typed in.
+const POLL_MS: u64 = 120;
 const HOTKEY_QUIT: i32 = 1;
 const HOTKEY_PAUSE: i32 = 2;
 const CMD_PAUSE: usize = 1001;
 const CMD_QUIT: usize = 1002;
+const CMD_LANG_EN: usize = 1011;
+const CMD_LANG_FR: usize = 1012;
+const CMD_LANG_AR: usize = 1013;
+const CMD_THEME_AUTO: usize = 1021;
+const CMD_THEME_LIGHT: usize = 1022;
+const CMD_THEME_DARK: usize = 1023;
+const CMD_AUTOSTART: usize = 1031;
 const TRAY_ID: u32 = 1;
-const LLKHF_INJECTED: u32 = 0x10;
+/// Stamped on the keys Verba itself sends, so its own keyboard hook can tell them from anyone else's
+/// (remote-desktop tools and accessibility programs also send keys, and those must still work).
+const VERBA_KEY_MARK: usize = 0x5645_5242; // "VERB"
 
 // what the keyboard hook needs to know without touching the rest of the program
 static POPUP_VISIBLE: AtomicBool = AtomicBool::new(false);
 static SWALLOWED_TAB: AtomicBool = AtomicBool::new(false);
 static CONTROLLER: AtomicIsize = AtomicIsize::new(0);
 static TASKBAR_CREATED: AtomicU32 = AtomicU32::new(0);
+static PAUSED: AtomicBool = AtomicBool::new(false);
+static QUITTING: AtomicBool = AtomicBool::new(false);
+/// What the worker thread last read (outer `Some` = new, not yet taken; inner `None` = no text field has the focus).
+static LATEST: Mutex<Option<Option<Snapshot>>> = Mutex::new(None);
 
 struct App {
-    locator: Locator,
     overlay: Overlay,
     engine: LocalEngine,
-    paused: bool,
+    settings: Settings,
     icon: HICON,
     /// What the popup shows now.
     shown: Vec<Suggestion>,
@@ -72,6 +90,8 @@ struct App {
     typed_len: usize,
     /// The text for which the user pressed Esc: stay closed until it changes.
     dismissed: Option<String>,
+    /// The text before the caret at the last reading (what Esc remembers).
+    last_text: String,
 }
 
 thread_local! {
@@ -86,8 +106,12 @@ fn main() {
             return;
         }
 
-        let engine = load_engine();
-        let locator = Locator::new().expect("UI Automation is not available");
+        let settings = Settings::load();
+        let mut engine = load_engine();
+        for lang in [Lang::En, Lang::Fr, Lang::Ar] {
+            engine.set_enabled(lang, settings.lang_on(lang));
+        }
+        PAUSED.store(settings.paused, Ordering::SeqCst);
         let overlay = Overlay::new().expect("could not make the popup window");
         let icon = make_icon();
 
@@ -101,7 +125,8 @@ fn main() {
         TASKBAR_CREATED.store(RegisterWindowMessageW(w!("TaskbarCreated")), Ordering::SeqCst);
 
         APP.with(|a| {
-            *a.borrow_mut() = Some(App { locator, overlay, engine, paused: false, icon, shown: Vec::new(), typed_len: 0, dismissed: None });
+            *a.borrow_mut() =
+                Some(App { overlay, engine, settings, icon, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new() });
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
@@ -110,8 +135,9 @@ fn main() {
         }
         let _ = RegisterHotKey(Some(hwnd), HOTKEY_PAUSE, mods, 'V' as u32);
 
+        with_app(|app| app.overlay.set_click_target(hwnd, WM_ACCEPT));
         add_tray(hwnd);
-        SetTimer(Some(hwnd), TIMER_TICK, TICK_MS, None);
+        spawn_reader();
         let hook = SetWindowsHookExW(WH_KEYBOARD_LL, Some(keyboard_hook), Some(hinst), 0).ok();
         if hook.is_none() {
             log("keyboard hook failed: Tab and Esc will not work");
@@ -162,20 +188,31 @@ fn log(text: &str) {
     let _ = text;
 }
 
-fn system_theme() -> Theme {
+/// The popup's look: Windows' theme and accent colour, unless the user chose light or dark.
+fn look_for(settings: &Settings) -> Look {
+    match settings.theme {
+        ThemeMode::Auto => Look::system(),
+        ThemeMode::Light => Look::with_theme(Theme::Light),
+        ThemeMode::Dark => Look::with_theme(Theme::Dark),
+    }
+}
+
+const RUN_KEY: windows::core::PCWSTR = w!(r"Software\Microsoft\Windows\CurrentVersion\Run");
+
+fn autostart_enabled() -> bool {
+    unsafe { RegGetValueW(HKEY_CURRENT_USER, RUN_KEY, w!("Verba"), RRF_RT_REG_SZ, None, None, None).is_ok() }
+}
+
+/// Start with Windows: one value in the user's Run key (no admin rights, nothing installed).
+fn set_autostart(on: bool) {
     unsafe {
-        let mut light = 1u32;
-        let mut size = std::mem::size_of::<u32>() as u32;
-        let r = RegGetValueW(
-            HKEY_CURRENT_USER,
-            w!("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"),
-            w!("AppsUseLightTheme"),
-            RRF_RT_REG_DWORD,
-            None,
-            Some(&mut light as *mut u32 as *mut _),
-            Some(&mut size),
-        );
-        if r.is_ok() && light == 0 { Theme::Dark } else { Theme::Light }
+        if on {
+            let Ok(exe) = std::env::current_exe() else { return };
+            let value: Vec<u16> = format!("\"{}\"", exe.display()).encode_utf16().chain(std::iter::once(0)).collect();
+            let _ = RegSetKeyValueW(HKEY_CURRENT_USER, RUN_KEY, w!("Verba"), REG_SZ.0, Some(value.as_ptr() as *const _), (value.len() * 2) as u32);
+        } else {
+            let _ = RegDeleteKeyValueW(HKEY_CURRENT_USER, RUN_KEY, w!("Verba"));
+        }
     }
 }
 
@@ -183,13 +220,16 @@ fn system_theme() -> Theme {
 
 unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: LPARAM) -> LRESULT {
     match msg {
-        WM_TIMER if wp.0 == TIMER_TICK => {
-            with_app(tick);
+        WM_SNAPSHOT => {
+            let latest = LATEST.lock().ok().and_then(|mut l| l.take());
+            if let Some(snap) = latest {
+                with_app(|app| apply(app, snap));
+            }
             LRESULT(0)
         }
         WM_HOTKEY => {
             match wp.0 as i32 {
-                HOTKEY_QUIT => unsafe { PostQuitMessage(0) },
+                HOTKEY_QUIT => quit(),
                 HOTKEY_PAUSE => with_app(|app| toggle_pause(app, hwnd)),
                 _ => {}
             }
@@ -203,27 +243,51 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
             LRESULT(0)
         }
         WM_COMMAND => {
-            match wp.0 & 0xFFFF {
+            let cmd = wp.0 & 0xFFFF;
+            match cmd {
                 CMD_PAUSE => with_app(|app| toggle_pause(app, hwnd)),
-                CMD_QUIT => unsafe { PostQuitMessage(0) },
+                CMD_QUIT => quit(),
+                CMD_LANG_EN | CMD_LANG_FR | CMD_LANG_AR => with_app(|app| {
+                    let lang = match cmd {
+                        CMD_LANG_EN => Lang::En,
+                        CMD_LANG_FR => Lang::Fr,
+                        _ => Lang::Ar,
+                    };
+                    let on = !app.settings.lang_on(lang);
+                    app.settings.set_lang(lang, on);
+                    app.engine.set_enabled(lang, on);
+                    app.settings.save();
+                    hide(app);
+                }),
+                CMD_THEME_AUTO | CMD_THEME_LIGHT | CMD_THEME_DARK => with_app(|app| {
+                    app.settings.theme = match cmd {
+                        CMD_THEME_LIGHT => ThemeMode::Light,
+                        CMD_THEME_DARK => ThemeMode::Dark,
+                        _ => ThemeMode::Auto,
+                    };
+                    app.settings.save();
+                    hide(app);
+                }),
+                CMD_AUTOSTART => set_autostart(!autostart_enabled()),
                 _ => {}
             }
             LRESULT(0)
         }
+        // a key (Tab) or a click on a candidate: wParam is the candidate's number
         WM_ACCEPT => {
-            with_app(accept);
+            with_app(|app| accept(app, wp.0));
             LRESULT(0)
         }
         WM_DISMISS => {
             with_app(|app| {
-                app.dismissed = Some(String::new());
+                app.dismissed = Some(app.last_text.clone());
                 hide(app);
             });
             LRESULT(0)
         }
         WM_DESTROY => {
             remove_tray(hwnd);
-            unsafe { PostQuitMessage(0) };
+            quit();
             LRESULT(0)
         }
         m if m == TASKBAR_CREATED.load(Ordering::SeqCst) && m != 0 => {
@@ -251,27 +315,62 @@ fn hide(app: &mut App) {
     POPUP_VISIBLE.store(false, Ordering::SeqCst);
 }
 
-/// Every tick: read the few letters before the caret, ask the engine, show or hide the popup.
-fn tick(app: &mut App) {
-    if app.paused {
-        if POPUP_VISIBLE.load(Ordering::SeqCst) {
-            hide(app);
+fn quit() {
+    QUITTING.store(true, Ordering::SeqCst);
+    unsafe { PostQuitMessage(0) };
+}
+
+/// The reading is done on a thread of its own. Asking another program about its text field can take a while
+/// (or never answer if that program is stuck), and the keyboard hook shares the main thread's message loop:
+/// if the main thread waited on another program, that program's keystrokes would wait on the hook, and both would stall.
+fn spawn_reader() {
+    std::thread::spawn(|| {
+        let Ok(locator) = Locator::new() else { return };
+        let mut last: Option<(i32, i32, i32, i32, String)> = None;
+        let mut was_paused = false;
+        while !QUITTING.load(Ordering::SeqCst) {
+            std::thread::sleep(std::time::Duration::from_millis(POLL_MS));
+            let paused = PAUSED.load(Ordering::SeqCst);
+            let snap = if paused { None } else { locator.snapshot(48) };
+            // wake the main thread only when something changed
+            let key = snap.as_ref().map(|s| (s.anchor.rect.left, s.anchor.rect.top, s.anchor.rect.right, s.anchor.rect.bottom, s.before_caret.clone()));
+            if key == last && paused == was_paused {
+                continue;
+            }
+            // (debug builds only; the text itself is never written out)
+            log(&format!("reader: {}", snap.as_ref().map_or("no text field".to_string(), |s| format!("{:?}, {} letters before the caret", s.anchor.kind, s.before_caret.chars().count()))));
+            last = key;
+            was_paused = paused;
+            if let Ok(mut latest) = LATEST.lock() {
+                *latest = Some(snap);
+            }
+            let controller = CONTROLLER.load(Ordering::SeqCst);
+            if controller != 0 {
+                unsafe {
+                    let _ = PostMessageW(Some(HWND(controller as *mut _)), WM_SNAPSHOT, WPARAM(0), LPARAM(0));
+                }
+            }
         }
-        return;
-    }
-    let Some(snap) = app.locator.snapshot(48) else {
+    });
+}
+
+/// A new reading: ask the engine about the word before the caret and show, move or hide the popup.
+fn apply(app: &mut App, snap: Option<Snapshot>) {
+    let Some(snap) = snap else {
+        app.last_text.clear();
         if POPUP_VISIBLE.load(Ordering::SeqCst) {
             hide(app);
         }
         return;
     };
+    app.last_text = snap.before_caret.clone();
     match &app.dismissed {
-        Some(d) if d.is_empty() => app.dismissed = Some(snap.before_caret.clone()), // Esc: remember what was there
-        Some(d) if *d == snap.before_caret => return,                                 // unchanged: stay closed
-        Some(_) => app.dismissed = None,                                              // the user typed on: allowed again
+        Some(d) if *d == snap.before_caret => return, // Esc was pressed for this text: stay closed
+        Some(_) => app.dismissed = None,              // the user typed on: allowed again
         None => {}
     }
     let found = app.engine.suggest(&snap.before_caret, 3);
+    log(&format!("engine: {} suggestions", found.len()));
     if found.is_empty() {
         if POPUP_VISIBLE.load(Ordering::SeqCst) {
             hide(app);
@@ -279,26 +378,31 @@ fn tick(app: &mut App) {
         return;
     }
     app.typed_len = current_word(&snap.before_caret).chars().count();
-    app.overlay.show(snap.anchor, &found, 0, system_theme());
+    app.overlay.show(snap.anchor, &found, 0, look_for(&app.settings));
     app.shown = found;
     POPUP_VISIBLE.store(true, Ordering::SeqCst);
 }
 
-/// Tab: replace the typed part of the word with the first suggestion, plus a space.
-fn accept(app: &mut App) {
-    let Some(first) = app.shown.first().cloned() else { return };
+/// Tab, or a click: replace the typed part of the word with that suggestion, plus a space.
+fn accept(app: &mut App, index: usize) {
+    let Some(first) = app.shown.get(index).cloned() else { return };
     hide(app);
     unsafe {
         let mut inputs: Vec<INPUT> = Vec::new();
-        for _ in 0..app.typed_len {
-            inputs.push(key(VK_BACK, 0, KEYBD_EVENT_FLAGS(0)));
-            inputs.push(key(VK_BACK, 0, KEYEVENTF_KEYUP));
+        for typed in accept_keys(app.typed_len, &first.text) {
+            match typed {
+                Typed::Backspace => {
+                    inputs.push(key(VK_BACK, 0, KEYBD_EVENT_FLAGS(0)));
+                    inputs.push(key(VK_BACK, 0, KEYEVENTF_KEYUP));
+                }
+                Typed::Unit(unit) => {
+                    inputs.push(key(VIRTUAL_KEY(0), unit, KEYEVENTF_UNICODE));
+                    inputs.push(key(VIRTUAL_KEY(0), unit, KEYEVENTF_UNICODE | KEYEVENTF_KEYUP));
+                }
+            }
         }
-        for unit in format!("{} ", first.text).encode_utf16() {
-            inputs.push(key(VIRTUAL_KEY(0), unit, KEYEVENTF_UNICODE));
-            inputs.push(key(VIRTUAL_KEY(0), unit, KEYEVENTF_UNICODE | KEYEVENTF_KEYUP));
-        }
-        SendInput(&inputs, std::mem::size_of::<INPUT>() as i32);
+        let sent = SendInput(&inputs, std::mem::size_of::<INPUT>() as i32);
+        log(&format!("accepted '{}': {} keys to send, {} sent, {} typed letters replaced", first.text, inputs.len(), sent, app.typed_len));
     }
     // the next tick sees a fresh word: nothing to remember
     app.dismissed = None;
@@ -307,15 +411,17 @@ fn accept(app: &mut App) {
 fn key(vk: VIRTUAL_KEY, scan: u16, flags: KEYBD_EVENT_FLAGS) -> INPUT {
     INPUT {
         r#type: INPUT_KEYBOARD,
-        Anonymous: INPUT_0 { ki: KEYBDINPUT { wVk: vk, wScan: scan, dwFlags: flags, time: 0, dwExtraInfo: 0 } },
+        Anonymous: INPUT_0 { ki: KEYBDINPUT { wVk: vk, wScan: scan, dwFlags: flags, time: 0, dwExtraInfo: VERBA_KEY_MARK } },
     }
 }
 
 fn toggle_pause(app: &mut App, hwnd: HWND) {
-    app.paused = !app.paused;
-    if app.paused {
+    app.settings.paused = !app.settings.paused;
+    PAUSED.store(app.settings.paused, Ordering::SeqCst);
+    if app.settings.paused {
         hide(app);
     }
+    app.settings.save();
     modify_tray(hwnd, app);
 }
 
@@ -326,30 +432,128 @@ unsafe extern "system" fn keyboard_hook(code: i32, wp: WPARAM, lp: LPARAM) -> LR
     unsafe {
         if code == 0 {
             let kb = &*(lp.0 as *const KBDLLHOOKSTRUCT);
-            let ours = kb.flags.0 & LLKHF_INJECTED != 0; // keys Verba itself sent
+            let ours = kb.dwExtraInfo == VERBA_KEY_MARK; // keys Verba itself sent
             let msg = wp.0 as u32;
             let ctrl_down = |vk: VIRTUAL_KEY| GetKeyState(vk.0 as i32) < 0;
             let plain = !ctrl_down(VK_SHIFT) && !ctrl_down(VK_CONTROL) && !ctrl_down(VK_MENU);
-            if !ours {
-                let controller = HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _);
-                if (msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN) && POPUP_VISIBLE.load(Ordering::SeqCst) && plain {
-                    if kb.vkCode == VK_TAB.0 as u32 {
-                        SWALLOWED_TAB.store(true, Ordering::SeqCst);
-                        let _ = PostMessageW(Some(controller), WM_ACCEPT, WPARAM(0), LPARAM(0));
-                        return LRESULT(1);
-                    }
-                    if kb.vkCode == VK_ESCAPE.0 as u32 {
-                        let _ = PostMessageW(Some(controller), WM_DISMISS, WPARAM(0), LPARAM(0));
-                        return LRESULT(1);
-                    }
-                }
-                // the Tab we kept from the app: keep its release too
-                if msg == WM_KEYUP && kb.vkCode == VK_TAB.0 as u32 && SWALLOWED_TAB.swap(false, Ordering::SeqCst) {
+            let controller = HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _);
+            let is_down = msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN;
+            let action = key_action(ours, is_down, msg == WM_KEYUP, kb.vkCode, POPUP_VISIBLE.load(Ordering::SeqCst), plain, SWALLOWED_TAB.load(Ordering::SeqCst));
+            match action {
+                KeyAction::Accept => {
+                    SWALLOWED_TAB.store(true, Ordering::SeqCst);
+                    let _ = PostMessageW(Some(controller), WM_ACCEPT, WPARAM(0), LPARAM(0));
                     return LRESULT(1);
                 }
+                KeyAction::Dismiss => {
+                    let _ = PostMessageW(Some(controller), WM_DISMISS, WPARAM(0), LPARAM(0));
+                    return LRESULT(1);
+                }
+                KeyAction::SwallowTabRelease => {
+                    SWALLOWED_TAB.store(false, Ordering::SeqCst);
+                    return LRESULT(1);
+                }
+                KeyAction::Pass => {}
             }
         }
         CallNextHookEx(None::<HHOOK>, code, wp, lp)
+    }
+}
+
+/// What the keyboard hook does with a key.
+#[derive(Debug, PartialEq, Eq)]
+enum KeyAction {
+    /// Let it through to the app, untouched.
+    Pass,
+    /// Tab while the popup is open: keep it from the app and accept the first suggestion.
+    Accept,
+    /// Esc while the popup is open: keep it from the app and close the popup.
+    Dismiss,
+    /// The release of a Tab we kept: keep that too, so the app never sees half a key press.
+    SwallowTabRelease,
+}
+
+/// The whole keyboard rule in one place (so it can be tested without a keyboard).
+/// Only plain Tab and Esc, only while the popup is open, and never the keys Verba sent itself.
+fn key_action(ours: bool, is_down: bool, is_up: bool, vk: u32, popup_visible: bool, plain: bool, tab_was_kept: bool) -> KeyAction {
+    if ours {
+        return KeyAction::Pass;
+    }
+    if is_down && popup_visible && plain {
+        if vk == VK_TAB.0 as u32 {
+            return KeyAction::Accept;
+        }
+        if vk == VK_ESCAPE.0 as u32 {
+            return KeyAction::Dismiss;
+        }
+    }
+    if is_up && vk == VK_TAB.0 as u32 && tab_was_kept {
+        return KeyAction::SwallowTabRelease;
+    }
+    KeyAction::Pass
+}
+
+/// What must be typed to put a suggestion in place of the part of the word already typed.
+#[derive(Debug, PartialEq, Eq)]
+enum Typed {
+    Backspace,
+    Unit(u16),
+}
+
+/// `typed_len` backspaces, then the suggestion and a space (as UTF-16 units, which is what Windows types).
+fn accept_keys(typed_len: usize, suggestion: &str) -> Vec<Typed> {
+    let mut keys: Vec<Typed> = (0..typed_len).map(|_| Typed::Backspace).collect();
+    keys.extend(format!("{suggestion} ").encode_utf16().map(Typed::Unit));
+    keys
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const TAB: u32 = 0x09;
+    const ESC: u32 = 0x1B;
+
+    #[test]
+    fn tab_accepts_only_when_the_popup_is_open_and_no_modifier_is_held() {
+        assert_eq!(key_action(false, true, false, TAB, true, true, false), KeyAction::Accept);
+        assert_eq!(key_action(false, true, false, TAB, false, true, false), KeyAction::Pass, "popup closed: Tab is the app's");
+        assert_eq!(key_action(false, true, false, TAB, true, false, false), KeyAction::Pass, "Shift/Ctrl/Alt+Tab is the app's");
+    }
+
+    #[test]
+    fn esc_closes_the_popup_only_when_it_is_open() {
+        assert_eq!(key_action(false, true, false, ESC, true, true, false), KeyAction::Dismiss);
+        assert_eq!(key_action(false, true, false, ESC, false, true, false), KeyAction::Pass);
+    }
+
+    #[test]
+    fn a_kept_tab_keeps_its_release_and_nothing_else_is_touched() {
+        assert_eq!(key_action(false, false, true, TAB, false, true, true), KeyAction::SwallowTabRelease);
+        assert_eq!(key_action(false, false, true, TAB, false, true, false), KeyAction::Pass, "no Tab was kept");
+        assert_eq!(key_action(false, true, false, 0x41, true, true, false), KeyAction::Pass, "letters are never touched");
+        assert_eq!(key_action(false, false, true, ESC, true, true, true), KeyAction::Pass);
+    }
+
+    #[test]
+    fn keys_sent_by_verba_itself_pass_through() {
+        assert_eq!(key_action(true, true, false, TAB, true, true, false), KeyAction::Pass);
+    }
+
+    #[test]
+    fn accepting_replaces_the_typed_part_and_adds_a_space() {
+        let keys = accept_keys(3, "like");
+        assert_eq!(&keys[..3], [Typed::Backspace, Typed::Backspace, Typed::Backspace]);
+        let units: Vec<u16> = keys[3..].iter().map(|k| match k { Typed::Unit(u) => *u, Typed::Backspace => panic!("late backspace") }).collect();
+        assert_eq!(String::from_utf16(&units).unwrap(), "like ");
+    }
+
+    #[test]
+    fn arabic_suggestions_type_as_their_own_letters() {
+        let keys = accept_keys(2, "مرحبا");
+        assert_eq!(keys.iter().filter(|k| **k == Typed::Backspace).count(), 2);
+        let units: Vec<u16> = keys.iter().filter_map(|k| if let Typed::Unit(u) = k { Some(*u) } else { None }).collect();
+        assert_eq!(String::from_utf16(&units).unwrap(), "مرحبا ");
     }
 }
 
@@ -381,14 +585,14 @@ fn tip_for(paused: bool) -> &'static str {
 
 fn add_tray(hwnd: HWND) {
     with_app(|app| unsafe {
-        let nid = tray_data(hwnd, app.icon, tip_for(app.paused));
+        let nid = tray_data(hwnd, app.icon, tip_for(app.settings.paused));
         let _ = Shell_NotifyIconW(NIM_ADD, &nid);
     });
 }
 
 fn modify_tray(hwnd: HWND, app: &App) {
     unsafe {
-        let nid = tray_data(hwnd, app.icon, tip_for(app.paused));
+        let nid = tray_data(hwnd, app.icon, tip_for(app.settings.paused));
         let _ = Shell_NotifyIconW(NIM_MODIFY, &nid);
     }
 }
@@ -401,11 +605,29 @@ fn remove_tray(hwnd: HWND) {
 }
 
 fn show_menu(hwnd: HWND) {
-    let paused = APP.with(|a| a.try_borrow().ok().and_then(|b| b.as_ref().map(|app| app.paused)).unwrap_or(false));
+    let Some(settings) = APP.with(|a| a.try_borrow().ok().and_then(|b| b.as_ref().map(|app| app.settings.clone()))) else { return };
     unsafe {
         let Ok(menu) = CreatePopupMenu() else { return };
-        let on_flags = if paused { MF_STRING } else { MF_STRING | MF_CHECKED };
-        let _ = AppendMenuW(menu, on_flags, CMD_PAUSE, w!("Suggestions on\tCtrl+Alt+Shift+V"));
+        let check = |on: bool| if on { MF_STRING | MF_CHECKED } else { MF_STRING };
+
+        let _ = AppendMenuW(menu, check(!settings.paused), CMD_PAUSE, w!("Suggestions on\tCtrl+Alt+Shift+V"));
+
+        if let Ok(langs) = CreatePopupMenu() {
+            let _ = AppendMenuW(langs, check(settings.english), CMD_LANG_EN, w!("English"));
+            let _ = AppendMenuW(langs, check(settings.french), CMD_LANG_FR, w!("Français"));
+            let _ = AppendMenuW(langs, check(settings.arabic), CMD_LANG_AR, w!("العربية  (Arabic)"));
+            let _ = AppendMenuW(menu, MF_POPUP, langs.0 as usize, w!("Languages"));
+        }
+        if let Ok(theme) = CreatePopupMenu() {
+            let _ = AppendMenuW(theme, check(settings.theme == ThemeMode::Auto), CMD_THEME_AUTO, w!("Follow Windows"));
+            let _ = AppendMenuW(theme, check(settings.theme == ThemeMode::Light), CMD_THEME_LIGHT, w!("Light"));
+            let _ = AppendMenuW(theme, check(settings.theme == ThemeMode::Dark), CMD_THEME_DARK, w!("Dark"));
+            let _ = AppendMenuW(menu, MF_POPUP, theme.0 as usize, w!("Theme"));
+        }
+        // starting with Windows points at this program's file: only for the real (release) build, not a test build
+        let auto_flags = if cfg!(debug_assertions) { MF_STRING | MF_GRAYED } else { check(autostart_enabled()) };
+        let _ = AppendMenuW(menu, auto_flags, CMD_AUTOSTART, w!("Start with Windows"));
+
         let _ = AppendMenuW(menu, MF_SEPARATOR, 0, PCWSTR::null());
         let _ = AppendMenuW(menu, MF_STRING, CMD_QUIT, w!("Quit Verba\tCtrl+Alt+Shift+Q"));
         let mut pt = POINT::default();
@@ -414,7 +636,7 @@ fn show_menu(hwnd: HWND) {
         let _ = SetForegroundWindow(hwnd);
         let _ = TrackPopupMenu(menu, TPM_RIGHTBUTTON | TPM_BOTTOMALIGN, pt.x, pt.y, None, hwnd, None);
         let _ = PostMessageW(Some(hwnd), WM_NULL, WPARAM(0), LPARAM(0));
-        let _ = DestroyMenu(menu);
+        let _ = DestroyMenu(menu); // also frees the two submenus
     }
 }
 
@@ -451,13 +673,5 @@ fn make_icon() -> HICON {
         let _ = DeleteObject(color.into());
         let _ = DeleteObject(mask.into());
         icon
-    }
-}
-
-#[allow(dead_code)]
-fn destroy_icon(icon: HICON) {
-    unsafe {
-        let _ = DestroyIcon(icon);
-        let _ = KillTimer(None, TIMER_TICK);
     }
 }

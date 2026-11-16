@@ -7,7 +7,7 @@
 use std::time::{Duration, Instant};
 
 use verba_core::{Lang, Suggestion};
-use verba_win::{Locator, Overlay, Theme};
+use verba_win::{Locator, Look, Overlay, Theme};
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -19,7 +19,7 @@ fn main() {
     };
     let delay: u64 = get("--delay").and_then(|s| s.parse().ok()).unwrap_or(3);
     let seconds: u64 = get("--seconds").and_then(|s| s.parse().ok()).unwrap_or(5);
-    let theme = if args.iter().any(|a| a == "--dark") { Theme::Dark } else { Theme::Light };
+    let look = if args.iter().any(|a| a == "--dark") { Look::with_theme(Theme::Dark) } else if args.iter().any(|a| a == "--light") { Look::with_theme(Theme::Light) } else { Look::system() };
 
     let words: &[&str] = match lang {
         Lang::En => &["hello", "help", "held"],
@@ -36,7 +36,7 @@ fn main() {
     match locator.locate() {
         Some(anchor) => {
             println!("anchor: {:?} left={} top={} right={} bottom={}", anchor.kind, anchor.rect.left, anchor.rect.top, anchor.rect.right, anchor.rect.bottom);
-            overlay.show(anchor, &suggestions, 0, theme);
+            overlay.show(anchor, &suggestions, 0, look);
             let r = overlay.rect();
             println!("popup:  left={} top={} right={} bottom={}", r.left, r.top, r.right, r.bottom);
         }

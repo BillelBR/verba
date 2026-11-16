@@ -5,7 +5,7 @@
 //! 2. the caret range through UI Automation `TextPattern2` (modern apps),
 //! 3. the text field's own rectangle (Chromium-based apps such as VS Code and Slack).
 
-use windows::Win32::Foundation::{HWND, POINT, RECT};
+use windows::Win32::Foundation::{HWND, LPARAM, POINT, RECT, WPARAM};
 use windows::Win32::Graphics::Gdi::ClientToScreen;
 use windows::Win32::System::Com::{
     CLSCTX_INPROC_SERVER, COINIT_MULTITHREADED, CoCreateInstance, CoInitializeEx, SAFEARRAY,
@@ -69,10 +69,61 @@ impl Locator {
             if is_password(&el) {
                 return None;
             }
-            let before_caret = text_before_caret(&el, max_chars)?;
+            // modern fields answer through UI Automation; the classic Windows edit boxes only through their own messages
+            let before_caret = text_before_caret(&el, max_chars).or_else(|| classic_edit_before_caret(max_chars))?;
             let anchor = classic_caret().map(|rect| Anchor { rect, kind: AnchorKind::Caret }).or_else(|| uia_anchor(&el))?;
             Some(Snapshot { anchor, before_caret })
         }
+    }
+}
+
+impl Locator {
+    /// A step-by-step account of reading the focused field, for finding out why a field cannot be read.
+    /// It never contains the text itself, only which steps worked.
+    pub fn diagnose(&self) -> String {
+        use std::fmt::Write;
+        let mut out = String::new();
+        let step = |out: &mut String, name: &str, r: &windows::core::Result<()>| {
+            let _ = match r {
+                Ok(()) => write!(out, "{name}: ok; "),
+                Err(e) => write!(out, "{name}: FAILED {:08X}; ", e.code().0 as u32),
+            };
+        };
+        unsafe {
+            let el = match self.uia.GetFocusedElement() {
+                Ok(e) => e,
+                Err(e) => return format!("GetFocusedElement FAILED {:08X}", e.code().0 as u32),
+            };
+            let class = el.CurrentClassName().map(|b| b.to_string()).unwrap_or_default();
+            let _ = write!(out, "class '{class}', control type {}; ", el.CurrentControlType().map(|t| t.0).unwrap_or(-1));
+            let _ = write!(out, "password: {}; ", is_password(&el));
+            let tp = el.GetCurrentPatternAs::<IUIAutomationTextPattern>(UIA_TextPatternId);
+            let vp = el.GetCurrentPatternAs::<IUIAutomationValuePattern>(UIA_ValuePatternId);
+            let _ = write!(out, "TextPattern: {}; ValuePattern: {}; ", tp.is_ok(), vp.is_ok());
+            let Ok(tp) = tp else { return out };
+            let sel = match tp.GetSelection() {
+                Ok(s) => s,
+                Err(e) => return format!("{out}GetSelection FAILED {:08X}", e.code().0 as u32),
+            };
+            let n = sel.Length().unwrap_or(-1);
+            let _ = write!(out, "selections: {n}; ");
+            let range = match sel.GetElement(0).and_then(|r| r.Clone()) {
+                Ok(r) => r,
+                Err(e) => return format!("{out}GetElement/Clone FAILED {:08X}", e.code().0 as u32),
+            };
+            step(&mut out, "collapse", &range.MoveEndpointByRange(TextPatternRangeEndpoint_End, &range, TextPatternRangeEndpoint_Start));
+            let moved = range.MoveEndpointByUnit(TextPatternRangeEndpoint_Start, TextUnit_Character, -48);
+            let _ = write!(out, "step back: {:?}; ", moved.as_ref().map_err(|e| e.code().0 as u32));
+            match range.GetText(48) {
+                Ok(t) => {
+                    let _ = write!(out, "text length {}", t.len());
+                }
+                Err(e) => {
+                    let _ = write!(out, "GetText FAILED {:08X}", e.code().0 as u32);
+                }
+            }
+        }
+        out
     }
 }
 
@@ -117,6 +168,61 @@ unsafe fn uia_anchor(el: &IUIAutomationElement) -> Option<Anchor> {
             return None;
         }
         Some(Anchor { rect, kind: AnchorKind::Field })
+    }
+}
+
+/// Up to `max_chars` characters just before the caret in a classic Windows edit box (Notepad, WinForms, dialogs),
+/// which answers to messages instead of a text pattern. Every message has a short timeout, so a stuck program cannot stall Verba.
+/// Password boxes are skipped.
+fn classic_edit_before_caret(max_chars: i32) -> Option<String> {
+    use windows::Win32::UI::WindowsAndMessaging::{GWL_STYLE, GetClassNameW, GetWindowLongW, SMTO_ABORTIFHUNG, SendMessageTimeoutW};
+    const EM_GETSEL: u32 = 0x00B0;
+    const EM_LINEINDEX: u32 = 0x00BB;
+    const EM_LINELENGTH: u32 = 0x00C1;
+    const EM_GETLINE: u32 = 0x00C4;
+    const EM_LINEFROMCHAR: u32 = 0x00C9;
+    const ES_PASSWORD: u32 = 0x0020;
+    unsafe {
+        let mut gti = GUITHREADINFO { cbSize: std::mem::size_of::<GUITHREADINFO>() as u32, ..Default::default() };
+        GetGUIThreadInfo(0, &mut gti).ok()?;
+        let hwnd = gti.hwndFocus;
+        if hwnd.is_invalid() {
+            return None;
+        }
+        let mut name = [0u16; 64];
+        let n = GetClassNameW(hwnd, &mut name);
+        let class = String::from_utf16_lossy(&name[..n.max(0) as usize]).to_ascii_lowercase();
+        if !(class == "edit" || class.contains(".edit.") || class.starts_with("richedit")) {
+            return None;
+        }
+        if GetWindowLongW(hwnd, GWL_STYLE) as u32 & ES_PASSWORD != 0 {
+            return None;
+        }
+        let ask = |msg: u32, wp: usize, lp: isize| -> Option<isize> {
+            let mut result = 0usize;
+            let r = SendMessageTimeoutW(hwnd, msg, WPARAM(wp), LPARAM(lp), SMTO_ABORTIFHUNG, 150, Some(&mut result));
+            (r.0 != 0).then_some(result as isize)
+        };
+        // where the caret is (the start of the selection)
+        let (mut start, mut end) = (0u32, 0u32);
+        ask(EM_GETSEL, &mut start as *mut u32 as usize, &mut end as *mut u32 as isize)?;
+        let line = ask(EM_LINEFROMCHAR, start as usize, 0)?;
+        let line_start = ask(EM_LINEINDEX, line as usize, 0)?;
+        if line_start < 0 || (start as isize) < line_start {
+            return None;
+        }
+        let line_len = ask(EM_LINELENGTH, line_start as usize, 0)?.clamp(0, 4000) as usize;
+        if line_len == 0 {
+            return Some(String::new());
+        }
+        // EM_GETLINE: the first u16 of the buffer says how many characters fit
+        let mut buf = vec![0u16; line_len + 2];
+        buf[0] = (line_len + 1) as u16;
+        let got = ask(EM_GETLINE, line as usize, buf.as_mut_ptr() as isize)?.clamp(0, line_len as isize) as usize;
+        let before = ((start as isize - line_start) as usize).min(got);
+        let text = String::from_utf16_lossy(&buf[..before]);
+        let skip = text.chars().count().saturating_sub(max_chars.max(0) as usize);
+        Some(text.chars().skip(skip).collect())
     }
 }
 

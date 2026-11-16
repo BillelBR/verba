@@ -27,9 +27,16 @@ Type in any app: when you have typed two letters of a word, a popup appears abov
 | Key | What it does |
 |---|---|
 | **Tab** | accept the first suggestion (replaces what you typed, adds a space) |
+| **Click** | accept the suggestion you click (the popup never takes the keyboard focus) |
 | **Esc** | close the popup |
 | **Ctrl+Alt+Shift+V** | pause / resume |
 | **Ctrl+Alt+Shift+Q** | quit |
+
+**Tray menu:** suggestions on/off, **Languages** (English, Français, العربية, each on its own), **Theme** (follow Windows, light or dark),
+**Start with Windows** (release build), Quit. Choices are saved in `%APPDATA%\Verba\settings.txt`.
+
+**Look:** a rounded card with a soft shadow, drawn with Direct2D/DirectWrite. It follows Windows' light or dark mode and
+accent colour, scales per monitor (high-DPI), fades in, highlights the candidate under the mouse, and lays Arabic out from the right.
 
 English, French and Arabic (Modern Standard Arabic) work. Arabic suggestions read from the right.
 
@@ -61,12 +68,25 @@ A Rust workspace:
 | `verba-app` | the tray program that ties them together |
 | `spike/` | throw-away experiments (`caret-probe` measures what each app lets us know) |
 
+Useful tools: `cargo run -p verba-win --example read_focus` prints what Verba can read from the field you are in (numbers only, never the text);
+`cargo run --release -p verba-local --example accuracy` measures suggestion accuracy (see [docs/ACCURACY.md](docs/ACCURACY.md)).
+
 See [docs/PLAN.md](docs/PLAN.md) for decisions and next steps, and [docs/DATA.md](docs/DATA.md) for the word lists and their licenses.
 
 ## Status
 
-Early. Windows only. Suggestions work in apps that expose their text through UI Automation (Notepad, many modern apps);
-others show nothing. Instant correction, more languages, settings and Mac/Linux come next.
+Early. Windows only. Verba reads the word before the caret in two ways:
+
+- **Modern fields** (Chromium and Electron apps such as VS Code and Slack, Office, many others) through UI Automation's text pattern.
+- **Classic Windows edit boxes** (Notepad, WinForms apps, many dialogs) through the control's own messages.
+
+Fields that give neither show nothing. Popup position is exact when the app tells us where the caret is, otherwise it sits above the field.
+
+Checked so far: 39 automated tests (engine accuracy, key rules, word cleaning, settings), the popup's look in light/dark and Arabic, and
+the tray commands. **Not yet checked by an automatic end-to-end test**: pressing Tab in a real app. Keystroke injection on a desktop in use
+is unreliable (focus moves, the keyboard layout changes the letters), so that last check is manual: open Notepad, type `hel`, press Tab.
+
+Next: instant correction, more languages, a proper settings window, Mac and Linux.
 
 ## License
 

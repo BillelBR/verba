@@ -18,7 +18,7 @@ Click **More info**, then **Run anyway**.
 To be sure the file is the one the project published, compare its SHA-256 with the `.sha256` file next to it on the Releases page:
 
 ```powershell
-Get-FileHash .\Verba-Setup-0.2.0.exe -Algorithm SHA256
+Get-FileHash .\Verba-Setup-0.3.0.exe -Algorithm SHA256
 ```
 
 The two hashes must be identical. The source code is public in this repository, and the Releases are built by GitHub Actions from it.
@@ -68,8 +68,8 @@ Other pieces: `scripts/make_icon.py` regenerates `crates/verba-app/assets/verba.
 2. Tag and push the tag. The tag must be `v` plus that exact version:
 
    ```
-   git tag v0.2.0
-   git push origin v0.2.0
+   git tag v0.3.0
+   git push origin v0.3.0
    ```
 
 3. The **Release** workflow (`.github/workflows/release.yml`) builds the installer and creates the GitHub Release with the Setup and its `.sha256`. It is marked *pre-release* when the version starts with `0.` or the tag has a hyphen (`v0.3.0-beta1`).

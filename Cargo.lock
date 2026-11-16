@@ -140,7 +140,7 @@ checksum = "a2c754d6c33795a1c324727428e5a7dedb5b06195f9890bdbcba760d3e246563"
 
 [[package]]
 name = "verba-app"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "verba-core",
  "verba-local",
@@ -151,18 +151,18 @@ dependencies = [
 
 [[package]]
 name = "verba-core"
-version = "0.2.0"
+version = "0.3.0"
 
 [[package]]
 name = "verba-local"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "verba-core",
 ]
 
 [[package]]
 name = "verba-win"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "verba-core",
  "windows",

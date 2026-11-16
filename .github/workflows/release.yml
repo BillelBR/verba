@@ -1,6 +1,6 @@
 name: Release
 
-# Push a tag such as v0.2.0 and this builds Verba-Setup-<version>.exe and publishes it on the Releases page.
+# Push a tag such as v0.3.0 and this builds Verba-Setup-<version>.exe and publishes it on the Releases page.
 on:
   push:
     tags:

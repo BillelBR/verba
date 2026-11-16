@@ -56,7 +56,7 @@ Used by `LocalEngine::next_words`: after a finished word and a space, the words 
 ## Personal dictionary files (written by the app, not downloaded)
 
 `personal.txt` (one word per line, editable; a line starting with `-` is a word never to learn automatically) and `learned.txt`
-(counts of single words and of pairs of words, tab separated). The engine does not know where they live: the app passes the paths to
+(counts of single words that are in no dictionary, `w` lines; of dictionary words the user writes, common ones included, `u` lines, with a count that fades; and of pairs of neighbouring words, `b` lines; tab separated). The engine does not know where they live: the app passes the paths to
 `PersonalDict::load` and `save`. Nothing else is stored; see [ACCURACY.md](ACCURACY.md#personal-dictionary) for what learning keeps and refuses.
 
 ## Algerian Darija (Arabizi)

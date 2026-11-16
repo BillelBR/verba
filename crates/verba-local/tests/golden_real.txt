@@ -1,0 +1,4163 @@
+en	yo	you:en|your:en|yourself:en
+-	I would yo	you:en|your:en|yourself:en
+en	wh	what:en|who:en|why:en
+en	wha	what:en|whatever:en|whale:en
+en	th	the:en|that:en|this:en
+-	I would th	the:en|that:en|this:en
+en	thi	this:en|think:en|thing:en
+-	I would thi	this:en|think:en|thing:en
+en	yo	you:en|your:en|yourself:en
+-	I would yo	you:en|your:en|yourself:en
+en	you	your:en|yourself:en|young:en
+-	I would you	your:en|yourself:en|young:en
+en	ar	are:en|around:en|aren't:en
+-	I would ar	are:en|around:en|aren't:en
+en	ca	can:en|can't:en|call:en
+en	al	all:en|always:en|already:en
+-	I would al	all:en|always:en|alors:fr
+en	th	the:en|that:en|this:en
+en	the	there:en|they:en|them:en
+en	ther	there:en|therefore:en|therapy:en
+en	li	like:en|little:en|life:en
+-	I would li	like:en|little:en|life:en
+en	lik	like:en|liked:en|likes:en
+-	I would lik	like:en|liked:en|likes:en
+en	ou	out:en|our:en|outside:en
+-	I would ou	out:en|our:en|oui:fr
+en	we	well:en|were:en|went:en
+en	wel	well:en|welcome:en|wells:en
+en	ye	yeah:en|yes:en|years:en
+-	I would ye	yeah:en|yes:en|years:en
+en	yea	yeah:en|years:en|year:en
+-	I would yea	yeah:en|years:en|year:en
+en	wa	was:en|want:en|way:en
+en	wan	want:en|wanted:en|wanna:en
+en	se	see:en|seen:en|second:en
+-	I would se	see:en|seen:en|second:en
+en	wh	what:en|who:en|why:en
+en	le	let:en|leave:en|left:en
+-	I would le	les:fr|let:en|leave:en
+en	wh	what:en|who:en|why:en
+en	whe	when:en|where:en|whether:en
+en	lo	look:en|love:en|long:en
+en	loo	look:en|looking:en|looks:en
+en	th	the:en|that:en|this:en
+-	I would th	the:en|that:en|this:en
+en	the	there:en|they:en|them:en
+-	I would the	there:en|they:en|them:en
+en	ta	take:en|talk:en|talking:en
+en	tak	take:en|taking:en|taken:en
+en	go	got:en|good:en|going:en
+en	gon	gonna:en|gone:en|gong:en
+en	gonn	gonna:en|gonnae:en
+en	re	really:en|remember:en|real:en
+-	I would re	really:en|remember:en|real:en
+en	rea	really:en|real:en|ready:en
+-	I would rea	really:en|real:en|ready:en
+en	real	really:en|realize:en|realized:en
+-	I would real	really:en|realize:en|realized:en
+en	sa	say:en|said:en|same:en
+en	di	did:en|didn't:en|die:en
+-	I would di	did:en|didn't:en|dit:fr
+en	did	didn't:en|didi:en|didnt:en
+-	I would did	didn't:en|didi:en|didnt:en
+en	didn	didn't:en|didnt:en|didnae:en
+-	I would didn	didn't:en|didnt:en|didnae:en
+en	so	some:en|something:en|sorry:en
+en	som	some:en|something:en|someone:en
+en	some	something:en|someone:en|somebody:en
+en	mo	more:en|money:en|mother:en
+-	I would mo	more:en|mon:fr|moi:fr
+en	mor	more:en|morning:en|morgan:en
+-	I would mor	more:en|morning:en|mort:fr
+en	ma	man:en|make:en|maybe:en
+en	mak	make:en|makes:en|making:en
+en	on	one:en|only:en|once:en
+-	I would on	one:en|only:en|ont:fr
+en	onl	only:en|online:en|onlookers:en
+-	I would onl	only:en|online:en|onlookers:en
+en	be	been:en|because:en|before:en
+en	bec	because:en|become:en|became:en
+en	beca	because:en|became:en
+en	lo	look:en|love:en|long:en
+-	I would lo	look:en|love:en|long:en
+en	lov	love:en|loved:en|lovely:en
+-	I would lov	love:en|loved:en|lovely:en
+en	sa	say:en|said:en|same:en
+en	sai	said:en|saint:en|sail:en
+en	of	off:en|office:en|officer:en
+-	I would of	off:en|office:en|officer:en
+en	an	and:en|any:en|anything:en
+en	mu	much:en|must:en|music:en
+-	I would mu	much:en|must:en|music:en
+en	muc	much:en|muck:en|mucho:en
+-	I would muc	much:en|muck:en|mucho:en
+en	th	the:en|that:en|this:en
+en	thi	this:en|think:en|thing:en
+en	thin	think:en|thing:en|things:en
+en	fi	first:en|find:en|fine:en
+-	I would fi	first:en|find:en|fine:en
+en	fir	first:en|fire:en|fired:en
+-	I would fir	first:en|fire:en|fired:en
+en	firs	first:en|firstly:en|firsthand:en
+-	I would firs	first:en|firstly:en|firsthand:en
+en	st	still:en|stop:en|stay:en
+en	sti	still:en|stick:en|sticks:en
+en	stil	still:en|stiles:en|stills:en
+en	no	not:en|now:en|nothing:en
+-	I would no	not:en|now:en|nous:fr
+en	not	nothing:en|notice:en|note:en
+-	I would not	nothing:en|notre:fr|notice:en
+en	noth	nothing:en|nothin:en|nothingness:en
+-	I would noth	nothing:en|nothin:en|nothingness:en
+en	go	got:en|good:en|going:en
+en	ag	again:en|ago:en|against:en
+-	I would ag	again:en|ago:en|against:en
+en	aga	again:en|against:en|agatha:en
+-	I would aga	again:en|against:en|agatha:en
+en	agai	again:en|against:en
+-	I would agai	again:en|against:en
+en	be	been:en|because:en|before:en
+en	bef	before:en|beforehand:en|befriend:en
+en	befo	before:en|beforehand:en
+en	st	still:en|stop:en|stay:en
+-	I would st	still:en|stop:en|stay:en
+en	sto	stop:en|story:en|stopped:en
+-	I would sto	stop:en|story:en|stopped:en
+en	wo	would:en|work:en|won:en
+en	th	the:en|that:en|this:en
+-	I would th	the:en|that:en|this:en
+en	tha	that:en|thank:en|than:en
+-	I would tha	that:en|thank:en|than:en
+en	ni	night:en|nice:en|nick:en
+en	nig	night:en|nights:en|nightmare:en
+en	nigh	night:en|nights:en|nightmare:en
+en	th	the:en|that:en|this:en
+-	I would th	the:en|that:en|this:en
+en	tho	thought:en|those:en|though:en
+-	I would tho	thought:en|those:en|though:en
+en	thos	those:en
+-	I would thos	those:en
+en	ev	even:en|everything:en|ever:en
+en	eve	even:en|everything:en|ever:en
+en	ever	everything:en|every:en|everyone:en
+en	wo	would:en|work:en|won:en
+-	I would wo	would:en|work:en|won:en
+en	won	won't:en|wonderful:en|wonder:en
+-	I would won	won't:en|wonderful:en|wonder:en
+en	won'	
+-	I would won'	
+en	ke	keep:en|kept:en|key:en
+en	kee	keep:en|keeping:en|keeps:en
+en	le	let:en|leave:en|left:en
+-	I would le	les:fr|let:en|leave:en
+en	lea	leave:en|least:en|leaving:en
+-	I would lea	leave:en|least:en|leaving:en
+en	leav	leave:en|leaving:en|leaves:en
+-	I would leav	leave:en|leaving:en|leaves:en
+en	ar	are:en|around:en|aren't:en
+en	aro	around:en|aroused:en|aroma:en
+en	arou	around:en|aroused:en|arouse:en
+en	pl	please:en|place:en|play:en
+-	I would pl	please:en|plus:fr|place:en
+en	pla	place:en|play:en|playing:en
+-	I would pla	place:en|play:en|playing:en
+en	plac	place:en|places:en|placed:en
+-	I would plac	place:en|places:en|placed:en
+en	gu	guys:en|guy:en|guess:en
+en	guy	guys:en
+en	ma	man:en|make:en|maybe:en
+-	I would ma	man:en|make:en|mais:fr
+en	mad	made:en|madam:en|madame:en
+-	I would mad	made:en|madam:en|madame:fr
+en	wh	what:en|who:en|why:en
+en	whi	which:en|while:en|white:en
+en	whic	which:en|whichever:en
+en	do	don't:en|down:en|doing:en
+-	I would do	don't:en|down:en|doing:en
+en	don	don't:en|done:en|donna:en
+-	I would don	don't:en|done:en|donc:fr
+en	be	been:en|because:en|before:en
+en	bel	believe:en|bell:en|belong:en
+en	beli	believe:en|believed:en|believes:en
+en	fi	first:en|find:en|fine:en
+-	I would fi	first:en|find:en|fine:en
+en	fin	find:en|fine:en|finally:en
+-	I would fin	find:en|fine:en|finally:en
+en	ki	kind:en|kill:en|killed:en
+en	kin	kind:en|king:en|kinda:en
+en	ev	even:en|everything:en|ever:en
+-	I would ev	even:en|everything:en|ever:en
+en	eve	even:en|everything:en|ever:en
+-	I would eve	even:en|everything:en|ever:en
+en	ever	everything:en|every:en|everyone:en
+-	I would ever	everything:en|every:en|everyone:en
+en	be	been:en|because:en|before:en
+en	bei	being:en|beings:en|beijing:en
+en	bein	being:en|beings:en
+en	le	let:en|leave:en|left:en
+-	I would le	les:fr|let:en|leave:en
+en	lef	left:en|leftovers:en|lefty:en
+-	I would lef	left:en|leftovers:en|lefty:en
+en	ha	have:en|had:en|has:en
+en	hap	happened:en|happy:en|happen:en
+en	happ	happened:en|happy:en|happen:en
+en	mo	more:en|money:en|mother:en
+-	I would mo	more:en|mon:fr|moi:fr
+en	mot	mother:en|motherfucker:en|motion:en
+-	I would mot	mother:en|motherfucker:en|mots:fr
+en	moth	mother:en|motherfucker:en|mothers:en
+-	I would moth	mother:en|motherfucker:en|mothers:en
+en	ba	back:en|bad:en|baby:en
+en	to	too:en|told:en|today:en
+-	I would to	too:en|tout:fr|told:en
+en	tod	today:en|todd:en|toddler:en
+-	I would tod	today:en|todd:en|toddler:en
+en	toda	today:en
+-	I would toda	today:en
+en	un	understand:en|until:en|under:en
+en	und	understand:en|under:en|understood:en
+en	unde	understand:en|under:en|understood:en
+en	as	ask:en|asked:en|ass:en
+-	I would as	ask:en|asked:en|ass:en
+en	sh	she:en|should:en|show:en
+en	sho	should:en|show:en|shot:en
+en	ta	take:en|talk:en|talking:en
+-	I would ta	take:en|talk:en|talking:en
+en	tal	talk:en|talking:en|talked:en
+-	I would tal	talk:en|talking:en|talked:en
+en	talk	talking:en|talked:en|talks:en
+-	I would talk	talking:en|talked:en|talks:en
+en	ge	get:en|getting:en|gets:en
+en	get	getting:en|gets:en|gettin:en
+en	gett	getting:en|gettin:en|gettysburg:en
+en	lo	look:en|love:en|long:en
+-	I would lo	look:en|love:en|long:en
+en	loo	look:en|looking:en|looks:en
+-	I would loo	look:en|looking:en|looks:en
+en	look	looking:en|looks:en|looked:en
+-	I would look	looking:en|looks:en|looked:en
+en	wo	would:en|work:en|won:en
+en	wom	woman:en|women:en|womb:en
+en	woma	woman:en|womanizer:en|womanhood:en
+en	de	dead:en|death:en|deal:en
+-	I would de	des:fr|dead:en|deux:fr
+en	dea	dead:en|death:en|deal:en
+-	I would dea	dead:en|death:en|deal:en
+en	wa	was:en|want:en|way:en
+en	was	wasn't:en|waste:en|wash:en
+en	wasn	wasn't:en|wasnt:en
+en	mo	more:en|money:en|mother:en
+-	I would mo	more:en|mon:fr|moi:fr
+en	tr	try:en|trying:en|true:en
+en	try	trying:en|tryin:en|tryouts:en
+en	tryi	trying:en|tryin:en
+en	yo	you:en|your:en|yourself:en
+-	I would yo	you:en|your:en|yourself:en
+en	you	your:en|yourself:en|young:en
+-	I would you	your:en|yourself:en|young:en
+en	your	yourself:en|yours:en|yourselves:en
+-	I would your	yourself:en|yours:en|yourselves:en
+en	fa	father:en|family:en|face:en
+en	fam	family:en|famous:en|familiar:en
+en	fami	family:en|familiar:en|families:en
+en	ba	back:en|bad:en|baby:en
+-	I would ba	back:en|bad:en|baby:en
+en	bab	baby:en|babe:en|babies:en
+-	I would bab	baby:en|babe:en|babies:en
+en	al	all:en|always:en|already:en
+en	alr	already:en|alright:en|alrighty:en
+en	alre	already:en
+en	se	see:en|seen:en|second:en
+-	I would se	see:en|seen:en|second:en
+en	see	seen:en|seems:en|seem:en
+-	I would see	seen:en|seems:en|seem:en
+en	ac	actually:en|act:en|across:en
+en	act	actually:en|action:en|acting:en
+en	actu	actually:en|actual:en|actuality:en
+en	he	here:en|her:en|hey:en
+-	I would he	here:en|her:en|hey:en
+en	hea	hear:en|heard:en|head:en
+-	I would hea	hear:en|heard:en|head:en
+en	hear	heard:en|heart:en|hearing:en
+-	I would hear	heard:en|heart:en|hearing:en
+en	he	here:en|her:en|hey:en
+en	hea	hear:en|heard:en|head:en
+en	id	idea:en|idiot:en|ideas:en
+-	I would id	idea:en|idée:fr|idiot:en
+en	ide	idea:en|ideas:en|identity:en
+-	I would ide	idea:en|ideas:en|idée:fr
+en	ha	have:en|had:en|has:en
+en	hap	happened:en|happy:en|happen:en
+en	happ	happened:en|happy:en|happen:en
+en	fu	fuck:en|fucking:en|fun:en
+-	I would fu	fuck:en|fucking:en|fun:en
+en	fuc	fuck:en|fucking:en|fuckin:en
+-	I would fuc	fuck:en|fucking:en|fuckin:en
+en	pr	pretty:en|problem:en|probably:en
+en	pre	pretty:en|president:en|present:en
+en	pret	pretty:en|pretend:en|pretending:en
+en	ha	have:en|had:en|has:en
+-	I would ha	have:en|had:en|has:en
+en	hav	have:en|haven't:en|having:en
+-	I would hav	have:en|haven't:en|having:en
+en	have	haven't:en|havent:en|havers:en
+-	I would have	haven't:en|haven:fr|havent:en
+en	wh	what:en|who:en|why:en
+en	who	whole:en|whoa:en|whose:en
+en	whol	whole:en|wholesale:en|wholly:en
+en	wh	what:en|who:en|why:en
+-	I would wh	what:en|who:en|why:en
+en	whi	which:en|while:en|white:en
+-	I would whi	which:en|while:en|white:en
+en	whil	while:en|whilst:en
+-	I would whil	while:en|whilst:en
+en	da	day:en|dad:en|days:en
+en	day	days:en|daylight:en|daytime:en
+en	ma	man:en|make:en|maybe:en
+-	I would ma	man:en|make:en|mais:fr
+en	mat	matter:en|match:en|mate:en
+-	I would mat	matter:en|matin:fr|match:en
+en	matt	matter:en|matters:en|matthew:en
+-	I would matt	matter:en|matters:en|matthew:en
+en	to	too:en|told:en|today:en
+en	ton	tonight:en|tony:en|tongue:en
+en	toni	tonight:en|tonic:en|tonino:en
+en	wa	was:en|want:en|way:en
+-	I would wa	was:en|want:en|way:en
+en	wan	want:en|wanted:en|wanna:en
+-	I would wan	want:en|wanted:en|wanna:en
+en	wann	wanna:en|wannabe:en|wannabes:en
+-	I would wann	wanna:en|wannabe:en|wannabes:en
+en	my	myself:en|mystery:en|mysterious:en
+en	mys	myself:en|mystery:en|mysterious:en
+en	myse	myself:en
+en	en	enough:en|end:en|entire:en
+-	I would en	enough:en|end:en|encore:fr
+en	pl	please:en|place:en|play:en
+en	pla	place:en|play:en|playing:en
+en	fu	fuck:en|fucking:en|fun:en
+-	I would fu	fuck:en|fucking:en|fun:en
+en	fuc	fuck:en|fucking:en|fuckin:en
+-	I would fuc	fuck:en|fucking:en|fuckin:en
+en	fuck	fucking:en|fuckin:en|fucked:en
+-	I would fuck	fucking:en|fuckin:en|fucked:en
+en	fr	from:en|friend:en|friends:en
+en	fri	friend:en|friends:en|friday:en
+en	frie	friend:en|friends:en|friendship:en
+en	op	open:en|opportunity:en|operation:en
+-	I would op	open:en|opportunity:en|operation:en
+en	ope	open:en|operation:en|opened:en
+-	I would ope	open:en|operation:en|opened:en
+en	ho	how:en|home:en|house:en
+en	hop	hope:en|hoping:en|hopefully:en
+en	lo	look:en|love:en|long:en
+-	I would lo	look:en|love:en|long:en
+en	los	lost:en|lose:en|losing:en
+-	I would los	lost:en|lose:en|losing:en
+en	tu	turn:en|turned:en|turns:en
+en	tur	turn:en|turned:en|turns:en
+en	wa	was:en|want:en|way:en
+-	I would wa	was:en|want:en|way:en
+en	wan	want:en|wanted:en|wanna:en
+-	I would wan	want:en|wanted:en|wanna:en
+en	want	wanted:en|wants:en|wanting:en
+-	I would want	wanted:en|wants:en|wanting:en
+en	di	did:en|didn't:en|die:en
+en	ea	each:en|eat:en|easy:en
+-	I would ea	each:en|eat:en|easy:en
+en	eac	each:en|eachother:en
+-	I would eac	each:en|eachother:en
+en	ye	yeah:en|yes:en|years:en
+en	yea	yeah:en|years:en|year:en
+en	ha	have:en|had:en|has:en
+-	I would ha	have:en|had:en|has:en
+en	han	hand:en|hands:en|hang:en
+-	I would han	hand:en|hands:en|hang:en
+en	be	been:en|because:en|before:en
+en	bea	beautiful:en|beat:en|bear:en
+en	beau	beautiful:en|beauty:en|beautifully:en
+en	ea	each:en|eat:en|easy:en
+-	I would ea	each:en|eat:en|easy:en
+en	se	see:en|seen:en|second:en
+en	sec	second:en|secret:en|security:en
+en	seco	second:en|seconds:en|secondary:en
+en	pe	people:en|person:en|perfect:en
+-	I would pe	people:en|peux:fr|peut:fr
+en	per	person:en|perfect:en|perhaps:en
+-	I would per	person:en|personne:fr|perfect:en
+en	pers	person:en|personal:en|personally:en
+-	I would pers	person:en|personne:fr|personal:en
+en	la	last:en|later:en|late:en
+en	lat	later:en|late:en|lately:en
+en	un	understand:en|until:en|under:en
+-	I would un	une:fr|understand:en|until:en
+en	und	understand:en|under:en|understood:en
+-	I would und	understand:en|under:en|understood:en
+en	unde	understand:en|under:en|understood:en
+-	I would unde	understand:en|under:en|understood:en
+en	pa	part:en|pay:en|party:en
+en	ev	even:en|everything:en|ever:en
+-	I would ev	even:en|everything:en|ever:en
+en	eve	even:en|everything:en|ever:en
+-	I would eve	even:en|everything:en|ever:en
+en	ever	everything:en|every:en|everyone:en
+-	I would ever	everything:en|every:en|everyone:en
+en	ga	gave:en|game:en|gasps:en
+en	gav	gave:en|gavin:en|gavel:en
+en	fi	first:en|find:en|fine:en
+-	I would fi	first:en|find:en|fine:en
+en	fiv	five:en|fives:en|fiver:en
+-	I would fiv	five:en|fives:en|fiver:en
+en	kn	know:en|knew:en|knows:en
+en	kno	know:en|knows:en|known:en
+en	know	knows:en|known:en|knowing:en
+en	ey	eyes:en|eye:en|eyebrows:en
+-	I would ey	eyes:en|eye:en|eyebrows:en
+en	eye	eyes:en|eyebrows:en|eyewitness:en
+-	I would eye	eyes:en|eyebrows:en|eyewitness:en
+en	hi	him:en|his:en|hit:en
+en	ti	time:en|times:en|till:en
+-	I would ti	time:en|times:en|till:en
+en	tim	time:en|times:en|timing:en
+-	I would tim	time:en|times:en|timing:en
+en	time	times:en|timer:en|timeline:en
+-	I would time	times:en|timer:en|timeline:en
+en	mi	might:en|mind:en|miss:en
+en	min	mind:en|minute:en|minutes:en
+en	minu	minute:en|minutes:en|minus:en
+en	me	mean:en|men:en|meet:en
+-	I would me	mean:en|merci:fr|men:en
+en	mea	mean:en|means:en|meant:en
+-	I would mea	mean:en|means:en|meant:en
+en	mean	means:en|meant:en|meaning:en
+-	I would mean	means:en|meant:en|meaning:en
+en	ma	man:en|make:en|maybe:en
+en	mak	make:en|makes:en|making:en
+en	make	makes:en|makeup:en|maker:en
+en	mi	might:en|mind:en|miss:en
+-	I would mi	might:en|mind:en|miss:en
+en	min	mind:en|minute:en|minutes:en
+-	I would min	mind:en|minute:en|minutes:en
+en	af	after:en|afraid:en|afternoon:en
+en	afr	afraid:en|africa:en|african:en
+en	afra	afraid:en
+en	de	dead:en|death:en|deal:en
+-	I would de	des:fr|dead:en|deux:fr
+en	dea	dead:en|death:en|deal:en
+-	I would dea	dead:en|death:en|deal:en
+en	an	and:en|any:en|anything:en
+en	any	anything:en|anyone:en|anyway:en
+en	anyw	anyway:en|anywhere:en|anyways:en
+en	pa	part:en|pay:en|party:en
+-	I would pa	pas:fr|par:fr|part:en
+en	par	part:en|party:en|parents:en
+-	I would par	part:en|party:en|parce:fr
+en	part	party:en|partner:en|parts:en
+-	I would part	party:en|partir:fr|partie:fr
+en	wo	would:en|work:en|won:en
+en	wor	work:en|world:en|worry:en
+en	se	see:en|seen:en|second:en
+-	I would se	see:en|seen:en|second:en
+en	nu	number:en|nurse:en|numbers:en
+en	num	number:en|numbers:en|numerous:en
+en	numb	number:en|numbers:en|numbered:en
+en	wa	was:en|want:en|way:en
+-	I would wa	was:en|want:en|way:en
+en	wai	wait:en|waiting:en|waited:en
+-	I would wai	wait:en|waiting:en|waited:en
+en	wait	waiting:en|waited:en|waiter:en
+-	I would wait	waiting:en|waited:en|waiter:en
+en	mo	more:en|money:en|mother:en
+en	mom	moment:en|mommy:en|moments:en
+en	mome	moment:en|moments:en|momentum:en
+en	hu	hurt:en|husband:en|hurry:en
+-	I would hu	hurt:en|husband:en|hurry:en
+en	hus	husband:en|hush:en|husbands:en
+-	I would hus	husband:en|hush:en|husbands:en
+en	husb	husband:en|husbands:en
+-	I would husb	husband:en|husbands:en
+en	ma	man:en|make:en|maybe:en
+en	mar	married:en|marry:en|marriage:en
+en	marr	married:en|marry:en|marriage:en
+en	no	not:en|now:en|nothing:en
+-	I would no	not:en|now:en|nous:fr
+en	nob	nobody:en|noble:en|nobel:en
+-	I would nob	nobody:en|noble:en|nobel:en
+en	nobo	nobody:en|nobodies:en|noboru:en
+-	I would nobo	nobody:en|nobodies:en|noboru:en
+en	si	sir:en|since:en|sit:en
+en	sid	side:en|sides:en|sidney:en
+en	th	the:en|that:en|this:en
+-	I would th	the:en|that:en|this:en
+en	tho	thought:en|those:en|though:en
+-	I would tho	thought:en|those:en|though:en
+en	thou	thought:en|though:en|thousand:en
+-	I would thou	thought:en|though:en|thousand:en
+en	si	sir:en|since:en|sit:en
+en	sis	sister:en|sisters:en|sissy:en
+en	sist	sister:en|sisters:en|sisterhood:en
+en	ch	change:en|check:en|chance:en
+-	I would ch	chose:fr|change:en|check:en
+en	chi	children:en|child:en|chief:en
+-	I would chi	children:en|child:en|chief:en
+en	chil	children:en|child:en|childhood:en
+-	I would chil	children:en|child:en|childhood:en
+en	sp	speak:en|special:en|speaking:en
+en	spe	speak:en|special:en|speaking:en
+en	spea	speak:en|speaking:en|speaks:en
+en	al	all:en|always:en|already:en
+-	I would al	all:en|always:en|alors:fr
+en	alm	almost:en|almighty:en|alma:en
+-	I would alm	almost:en|almighty:en|alma:en
+en	almo	almost:en|almond:en|almonds:en
+-	I would almo	almost:en|almond:en|almonds:en
+en	ab	about:en|able:en|absolutely:en
+en	abl	able:en|ablaze:en|abla:en
+en	pl	please:en|place:en|play:en
+-	I would pl	please:en|plus:fr|place:en
+en	pla	place:en|play:en|playing:en
+-	I would pla	place:en|play:en|playing:en
+en	play	playing:en|played:en|plays:en
+-	I would play	playing:en|played:en|plays:en
+en	re	really:en|remember:en|real:en
+en	rea	really:en|real:en|ready:en
+en	reas	reason:en|reasons:en|reasonable:en
+en	wa	was:en|want:en|way:en
+-	I would wa	was:en|want:en|way:en
+en	to	too:en|told:en|today:en
+en	tow	town:en|towards:en|tower:en
+en	of	off:en|office:en|officer:en
+-	I would of	off:en|office:en|officer:en
+en	off	office:en|officer:en|offer:en
+-	I would off	office:en|officer:en|offer:en
+en	offi	office:en|officer:en|officers:en
+-	I would offi	office:en|officer:en|officers:en
+en	yo	you:en|your:en|yourself:en
+en	you	your:en|yourself:en|young:en
+en	your	yourself:en|yours:en|yourselves:en
+en	wo	would:en|work:en|won:en
+-	I would wo	would:en|work:en|won:en
+en	di	did:en|didn't:en|die:en
+en	die	died:en|dies:en|diet:en
+en	ei	either:en|eight:en|einstein:en
+-	I would ei	either:en|eight:en|einstein:en
+en	eit	either:en
+-	I would eit	either:en
+en	eith	either:en
+-	I would eith	either:en
+en	wh	what:en|who:en|why:en
+en	who	whole:en|whoa:en|whose:en
+en	te	tell:en|telling:en|team:en
+-	I would te	tell:en|temps:fr|telling:en
+en	tel	tell:en|telling:en|tells:en
+-	I would tel	tell:en|telling:en|tellement:fr
+en	tell	telling:en|tells:en|tellin:en
+-	I would tell	telling:en|tellement:fr|tells:en
+en	fr	from:en|friend:en|friends:en
+en	fro	from:en|front:en|frozen:en
+en	fron	front:en|frontier:en|frontal:en
+en	gu	guys:en|guy:en|guess:en
+-	I would gu	guys:en|guy:en|guess:en
+en	se	see:en|seen:en|second:en
+en	sen	send:en|sent:en|sense:en
+en	be	been:en|because:en|before:en
+-	I would be	been:en|because:en|before:en
+en	mo	more:en|money:en|mother:en
+en	mon	money:en|months:en|month:en
+en	mont	months:en|month:en|monty:en
+en	be	been:en|because:en|before:en
+-	I would be	been:en|because:en|before:en
+en	bec	because:en|become:en|became:en
+-	I would bec	because:en|become:en|became:en
+en	beco	become:en|becomes:en|becoming:en
+-	I would beco	become:en|becomes:en|becoming:en
+en	fo	for:en|found:en|forget:en
+en	foo	food:en|fool:en|foot:en
+en	ne	need:en|never:en|new:en
+-	I would ne	need:en|never:en|new:en
+en	nee	need:en|needs:en|needed:en
+-	I would nee	need:en|needs:en|needed:en
+en	need	needs:en|needed:en|needle:en
+-	I would need	needs:en|needed:en|needle:en
+en	cl	close:en|clear:en|clean:en
+en	cle	clear:en|clean:en|clearly:en
+en	clea	clear:en|clean:en|clearly:en
+en	fa	father:en|family:en|face:en
+-	I would fa	fait:fr|faire:fr|father:en
+en	fac	face:en|fact:en|faces:en
+-	I would fac	face:en|fact:en|facile:fr
+en	si	sir:en|since:en|sit:en
+en	bl	blood:en|black:en|blue:en
+-	I would bl	blood:en|black:en|blue:en
+en	bla	black:en|blame:en|blake:en
+-	I would bla	black:en|blame:en|blake:en
+en	blac	black:en|blackmail:en|blacks:en
+-	I would blac	black:en|blackmail:en|blacks:en
+en	fe	feel:en|few:en|feeling:en
+en	fee	feel:en|feeling:en|feet:en
+en	feel	feeling:en|feels:en|feelings:en
+en	ah	ahead:en|ahem:en|aha:en
+-	I would ah	ahead:en|ahem:en|aha:en
+en	ahe	ahead:en|ahem:en
+-	I would ahe	ahead:en|ahem:en
+en	ahea	ahead:en
+-	I would ahea	ahead:en
+en	pl	please:en|place:en|play:en
+en	pla	place:en|play:en|playing:en
+en	so	some:en|something:en|sorry:en
+-	I would so	some:en|something:en|sorry:en
+en	sor	sorry:en|sort:en|sorts:en
+-	I would sor	sorry:en|sort:en|sortir:fr
+en	ru	run:en|running:en|rules:en
+en	run	running:en|runs:en|runway:en
+en	runn	running:en|runner:en|runnin:en
+en	pr	pretty:en|problem:en|probably:en
+-	I would pr	pretty:en|problem:en|probably:en
+en	pro	problem:en|probably:en|promise:en
+-	I would pro	problem:en|probably:en|promise:en
+en	prom	promise:en|promised:en|promises:en
+-	I would prom	promise:en|promised:en|promis:fr
+en	wh	what:en|who:en|why:en
+-	I would wh	what:en|who:en|why:en
+en	whi	which:en|while:en|white:en
+-	I would whi	which:en|while:en|white:en
+en	whit	white:en|whitney:en|whites:en
+-	I would whit	white:en|whitney:en|whites:en
+en	sm	small:en|smart:en|smell:en
+en	sma	small:en|smart:en|smaller:en
+en	smal	small:en|smaller:en|smallest:en
+en	sp	speak:en|special:en|speaking:en
+-	I would sp	speak:en|special:en|speaking:en
+en	spe	speak:en|special:en|speaking:en
+-	I would spe	speak:en|special:en|speaking:en
+en	spec	special:en|species:en|specific:en
+-	I would spec	special:en|species:en|specific:en
+en	hi	him:en|his:en|hit:en
+en	him	himself:en|himmler:en|himalayas:en
+en	hims	himself:en
+en	se	see:en|seen:en|second:en
+-	I would se	see:en|seen:en|second:en
+en	ser	serious:en|seriously:en|service:en
+-	I would ser	sera:fr|serious:en|serait:fr
+en	seri	serious:en|seriously:en|series:en
+-	I would seri	serious:en|seriously:en|series:en
+en	sc	school:en|scared:en|screaming:en
+en	sca	scared:en|scare:en|scary:en
+en	scar	scared:en|scare:en|scary:en
+en	re	really:en|remember:en|real:en
+-	I would re	really:en|remember:en|real:en
+en	po	police:en|point:en|power:en
+en	pos	possible:en|position:en|possibly:en
+en	poss	possible:en|possibly:en|possibility:en
+en	so	some:en|something:en|sorry:en
+-	I would so	some:en|something:en|sorry:en
+en	sou	sounds:en|sound:en|soul:en
+-	I would sou	sounds:en|sound:en|soul:en
+en	soun	sounds:en|sound:en|sounded:en
+-	I would soun	sounds:en|sound:en|sounded:en
+en	la	last:en|later:en|late:en
+en	lau	laughs:en|laughing:en|laugh:en
+en	laug	laughs:en|laughing:en|laugh:en
+en	wi	with:en|will:en|without:en
+-	I would wi	with:en|will:en|without:en
+en	hu	hurt:en|husband:en|hurry:en
+en	hum	human:en|humans:en|humanity:en
+en	huma	human:en|humans:en|humanity:en
+en	ja	jack:en|jail:en|james:en
+-	I would ja	jamais:fr|jack:en|jail:en
+en	jac	jack:en|jacket:en|jackson:en
+-	I would jac	jack:en|jacket:en|jackson:en
+en	mu	much:en|must:en|music:en
+en	mur	murder:en|murdered:en|murderer:en
+en	murd	murder:en|murdered:en|murderer:en
+en	te	tell:en|telling:en|team:en
+-	I would te	tell:en|temps:fr|telling:en
+en	ch	change:en|check:en|chance:en
+en	chu	chuckles:en|church:en|chuckling:en
+en	chuc	chuckles:en|chuckling:en|chuck:en
+en	se	see:en|seen:en|second:en
+-	I would se	see:en|seen:en|second:en
+en	see	seen:en|seems:en|seem:en
+-	I would see	seen:en|seems:en|seem:en
+en	ho	how:en|home:en|house:en
+en	hos	hospital:en|host:en|hostage:en
+en	hosp	hospital:en|hospitals:en|hospitality:en
+en	da	day:en|dad:en|days:en
+-	I would da	dans:fr|day:en|dad:en
+en	dan	dance:en|dangerous:en|danny:en
+-	I would dan	dans:fr|dance:en|dangerous:en
+en	danc	dance:en|dancing:en|dancer:en
+-	I would danc	dance:en|dancing:en|dancer:en
+en	ot	other:en|others:en|otherwise:en
+en	oth	other:en|others:en|otherwise:en
+en	othe	other:en|others:en|otherwise:en
+en	se	see:en|seen:en|second:en
+-	I would se	see:en|seen:en|second:en
+en	sen	send:en|sent:en|sense:en
+-	I would sen	send:en|sent:en|sense:en
+en	sens	sense:en|sensitive:en|senses:en
+-	I would sens	sense:en|sensitive:en|senses:en
+en	ev	even:en|everything:en|ever:en
+en	eve	even:en|everything:en|ever:en
+en	even	evening:en|event:en|eventually:en
+en	dr	drink:en|drive:en|dream:en
+-	I would dr	drink:en|drive:en|dream:en
+en	dre	dream:en|dress:en|dreams:en
+-	I would dre	dream:en|dress:en|dreams:en
+en	drea	dream:en|dreams:en|dreaming:en
+-	I would drea	dream:en|dreams:en|dreaming:en
+en	vo	voice:en|vote:en|voices:en
+en	voi	voice:en|voices:en|void:en
+en	voic	voice:en|voices:en|voiceover:en
+en	fe	feel:en|few:en|feeling:en
+-	I would fe	feel:en|few:en|femme:fr
+en	fel	felt:en|fell:en|fellow:en
+-	I would fel	felt:en|fell:en|fellow:en
+en	so	some:en|something:en|sorry:en
+en	som	some:en|something:en|someone:en
+en	some	something:en|someone:en|somebody:en
+en	lo	look:en|love:en|long:en
+-	I would lo	look:en|love:en|long:en
+en	lon	long:en|longer:en|london:en
+-	I would lon	long:en|longer:en|longtemps:fr
+en	long	longer:en|longest:en|longing:en
+-	I would long	longer:en|longtemps:fr|longue:fr
+en	qu	quite:en|question:en|quiet:en
+en	qui	quite:en|quiet:en|quick:en
+en	quie	quiet:en|quietly:en|quieter:en
+en	pu	put:en|pull:en|public:en
+-	I would pu	put:en|pull:en|puis:fr
+en	pul	pull:en|pulled:en|pulling:en
+-	I would pul	pull:en|pulled:en|pulling:en
+en	co	come:en|could:en|coming:en
+en	cof	coffee:en|coffin:en|coffees:en
+en	coff	coffee:en|coffin:en|coffees:en
+en	we	well:en|were:en|went:en
+-	I would we	well:en|were:en|went:en
+en	wee	week:en|weeks:en|weekend:en
+-	I would wee	week:en|weeks:en|weekend:en
+en	week	weeks:en|weekend:en|weekends:en
+-	I would week	weeks:en|weekend:en|weekends:en
+en	se	see:en|seen:en|second:en
+en	see	seen:en|seems:en|seem:en
+en	seei	seeing:en|seein:en
+en	fa	father:en|family:en|face:en
+-	I would fa	fait:fr|faire:fr|father:en
+en	fau	fault:en|faults:en|faulty:en
+-	I would fau	faut:fr|fault:en|faute:fr
+en	faul	fault:en|faults:en|faulty:en
+-	I would faul	fault:en|faults:en|faulty:en
+en	so	some:en|something:en|sorry:en
+en	son	song:en|songs:en|sons:en
+en	lo	look:en|love:en|long:en
+-	I would lo	look:en|love:en|long:en
+en	lov	love:en|loved:en|lovely:en
+-	I would lov	love:en|loved:en|lovely:en
+en	love	loved:en|lovely:en|loves:en
+-	I would love	loved:en|lovely:en|loves:en
+en	ca	can:en|can't:en|call:en
+en	cal	call:en|called:en|calling:en
+en	tu	turn:en|turned:en|turns:en
+-	I would tu	turn:en|turned:en|tuer:fr
+en	tur	turn:en|turned:en|turns:en
+-	I would tur	turn:en|turned:en|turns:en
+en	turn	turned:en|turns:en|turning:en
+-	I would turn	turned:en|turns:en|turning:en
+en	le	let:en|leave:en|left:en
+en	lea	leave:en|least:en|leaving:en
+en	lear	learn:en|learned:en|learning:en
+en	ea	each:en|eat:en|easy:en
+-	I would ea	each:en|eat:en|easy:en
+en	ear	earth:en|early:en|earlier:en
+-	I would ear	earth:en|early:en|earlier:en
+en	earl	early:en|earlier:en|earliest:en
+-	I would earl	early:en|earlier:en|earliest:en
+en	pi	pick:en|piece:en|picture:en
+en	pie	piece:en|pieces:en|pierre:en
+en	piec	piece:en|pieces:en|pieced:en
+en	pi	pick:en|piece:en|picture:en
+-	I would pi	pick:en|piece:en|picture:en
+en	pic	pick:en|picture:en|picked:en
+-	I would pic	pick:en|picture:en|picked:en
+en	pict	picture:en|pictures:en|pictured:en
+-	I would pict	picture:en|pictures:en|pictured:en
+en	wo	would:en|work:en|won:en
+en	won	won't:en|wonderful:en|wonder:en
+en	wond	wonderful:en|wonder:en|wondering:en
+en	wo	would:en|work:en|won:en
+-	I would wo	would:en|work:en|won:en
+en	wor	work:en|world:en|worry:en
+-	I would wor	work:en|world:en|worry:en
+en	wort	worth:en|worthy:en|worthless:en
+-	I would wort	worth:en|worthy:en|worthless:en
+en	gi	give:en|girl:en|girls:en
+en	giv	give:en|given:en|giving:en
+en	givi	giving:en|givin:en
+en	qu	quite:en|question:en|quiet:en
+-	I would qu	que:fr|qui:fr|quoi:fr
+en	qui	quite:en|quiet:en|quick:en
+-	I would qui	quite:en|quiet:en|quick:en
+en	quic	quick:en|quickly:en|quicker:en
+-	I would quic	quick:en|quickly:en|quicker:en
+en	st	still:en|stop:en|stay:en
+en	sta	stay:en|start:en|stand:en
+en	stat	state:en|station:en|states:en
+en	no	not:en|now:en|nothing:en
+-	I would no	not:en|now:en|nous:fr
+en	non	none:en|nonsense:en|nonetheless:en
+-	I would non	none:en|nonsense:en|nonetheless:en
+en	wo	would:en|work:en|won:en
+en	wor	work:en|world:en|worry:en
+en	work	working:en|worked:en|works:en
+en	we	well:en|were:en|went:en
+-	I would we	well:en|were:en|went:en
+en	wei	weird:en|weight:en|weigh:en
+-	I would wei	weird:en|weight:en|weigh:en
+en	weir	weird:en|weirdo:en|weirdest:en
+-	I would weir	weird:en|weirdo:en|weirdest:en
+en	re	really:en|remember:en|real:en
+en	rep	report:en|repeat:en|reports:en
+en	repo	report:en|reports:en|reporter:en
+en	ch	change:en|check:en|chance:en
+-	I would ch	chose:fr|change:en|check:en
+en	cho	choice:en|choose:en|chocolate:en
+-	I would cho	chose:fr|choses:fr|choice:en
+en	choi	choice:en|choices:en|choir:en
+-	I would choi	choice:en|choix:fr|choisi:fr
+en	we	well:en|were:en|went:en
+en	wed	wedding:en|wednesday:en|weddings:en
+en	wedd	wedding:en|weddings:en|wedded:en
+en	pa	part:en|pay:en|party:en
+-	I would pa	pas:fr|par:fr|part:en
+en	pai	pain:en|paid:en|paint:en
+-	I would pai	pain:en|paid:en|paint:en
+en	cl	close:en|clear:en|clean:en
+-	I would cl	close:en|clear:en|clean:en
+en	cla	class:en|claire:en|claim:en
+-	I would cla	class:en|claire:en|claim:en
+en	clas	class:en|classic:en|classes:en
+-	I would clas	class:en|classe:fr|classic:en
+en	wa	was:en|want:en|way:en
+en	wak	wake:en|waking:en|wakes:en
+en	mi	might:en|mind:en|miss:en
+-	I would mi	might:en|mind:en|miss:en
+en	mis	miss:en|missing:en|mistake:en
+-	I would mis	miss:en|missing:en|mistake:en
+en	mist	mistake:en|mister:en|mistakes:en
+-	I would mist	mistake:en|mister:en|mistakes:en
+en	bu	but:en|business:en|buy:en
+en	bui	building:en|build:en|built:en
+en	buil	building:en|build:en|built:en
+en	ag	again:en|ago:en|against:en
+-	I would ag	again:en|ago:en|against:en
+en	ma	man:en|make:en|maybe:en
+en	mar	married:en|marry:en|marriage:en
+en	marr	married:en|marry:en|marriage:en
+en	da	day:en|dad:en|days:en
+-	I would da	dans:fr|day:en|dad:en
+en	dar	darling:en|dark:en|dare:en
+-	I would dar	darling:en|dark:en|dare:en
+en	su	sure:en|such:en|supposed:en
+en	sup	supposed:en|suppose:en|support:en
+en	supp	supposed:en|suppose:en|support:en
+en	ri	right:en|ride:en|ring:en
+-	I would ri	right:en|rien:fr|ride:en
+en	rid	ride:en|ridiculous:en|riding:en
+-	I would rid	ride:en|ridiculous:en|riding:en
+en	to	too:en|told:en|today:en
+en	tot	totally:en|total:en|toto:en
+en	tota	totally:en|total:en|totaled:en
+en	fo	for:en|found:en|forget:en
+-	I would fo	for:en|found:en|forget:en
+en	for	forget:en|forgive:en|forever:en
+-	I would for	forget:en|forgive:en|forever:en
+en	forg	forget:en|forgive:en|forgot:en
+-	I would forg	forget:en|forgive:en|forgot:en
+en	in	into:en|inside:en|information:en
+en	inf	information:en|influence:en|inform:en
+en	info	information:en|inform:en|informed:en
+en	se	see:en|seen:en|second:en
+-	I would se	see:en|seen:en|second:en
+en	sec	second:en|secret:en|security:en
+-	I would sec	second:en|secret:en|security:en
+en	secu	security:en|secure:en|secured:en
+-	I would secu	security:en|secure:en|sécurité:fr
+en	mo	more:en|money:en|mother:en
+en	mon	money:en|months:en|month:en
+en	mont	months:en|month:en|monty:en
+en	tr	try:en|trying:en|true:en
+-	I would tr	try:en|trying:en|très:fr
+en	tra	train:en|track:en|training:en
+-	I would tra	travail:fr|train:en|track:en
+en	trai	train:en|training:en|trained:en
+-	I would trai	train:en|training:en|trained:en
+en	cl	close:en|clear:en|clean:en
+en	clo	close:en|clothes:en|closed:en
+en	clot	clothes:en|clothing:en|cloth:en
+en	ch	change:en|check:en|chance:en
+-	I would ch	chose:fr|change:en|check:en
+en	chr	christmas:en|christ:en|chris:en
+-	I would chr	christmas:en|christ:en|chris:en
+en	chri	christmas:en|christ:en|chris:en
+-	I would chri	christmas:en|christ:en|chris:en
+en	ro	room:en|road:en|round:en
+en	rou	round:en|rough:en|route:en
+en	roun	round:en|rounds:en|rounded:en
+en	te	tell:en|telling:en|team:en
+-	I would te	tell:en|temps:fr|telling:en
+en	ter	terrible:en|terms:en|terry:en
+-	I would ter	terrible:en|terre:fr|terms:en
+en	terr	terrible:en|terry:en|terrific:en
+-	I would terr	terrible:en|terre:fr|terry:en
+en	hi	him:en|his:en|hit:en
+en	his	history:en|hissing:en|historical:en
+en	hist	history:en|historical:en|historic:en
+en	br	brother:en|bring:en|break:en
+-	I would br	brother:en|bring:en|break:en
+en	bro	brother:en|brought:en|broke:en
+-	I would bro	brother:en|brought:en|broke:en
+en	brok	broke:en|broken:en|broker:en
+-	I would brok	broke:en|broken:en|broker:en
+en	fo	for:en|found:en|forget:en
+en	for	forget:en|forgive:en|forever:en
+en	fore	forever:en|forest:en|foreign:en
+en	ex	excuse:en|exactly:en|explain:en
+-	I would ex	excuse:en|exactly:en|explain:en
+en	exc	excuse:en|except:en|excited:en
+-	I would exc	excuse:en|except:en|excited:en
+en	exce	except:en|excellent:en|excellency:en
+-	I would exce	except:en|excellent:en|excellency:en
+en	en	enough:en|end:en|entire:en
+en	ent	entire:en|enter:en|entirely:en
+en	enti	entire:en|entirely:en|entitled:en
+en	ta	take:en|talk:en|talking:en
+-	I would ta	take:en|talk:en|talking:en
+en	tal	talk:en|talking:en|talked:en
+-	I would tal	talk:en|talking:en|talked:en
+en	talk	talking:en|talked:en|talks:en
+-	I would talk	talking:en|talked:en|talks:en
+en	lo	look:en|love:en|long:en
+en	lov	love:en|loved:en|lovely:en
+en	love	loved:en|lovely:en|loves:en
+en	bu	but:en|business:en|buy:en
+-	I would bu	but:en|business:en|buy:en
+en	bud	buddy:en|budget:en|buddies:en
+-	I would bud	buddy:en|budget:en|buddies:en
+en	budd	buddy:en|buddies:en|buddha:en
+-	I would budd	buddy:en|buddies:en|buddha:en
+en	us	used:en|use:en|using:en
+en	usi	using:en|usin:en
+en	usin	using:en
+en	sw	sweet:en|swear:en|sweetheart:en
+-	I would sw	sweet:en|swear:en|sweetheart:en
+en	swe	sweet:en|swear:en|sweetheart:en
+-	I would swe	sweet:en|swear:en|sweetheart:en
+en	swea	swear:en|sweat:en|sweater:en
+-	I would swea	swear:en|sweat:en|sweater:en
+en	ri	right:en|ride:en|ring:en
+en	rin	ring:en|rings:en|ringing:en
+en	bi	big:en|bit:en|bitch:en
+-	I would bi	bien:fr|big:en|bit:en
+en	bil	bill:en|billy:en|billion:en
+-	I would bil	bill:en|billy:en|billion:en
+en	le	let:en|leave:en|left:en
+en	lea	leave:en|least:en|leaving:en
+en	fa	father:en|family:en|face:en
+-	I would fa	fait:fr|faire:fr|father:en
+en	fai	fair:en|faith:en|failed:en
+-	I would fai	fait:fr|faire:fr|fais:fr
+en	fo	for:en|found:en|forget:en
+en	foo	food:en|fool:en|foot:en
+en	si	sir:en|since:en|sit:en
+-	I would si	sir:en|since:en|sit:en
+en	sim	simple:en|simply:en|simon:en
+-	I would sim	simple:en|simply:en|simon:en
+en	simp	simple:en|simply:en|simpson:en
+-	I would simp	simple:en|simply:en|simplement:fr
+en	te	tell:en|telling:en|team:en
+en	tes	test:en|tests:en|testing:en
+en	si	sir:en|since:en|sit:en
+-	I would si	sir:en|since:en|sit:en
+en	sin	since:en|sing:en|single:en
+-	I would sin	since:en|sing:en|single:en
+en	sing	single:en|singing:en|singer:en
+-	I would sing	single:en|singing:en|singer:en
+en	jo	job:en|john:en|joe:en
+en	joi	join:en|joined:en|joint:en
+en	fo	for:en|found:en|forget:en
+-	I would fo	for:en|found:en|forget:en
+en	for	forget:en|forgive:en|forever:en
+-	I would for	forget:en|forgive:en|forever:en
+en	forg	forget:en|forgive:en|forgot:en
+-	I would forg	forget:en|forgive:en|forgot:en
+en	no	not:en|now:en|nothing:en
+en	nor	normal:en|north:en|normally:en
+en	norm	normal:en|normally:en|norman:en
+en	en	enough:en|end:en|entire:en
+-	I would en	enough:en|end:en|encore:fr
+en	enj	enjoy:en|enjoying:en|enjoyed:en
+-	I would enj	enjoy:en|enjoying:en|enjoyed:en
+en	enjo	enjoy:en|enjoying:en|enjoyed:en
+-	I would enjo	enjoy:en|enjoying:en|enjoyed:en
+en	ho	how:en|home:en|house:en
+en	hor	horse:en|horrible:en|horses:en
+en	hors	horse:en|horses:en|horsepower:en
+en	co	come:en|could:en|coming:en
+-	I would co	come:en|could:en|comme:fr
+en	cou	could:en|course:en|couldn't:en
+-	I would cou	could:en|course:en|couldn't:en
+en	coun	country:en|count:en|council:en
+-	I would coun	country:en|count:en|council:en
+en	ho	how:en|home:en|house:en
+en	hon	honey:en|honor:en|honest:en
+en	hono	honor:en|honour:en|honored:en
+en	ra	rather:en|ran:en|radio:en
+-	I would ra	rather:en|raison:fr|ran:en
+en	rad	radio:en|radar:en|radiation:en
+-	I would rad	radio:en|radar:en|radiation:en
+en	radi	radio:en|radiation:en|radical:en
+-	I would radi	radio:en|radiation:en|radical:en
+en	su	sure:en|such:en|supposed:en
+en	sur	sure:en|surprise:en|surprised:en
+en	surp	surprise:en|surprised:en|surprising:en
+en	bo	boy:en|both:en|body:en
+-	I would bo	boy:en|bon:fr|both:en
+en	boa	boat:en|board:en|boats:en
+-	I would boa	boat:en|board:en|boats:en
+en	ba	back:en|bad:en|baby:en
+en	to	too:en|told:en|today:en
+-	I would to	too:en|tout:fr|told:en
+en	ac	actually:en|act:en|across:en
+en	acc	accident:en|accept:en|according:en
+en	acci	accident:en|accidentally:en|accidents:en
+en	fe	feel:en|few:en|feeling:en
+-	I would fe	feel:en|few:en|femme:fr
+en	fel	felt:en|fell:en|fellow:en
+-	I would fel	felt:en|fell:en|fellow:en
+en	in	into:en|inside:en|information:en
+en	int	into:en|interesting:en|interested:en
+en	inte	interesting:en|interested:en|interest:en
+en	se	see:en|seen:en|second:en
+-	I would se	see:en|seen:en|second:en
+en	pr	pretty:en|problem:en|probably:en
+en	pro	problem:en|probably:en|promise:en
+en	prob	problem:en|probably:en|problems:en
+en	st	still:en|stop:en|stay:en
+-	I would st	still:en|stop:en|stay:en
+en	sti	still:en|stick:en|sticks:en
+-	I would sti	still:en|stick:en|sticks:en
+en	stic	stick:en|sticks:en|sticking:en
+-	I would stic	stick:en|sticks:en|sticking:en
+en	sm	small:en|smart:en|smell:en
+en	sma	small:en|smart:en|smaller:en
+en	smar	smart:en|smarter:en|smartest:en
+en	st	still:en|stop:en|stay:en
+-	I would st	still:en|stop:en|stay:en
+en	sto	stop:en|story:en|stopped:en
+-	I would sto	stop:en|story:en|stopped:en
+en	stop	stopped:en|stops:en|stopping:en
+-	I would stop	stopped:en|stops:en|stopping:en
+en	ba	back:en|bad:en|baby:en
+en	ban	bank:en|band:en|bang:en
+en	am	amazing:en|american:en|america:en
+-	I would am	amazing:en|ami:fr|american:en
+en	ame	american:en|america:en|americans:en
+-	I would ame	american:en|america:en|americans:en
+en	amer	american:en|america:en|americans:en
+-	I would amer	american:en|america:en|americans:en
+en	af	after:en|afraid:en|afternoon:en
+en	aft	after:en|afternoon:en|afterwards:en
+en	afte	after:en|afternoon:en|afterwards:en
+en	ba	back:en|bad:en|baby:en
+-	I would ba	back:en|bad:en|baby:en
+en	bas	bastard:en|base:en|based:en
+-	I would bas	bastard:en|base:en|based:en
+en	bast	bastard:en|bastards:en|bastille:en
+-	I would bast	bastard:en|bastards:en|bastille:en
+en	te	tell:en|telling:en|team:en
+en	an	and:en|any:en|anything:en
+-	I would an	and:en|any:en|anything:en
+en	ang	angry:en|angel:en|anger:en
+-	I would ang	angry:en|angel:en|anger:en
+en	angr	angry:en|angrily:en|angrier:en
+-	I would angr	angry:en|angrily:en|angrier:en
+en	fi	first:en|find:en|fine:en
+en	fig	fight:en|figure:en|fighting:en
+en	figh	fight:en|fighting:en|fighter:en
+en	ag	again:en|ago:en|against:en
+-	I would ag	again:en|ago:en|against:en
+en	age	agent:en|agency:en|agents:en
+-	I would age	agent:en|agency:en|agents:en
+en	agen	agent:en|agency:en|agents:en
+-	I would agen	agent:en|agency:en|agents:en
+en	dr	drink:en|drive:en|dream:en
+en	dre	dream:en|dress:en|dreams:en
+en	dres	dress:en|dressed:en|dressing:en
+en	sc	school:en|scared:en|screaming:en
+-	I would sc	school:en|scared:en|screaming:en
+en	sce	scene:en|scenes:en|scent:en
+-	I would sce	scene:en|scenes:en|scène:fr
+en	scen	scene:en|scenes:en|scent:en
+-	I would scen	scene:en|scenes:en|scène:fr
+en	sa	say:en|said:en|same:en
+en	sav	save:en|saved:en|saving:en
+en	save	saved:en|saves:en|saver:en
+en	ic	ice:en|iced:en|icy:en
+-	I would ic	ici:fr|ice:en|iced:en
+en	fe	feel:en|few:en|feeling:en
+en	fee	feel:en|feeling:en|feet:en
+en	feel	feeling:en|feels:en|feelings:en
+en	ce	certainly:en|certain:en|cell:en
+-	I would ce	cette:fr|ces:fr|cela:fr
+en	cel	cell:en|celebrate:en|cells:en
+-	I would cel	cela:fr|cell:en|celui:fr
+en	ca	can:en|can't:en|call:en
+en	cam	came:en|camera:en|camp:en
+en	came	camera:en|cameras:en|cameron:en
+en	fl	floor:en|fly:en|flight:en
+-	I would fl	floor:en|fly:en|flight:en
+en	la	last:en|later:en|late:en
+en	lau	laughs:en|laughing:en|laugh:en
+en	laug	laughs:en|laughing:en|laugh:en
+en	mu	much:en|must:en|music:en
+-	I would mu	much:en|must:en|music:en
+en	st	still:en|stop:en|stay:en
+en	sta	stay:en|start:en|stand:en
+en	star	start:en|started:en|starting:en
+en	th	the:en|that:en|this:en
+-	I would th	the:en|that:en|this:en
+en	thi	this:en|think:en|thing:en
+-	I would thi	this:en|think:en|thing:en
+en	thir	third:en|thirty:en|thirsty:en
+-	I would thir	third:en|thirty:en|thirsty:en
+en	ma	man:en|make:en|maybe:en
+en	mam	mama:en|mamma:en|mammy:en
+en	hu	hurt:en|husband:en|hurry:en
+-	I would hu	hurt:en|husband:en|hurry:en
+en	hun	hungry:en|hundred:en|hunt:en
+-	I would hun	hungry:en|hundred:en|hunt:en
+en	hung	hungry:en|hunger:en|hungarian:en
+-	I would hung	hungry:en|hunger:en|hungarian:en
+en	mo	more:en|money:en|mother:en
+en	mov	move:en|moving:en|movie:en
+en	move	moved:en|moves:en|movement:en
+en	wa	was:en|want:en|way:en
+-	I would wa	was:en|want:en|way:en
+en	wal	walk:en|wall:en|walking:en
+-	I would wal	walk:en|wall:en|walking:en
+en	li	like:en|little:en|life:en
+en	lie	lieutenant:en|lies:en|lied:en
+en	lieu	lieutenant:en|lieutenants:en|lieut:en
+en	es	especially:en|escape:en|escaped:en
+-	I would es	est:fr|especially:en|escape:en
+en	esp	especially:en|espresso:en|espionage:en
+-	I would esp	especially:en|espère:fr|esprit:fr
+en	espe	especially:en|esperanza:en|espen:en
+-	I would espe	especially:en|espère:fr|espèce:fr
+en	ar	are:en|around:en|aren't:en
+en	co	come:en|could:en|coming:en
+-	I would co	come:en|could:en|comme:fr
+en	col	cold:en|college:en|colonel:en
+-	I would col	cold:en|college:en|colonel:en
+en	coll	college:en|collect:en|collection:en
+-	I would coll	college:en|collect:en|collection:en
+en	cr	crazy:en|crime:en|crying:en
+en	im	important:en|imagine:en|impossible:en
+-	I would im	important:en|imagine:en|importe:fr
+en	imp	important:en|impossible:en|impressive:en
+-	I would imp	important:en|importe:fr|impossible:en
+en	impo	important:en|impossible:en|importance:en
+-	I would impo	important:en|importe:fr|impossible:en
+en	ac	actually:en|act:en|across:en
+en	acc	accident:en|accept:en|according:en
+en	acce	accept:en|access:en|accepted:en
+en	qu	quite:en|question:en|quiet:en
+-	I would qu	que:fr|qui:fr|quoi:fr
+en	que	question:en|questions:en|queen:en
+-	I would que	quelque:fr|question:en|quel:fr
+en	quee	queen:en|queens:en|queer:en
+-	I would quee	queen:en|queens:en|queer:en
+en	sa	say:en|said:en|same:en
+en	sak	sake:en|sakes:en|sakura:en
+en	te	tell:en|telling:en|team:en
+-	I would te	tell:en|temps:fr|telling:en
+en	tea	team:en|teacher:en|teach:en
+-	I would tea	team:en|teacher:en|teach:en
+en	teac	teacher:en|teach:en|teaching:en
+-	I would teac	teacher:en|teach:en|teaching:en
+en	gr	great:en|group:en|ground:en
+en	gre	great:en|green:en|greatest:en
+en	gree	green:en|greetings:en|greek:en
+en	ev	even:en|everything:en|ever:en
+-	I would ev	even:en|everything:en|ever:en
+en	evi	evidence:en|evil:en|evidently:en
+-	I would evi	evidence:en|evil:en|éviter:fr
+en	jo	job:en|john:en|joe:en
+en	jok	joke:en|joking:en|jokes:en
+en	ho	how:en|home:en|house:en
+-	I would ho	how:en|home:en|house:en
+en	hol	hold:en|holy:en|holding:en
+-	I would hol	hold:en|holy:en|holding:en
+en	li	like:en|little:en|life:en
+en	lik	like:en|liked:en|likes:en
+en	like	liked:en|likes:en|likely:en
+en	co	come:en|could:en|coming:en
+-	I would co	come:en|could:en|comme:fr
+en	con	control:en|contact:en|continue:en
+-	I would con	control:en|connais:fr|contre:fr
+en	cont	control:en|contact:en|continue:en
+-	I would cont	control:en|contre:fr|contact:en
+en	sh	she:en|should:en|show:en
+en	sho	should:en|show:en|shot:en
+en	wr	wrong:en|write:en|wrote:en
+-	I would wr	wrong:en|write:en|wrote:en
+en	wro	wrong:en|wrote:en|wronged:en
+-	I would wro	wrong:en|wrote:en|wronged:en
+en	wrot	wrote:en
+-	I would wrot	wrote:en
+en	fi	first:en|find:en|fine:en
+en	fie	field:en|fields:en|fierce:en
+en	fiel	field:en|fields:en|fielding:en
+en	de	dead:en|death:en|deal:en
+-	I would de	des:fr|dead:en|deux:fr
+en	dec	decided:en|decision:en|decide:en
+-	I would dec	decided:en|decision:en|decide:en
+en	deci	decided:en|decision:en|decide:en
+-	I would deci	decided:en|decision:en|decide:en
+en	sl	sleep:en|sleeping:en|slow:en
+en	slo	slow:en|slowly:en|slower:en
+en	gl	glad:en|glass:en|glasses:en
+-	I would gl	glad:en|glass:en|glasses:en
+en	gla	glad:en|glass:en|glasses:en
+-	I would gla	glad:en|glass:en|glasses:en
+en	glas	glass:en|glasses:en|glasgow:en
+-	I would glas	glass:en|glasses:en|glasgow:en
+en	dy	dying:en|dylan:en|dynamite:en
+en	dyi	dying:en|dyin:en
+en	dyin	dying:en
+en	di	did:en|didn't:en|die:en
+-	I would di	did:en|didn't:en|dit:fr
+en	dif	different:en|difficult:en|difference:en
+-	I would dif	different:en|difficult:en|difference:en
+en	diff	different:en|difficult:en|difference:en
+-	I would diff	different:en|difficult:en|difference:en
+en	co	come:en|could:en|coming:en
+en	con	control:en|contact:en|continue:en
+en	cont	control:en|contact:en|continue:en
+en	no	not:en|now:en|nothing:en
+-	I would no	not:en|now:en|nous:fr
+en	nor	normal:en|north:en|normally:en
+-	I would nor	normal:en|north:en|normally:en
+en	nort	north:en|northern:en|norton:en
+-	I would nort	north:en|northern:en|norton:en
+en	ma	man:en|make:en|maybe:en
+en	mad	made:en|madam:en|madame:en
+en	mada	madam:en|madame:en|madagascar:en
+en	pu	put:en|pull:en|public:en
+-	I would pu	put:en|pull:en|puis:fr
+en	put	putting:en|puts:en|puttin:en
+-	I would put	putain:fr|putting:en|puts:en
+en	putt	putting:en|puttin:en|putty:en
+-	I would putt	putting:en|puttin:en|putty:en
+en	gr	great:en|group:en|ground:en
+en	gra	grab:en|grand:en|grace:en
+en	ma	man:en|make:en|maybe:en
+-	I would ma	man:en|make:en|mais:fr
+en	mag	magic:en|magazine:en|maggie:en
+-	I would mag	magic:en|magazine:en|magnifique:fr
+en	magi	magic:en|magical:en|magician:en
+-	I would magi	magic:en|magical:en|magie:fr
+en	gr	great:en|group:en|ground:en
+en	gru	grunts:en|grunting:en|grudge:en
+en	grun	grunts:en|grunting:en|grunt:en
+en	wi	with:en|will:en|without:en
+-	I would wi	with:en|will:en|without:en
+en	win	window:en|wine:en|wind:en
+-	I would win	window:en|wine:en|wind:en
+en	ma	man:en|make:en|maybe:en
+en	gi	give:en|girl:en|girls:en
+-	I would gi	give:en|girl:en|girls:en
+en	giv	give:en|given:en|giving:en
+-	I would giv	give:en|given:en|giving:en
+en	give	given:en|gives:en|giver:en
+-	I would give	given:en|gives:en|giver:en
+en	vi	visit:en|village:en|victim:en
+en	vic	victim:en|victims:en|victory:en
+en	vict	victim:en|victims:en|victory:en
+en	ch	change:en|check:en|chance:en
+-	I would ch	chose:fr|change:en|check:en
+en	chr	christmas:en|christ:en|chris:en
+-	I would chr	christmas:en|christ:en|chris:en
+en	chri	christmas:en|christ:en|chris:en
+-	I would chri	christmas:en|christ:en|chris:en
+en	bu	but:en|business:en|buy:en
+en	se	see:en|seen:en|second:en
+-	I would se	see:en|seen:en|second:en
+en	sea	seat:en|search:en|season:en
+-	I would sea	seat:en|search:en|season:en
+en	sear	search:en|searching:en|searched:en
+-	I would sear	search:en|searching:en|searched:en
+en	ar	are:en|around:en|aren't:en
+en	arr	arrest:en|arrived:en|arrested:en
+en	arre	arrest:en|arrested:en|arresting:en
+en	us	used:en|use:en|using:en
+-	I would us	used:en|use:en|using:en
+en	usu	usually:en|usual:en|usurp:en
+-	I would usu	usually:en|usual:en|usurp:en
+en	usua	usually:en|usual:en
+-	I would usua	usually:en|usual:en
+en	ha	have:en|had:en|has:en
+en	har	hard:en|harry:en|hardly:en
+en	harr	harry:en|harris:en|harrison:en
+en	au	aunt:en|audience:en|authority:en
+-	I would au	aussi:fr|autre:fr|aux:fr
+en	aun	aunt:en|auntie:en|aunty:en
+-	I would aun	aunt:en|auntie:en|aunty:en
+en	ki	kind:en|kill:en|killed:en
+en	kit	kitchen:en|kitty:en|kitt:en
+en	kitc	kitchen:en|kitchens:en|kitchener:en
+en	fi	first:en|find:en|fine:en
+-	I would fi	first:en|find:en|fine:en
+en	fin	find:en|fine:en|finally:en
+-	I would fin	find:en|fine:en|finally:en
+en	fina	finally:en|final:en|financial:en
+-	I would fina	finally:en|final:en|financial:en
+en	li	like:en|little:en|life:en
+en	lis	listen:en|list:en|listening:en
+en	list	listen:en|listening:en|listened:en
+en	mo	more:en|money:en|mother:en
+-	I would mo	more:en|mon:fr|moi:fr
+en	moo	moon:en|mood:en|moore:en
+-	I would moo	moon:en|mood:en|moore:en
+en	ad	address:en|admit:en|adam:en
+en	add	address:en|added:en|addition:en
+en	addr	address:en|addresses:en|addressed:en
+en	ga	gave:en|game:en|gasps:en
+-	I would ga	gave:en|game:en|gars:fr
+en	gas	gasps:en|gasping:en|gasp:en
+-	I would gas	gasps:en|gasping:en|gasp:en
+en	gasp	gasps:en|gasping:en|gaspar:en
+-	I would gasp	gasps:en|gasping:en|gaspiller:fr
+en	ne	need:en|never:en|new:en
+en	ner	nervous:en|nerve:en|nerves:en
+en	nerv	nervous:en|nerve:en|nerves:en
+en	de	dead:en|death:en|deal:en
+-	I would de	des:fr|dead:en|deux:fr
+en	dec	decided:en|decision:en|decide:en
+-	I would dec	decided:en|decision:en|decide:en
+en	deci	decided:en|decision:en|decide:en
+-	I would deci	decided:en|decision:en|decide:en
+en	pr	pretty:en|problem:en|probably:en
+en	pre	pretty:en|president:en|present:en
+en	pres	president:en|present:en|press:en
+en	ha	have:en|had:en|has:en
+-	I would ha	have:en|had:en|has:en
+en	had	hadn't:en|hades:en|hadley:en
+-	I would had	hadn't:en|hades:en|hadley:en
+en	hadn	hadn't:en
+-	I would hadn	hadn't:en
+en	dr	drink:en|drive:en|dream:en
+en	dru	drunk:en|drugs:en|drug:en
+en	drug	drugs:en|drugged:en|drugstore:en
+en	mi	might:en|mind:en|miss:en
+-	I would mi	might:en|mind:en|miss:en
+en	mis	miss:en|missing:en|mistake:en
+-	I would mis	miss:en|missing:en|mistake:en
+en	miss	missing:en|missed:en|mission:en
+-	I would miss	missing:en|missed:en|mission:en
+en	pi	pick:en|piece:en|picture:en
+en	pic	pick:en|picture:en|picked:en
+en	pick	picked:en|picking:en|picks:en
+en	ri	right:en|ride:en|ring:en
+-	I would ri	right:en|rien:fr|ride:en
+en	ris	risk:en|rise:en|rising:en
+-	I would ris	risk:en|rise:en|risque:fr
+en	da	day:en|dad:en|days:en
+en	dan	dance:en|dangerous:en|danny:en
+en	dann	danny:en|danni:en|danno:en
+en	or	order:en|orders:en|original:en
+-	I would or	order:en|orders:en|original:en
+en	ord	order:en|orders:en|ordered:en
+-	I would ord	order:en|orders:en|ordered:en
+en	orde	order:en|orders:en|ordered:en
+-	I would orde	order:en|orders:en|ordered:en
+en	ar	are:en|around:en|aren't:en
+en	arr	arrest:en|arrived:en|arrested:en
+en	arri	arrived:en|arrival:en|arrives:en
+en	pi	pick:en|piece:en|picture:en
+-	I would pi	pick:en|piece:en|picture:en
+en	pic	pick:en|picture:en|picked:en
+-	I would pic	pick:en|picture:en|picked:en
+en	pict	picture:en|pictures:en|pictured:en
+-	I would pict	picture:en|pictures:en|pictured:en
+en	fa	father:en|family:en|face:en
+en	fav	favor:en|favorite:en|favour:en
+en	favo	favor:en|favorite:en|favour:en
+en	aw	away:en|awesome:en|awful:en
+-	I would aw	away:en|awesome:en|awful:en
+en	awe	awesome:en|awesomeness:en|awesomest:en
+-	I would awe	awesome:en|awesomeness:en|awesomest:en
+en	awes	awesome:en|awesomeness:en|awesomest:en
+-	I would awes	awesome:en|awesomeness:en|awesomest:en
+en	gu	guys:en|guy:en|guess:en
+en	gua	guard:en|guards:en|guarantee:en
+en	guar	guard:en|guards:en|guarantee:en
+en	su	sure:en|such:en|supposed:en
+-	I would su	suis:fr|sure:en|sur:fr
+en	sur	sure:en|surprise:en|surprised:en
+-	I would sur	sure:en|surprise:en|surprised:en
+en	surp	surprise:en|surprised:en|surprising:en
+-	I would surp	surprise:en|surprised:en|surpris:fr
+en	he	here:en|her:en|hey:en
+en	her	here:en|herself:en|hero:en
+en	hers	herself:en|hershey:en|herschel:en
+en	en	enough:en|end:en|entire:en
+-	I would en	enough:en|end:en|encore:fr
+en	ene	enemy:en|energy:en|enemies:en
+-	I would ene	enemy:en|energy:en|enemies:en
+en	enem	enemy:en|enemies:en|enema:en
+-	I would enem	enemy:en|enemies:en|enema:en
+en	al	all:en|always:en|already:en
+en	ale	alex:en|alert:en|alexander:en
+en	ni	night:en|nice:en|nick:en
+-	I would ni	night:en|nice:en|nick:en
+en	nin	nine:en|nina:en|ninja:en
+-	I would nin	nine:en|nina:en|ninja:en
+en	gu	guys:en|guy:en|guess:en
+en	gui	guilty:en|guitar:en|guide:en
+en	guil	guilty:en|guilt:en|guild:en
+en	du	dude:en|during:en|duty:en
+-	I would du	dude:en|during:en|duty:en
+en	dut	duty:en|dutch:en|duties:en
+-	I would dut	duty:en|dutch:en|duties:en
+en	be	been:en|because:en|before:en
+en	bel	believe:en|bell:en|belong:en
+en	he	here:en|her:en|hey:en
+-	I would he	here:en|her:en|hey:en
+en	her	here:en|herself:en|hero:en
+-	I would her	here:en|herself:en|hero:en
+en	bu	but:en|business:en|buy:en
+en	bun	bunch:en|bunny:en|bunker:en
+en	bunc	bunch:en|bunches:en|bunchy:en
+en	bi	big:en|bit:en|bitch:en
+-	I would bi	bien:fr|big:en|bit:en
+en	big	bigger:en|biggest:en|bigfoot:en
+-	I would big	bigger:en|biggest:en|bigfoot:en
+en	bigg	bigger:en|biggest:en|biggie:en
+-	I would bigg	bigger:en|biggest:en|biggie:en
+en	he	here:en|her:en|hey:en
+en	hel	help:en|hello:en|hell:en
+en	help	helping:en|helped:en|helps:en
+en	na	name:en|named:en|narrator:en
+-	I would na	name:en|named:en|narrator:en
+en	nam	name:en|named:en|names:en
+-	I would nam	name:en|named:en|names:en
+en	name	named:en|names:en|namely:en
+-	I would name	named:en|names:en|namely:en
+en	ar	are:en|around:en|aren't:en
+fr	pa	pas:fr|par:fr|parce:fr
+fr	de	des:fr|deux:fr|depuis:fr
+fr	da	dans:fr|david:fr|danger:fr
+-	I would da	dans:fr|day:en|dad:en
+fr	dan	dans:fr|danger:fr|dangereux:fr
+-	I would dan	dans:fr|dance:en|dangerous:en
+fr	av	avec:fr|avez:fr|avoir:fr
+fr	ave	avec:fr|avez:fr|avenir:fr
+fr	mo	mon:fr|moi:fr|monde:fr
+-	I would mo	more:en|mon:fr|moi:fr
+fr	fa	fait:fr|faire:fr|fais:fr
+fr	fai	fait:fr|faire:fr|fais:fr
+fr	fa	fait:fr|faire:fr|fais:fr
+fr	fai	fait:fr|faire:fr|fais:fr
+fr	fair	faire:fr|fairfax:fr|fairbanks:fr
+fr	qu	que:fr|qui:fr|quoi:fr
+-	I would qu	que:fr|qui:fr|quoi:fr
+fr	quo	quoi:fr|quoique:fr|quotidien:fr
+-	I would quo	quoi:fr|quote:en|quoique:fr
+fr	sa	sais:fr|sans:fr|savoir:fr
+fr	sai	sais:fr|sait:fr|saison:fr
+fr	ic	ici:fr|ichi:fr|iceberg:fr
+-	I would ic	ici:fr|ice:en|iced:en
+fr	di	dit:fr|dire:fr|dieu:fr
+fr	so	sont:fr|son:fr|soit:fr
+-	I would so	some:en|something:en|sorry:en
+fr	son	sont:fr|sonne:fr|sonné:fr
+-	I would son	sont:fr|song:en|songs:en
+fr	di	dit:fr|dire:fr|dieu:fr
+fr	dir	dire:fr|dirait:fr|dirai:fr
+fr	va	vais:fr|vas:fr|vaut:fr
+-	I would va	vais:fr|vas:fr|van:en
+fr	vai	vais:fr|vaisseau:fr|vaisseaux:fr
+-	I would vai	vais:fr|vaisseau:fr|vain:en
+fr	co	comme:fr|comment:fr|connais:fr
+fr	com	comme:fr|comment:fr|combien:fr
+fr	comm	comme:fr|comment:fr|commence:fr
+fr	ch	chose:fr|chez:fr|choses:fr
+-	I would ch	chose:fr|change:en|check:en
+fr	cho	chose:fr|choses:fr|choix:fr
+-	I would cho	chose:fr|choses:fr|choice:en
+fr	chos	chose:fr|choses:fr
+-	I would chos	chose:fr|choses:fr|chosen:en
+fr	me	merci:fr|mes:fr|même:fr
+fr	mer	merci:fr|merde:fr|mère:fr
+fr	merc	merci:fr|mercredi:fr|mercedes:fr
+fr	ja	jamais:fr|jack:fr|james:fr
+-	I would ja	jamais:fr|jack:en|jail:en
+fr	jam	jamais:fr|james:fr|jambes:fr
+-	I would jam	jamais:fr|james:en|jamie:en
+fr	jama	jamais:fr|jamal:fr|jamaïque:fr
+-	I would jama	jamais:fr|jamal:en|jamaica:en
+fr	av	avec:fr|avez:fr|avoir:fr
+fr	avo	avoir:fr|avons:fr|avocat:fr
+fr	avoi	avoir:fr|avoine:fr|avoirs:fr
+fr	mê	même:fr|mêmes:fr|mêle:fr
+-	I would mê	même:fr|mêmes:fr|mêle:fr
+fr	mêm	même:fr|mêmes:fr
+-	I would mêm	même:fr|mêmes:fr
+fr	ma	mais:fr|maintenant:fr|mal:fr
+fr	mai	mais:fr|maintenant:fr|maison:fr
+fr	main	maintenant:fr|mains:fr|maintenir:fr
+fr	de	des:fr|deux:fr|depuis:fr
+-	I would de	des:fr|dead:en|deux:fr
+fr	deu	deux:fr|deuxième:fr|deuil:fr
+-	I would deu	deux:fr|deuxième:fr|deuil:fr
+fr	al	alors:fr|allez:fr|aller:fr
+fr	all	allez:fr|aller:fr|allons:fr
+fr	alle	allez:fr|aller:fr|allé:fr
+fr	pe	peux:fr|peut:fr|peu:fr
+-	I would pe	people:en|peux:fr|peut:fr
+fr	fa	fait:fr|faire:fr|fais:fr
+fr	fai	fait:fr|faire:fr|fais:fr
+fr	no	nous:fr|non:fr|notre:fr
+-	I would no	not:en|now:en|nous:fr
+fr	not	notre:fr|note:fr|notes:fr
+-	I would not	nothing:en|notre:fr|notice:en
+fr	notr	notre:fr|nôtres:fr
+-	I would notr	notre:fr|nôtres:fr
+fr	av	avec:fr|avez:fr|avoir:fr
+fr	ava	avait:fr|avant:fr|avais:fr
+fr	avai	avait:fr|avais:fr|avaient:fr
+fr	do	dois:fr|donc:fr|doit:fr
+-	I would do	don't:en|down:en|doing:en
+fr	doi	dois:fr|doit:fr|doivent:fr
+-	I would doi	doing:en|dois:fr|doit:fr
+fr	fo	fois:fr|font:fr|fort:fr
+fr	foi	fois:fr|foie:fr|foiré:fr
+fr	sa	sais:fr|sans:fr|savoir:fr
+-	I would sa	say:en|said:en|sais:fr
+fr	san	sans:fr|sang:fr|santé:fr
+-	I would san	sans:fr|sang:fr|santa:en
+fr	pa	pas:fr|par:fr|parce:fr
+fr	par	parce:fr|parler:fr|partir:fr
+fr	parc	parce:fr|parcours:fr|parcouru:fr
+fr	tr	très:fr|trop:fr|trouvé:fr
+-	I would tr	try:en|trying:en|très:fr
+fr	tro	trop:fr|trouvé:fr|trouver:fr
+-	I would tro	trop:fr|trouble:en|trouvé:fr
+fr	av	avec:fr|avez:fr|avoir:fr
+fr	ava	avait:fr|avant:fr|avais:fr
+fr	avai	avait:fr|avais:fr|avaient:fr
+fr	ap	après:fr|appelle:fr|appeler:fr
+-	I would ap	après:fr|appelle:fr|apartment:en
+fr	apr	après:fr|april:fr|aprèm:fr
+-	I would apr	après:fr|april:en|apron:en
+fr	aprè	après:fr|aprèm:fr
+-	I would aprè	après:fr|aprèm:fr
+fr	ou	oui:fr|ouais:fr|oublié:fr
+fr	oua	ouais:fr|ouai:fr|ouah:fr
+fr	ouai	ouais:fr|ouaip:fr|ouailles:fr
+fr	ho	homme:fr|hommes:fr|honneur:fr
+fr	hom	homme:fr|hommes:fr|homicide:fr
+fr	homm	homme:fr|hommes:fr|hommage:fr
+fr	fe	femme:fr|femmes:fr|feu:fr
+-	I would fe	feel:en|few:en|femme:fr
+fr	fem	femme:fr|femmes:fr|femelle:fr
+-	I would fem	femme:fr|femmes:fr|female:en
+fr	femm	femme:fr|femmes:fr|femmelette:fr
+-	I would femm	femme:fr|femmes:fr|femmelette:fr
+fr	ve	veux:fr|veut:fr|venir:fr
+fr	veu	veux:fr|veut:fr|veulent:fr
+fr	ch	chose:fr|chez:fr|choses:fr
+-	I would ch	chose:fr|change:en|check:en
+fr	che	chez:fr|chercher:fr|chef:fr
+-	I would che	check:en|chez:fr|chercher:fr
+fr	be	besoin:fr|beaucoup:fr|belle:fr
+fr	bea	beaucoup:fr|beau:fr|beauté:fr
+fr	beau	beaucoup:fr|beauté:fr|beaux:fr
+fr	mo	mon:fr|moi:fr|monde:fr
+-	I would mo	more:en|mon:fr|moi:fr
+fr	mor	mort:fr|morte:fr|morts:fr
+-	I would mor	more:en|morning:en|mort:fr
+fr	mè	mère:fr|mètres:fr|mène:fr
+fr	mèr	mère:fr|mères:fr
+fr	fi	fille:fr|fils:fr|fini:fr
+-	I would fi	first:en|find:en|fine:en
+fr	fil	fille:fr|fils:fr|filles:fr
+-	I would fil	fille:fr|fils:fr|film:en
+fr	fill	fille:fr|filles:fr|fillette:fr
+-	I would fill	fille:fr|filles:fr|filled:en
+fr	qu	que:fr|qui:fr|quoi:fr
+fr	que	quelque:fr|quel:fr|quelle:fr
+fr	pe	peux:fr|peut:fr|peu:fr
+fr	pet	petit:fr|petite:fr|petits:fr
+fr	peti	petit:fr|petite:fr|petits:fr
+fr	ce	cette:fr|ces:fr|cela:fr
+-	I would ce	cette:fr|ces:fr|cela:fr
+fr	cel	cela:fr|celui:fr|celle:fr
+-	I would cel	cela:fr|cell:en|celui:fr
+fr	so	sont:fr|son:fr|soit:fr
+fr	soi	soit:fr|soir:fr|sois:fr
+fr	jo	jour:fr|jours:fr|jouer:fr
+-	I would jo	job:en|john:en|jour:fr
+fr	jou	jour:fr|jours:fr|jouer:fr
+-	I would jou	jour:fr|jours:fr|jouer:fr
+fr	sa	sais:fr|sans:fr|savoir:fr
+fr	sav	savoir:fr|savez:fr|savais:fr
+fr	savo	savoir:fr|savons:fr|savon:fr
+fr	ce	cette:fr|ces:fr|cela:fr
+-	I would ce	cette:fr|ces:fr|cela:fr
+fr	bo	bon:fr|bonne:fr|bonjour:fr
+fr	bon	bonne:fr|bonjour:fr|bonsoir:fr
+fr	bonj	bonjour:fr|bonjours:fr
+fr	mo	mon:fr|moi:fr|monde:fr
+-	I would mo	more:en|mon:fr|moi:fr
+fr	moi	moins:fr|mois:fr|moitié:fr
+-	I would moi	moins:fr|mois:fr|moitié:fr
+fr	moin	moins:fr|moindre:fr|moine:fr
+-	I would moin	moins:fr|moindre:fr|moine:fr
+fr	re	reste:fr|regarde:fr|rester:fr
+fr	res	reste:fr|rester:fr|ressemble:fr
+fr	rest	reste:fr|rester:fr|restez:fr
+fr	se	ses:fr|sera:fr|seul:fr
+-	I would se	see:en|seen:en|second:en
+fr	seu	seul:fr|seule:fr|seulement:fr
+-	I would seu	seul:fr|seule:fr|seulement:fr
+fr	en	encore:fr|entre:fr|enfants:fr
+fr	ent	entre:fr|entendu:fr|entendre:fr
+fr	entr	entre:fr|entrer:fr|entrez:fr
+fr	au	aussi:fr|autre:fr|aux:fr
+-	I would au	aussi:fr|autre:fr|aux:fr
+fr	aur	aurais:fr|aurait:fr|aura:fr
+-	I would aur	aurais:fr|aurait:fr|aura:fr
+fr	aura	aurais:fr|aurait:fr|aurai:fr
+-	I would aura	aurais:fr|aurait:fr|aurai:fr
+fr	re	reste:fr|regarde:fr|rester:fr
+fr	reg	regarde:fr|regardez:fr|regarder:fr
+fr	rega	regarde:fr|regardez:fr|regarder:fr
+fr	tr	très:fr|trop:fr|trouvé:fr
+-	I would tr	try:en|trying:en|très:fr
+fr	tro	trop:fr|trouvé:fr|trouver:fr
+-	I would tro	trop:fr|trouble:en|trouvé:fr
+fr	trou	trouvé:fr|trouver:fr|trouve:fr
+-	I would trou	trouble:en|trouvé:fr|trouver:fr
+fr	sa	sais:fr|sans:fr|savoir:fr
+fr	sav	savoir:fr|savez:fr|savais:fr
+fr	save	savez:fr|savent:fr|saveur:fr
+fr	as	assez:fr|assis:fr|asseoir:fr
+-	I would as	ask:en|asked:en|ass:en
+fr	ass	assez:fr|assis:fr|asseoir:fr
+-	I would ass	assez:fr|asshole:en|assistant:en
+fr	asse	assez:fr|asseoir:fr|assemblée:fr
+-	I would asse	assez:fr|asseoir:fr|asses:en
+fr	to	tout:fr|toi:fr|ton:fr
+fr	tou	tout:fr|tous:fr|toujours:fr
+fr	tout	toute:fr|toutes:fr|toutefois:fr
+fr	tr	très:fr|trop:fr|trouvé:fr
+-	I would tr	try:en|trying:en|très:fr
+fr	tra	travail:fr|train:fr|travailler:fr
+-	I would tra	travail:fr|train:en|track:en
+fr	trav	travail:fr|travailler:fr|travaille:fr
+-	I would trav	travail:fr|travel:en|travailler:fr
+fr	tê	tête:fr|têtes:fr|têtu:fr
+fr	têt	tête:fr|têtes:fr|têtu:fr
+fr	so	sont:fr|son:fr|soit:fr
+-	I would so	some:en|something:en|sorry:en
+fr	som	sommes:fr|sommeil:fr|sombre:fr
+-	I would som	some:en|something:en|someone:en
+fr	somm	sommes:fr|sommeil:fr|somme:fr
+-	I would somm	sommes:fr|sommeil:fr|somme:fr
+fr	fa	fait:fr|faire:fr|fais:fr
+fr	fai	fait:fr|faire:fr|fais:fr
+fr	fait	faites:fr|faite:fr|faits:fr
+fr	ar	argent:fr|arrive:fr|arrête:fr
+-	I would ar	are:en|around:en|aren't:en
+fr	arr	arrive:fr|arrête:fr|arrivé:fr
+-	I would arr	arrive:fr|arrête:fr|arrivé:fr
+fr	arrê	arrête:fr|arrêter:fr|arrêtez:fr
+-	I would arrê	arrête:fr|arrêter:fr|arrêtez:fr
+fr	vo	vous:fr|votre:fr|voir:fr
+fr	voi	voir:fr|vois:fr|voilà:fr
+fr	voit	voiture:fr|voitures:fr|voiturier:fr
+fr	me	merci:fr|mes:fr|même:fr
+-	I would me	mean:en|merci:fr|men:en
+fr	mer	merci:fr|merde:fr|mère:fr
+-	I would mer	merci:fr|merde:fr|mère:fr
+fr	merd	merde:fr|merdique:fr|merdes:fr
+-	I would merd	merde:fr|merdique:fr|merdes:fr
+fr	id	idée:fr|idiot:fr|idées:fr
+fr	idé	idée:fr|idées:fr|idéal:fr
+fr	au	aussi:fr|autre:fr|aux:fr
+-	I would au	aussi:fr|autre:fr|aux:fr
+fr	aur	aurais:fr|aurait:fr|aura:fr
+-	I would aur	aurais:fr|aurait:fr|aura:fr
+fr	aura	aurais:fr|aurait:fr|aurai:fr
+-	I would aura	aurais:fr|aurait:fr|aurai:fr
+fr	jo	jour:fr|jours:fr|jouer:fr
+fr	jou	jour:fr|jours:fr|jouer:fr
+fr	jour	jours:fr|journée:fr|journal:fr
+fr	ve	veux:fr|veut:fr|venir:fr
+-	I would ve	very:en|veux:fr|veut:fr
+fr	ven	venir:fr|venu:fr|venez:fr
+-	I would ven	venir:fr|venu:fr|venez:fr
+fr	veni	venir:fr|veniez:fr|venise:fr
+-	I would veni	venir:fr|venice:en|veniez:fr
+fr	he	hein:fr|heure:fr|heures:fr
+fr	hei	hein:fr|heidi:fr|heights:fr
+fr	tr	très:fr|trop:fr|trouvé:fr
+-	I would tr	try:en|trying:en|très:fr
+fr	tru	truc:fr|trucs:fr|trudy:fr
+-	I would tru	true:en|truth:en|trust:en
+fr	ta	tard:fr|tant:fr|table:fr
+fr	tan	tant:fr|tante:fr|tandis:fr
+fr	me	merci:fr|mes:fr|même:fr
+-	I would me	mean:en|merci:fr|men:en
+fr	po	pour:fr|pourquoi:fr|pourrait:fr
+fr	por	porte:fr|porter:fr|portes:fr
+fr	port	porte:fr|porter:fr|portes:fr
+fr	he	hein:fr|heure:fr|heures:fr
+-	I would he	here:en|her:en|hey:en
+fr	heu	heure:fr|heures:fr|heureux:fr
+-	I would heu	heure:fr|heures:fr|heureux:fr
+fr	heur	heure:fr|heures:fr|heureux:fr
+-	I would heur	heure:fr|heures:fr|heureux:fr
+fr	co	comme:fr|comment:fr|connais:fr
+fr	com	comme:fr|comment:fr|combien:fr
+fr	comp	comprends:fr|compris:fr|compte:fr
+fr	al	alors:fr|allez:fr|aller:fr
+-	I would al	all:en|always:en|alors:fr
+fr	all	allez:fr|aller:fr|allons:fr
+-	I would all	allez:fr|aller:fr|allons:fr
+fr	allo	allons:fr|allonger:fr|allongé:fr
+-	I would allo	allons:fr|allowed:en|allow:en
+fr	am	ami:fr|amour:fr|amis:fr
+fr	amo	amour:fr|amoureux:fr|amoureuse:fr
+fr	amou	amour:fr|amoureux:fr|amoureuse:fr
+fr	dé	déjà:fr|désolé:fr|désolée:fr
+-	I would dé	déjà:fr|désolé:fr|désolée:fr
+fr	dés	désolé:fr|désolée:fr|désormais:fr
+-	I would dés	désolé:fr|désolée:fr|désormais:fr
+fr	déso	désolé:fr|désolée:fr|désormais:fr
+-	I would déso	désolé:fr|désolée:fr|désormais:fr
+fr	re	reste:fr|regarde:fr|rester:fr
+fr	res	reste:fr|rester:fr|ressemble:fr
+fr	rest	reste:fr|rester:fr|restez:fr
+fr	fi	fille:fr|fils:fr|fini:fr
+-	I would fi	first:en|find:en|fine:en
+fr	fin	fini:fr|finir:fr|finalement:fr
+-	I would fin	find:en|fine:en|finally:en
+fr	qu	que:fr|qui:fr|quoi:fr
+fr	que	quelque:fr|quel:fr|quelle:fr
+fr	ques	question:fr|questions:fr|questionner:fr
+fr	de	des:fr|deux:fr|depuis:fr
+-	I would de	des:fr|dead:en|deux:fr
+fr	dev	devrais:fr|devrait:fr|devant:fr
+-	I would dev	devrais:fr|devrait:fr|devant:fr
+fr	devr	devrais:fr|devrait:fr|devriez:fr
+-	I would devr	devrais:fr|devrait:fr|devriez:fr
+fr	de	des:fr|deux:fr|depuis:fr
+fr	dem	demain:fr|demande:fr|demandé:fr
+fr	dema	demain:fr|demande:fr|demandé:fr
+fr	ge	gens:fr|genre:fr|gentil:fr
+-	I would ge	get:en|getting:en|gets:en
+fr	gen	gens:fr|genre:fr|gentil:fr
+-	I would gen	gens:fr|gentlemen:en|general:en
+fr	genr	genre:fr|genres:fr
+-	I would genr	genre:fr|genres:fr
+fr	ca	ça:fr|cas:fr|car:fr
+fr	la	laisser:fr|laisse:fr|laissé:fr
+-	I would la	last:en|later:en|late:en
+fr	lai	laisser:fr|laisse:fr|laissé:fr
+-	I would lai	laisser:fr|laisse:fr|laissé:fr
+fr	lais	laisser:fr|laisse:fr|laissé:fr
+-	I would lais	laisser:fr|laisse:fr|laissé:fr
+fr	eu	eux:fr|euh:fr|europe:fr
+fr	vi	vie:fr|viens:fr|vite:fr
+-	I would vi	vie:fr|viens:fr|vite:fr
+fr	vil	ville:fr|village:fr|villes:fr
+-	I would vil	ville:fr|village:en|villa:en
+fr	vill	ville:fr|village:fr|villes:fr
+-	I would vill	ville:fr|village:en|villa:en
+fr	pa	pas:fr|par:fr|parce:fr
+fr	par	parce:fr|parler:fr|partir:fr
+fr	parl	parler:fr|parle:fr|parlé:fr
+fr	au	aussi:fr|autre:fr|aux:fr
+-	I would au	aussi:fr|autre:fr|aux:fr
+fr	auc	aucun:fr|aucune:fr|aucunes:fr
+-	I would auc	aucun:fr|aucune:fr|auction:en
+fr	aucu	aucun:fr|aucune:fr|aucunes:fr
+-	I would aucu	aucun:fr|aucune:fr|aucunes:fr
+fr	pl	plus:fr|plaît:fr|place:fr
+fr	pla	plaît:fr|place:fr|plan:fr
+fr	plac	place:fr|placard:fr|places:fr
+fr	co	comme:fr|comment:fr|connais:fr
+-	I would co	come:en|could:en|comme:fr
+fr	com	comme:fr|comment:fr|combien:fr
+-	I would com	come:en|comme:fr|coming:en
+fr	comp	comprends:fr|compris:fr|compte:fr
+-	I would comp	company:en|completely:en|comprends:fr
+fr	le	les:fr|leur:fr|leurs:fr
+fr	leu	leur:fr|leurs:fr|leurre:fr
+fr	leur	leurs:fr|leurre:fr|leurres:fr
+fr	do	dois:fr|donc:fr|doit:fr
+-	I would do	don't:en|down:en|doing:en
+fr	don	donc:fr|donner:fr|donné:fr
+-	I would don	don't:en|done:en|donc:fr
+fr	donn	donner:fr|donné:fr|donne:fr
+-	I would donn	donner:fr|donné:fr|donne:fr
+fr	po	pour:fr|pourquoi:fr|pourrait:fr
+fr	pou	pour:fr|pourquoi:fr|pourrait:fr
+fr	pour	pourquoi:fr|pourrait:fr|pourrais:fr
+fr	do	dois:fr|donc:fr|doit:fr
+-	I would do	don't:en|down:en|doing:en
+fr	don	donc:fr|donner:fr|donné:fr
+-	I would don	don't:en|done:en|donc:fr
+fr	donn	donner:fr|donné:fr|donne:fr
+-	I would donn	donner:fr|donné:fr|donne:fr
+fr	do	dois:fr|donc:fr|doit:fr
+fr	don	donc:fr|donner:fr|donné:fr
+fr	tr	très:fr|trop:fr|trouvé:fr
+-	I would tr	try:en|trying:en|très:fr
+fr	tro	trop:fr|trouvé:fr|trouver:fr
+-	I would tro	trop:fr|trouble:en|trouvé:fr
+fr	trou	trouvé:fr|trouver:fr|trouve:fr
+-	I would trou	trouble:en|trouvé:fr|trouver:fr
+fr	pe	peux:fr|peut:fr|peu:fr
+fr	per	personne:fr|père:fr|perdu:fr
+fr	perd	perdu:fr|perdre:fr|perds:fr
+fr	cô	côté:fr|côtés:fr|côte:fr
+-	I would cô	côté:fr|côtés:fr|côte:fr
+fr	côt	côté:fr|côtés:fr|côte:fr
+-	I would côt	côté:fr|côtés:fr|côte:fr
+fr	ma	mais:fr|maintenant:fr|mal:fr
+fr	mai	mais:fr|maintenant:fr|maison:fr
+fr	en	encore:fr|entre:fr|enfants:fr
+-	I would en	enough:en|end:en|encore:fr
+fr	enf	enfants:fr|enfant:fr|enfin:fr
+-	I would enf	enfants:fr|enfant:fr|enfin:fr
+fr	enfa	enfants:fr|enfant:fr|enfance:fr
+-	I would enfa	enfants:fr|enfant:fr|enfance:fr
+fr	ve	veux:fr|veut:fr|venir:fr
+fr	ven	venir:fr|venu:fr|venez:fr
+fr	ve	veux:fr|veut:fr|venir:fr
+-	I would ve	very:en|veux:fr|veut:fr
+fr	ver	vers:fr|verre:fr|vérité:fr
+-	I would ver	very:en|vers:fr|verre:fr
+fr	ve	veux:fr|veut:fr|venir:fr
+fr	ven	venir:fr|venu:fr|venez:fr
+fr	vene	venez:fr|venezuela:fr|vénère:fr
+fr	en	encore:fr|entre:fr|enfants:fr
+-	I would en	enough:en|end:en|encore:fr
+fr	enf	enfants:fr|enfant:fr|enfin:fr
+-	I would enf	enfants:fr|enfant:fr|enfin:fr
+fr	enfi	enfin:fr|enfiler:fr|enfile:fr
+-	I would enfi	enfin:fr|enfiler:fr|enfile:fr
+fr	no	nous:fr|non:fr|notre:fr
+fr	nou	nous:fr|nouveau:fr|nouvelle:fr
+fr	nouv	nouveau:fr|nouvelle:fr|nouvelles:fr
+fr	dr	droit:fr|drôle:fr|droite:fr
+-	I would dr	drink:en|drive:en|dream:en
+fr	dro	droit:fr|droite:fr|drogue:fr
+-	I would dro	drop:en|droit:fr|dropped:en
+fr	droi	droit:fr|droite:fr|droits:fr
+-	I would droi	droit:fr|droite:fr|droits:fr
+fr	ea	eau:fr|earl:fr|eaux:fr
+fr	te	temps:fr|tes:fr|tellement:fr
+-	I would te	tell:en|temps:fr|telling:en
+fr	ter	terre:fr|terminé:fr|terrible:fr
+-	I would ter	terrible:en|terre:fr|terms:en
+fr	terr	terre:fr|terrible:fr|terrain:fr
+-	I would terr	terrible:en|terre:fr|terry:en
+fr	ai	aime:fr|aider:fr|air:fr
+fr	aim	aime:fr|aimerais:fr|aimes:fr
+fr	aime	aimerais:fr|aimes:fr|aimer:fr
+fr	do	dois:fr|donc:fr|doit:fr
+-	I would do	don't:en|down:en|doing:en
+fr	don	donc:fr|donner:fr|donné:fr
+-	I would don	don't:en|done:en|donc:fr
+fr	donn	donner:fr|donné:fr|donne:fr
+-	I would donn	donner:fr|donné:fr|donne:fr
+fr	mm	mme:fr|mmh:fr|mma:fr
+fr	bo	bon:fr|bonne:fr|bonjour:fr
+-	I would bo	boy:en|bon:fr|both:en
+fr	bou	boulot:fr|bout:fr|bouge:fr
+-	I would bou	bought:en|boulot:fr|bout:fr
+fr	boul	boulot:fr|boule:fr|boules:fr
+-	I would boul	boulot:fr|boule:fr|boules:fr
+fr	pr	prendre:fr|problème:fr|pris:fr
+fr	prê	prêt:fr|prête:fr|prêts:fr
+fr	mo	mon:fr|moi:fr|monde:fr
+-	I would mo	more:en|mon:fr|moi:fr
+fr	mou	mourir:fr|mouvement:fr|mourra:fr
+-	I would mou	mouth:en|mourir:fr|mountain:en
+fr	mour	mourir:fr|mourra:fr|mourant:fr
+-	I would mour	mourir:fr|mourning:en|mourra:fr
+fr	jo	jour:fr|jours:fr|jouer:fr
+fr	jou	jour:fr|jours:fr|jouer:fr
+fr	joue	jouer:fr|joues:fr|joueur:fr
+fr	vo	vous:fr|votre:fr|voir:fr
+-	I would vo	vous:fr|votre:fr|voir:fr
+fr	vou	vous:fr|voulais:fr|voulez:fr
+-	I would vou	vous:fr|voulais:fr|voulez:fr
+fr	voul	voulais:fr|voulez:fr|voulait:fr
+-	I would voul	voulais:fr|voulez:fr|voulait:fr
+fr	eu	eux:fr|euh:fr|europe:fr
+fr	co	comme:fr|comment:fr|connais:fr
+-	I would co	come:en|could:en|comme:fr
+fr	con	connais:fr|contre:fr|confiance:fr
+-	I would con	control:en|connais:fr|contre:fr
+fr	conf	confiance:fr|conférence:fr|confirmé:fr
+-	I would conf	confiance:fr|confused:en|conference:en
+fr	vé	vérité:fr|vérifier:fr|vécu:fr
+fr	vér	vérité:fr|vérifier:fr|vérifié:fr
+fr	véri	vérité:fr|vérifier:fr|vérifié:fr
+fr	fe	femme:fr|femmes:fr|feu:fr
+-	I would fe	feel:en|few:en|femme:fr
+fr	fem	femme:fr|femmes:fr|femelle:fr
+-	I would fem	femme:fr|femmes:fr|female:en
+fr	femm	femme:fr|femmes:fr|femmelette:fr
+-	I would femm	femme:fr|femmes:fr|femmelette:fr
+fr	vi	vie:fr|viens:fr|vite:fr
+fr	viv	vivre:fr|vivant:fr|vivante:fr
+fr	vivr	vivre:fr|vivra:fr|vivres:fr
+fr	jo	jour:fr|jours:fr|jouer:fr
+-	I would jo	job:en|john:en|jour:fr
+fr	jou	jour:fr|jours:fr|jouer:fr
+-	I would jou	jour:fr|jours:fr|jouer:fr
+fr	jour	jours:fr|journée:fr|journal:fr
+-	I would jour	jours:fr|journée:fr|journey:en
+fr	té	téléphone:fr|télé:fr|témoin:fr
+fr	tél	téléphone:fr|télé:fr|télévision:fr
+fr	télé	téléphone:fr|télévision:fr|téléphoner:fr
+fr	me	merci:fr|mes:fr|même:fr
+-	I would me	mean:en|merci:fr|men:en
+fr	mei	meilleur:fr|meilleure:fr|meilleurs:fr
+-	I would mei	meilleur:fr|meilleure:fr|meilleurs:fr
+fr	meil	meilleur:fr|meilleure:fr|meilleurs:fr
+-	I would meil	meilleur:fr|meilleure:fr|meilleurs:fr
+fr	ma	mais:fr|maintenant:fr|mal:fr
+fr	mai	mais:fr|maintenant:fr|maison:fr
+fr	main	maintenant:fr|mains:fr|maintenir:fr
+fr	éq	équipe:fr|équipage:fr|équipes:fr
+-	I would éq	équipe:fr|équipage:fr|équipes:fr
+fr	équ	équipe:fr|équipage:fr|équipes:fr
+-	I would équ	équipe:fr|équipage:fr|équipes:fr
+fr	équi	équipe:fr|équipage:fr|équipes:fr
+-	I would équi	équipe:fr|équipage:fr|équipes:fr
+fr	ar	argent:fr|arrive:fr|arrête:fr
+fr	arr	arrive:fr|arrête:fr|arrivé:fr
+fr	arri	arrive:fr|arrivé:fr|arriver:fr
+fr	ai	aime:fr|aider:fr|air:fr
+-	I would ai	ain't:en|aime:fr|air:en
+fr	sé	sécurité:fr|sérieux:fr|sérieusement:fr
+fr	séc	sécurité:fr|sécurisé:fr|sécher:fr
+fr	sécu	sécurité:fr|sécurisé:fr|sécurisée:fr
+fr	im	importe:fr|important:fr|impossible:fr
+-	I would im	important:en|imagine:en|importe:fr
+fr	imp	importe:fr|important:fr|impossible:fr
+-	I would imp	important:en|importe:fr|impossible:en
+fr	impo	importe:fr|important:fr|impossible:fr
+-	I would impo	important:en|importe:fr|impossible:en
+fr	fo	fois:fr|font:fr|fort:fr
+fr	fon	font:fr|fond:fr|fonctionne:fr
+fr	pl	plus:fr|plaît:fr|place:fr
+-	I would pl	please:en|plus:fr|place:en
+fr	ple	plein:fr|pleine:fr|pleurer:fr
+-	I would ple	please:en|pleasure:en|plenty:en
+fr	plei	plein:fr|pleine:fr|pleins:fr
+-	I would plei	plein:fr|pleine:fr|pleins:fr
+fr	ma	mais:fr|maintenant:fr|mal:fr
+fr	mar	mari:fr|marche:fr|mariage:fr
+fr	mari	mariage:fr|marier:fr|marié:fr
+fr	de	des:fr|deux:fr|depuis:fr
+-	I would de	des:fr|dead:en|deux:fr
+fr	der	dernière:fr|derrière:fr|dernier:fr
+-	I would der	dernière:fr|derrière:fr|dernier:fr
+fr	dern	dernière:fr|dernier:fr|derniers:fr
+-	I would dern	dernière:fr|dernier:fr|derniers:fr
+fr	to	tout:fr|toi:fr|ton:fr
+fr	tom	tomber:fr|tombe:fr|tombé:fr
+fr	tomb	tomber:fr|tombe:fr|tombé:fr
+fr	pe	peux:fr|peut:fr|peu:fr
+-	I would pe	people:en|peux:fr|peut:fr
+fr	pen	pense:fr|pendant:fr|pensais:fr
+-	I would pen	pense:fr|pendant:fr|pensais:fr
+fr	pens	pense:fr|pensais:fr|penses:fr
+-	I would pens	pense:fr|pensais:fr|penses:fr
+fr	fê	fête:fr|fêter:fr|fêtes:fr
+fr	fêt	fête:fr|fêter:fr|fêtes:fr
+fr	pa	pas:fr|par:fr|parce:fr
+-	I would pa	pas:fr|par:fr|part:en
+fr	pay	pays:fr|payer:fr|payé:fr
+-	I would pay	pays:fr|paying:en|payer:fr
+fr	bi	bien:fr|bientôt:fr|bizarre:fr
+fr	bie	bien:fr|bientôt:fr|bienvenue:fr
+fr	bien	bientôt:fr|bienvenue:fr|biens:fr
+fr	pe	peux:fr|peut:fr|peu:fr
+-	I would pe	people:en|peux:fr|peut:fr
+fr	per	personne:fr|père:fr|perdu:fr
+-	I would per	person:en|personne:fr|perfect:en
+fr	pers	personne:fr|personnes:fr|personnel:fr
+-	I would pers	person:en|personne:fr|personal:en
+fr	la	laisser:fr|laisse:fr|laissé:fr
+fr	lai	laisser:fr|laisse:fr|laissé:fr
+fr	lais	laisser:fr|laisse:fr|laissé:fr
+fr	se	ses:fr|sera:fr|seul:fr
+-	I would se	see:en|seen:en|second:en
+fr	sem	semaine:fr|semble:fr|semaines:fr
+-	I would sem	semaine:fr|semble:fr|semaines:fr
+fr	semb	semble:fr|semblant:fr|semblait:fr
+-	I would semb	semble:fr|semblant:fr|semblait:fr
+fr	mi	mieux:fr|minutes:fr|mis:fr
+fr	min	minutes:fr|minute:fr|mince:fr
+fr	minu	minutes:fr|minute:fr|minuit:fr
+fr	in	instant:fr|inquiète:fr|intérieur:fr
+-	I would in	into:en|inside:en|information:en
+fr	ins	instant:fr|inspecteur:fr|installer:fr
+-	I would ins	inside:en|instead:en|inspector:en
+fr	inst	instant:fr|installer:fr|instinct:fr
+-	I would inst	instead:en|instant:fr|instructions:en
+fr	pe	peux:fr|peut:fr|peu:fr
+fr	pen	pense:fr|pendant:fr|pensais:fr
+fr	pens	pense:fr|pensais:fr|penses:fr
+fr	ar	argent:fr|arrive:fr|arrête:fr
+-	I would ar	are:en|around:en|aren't:en
+fr	arm	arme:fr|armes:fr|armée:fr
+-	I would arm	army:en|arms:en|arme:fr
+fr	tr	très:fr|trop:fr|trouvé:fr
+fr	tra	travail:fr|train:fr|travailler:fr
+fr	trav	travail:fr|travailler:fr|travaille:fr
+fr	re	reste:fr|regarde:fr|rester:fr
+-	I would re	really:en|remember:en|real:en
+fr	reg	regarde:fr|regardez:fr|regarder:fr
+-	I would reg	regarde:fr|regardez:fr|regarder:fr
+fr	rega	regarde:fr|regardez:fr|regarder:fr
+-	I would rega	regarde:fr|regardez:fr|regarder:fr
+fr	fi	fille:fr|fils:fr|fini:fr
+fr	fil	fille:fr|fils:fr|filles:fr
+fr	fa	fait:fr|faire:fr|fais:fr
+-	I would fa	fait:fr|faire:fr|father:en
+fr	fau	faut:fr|faute:fr|faux:fr
+-	I would fau	faut:fr|fault:en|faute:fr
+fr	faut	faute:fr|fauteuil:fr|fautes:fr
+-	I would faut	faute:fr|fauteuil:fr|fautes:fr
+fr	ba	bas:fr|battre:fr|bateau:fr
+fr	pl	plus:fr|plaît:fr|place:fr
+-	I would pl	please:en|plus:fr|place:en
+fr	pla	plaît:fr|place:fr|plan:fr
+-	I would pla	place:en|play:en|playing:en
+fr	plai	plaît:fr|plaisir:fr|plait:fr
+-	I would plai	plaît:fr|plaisir:fr|plait:fr
+fr	vo	vous:fr|votre:fr|voir:fr
+fr	vou	vous:fr|voulais:fr|voulez:fr
+fr	voud	voudrais:fr|voudrait:fr|voudra:fr
+fr	to	tout:fr|toi:fr|ton:fr
+-	I would to	too:en|tout:fr|told:en
+fr	tou	tout:fr|tous:fr|toujours:fr
+-	I would tou	tout:fr|tous:fr|toujours:fr
+fr	ga	gars:fr|garçon:fr|garde:fr
+fr	gar	gars:fr|garçon:fr|garde:fr
+fr	gard	garde:fr|garder:fr|gardes:fr
+fr	li	lit:fr|lieu:fr|livre:fr
+-	I would li	like:en|little:en|life:en
+fr	am	ami:fr|amour:fr|amis:fr
+fr	ami	amis:fr|amie:fr|amies:fr
+fr	li	lit:fr|lieu:fr|livre:fr
+-	I would li	like:en|little:en|life:en
+fr	lie	lieu:fr|lieutenant:fr|lien:fr
+-	I would lie	lieutenant:en|lies:en|lied:en
+fr	co	comme:fr|comment:fr|connais:fr
+fr	com	comme:fr|comment:fr|combien:fr
+fr	comm	comme:fr|comment:fr|commence:fr
+fr	at	attends:fr|attention:fr|attendez:fr
+-	I would at	attends:fr|attack:en|attention:en
+fr	att	attends:fr|attention:fr|attendez:fr
+-	I would att	attends:fr|attack:en|attention:en
+fr	atte	attends:fr|attention:fr|attendez:fr
+-	I would atte	attends:fr|attention:en|attendez:fr
+fr	sû	sûr:fr|sûre:fr|sûrement:fr
+fr	sûr	sûre:fr|sûrement:fr|sûrs:fr
+fr	pe	peux:fr|peut:fr|peu:fr
+-	I would pe	people:en|peux:fr|peut:fr
+fr	peu	peux:fr|peut:fr|peur:fr
+-	I would peu	peux:fr|peut:fr|peur:fr
+fr	peuv	peuvent:fr
+-	I would peuv	peuvent:fr
+fr	ce	cette:fr|ces:fr|cela:fr
+fr	cec	ceci:fr|cece:fr|cecil:fr
+fr	pe	peux:fr|peut:fr|peu:fr
+-	I would pe	people:en|peux:fr|peut:fr
+fr	per	personne:fr|père:fr|perdu:fr
+-	I would per	person:en|personne:fr|perfect:en
+fr	perd	perdu:fr|perdre:fr|perds:fr
+-	I would perd	perdu:fr|perdre:fr|perds:fr
+fr	mo	mon:fr|moi:fr|monde:fr
+fr	mor	mort:fr|morte:fr|morts:fr
+fr	mort	morte:fr|morts:fr|mortel:fr
+fr	bi	bien:fr|bientôt:fr|bizarre:fr
+-	I would bi	bien:fr|big:en|bit:en
+fr	biz	bizarre:fr|bizarres:fr|bizarrement:fr
+-	I would biz	bizarre:fr|bizarres:fr|bizarrement:fr
+fr	biza	bizarre:fr|bizarres:fr|bizarrement:fr
+-	I would biza	bizarre:fr|bizarres:fr|bizarrement:fr
+fr	fe	femme:fr|femmes:fr|feu:fr
+fr	fer	fera:fr|ferai:fr|ferme:fr
+fr	fera	ferai:fr|ferais:fr|ferait:fr
+fr	in	instant:fr|inquiète:fr|intérieur:fr
+-	I would in	into:en|inside:en|information:en
+fr	inq	inquiète:fr|inquiétez:fr|inquiéter:fr
+-	I would inq	inquiète:fr|inquiétez:fr|inquiéter:fr
+fr	inqu	inquiète:fr|inquiétez:fr|inquiéter:fr
+-	I would inqu	inquiète:fr|inquiétez:fr|inquiéter:fr
+fr	dè	dès:fr|dèjà:fr|dèj:fr
+fr	ch	chose:fr|chez:fr|choses:fr
+-	I would ch	chose:fr|change:en|check:en
+fr	chi	chien:fr|chiens:fr|chier:fr
+-	I would chi	children:en|child:en|chief:en
+fr	chie	chien:fr|chiens:fr|chier:fr
+-	I would chie	chief:en|chien:fr|chiens:fr
+fr	pe	peux:fr|peut:fr|peu:fr
+fr	pen	pense:fr|pendant:fr|pensais:fr
+fr	pens	pense:fr|pensais:fr|penses:fr
+fr	ch	chose:fr|chez:fr|choses:fr
+-	I would ch	chose:fr|change:en|check:en
+fr	che	chez:fr|chercher:fr|chef:fr
+-	I would che	check:en|chez:fr|chercher:fr
+fr	cher	chercher:fr|cherche:fr|chérie:fr
+-	I would cher	chercher:fr|cherche:fr|chérie:fr
+fr	ph	photo:fr|photos:fr|physique:fr
+fr	pho	photo:fr|photos:fr|phoebe:fr
+fr	phot	photo:fr|photos:fr|photographe:fr
+fr	cœ	cœur:fr|cœurs:fr
+-	I would cœ	cœur:fr|cœurs:fr
+fr	cœu	cœur:fr|cœurs:fr
+-	I would cœu	cœur:fr|cœurs:fr
+fr	ai	aime:fr|aider:fr|air:fr
+fr	aim	aime:fr|aimerais:fr|aimes:fr
+fr	aime	aimerais:fr|aimes:fr|aimer:fr
+fr	do	dois:fr|donc:fr|doit:fr
+-	I would do	don't:en|down:en|doing:en
+fr	dou	doute:fr|doucement:fr|douleur:fr
+-	I would dou	doubt:en|double:en|doute:fr
+fr	dout	doute:fr|doutes:fr|douter:fr
+-	I would dout	doute:fr|doutes:fr|douter:fr
+fr	sa	sais:fr|sans:fr|savoir:fr
+fr	sau	sauf:fr|sauver:fr|sauvé:fr
+fr	av	avec:fr|avez:fr|avoir:fr
+-	I would av	avec:fr|avez:fr|avoir:fr
+fr	avi	avis:fr|aviez:fr|avion:fr
+-	I would avi	avis:fr|aviez:fr|avion:fr
+fr	qu	que:fr|qui:fr|quoi:fr
+fr	que	quelque:fr|quel:fr|quelle:fr
+fr	ques	question:fr|questions:fr|questionner:fr
+fr	se	ses:fr|sera:fr|seul:fr
+-	I would se	see:en|seen:en|second:en
+fr	sec	seconde:fr|secret:fr|sécurité:fr
+-	I would sec	second:en|secret:en|security:en
+fr	seco	seconde:fr|secondes:fr|secours:fr
+-	I would seco	second:en|seconds:en|seconde:fr
+fr	al	alors:fr|allez:fr|aller:fr
+fr	all	allez:fr|aller:fr|allons:fr
+fr	alla	allait:fr|allais:fr|allaient:fr
+fr	ml	mlle:fr
+-	I would ml	mlle:fr|mla:en
+fr	mll	mlle:fr
+-	I would mll	mlle:fr
+fr	ha	haut:fr|habitude:fr|harry:fr
+fr	hau	haut:fr|haute:fr|hauteur:fr
+fr	ch	chose:fr|chez:fr|choses:fr
+-	I would ch	chose:fr|change:en|check:en
+fr	cha	chance:fr|chaque:fr|chambre:fr
+-	I would cha	change:en|chance:en|changed:en
+fr	chan	chance:fr|changer:fr|changé:fr
+-	I would chan	change:en|chance:en|changed:en
+fr	si	six:fr|simple:fr|sinon:fr
+fr	se	ses:fr|sera:fr|seul:fr
+-	I would se	see:en|seen:en|second:en
+fr	sem	semaine:fr|semble:fr|semaines:fr
+-	I would sem	semaine:fr|semble:fr|semaines:fr
+fr	sema	semaine:fr|semaines:fr|semak:fr
+-	I would sema	semaine:fr|semaines:fr|semantics:en
+fr	ap	après:fr|appelle:fr|appeler:fr
+fr	app	appelle:fr|appeler:fr|appelé:fr
+fr	appr	appris:fr|apprendre:fr|approche:fr
+fr	so	sont:fr|son:fr|soit:fr
+-	I would so	some:en|something:en|sorry:en
+fr	sor	sortir:fr|sorte:fr|sors:fr
+-	I would sor	sorry:en|sort:en|sortir:fr
+fr	ch	chose:fr|chez:fr|choses:fr
+fr	che	chez:fr|chercher:fr|chef:fr
+fr	chem	chemin:fr|chemise:fr|chemins:fr
+fr	cu	cul:fr|cuisine:fr|curieux:fr
+-	I would cu	cut:en|cute:en|cup:en
+fr	me	merci:fr|mes:fr|même:fr
+fr	mei	meilleur:fr|meilleure:fr|meilleurs:fr
+fr	meil	meilleur:fr|meilleure:fr|meilleurs:fr
+fr	ro	route:fr|roi:fr|rouge:fr
+-	I would ro	room:en|road:en|round:en
+fr	éc	écoute:fr|école:fr|écrit:fr
+fr	écr	écrit:fr|écrire:fr|écris:fr
+fr	écri	écrit:fr|écrire:fr|écris:fr
+fr	ch	chose:fr|chez:fr|choses:fr
+-	I would ch	chose:fr|change:en|check:en
+fr	ché	chérie:fr|chéri:fr|chéris:fr
+-	I would ché	chérie:fr|chéri:fr|chéris:fr
+fr	chér	chérie:fr|chéri:fr|chéris:fr
+-	I would chér	chérie:fr|chéri:fr|chéris:fr
+fr	fe	femme:fr|femmes:fr|feu:fr
+fr	fer	fera:fr|ferai:fr|ferme:fr
+fr	fera	ferai:fr|ferais:fr|ferait:fr
+fr	so	sont:fr|son:fr|soit:fr
+-	I would so	some:en|something:en|sorry:en
+fr	soy	soyez:fr|soyons:fr|soyeux:fr
+-	I would soy	soyez:fr|soyons:fr|soya:en
+fr	soye	soyez:fr|soyeux:fr
+-	I would soye	soyez:fr|soyeux:fr
+fr	bo	bon:fr|bonne:fr|bonjour:fr
+fr	boi	boire:fr|bois:fr|boîte:fr
+fr	ne	new:fr|neuf:fr|nez:fr
+-	I would ne	need:en|never:en|new:en
+fr	re	reste:fr|regarde:fr|rester:fr
+fr	ren	rentrer:fr|rendre:fr|rentre:fr
+fr	rent	rentrer:fr|rentre:fr|rentré:fr
+fr	jo	jour:fr|jours:fr|jouer:fr
+-	I would jo	job:en|john:en|jour:fr
+fr	jou	jour:fr|jours:fr|jouer:fr
+-	I would jou	jour:fr|jours:fr|jouer:fr
+fr	re	reste:fr|regarde:fr|rester:fr
+fr	ren	rentrer:fr|rendre:fr|rentre:fr
+fr	renc	rencontrer:fr|rencontré:fr|rencontre:fr
+fr	po	pour:fr|pourquoi:fr|pourrait:fr
+-	I would po	pour:fr|pourquoi:fr|police:en
+fr	pou	pour:fr|pourquoi:fr|pourrait:fr
+-	I would pou	pour:fr|pourquoi:fr|pourrait:fr
+fr	pouv	pouvez:fr|pouvoir:fr|pouvais:fr
+-	I would pouv	pouvez:fr|pouvoir:fr|pouvais:fr
+fr	so	sont:fr|son:fr|soit:fr
+fr	sou	sous:fr|souviens:fr|souvent:fr
+fr	souv	souviens:fr|souvent:fr|souvenir:fr
+fr	gr	grand:fr|gros:fr|grande:fr
+-	I would gr	great:en|grand:fr|group:en
+fr	gra	grand:fr|grande:fr|grave:fr
+-	I would gra	grand:fr|grab:en|grace:en
+fr	grav	grave:fr|graves:fr|gravité:fr
+-	I would grav	grave:en|gravity:en|graves:en
+fr	ho	homme:fr|hommes:fr|honneur:fr
+fr	hon	honneur:fr|honte:fr|honnête:fr
+fr	honn	honneur:fr|honnête:fr|honnêtement:fr
+fr	me	merci:fr|mes:fr|même:fr
+-	I would me	mean:en|merci:fr|men:en
+fr	mes	message:fr|messieurs:fr|mesdames:fr
+-	I would mes	message:en|mess:en|messieurs:fr
+fr	mess	message:fr|messieurs:fr|messages:fr
+-	I would mess	message:en|messieurs:fr|messed:en
+fr	ca	ça:fr|cas:fr|car:fr
+fr	car	carte:fr|cartes:fr|carrière:fr
+fr	cart	carte:fr|cartes:fr|carter:fr
+fr	ma	mais:fr|maintenant:fr|mal:fr
+-	I would ma	man:en|make:en|mais:fr
+fr	man	manger:fr|manque:fr|manière:fr
+-	I would man	many:en|manger:fr|manager:en
+fr	manq	manque:fr|manqué:fr|manquer:fr
+-	I would manq	manque:fr|manqué:fr|manquer:fr
+fr	sa	sais:fr|sans:fr|savoir:fr
+fr	bo	bon:fr|bonne:fr|bonjour:fr
+-	I would bo	boy:en|bon:fr|both:en
+fr	bon	bonne:fr|bonjour:fr|bonsoir:fr
+-	I would bon	bonne:fr|bonjour:fr|bones:en
+fr	bons	bonsoir:fr|bonshommes:fr
+-	I would bons	bonsoir:fr|bonsai:en|bonshommes:fr
+fr	ve	veux:fr|veut:fr|venir:fr
+fr	ven	venir:fr|venu:fr|venez:fr
+fr	venu	venue:fr|venus:fr|venues:fr
+fr	vo	vous:fr|votre:fr|voir:fr
+-	I would vo	vous:fr|votre:fr|voir:fr
+fr	voy	voyez:fr|voyons:fr|voyage:fr
+-	I would voy	voyez:fr|voyons:fr|voyage:fr
+fr	voyo	voyons:fr|voyou:fr|voyous:fr
+-	I would voyo	voyons:fr|voyou:fr|voyous:fr
+fr	ac	accord:fr|acheter:fr|accident:fr
+fr	ach	acheter:fr|acheté:fr|achète:fr
+fr	ache	acheter:fr|acheté:fr|achetée:fr
+fr	oc	occupe:fr|occuper:fr|occupé:fr
+-	I would oc	ocean:en|occupe:fr|occuper:fr
+fr	occ	occupe:fr|occuper:fr|occupé:fr
+-	I would occ	occupe:fr|occuper:fr|occupé:fr
+fr	occu	occupe:fr|occuper:fr|occupé:fr
+-	I would occu	occupe:fr|occuper:fr|occupé:fr
+fr	gr	grand:fr|gros:fr|grande:fr
+fr	grâ	grâce:fr|grâces:fr
+fr	grâc	grâce:fr|grâces:fr
+fr	ma	mais:fr|maintenant:fr|mal:fr
+-	I would ma	man:en|make:en|mais:fr
+fr	mau	mauvais:fr|mauvaise:fr|mauvaises:fr
+-	I would mau	mauvais:fr|mauvaise:fr|maurice:en
+fr	mauv	mauvais:fr|mauvaise:fr|mauvaises:fr
+-	I would mauv	mauvais:fr|mauvaise:fr|mauvaises:fr
+fr	lo	longtemps:fr|loin:fr|long:fr
+fr	lon	longtemps:fr|long:fr|longue:fr
+fr	ap	après:fr|appelle:fr|appeler:fr
+-	I would ap	après:fr|appelle:fr|apartment:en
+fr	app	appelle:fr|appeler:fr|appelé:fr
+-	I would app	appelle:fr|appreciate:en|applause:en
+fr	appr	appris:fr|apprendre:fr|approche:fr
+-	I would appr	appreciate:en|appris:fr|apprendre:fr
+fr	pr	prendre:fr|problème:fr|pris:fr
+fr	pro	problème:fr|propos:fr|propre:fr
+fr	prom	promis:fr|promets:fr|promesse:fr
+fr	av	avec:fr|avez:fr|avoir:fr
+-	I would av	avec:fr|avez:fr|avoir:fr
+fr	avo	avoir:fr|avons:fr|avocat:fr
+-	I would avo	avoir:fr|avons:fr|avoid:en
+fr	avoc	avocat:fr|avocats:fr|avocate:fr
+-	I would avoc	avocat:fr|avocats:fr|avocate:fr
+fr	di	dit:fr|dire:fr|dieu:fr
+fr	bo	bon:fr|bonne:fr|bonjour:fr
+-	I would bo	boy:en|bon:fr|both:en
+fr	bou	boulot:fr|bout:fr|bouge:fr
+-	I would bou	bought:en|boulot:fr|bout:fr
+fr	cr	crois:fr|croire:fr|croyais:fr
+fr	mi	mieux:fr|minutes:fr|mis:fr
+-	I would mi	might:en|mind:en|miss:en
+fr	mil	millions:fr|milieu:fr|mille:fr
+-	I would mil	million:en|miles:en|military:en
+fr	mill	millions:fr|mille:fr|million:fr
+-	I would mill	million:en|millions:en|miller:en
+fr	ai	aime:fr|aider:fr|air:fr
+fr	ail	ailleurs:fr|aille:fr|ailes:fr
+fr	aill	ailleurs:fr|aille:fr|ailles:fr
+fr	bi	bien:fr|bientôt:fr|bizarre:fr
+-	I would bi	bien:fr|big:en|bit:en
+fr	bie	bien:fr|bientôt:fr|bienvenue:fr
+-	I would bie	bien:fr|bientôt:fr|bienvenue:fr
+fr	bien	bientôt:fr|bienvenue:fr|biens:fr
+-	I would bien	bientôt:fr|bienvenue:fr|biens:fr
+fr	ut	utiliser:fr|utilisé:fr|utilise:fr
+fr	uti	utiliser:fr|utilisé:fr|utilise:fr
+fr	util	utiliser:fr|utilisé:fr|utilise:fr
+fr	au	aussi:fr|autre:fr|aux:fr
+-	I would au	aussi:fr|autre:fr|aux:fr
+fr	aur	aurais:fr|aurait:fr|aura:fr
+-	I would aur	aurais:fr|aurait:fr|aura:fr
+fr	aura	aurais:fr|aurait:fr|aurai:fr
+-	I would aura	aurais:fr|aurait:fr|aurai:fr
+fr	sc	scène:fr|scott:fr|science:fr
+fr	scè	scène:fr|scènes:fr
+fr	scèn	scène:fr|scènes:fr
+fr	on	ont:fr|oncle:fr|ongles:fr
+-	I would on	one:en|only:en|ont:fr
+fr	onc	oncle:fr|oncles:fr|oncologie:fr
+-	I would onc	once:en|oncle:fr|oncologist:en
+fr	oncl	oncle:fr|oncles:fr
+-	I would oncl	oncle:fr|oncles:fr
+fr	so	sont:fr|son:fr|soit:fr
+fr	soe	soeur:fr|soeurs:fr|soeurette:fr
+fr	soeu	soeur:fr|soeurs:fr|soeurette:fr
+fr	ar	argent:fr|arrive:fr|arrête:fr
+-	I would ar	are:en|around:en|aren't:en
+fr	arm	arme:fr|armes:fr|armée:fr
+-	I would arm	army:en|arms:en|arme:fr
+fr	armé	armée:fr|armés:fr|armées:fr
+-	I would armé	armée:fr|armés:fr|armées:fr
+fr	yo	york:fr|yoga:fr|youtube:fr
+fr	yor	york:fr|yorkshire:fr|yorker:fr
+fr	fi	fille:fr|fils:fr|fini:fr
+-	I would fi	first:en|find:en|fine:en
+fr	fin	fini:fr|finir:fr|finalement:fr
+-	I would fin	find:en|fine:en|finally:en
+fr	fini	finir:fr|finit:fr|finie:fr
+-	I would fini	finish:en|finished:en|finir:fr
+fr	re	reste:fr|regarde:fr|rester:fr
+fr	ret	retour:fr|retard:fr|retrouver:fr
+fr	reto	retour:fr|retourner:fr|retourne:fr
+fr	bo	bon:fr|bonne:fr|bonjour:fr
+-	I would bo	boy:en|bon:fr|both:en
+fr	bou	boulot:fr|bout:fr|bouge:fr
+-	I would bou	bought:en|boulot:fr|bout:fr
+fr	boug	bouge:fr|bouger:fr|bougez:fr
+-	I would boug	bought:en|bouge:fr|bouger:fr
+fr	ar	argent:fr|arrive:fr|arrête:fr
+fr	arr	arrive:fr|arrête:fr|arrivé:fr
+fr	arrê	arrête:fr|arrêter:fr|arrêtez:fr
+fr	re	reste:fr|regarde:fr|rester:fr
+-	I would re	really:en|remember:en|real:en
+fr	ren	rentrer:fr|rendre:fr|rentre:fr
+-	I would ren	rentrer:fr|rendre:fr|rent:en
+fr	renc	rencontrer:fr|rencontré:fr|rencontre:fr
+-	I would renc	rencontrer:fr|rencontré:fr|rencontre:fr
+fr	mo	mon:fr|moi:fr|monde:fr
+fr	mot	mots:fr|moteur:fr|moto:fr
+fr	dé	déjà:fr|désolé:fr|désolée:fr
+-	I would dé	déjà:fr|désolé:fr|désolée:fr
+fr	déc	décidé:fr|décision:fr|découvert:fr
+-	I would déc	décidé:fr|décision:fr|découvert:fr
+fr	déci	décidé:fr|décision:fr|décider:fr
+-	I would déci	décidé:fr|décision:fr|décider:fr
+fr	fa	fait:fr|faire:fr|fais:fr
+fr	fas	fasse:fr|fasses:fr|fascinant:fr
+fr	fass	fasse:fr|fasses:fr|fassiez:fr
+fr	ha	haut:fr|habitude:fr|harry:fr
+-	I would ha	have:en|had:en|has:en
+fr	hab	habitude:fr|habite:fr|habiller:fr
+-	I would hab	habitude:fr|habit:en|habite:fr
+fr	habi	habitude:fr|habite:fr|habiller:fr
+-	I would habi	habitude:fr|habit:en|habite:fr
+fr	sy	sympa:fr|système:fr|systèmes:fr
+fr	sys	système:fr|systèmes:fr|systématiquement:fr
+fr	syst	système:fr|systèmes:fr|systématiquement:fr
+fr	se	ses:fr|sera:fr|seul:fr
+-	I would se	see:en|seen:en|second:en
+fr	ser	sera:fr|serait:fr|serai:fr
+-	I would ser	sera:fr|serious:en|serait:fr
+fr	sera	serait:fr|serai:fr|serais:fr
+-	I would sera	serait:fr|serai:fr|serais:fr
+fr	fa	fait:fr|faire:fr|fais:fr
+fr	fai	fait:fr|faire:fr|fais:fr
+fr	su	suis:fr|sur:fr|super:fr
+-	I would su	suis:fr|sure:en|sur:fr
+fr	sur	surtout:fr|surprise:fr|sûre:fr
+-	I would sur	sure:en|surprise:en|surprised:en
+fr	surp	surprise:fr|surpris:fr|surprendre:fr
+-	I would surp	surprise:en|surprised:en|surpris:fr
+fr	li	lit:fr|lieu:fr|livre:fr
+fr	lig	ligne:fr|lignes:fr|ligue:fr
+fr	lign	ligne:fr|lignes:fr|lignée:fr
+fr	co	comme:fr|comment:fr|connais:fr
+-	I would co	come:en|could:en|comme:fr
+fr	col	colère:fr|colonel:fr|colle:fr
+-	I would col	cold:en|college:en|colonel:en
+fr	colè	colère:fr|colères:fr
+-	I would colè	colère:fr|colères:fr
+fr	sa	sais:fr|sans:fr|savoir:fr
+fr	sav	savoir:fr|savez:fr|savais:fr
+fr	sava	savais:fr|savait:fr|savaient:fr
+fr	ho	homme:fr|hommes:fr|honneur:fr
+-	I would ho	how:en|home:en|house:en
+fr	hor	hors:fr|horrible:fr|horreur:fr
+-	I would hor	horse:en|horrible:en|horses:en
+fr	te	temps:fr|tes:fr|tellement:fr
+fr	ter	terre:fr|terminé:fr|terrible:fr
+fr	term	terminé:fr|terme:fr|terminée:fr
+fr	mi	mieux:fr|minutes:fr|mis:fr
+-	I would mi	might:en|mind:en|miss:en
+fr	mis	mission:fr|mise:fr|miss:fr
+-	I would mis	miss:en|missing:en|mistake:en
+fr	miss	mission:fr|missiles:fr|missile:fr
+-	I would miss	missing:en|missed:en|mission:en
+fr	pr	prendre:fr|problème:fr|pris:fr
+fr	pré	président:fr|présent:fr|préfère:fr
+fr	prés	président:fr|présent:fr|présente:fr
+fr	ex	exactement:fr|expliquer:fr|exact:fr
+-	I would ex	excuse:en|exactly:en|explain:en
+fr	exp	expliquer:fr|expérience:fr|explique:fr
+-	I would exp	explain:en|expect:en|experience:en
+fr	expl	expliquer:fr|explique:fr|exploser:fr
+-	I would expl	explain:en|explosion:en|expliquer:fr
+fr	ga	gars:fr|garçon:fr|garde:fr
+fr	gau	gauche:fr|gaufres:fr|gaucher:fr
+fr	gauc	gauche:fr|gaucher:fr|gauches:fr
+fr	ou	oui:fr|ouais:fr|oublié:fr
+-	I would ou	out:en|our:en|oui:fr
+fr	ouv	ouvre:fr|ouvrir:fr|ouvert:fr
+-	I would ouv	ouvre:fr|ouvrir:fr|ouvert:fr
+fr	ouvr	ouvre:fr|ouvrir:fr|ouvrez:fr
+-	I would ouvr	ouvre:fr|ouvrir:fr|ouvrez:fr
+fr	di	dit:fr|dire:fr|dieu:fr
+fr	dis	disparu:fr|disais:fr|disent:fr
+fr	dise	disent:fr|dises:fr|diseuse:fr
+fr	po	pour:fr|pourquoi:fr|pourrait:fr
+-	I would po	pour:fr|pourquoi:fr|police:en
+fr	pou	pour:fr|pourquoi:fr|pourrait:fr
+-	I would pou	pour:fr|pourquoi:fr|pourrait:fr
+fr	pour	pourquoi:fr|pourrait:fr|pourrais:fr
+-	I would pour	pourquoi:fr|pourrait:fr|pourrais:fr
+fr	lu	lui:fr|lumière:fr|lune:fr
+fr	lum	lumière:fr|lumières:fr|lumineux:fr
+fr	lumi	lumière:fr|lumières:fr|lumineux:fr
+fr	mo	mon:fr|moi:fr|monde:fr
+-	I would mo	more:en|mon:fr|moi:fr
+fr	mon	monde:fr|monsieur:fr|montrer:fr
+-	I would mon	money:en|monde:fr|months:en
+fr	mont	montrer:fr|montre:fr|monte:fr
+-	I would mont	months:en|month:en|montrer:fr
+fr	ch	chose:fr|chez:fr|choses:fr
+fr	cha	chance:fr|chaque:fr|chambre:fr
+fr	char	charlie:fr|charge:fr|charles:fr
+fr	vr	vraiment:fr|vrai:fr|vraie:fr
+-	I would vr	vraiment:fr|vrai:fr|vraie:fr
+fr	vra	vraiment:fr|vrai:fr|vraie:fr
+-	I would vra	vraiment:fr|vrai:fr|vraie:fr
+fr	vrai	vraiment:fr|vraie:fr|vrais:fr
+-	I would vrai	vraiment:fr|vraie:fr|vrais:fr
+fr	al	alors:fr|allez:fr|aller:fr
+fr	all	allez:fr|aller:fr|allons:fr
+fr	ca	ça:fr|cas:fr|car:fr
+-	I would ca	can:en|can't:en|ça:fr
+fr	cam	camp:fr|camion:fr|caméra:fr
+-	I would cam	came:en|camera:en|camp:en
+fr	ig	ignore:fr|ignorais:fr|ignorer:fr
+fr	ign	ignore:fr|ignorais:fr|ignorer:fr
+fr	igno	ignore:fr|ignorais:fr|ignorer:fr
+fr	te	temps:fr|tes:fr|tellement:fr
+-	I would te	tell:en|temps:fr|telling:en
+fr	ten	tenir:fr|tenez:fr|tente:fr
+-	I would ten	tenir:fr|tenez:fr|tend:en
+fr	teni	tenir:fr|teniez:fr|tenions:fr
+-	I would teni	tenir:fr|teniez:fr|tenions:fr
+fr	mi	mieux:fr|minutes:fr|mis:fr
+fr	mic	michael:fr|michelle:fr|micro:fr
+fr	mich	michael:fr|michelle:fr|michel:fr
+fr	co	comme:fr|comment:fr|connais:fr
+-	I would co	come:en|could:en|comme:fr
+fr	con	connais:fr|contre:fr|confiance:fr
+-	I would con	control:en|connais:fr|contre:fr
+fr	cont	contre:fr|content:fr|continue:fr
+-	I would cont	control:en|contre:fr|contact:en
+fr	re	reste:fr|regarde:fr|rester:fr
+fr	rec	recherche:fr|reçu:fr|recherches:fr
+fr	rech	recherche:fr|recherches:fr|recherché:fr
+fr	do	dois:fr|donc:fr|doit:fr
+-	I would do	don't:en|down:en|doing:en
+fr	dou	doute:fr|doucement:fr|douleur:fr
+-	I would dou	doubt:en|double:en|doute:fr
+fr	douc	doucement:fr|douce:fr|douche:fr
+-	I would douc	doucement:fr|douce:fr|douche:fr
+fr	ex	exactement:fr|expliquer:fr|exact:fr
+fr	exa	exactement:fr|exact:fr|examen:fr
+fr	exac	exactement:fr|exact:fr|exacte:fr
+fr	ar	argent:fr|arrive:fr|arrête:fr
+-	I would ar	are:en|around:en|aren't:en
+fr	arr	arrive:fr|arrête:fr|arrivé:fr
+-	I would arr	arrive:fr|arrête:fr|arrivé:fr
+fr	arri	arrive:fr|arrivé:fr|arriver:fr
+-	I would arri	arrive:fr|arrivé:fr|arrived:en
+fr	ch	chose:fr|chez:fr|choses:fr
+fr	cha	chance:fr|chaque:fr|chambre:fr
+fr	chau	chaud:fr|chaussures:fr|chauffeur:fr
+fr	da	dans:fr|david:fr|danger:fr
+-	I would da	dans:fr|day:en|dad:en
+fr	dav	david:fr|dave:fr|davantage:fr
+-	I would dav	david:en|dave:en|davis:en
+fr	davi	david:fr|davis:fr|davies:fr
+-	I would davi	david:en|davis:en|davies:en
+fr	qu	que:fr|qui:fr|quoi:fr
+fr	qui	quitter:fr|quitté:fr|quitte:fr
+fr	quit	quitter:fr|quitté:fr|quitte:fr
+fr	fl	flics:fr|flic:fr|fleurs:fr
+-	I would fl	floor:en|fly:en|flight:en
+fr	fli	flics:fr|flic:fr|flingue:fr
+-	I would fli	flight:en|flics:fr|flic:fr
+fr	flic	flics:fr|flicka:fr|flick:fr
+-	I would flic	flics:fr|flick:en|flicks:en
+fr	fo	fois:fr|font:fr|fort:fr
+fr	for	fort:fr|force:fr|forme:fr
+fr	form	forme:fr|formidable:fr|formation:fr
+fr	ba	bas:fr|battre:fr|bateau:fr
+-	I would ba	back:en|bad:en|baby:en
+fr	da	dans:fr|david:fr|danger:fr
+fr	dan	dans:fr|danger:fr|dangereux:fr
+fr	dang	danger:fr|dangereux:fr|dangereuse:fr
+fr	ti	tiens:fr|tirer:fr|tiré:fr
+-	I would ti	time:en|times:en|till:en
+fr	tir	tirer:fr|tiré:fr|tire:fr
+-	I would tir	tired:en|tirer:fr|tires:en
+fr	of	offre:fr|officier:fr|offrir:fr
+fr	off	offre:fr|officier:fr|offrir:fr
+fr	offr	offre:fr|offrir:fr|offres:fr
+fr	tr	très:fr|trop:fr|trouvé:fr
+-	I would tr	try:en|trying:en|très:fr
+fr	tra	travail:fr|train:fr|travailler:fr
+-	I would tra	travail:fr|train:en|track:en
+fr	tran	tranquille:fr|transformer:fr|transfert:fr
+-	I would tran	tranquille:fr|transfer:en|transport:en
+fr	cl	clair:fr|club:fr|classe:fr
+fr	cla	clair:fr|classe:fr|claire:fr
+fr	clas	classe:fr|classique:fr|classes:fr
+fr	co	comme:fr|comment:fr|connais:fr
+-	I would co	come:en|could:en|comme:fr
+fr	bo	bon:fr|bonne:fr|bonjour:fr
+fr	boî	boîte:fr|boîtes:fr|boîtier:fr
+fr	boît	boîte:fr|boîtes:fr|boîtier:fr
+fr	ju	juste:fr|jure:fr|juge:fr
+-	I would ju	just:en|juste:fr|judge:en
+fr	jug	juge:fr|jugement:fr|juger:fr
+-	I would jug	juge:fr|jugement:fr|juger:fr
+fr	en	encore:fr|entre:fr|enfants:fr
+fr	env	envie:fr|envoyé:fr|envoyer:fr
+fr	envo	envoyé:fr|envoyer:fr|envoie:fr
+fr	bo	bon:fr|bonne:fr|bonjour:fr
+-	I would bo	boy:en|bon:fr|both:en
+fr	bon	bonne:fr|bonjour:fr|bonsoir:fr
+-	I would bon	bonne:fr|bonjour:fr|bones:en
+fr	té	téléphone:fr|télé:fr|témoin:fr
+-	I would té	téléphone:fr|télé:fr|témoin:fr
+fr	tél	téléphone:fr|télé:fr|télévision:fr
+-	I would tél	téléphone:fr|télé:fr|télévision:fr
+fr	se	ses:fr|sera:fr|seul:fr
+fr	ser	sera:fr|serait:fr|serai:fr
+fr	sere	serez:fr|serena:fr|serein:fr
+fr	tr	très:fr|trop:fr|trouvé:fr
+-	I would tr	try:en|trying:en|très:fr
+fr	tri	triste:fr|tribunal:fr|tribu:fr
+-	I would tri	tried:en|trip:en|trial:en
+fr	tris	triste:fr|tristesse:fr|tristes:fr
+-	I would tris	triste:fr|trish:en|tristan:en
+fr	to	tout:fr|toi:fr|ton:fr
+fr	tom	tomber:fr|tombe:fr|tombé:fr
+fr	tomb	tomber:fr|tombe:fr|tombé:fr
+fr	tr	très:fr|trop:fr|trouvé:fr
+-	I would tr	try:en|trying:en|très:fr
+fr	tra	travail:fr|train:fr|travailler:fr
+-	I would tra	travail:fr|train:en|track:en
+fr	trav	travail:fr|travailler:fr|travaille:fr
+-	I would trav	travail:fr|travel:en|travailler:fr
+fr	co	comme:fr|comment:fr|connais:fr
+-	I would co	come:en|could:en|comme:fr
+fr	cou	coup:fr|cours:fr|courant:fr
+-	I would cou	could:en|course:en|couldn't:en
+fr	couc	coucher:fr|couché:fr|couche:fr
+-	I would couc	couch:en|coucher:fr|couché:fr
+fr	si	six:fr|simple:fr|sinon:fr
+fr	sig	signifie:fr|signe:fr|signal:fr
+fr	sign	signifie:fr|signe:fr|signal:fr
+fr	ce	cette:fr|ces:fr|cela:fr
+-	I would ce	cette:fr|ces:fr|cela:fr
+fr	cen	centre:fr|censé:fr|cent:fr
+-	I would cen	center:en|century:en|central:en
+fr	cent	centre:fr|centaines:fr|cents:fr
+-	I would cent	center:en|century:en|central:en
+fr	ch	chose:fr|chez:fr|choses:fr
+fr	cha	chance:fr|chaque:fr|chambre:fr
+fr	chan	chance:fr|changer:fr|changé:fr
+fr	bl	blanc:fr|blague:fr|blessé:fr
+-	I would bl	blood:en|black:en|blue:en
+fr	bla	blanc:fr|blague:fr|blanche:fr
+-	I would bla	black:en|blame:en|blake:en
+fr	blan	blanc:fr|blanche:fr|blancs:fr
+-	I would blan	blanc:fr|blanche:fr|blanket:en
+fr	do	dois:fr|donc:fr|doit:fr
+fr	fl	flics:fr|flic:fr|fleurs:fr
+-	I would fl	floor:en|fly:en|flight:en
+fr	fli	flics:fr|flic:fr|flingue:fr
+-	I would fli	flight:en|flics:fr|flic:fr
+fr	vi	vie:fr|viens:fr|vite:fr
+fr	di	dit:fr|dire:fr|dieu:fr
+-	I would di	did:en|didn't:en|dit:fr
+fr	dif	difficile:fr|différent:fr|différence:fr
+-	I would dif	different:en|difficult:en|difference:en
+fr	diff	difficile:fr|différent:fr|différence:fr
+-	I would diff	different:en|difficult:en|difference:en
+fr	cl	clair:fr|club:fr|classe:fr
+fr	en	encore:fr|entre:fr|enfants:fr
+-	I would en	enough:en|end:en|encore:fr
+fr	enf	enfants:fr|enfant:fr|enfin:fr
+-	I would enf	enfants:fr|enfant:fr|enfin:fr
+fr	enfe	enfer:fr|enfermé:fr|enfermer:fr
+-	I would enfe	enfer:fr|enfermé:fr|enfermer:fr
+fr	fa	fait:fr|faire:fr|fais:fr
+fr	fai	fait:fr|faire:fr|fais:fr
+fr	fais	faisait:fr|faisais:fr|faisons:fr
+fr	nu	nuit:fr|numéro:fr|nulle:fr
+-	I would nu	number:en|nuit:fr|numéro:fr
+fr	nul	nulle:fr|nuls:fr|nulles:fr
+-	I would nul	nulle:fr|nuls:fr|null:en
+fr	null	nulle:fr|nulles:fr|nullement:fr
+-	I would null	nulle:fr|nulles:fr|nullement:fr
+fr	ai	aime:fr|aider:fr|air:fr
+fr	ail	ailleurs:fr|aille:fr|ailes:fr
+fr	aill	ailleurs:fr|aille:fr|ailles:fr
+fr	vi	vie:fr|viens:fr|vite:fr
+-	I would vi	vie:fr|viens:fr|vite:fr
+fr	vie	viens:fr|vient:fr|vieux:fr
+-	I would vie	viens:fr|vient:fr|vieux:fr
+fr	vien	viens:fr|vient:fr|viennent:fr
+-	I would vien	viens:fr|vient:fr|viennent:fr
+fr	ca	ça:fr|cas:fr|car:fr
+fr	cap	capitaine:fr|capable:fr|capacité:fr
+fr	capa	capable:fr|capacité:fr|capables:fr
+fr	ho	homme:fr|hommes:fr|honneur:fr
+-	I would ho	how:en|home:en|house:en
+fr	hon	honneur:fr|honte:fr|honnête:fr
+-	I would hon	honey:en|honor:en|honest:en
+fr	hont	honte:fr|honteux:fr|honteuse:fr
+-	I would hont	honte:fr|honteux:fr|honteuse:fr
+fr	co	comme:fr|comment:fr|connais:fr
+fr	cou	coup:fr|cours:fr|courant:fr
+fr	coup	coupable:fr|coups:fr|couple:fr
+fr	so	sont:fr|son:fr|soit:fr
+-	I would so	some:en|something:en|sorry:en
+fr	soi	soit:fr|soir:fr|sois:fr
+-	I would soi	soit:fr|soir:fr|sois:fr
+fr	pr	prendre:fr|problème:fr|pris:fr
+fr	pro	problème:fr|propos:fr|propre:fr
+fr	proc	prochaine:fr|prochain:fr|procès:fr
+fr	bl	blanc:fr|blague:fr|blessé:fr
+-	I would bl	blood:en|black:en|blue:en
+fr	bla	blanc:fr|blague:fr|blanche:fr
+-	I would bla	black:en|blame:en|blake:en
+fr	blag	blague:fr|blagues:fr|blaguais:fr
+-	I would blag	blague:fr|blagues:fr|blaguais:fr
+fr	au	aussi:fr|autre:fr|aux:fr
+fr	aur	aurais:fr|aurait:fr|aura:fr
+fr	aure	aurez:fr|aurevoir:fr|auréole:fr
+fr	co	comme:fr|comment:fr|connais:fr
+-	I would co	come:en|could:en|comme:fr
+fr	con	connais:fr|contre:fr|confiance:fr
+-	I would con	control:en|connais:fr|contre:fr
+fr	conn	connais:fr|connaissez:fr|connaître:fr
+-	I would conn	connais:fr|connection:en|connaissez:fr
+fr	ch	chose:fr|chez:fr|choses:fr
+fr	che	chez:fr|chercher:fr|chef:fr
+fr	chev	cheveux:fr|cheval:fr|chevaux:fr
+fr	co	comme:fr|comment:fr|connais:fr
+-	I would co	come:en|could:en|comme:fr
+fr	cou	coup:fr|cours:fr|courant:fr
+-	I would cou	could:en|course:en|couldn't:en
+fr	coup	coupable:fr|coups:fr|couple:fr
+-	I would coup	couple:en|coupable:fr|coups:fr
+fr	re	reste:fr|regarde:fr|rester:fr
+fr	ret	retour:fr|retard:fr|retrouver:fr
+fr	reto	retour:fr|retourner:fr|retourne:fr
+fr	pu	puis:fr|putain:fr|puisse:fr
+-	I would pu	put:en|pull:en|puis:fr
+fr	pub	public:fr|publique:fr|publicité:fr
+-	I would pub	public:en|published:en|publicity:en
+fr	publ	public:fr|publique:fr|publicité:fr
+-	I would publ	public:en|published:en|publicity:en
+fr	pl	plus:fr|plaît:fr|place:fr
+fr	ple	plein:fr|pleine:fr|pleurer:fr
+fr	plei	plein:fr|pleine:fr|pleins:fr
+fr	dr	droit:fr|drôle:fr|droite:fr
+-	I would dr	drink:en|drive:en|dream:en
+fr	dro	droit:fr|droite:fr|drogue:fr
+-	I would dro	drop:en|droit:fr|dropped:en
+fr	drog	drogue:fr|drogues:fr|drogué:fr
+-	I would drog	drogue:fr|drogues:fr|drogué:fr
+fr	fa	fait:fr|faire:fr|fais:fr
+fr	fai	fait:fr|faire:fr|fais:fr
+fr	fais	faisait:fr|faisais:fr|faisons:fr
+fr	pr	prendre:fr|problème:fr|pris:fr
+-	I would pr	pretty:en|problem:en|probably:en
+fr	pri	pris:fr|prie:fr|prison:fr
+-	I would pri	pris:fr|prison:en|private:en
+fr	pris	prison:fr|prise:fr|prisonnier:fr
+-	I would pris	prison:en|prisoner:en|prisoners:en
+fr	cl	clair:fr|club:fr|classe:fr
+fr	cli	client:fr|clients:fr|clinique:fr
+fr	clie	client:fr|clients:fr|cliente:fr
+fr	co	comme:fr|comment:fr|connais:fr
+-	I would co	come:en|could:en|comme:fr
+fr	con	connais:fr|contre:fr|confiance:fr
+-	I would con	control:en|connais:fr|contre:fr
+fr	cont	contre:fr|content:fr|continue:fr
+-	I would cont	control:en|contre:fr|contact:en
+fr	ré	réussi:fr|réponse:fr|réunion:fr
+fr	réc	récupérer:fr|récemment:fr|récompense:fr
+fr	récu	récupérer:fr|récupéré:fr|récupère:fr
+fr	pr	prendre:fr|problème:fr|pris:fr
+-	I would pr	pretty:en|problem:en|probably:en
+fr	pré	président:fr|présent:fr|préfère:fr
+-	I would pré	président:fr|présent:fr|préfère:fr
+fr	prés	président:fr|présent:fr|présente:fr
+-	I would prés	président:fr|présent:fr|présente:fr
+fr	pe	peux:fr|peut:fr|peu:fr
+fr	peu	peux:fr|peut:fr|peur:fr
+fr	peup	peuple:fr|peuples:fr|peuplée:fr
+fr	ma	mais:fr|maintenant:fr|mal:fr
+-	I would ma	man:en|make:en|mais:fr
+fr	bl	blanc:fr|blague:fr|blessé:fr
+fr	ble	blessé:fr|bleu:fr|blesser:fr
+fr	bles	blessé:fr|blesser:fr|blessure:fr
+fr	se	ses:fr|sera:fr|seul:fr
+-	I would se	see:en|seen:en|second:en
+fr	sep	sept:fr|septembre:fr|séparer:fr
+-	I would sep	separate:en|sept:fr|separated:en
+fr	ou	oui:fr|ouais:fr|oublié:fr
+fr	ouv	ouvre:fr|ouvrir:fr|ouvert:fr
+fr	ouve	ouvert:fr|ouverte:fr|ouverture:fr
+fr	me	merci:fr|mes:fr|même:fr
+-	I would me	mean:en|merci:fr|men:en
+fr	qu	que:fr|qui:fr|quoi:fr
+fr	qui	quitter:fr|quitté:fr|quitte:fr
+fr	quit	quitter:fr|quitté:fr|quitte:fr
+fr	as	assez:fr|assis:fr|asseoir:fr
+-	I would as	ask:en|asked:en|ass:en
+fr	ass	assez:fr|assis:fr|asseoir:fr
+-	I would ass	assez:fr|asshole:en|assistant:en
+fr	assi	assis:fr|assistant:fr|assise:fr
+-	I would assi	assistant:en|assis:fr|assignment:en
+fr	de	des:fr|deux:fr|depuis:fr
+fr	dev	devrais:fr|devrait:fr|devant:fr
+fr	devi	devient:fr|deviens:fr|devine:fr
+fr	pr	prendre:fr|problème:fr|pris:fr
+-	I would pr	pretty:en|problem:en|probably:en
+fr	pré	président:fr|présent:fr|préfère:fr
+-	I would pré	président:fr|présent:fr|préfère:fr
+fr	prév	prévu:fr|prévenir:fr|prévenu:fr
+-	I would prév	prévu:fr|prévenir:fr|prévenu:fr
+fr	li	lit:fr|lieu:fr|livre:fr
+fr	liv	livre:fr|livres:fr|livrer:fr
+fr	livr	livre:fr|livres:fr|livrer:fr
+fr	pu	puis:fr|putain:fr|puisse:fr
+-	I would pu	put:en|pull:en|puis:fr
+fr	put	putain:fr|pute:fr|putains:fr
+-	I would put	putain:fr|putting:en|puts:en
+fr	ho	homme:fr|hommes:fr|honneur:fr
+fr	hor	hors:fr|horrible:fr|horreur:fr
+fr	horr	horrible:fr|horreur:fr|horribles:fr
+fr	au	aussi:fr|autre:fr|aux:fr
+-	I would au	aussi:fr|autre:fr|aux:fr
+fr	aur	aurais:fr|aurait:fr|aura:fr
+-	I would aur	aurais:fr|aurait:fr|aura:fr
+fr	auri	auriez:fr|aurions:fr|auriculaire:fr
+-	I would auri	auriez:fr|aurions:fr|auriculaire:fr
+fr	rè	règles:fr|règle:fr|règlement:fr
+fr	règ	règles:fr|règle:fr|règlement:fr
+fr	règl	règles:fr|règle:fr|règlement:fr
+fr	fb	fbi:fr
+-	I would fb	fbi:en
+fr	br	bras:fr|bruit:fr|bravo:fr
+fr	bru	bruit:fr|bruce:fr|bruits:fr
+fr	brui	bruit:fr|bruits:fr|bruissement:fr
+fr	en	encore:fr|entre:fr|enfants:fr
+-	I would en	enough:en|end:en|encore:fr
+fr	enc	encore:fr|enceinte:fr|enchanté:fr
+-	I would enc	encore:fr|enceinte:fr|enchanté:fr
+fr	ence	enceinte:fr|enceintes:fr|encerclé:fr
+-	I would ence	enceinte:fr|enceintes:fr|encerclé:fr
+fr	di	dit:fr|dire:fr|dieu:fr
+fr	dir	dire:fr|dirait:fr|dirai:fr
+fr	dira	dirait:fr|dirai:fr|dirais:fr
+fr	ex	exactement:fr|expliquer:fr|exact:fr
+-	I would ex	excuse:en|exactly:en|explain:en
+fr	exc	excuse:fr|excuser:fr|excellent:fr
+-	I would exc	excuse:en|except:en|excited:en
+fr	excu	excuse:fr|excuser:fr|excuses:fr
+-	I would excu	excuse:en|excuser:fr|excuses:fr
+fr	te	temps:fr|tes:fr|tellement:fr
+fr	ter	terre:fr|terminé:fr|terrible:fr
+fr	terr	terre:fr|terrible:fr|terrain:fr
+fr	hu	humain:fr|hum:fr|huit:fr
+-	I would hu	hurt:en|husband:en|hurry:en
+fr	hum	humain:fr|humains:fr|humaine:fr
+-	I would hum	human:en|humans:en|humain:fr
+fr	huma	humain:fr|humains:fr|humaine:fr
+-	I would huma	human:en|humans:en|humain:fr
+fr	rê	rêve:fr|rêves:fr|rêvé:fr
+fr	rêv	rêve:fr|rêves:fr|rêvé:fr
+fr	rêve	rêves:fr|rêver:fr|rêvent:fr
+fr	sé	sécurité:fr|sérieux:fr|sérieusement:fr
+-	I would sé	sécurité:fr|sérieux:fr|sérieusement:fr
+fr	sér	sérieux:fr|sérieusement:fr|série:fr
+-	I would sér	sérieux:fr|sérieusement:fr|série:fr
+fr	séri	sérieux:fr|sérieusement:fr|série:fr
+-	I would séri	sérieux:fr|sérieusement:fr|série:fr
+fr	no	nous:fr|non:fr|notre:fr
+fr	nou	nous:fr|nouveau:fr|nouvelle:fr
+fr	nour	nourriture:fr|nourrir:fr|nourrit:fr
+fr	ly	lycée:fr|lydia:fr|lynn:fr
+-	I would ly	lying:en|lycée:fr|lydia:en
+fr	lyc	lycée:fr|lycéens:fr|lycéen:fr
+-	I would lyc	lycée:fr|lycéens:fr|lycéen:fr
+fr	lycé	lycée:fr|lycéens:fr|lycéen:fr
+-	I would lycé	lycée:fr|lycéens:fr|lycéen:fr
+fr	lo	longtemps:fr|loin:fr|long:fr
+fr	lon	longtemps:fr|long:fr|longue:fr
+fr	long	longtemps:fr|longue:fr|longues:fr
+fr	ba	bas:fr|battre:fr|bateau:fr
+-	I would ba	back:en|bad:en|baby:en
+fr	ban	banque:fr|bande:fr|banques:fr
+-	I would ban	bank:en|band:en|bang:en
+fr	banq	banque:fr|banques:fr|banquier:fr
+-	I would banq	banque:fr|banquet:en|banques:fr
+fr	lu	lui:fr|lumière:fr|lune:fr
+fr	lun	lune:fr|lundi:fr|lunettes:fr
+fr	ex	exactement:fr|expliquer:fr|exact:fr
+-	I would ex	excuse:en|exactly:en|explain:en
+fr	exp	expliquer:fr|expérience:fr|explique:fr
+-	I would exp	explain:en|expect:en|experience:en
+fr	expé	expérience:fr|expériences:fr|expédition:fr
+-	I would expé	expérience:fr|expériences:fr|expédition:fr
+fr	hu	humain:fr|hum:fr|huit:fr
+fr	pa	pas:fr|par:fr|parce:fr
+-	I would pa	pas:fr|par:fr|part:en
+fr	par	parce:fr|parler:fr|partir:fr
+-	I would par	part:en|party:en|parce:fr
+fr	part	partir:fr|partie:fr|parti:fr
+-	I would part	party:en|partir:fr|partie:fr
+fr	po	pour:fr|pourquoi:fr|pourrait:fr
+fr	pos	possible:fr|poser:fr|poste:fr
+fr	ba	bas:fr|battre:fr|bateau:fr
+-	I would ba	back:en|bad:en|baby:en
+fr	ban	banque:fr|bande:fr|banques:fr
+-	I would ban	bank:en|band:en|bang:en
+fr	band	bande:fr|bandes:fr|bandits:fr
+-	I would band	bande:fr|bands:en|bandits:en
+fr	no	nous:fr|non:fr|notre:fr
+fr	nor	normal:fr|nord:fr|normale:fr
+fr	ba	bas:fr|battre:fr|bateau:fr
+-	I would ba	back:en|bad:en|baby:en
+fr	bai	baiser:fr|bain:fr|baisse:fr
+-	I would bai	bail:en|baiser:fr|bain:fr
+fr	bais	baiser:fr|baisse:fr|baise:fr
+-	I would bais	baiser:fr|baisse:fr|baise:fr
+fr	to	tout:fr|toi:fr|ton:fr
+fr	toi	toilettes:fr|toit:fr|toile:fr
+fr	toil	toilettes:fr|toile:fr|toilette:fr
+fr	oc	occupe:fr|occuper:fr|occupé:fr
+-	I would oc	ocean:en|occupe:fr|occuper:fr
+fr	occ	occupe:fr|occuper:fr|occupé:fr
+-	I would occ	occupe:fr|occuper:fr|occupé:fr
+fr	occu	occupe:fr|occuper:fr|occupé:fr
+-	I would occu	occupe:fr|occuper:fr|occupé:fr
+fr	rô	rôle:fr|rôles:fr|rôti:fr
+fr	rôl	rôle:fr|rôles:fr
+fr	re	reste:fr|regarde:fr|rester:fr
+-	I would re	really:en|remember:en|real:en
+fr	rei	reine:fr|reid:fr|rein:fr
+-	I would rei	reine:fr|reid:en|reign:en
+fr	rein	reine:fr|reins:fr|reines:fr
+-	I would rein	reine:fr|reinforcements:en|reindeer:en
+fr	ég	église:fr|également:fr|égal:fr
+fr	égl	église:fr|églises:fr
+fr	égli	église:fr|églises:fr
+fr	co	comme:fr|comment:fr|connais:fr
+-	I would co	come:en|could:en|comme:fr
+fr	con	connais:fr|contre:fr|confiance:fr
+-	I would con	control:en|connais:fr|contre:fr
+fr	conn	connais:fr|connaissez:fr|connaître:fr
+-	I would conn	connais:fr|connection:en|connaissez:fr
+fr	co	comme:fr|comment:fr|connais:fr
+fr	con	connais:fr|contre:fr|confiance:fr
+fr	cond	conduire:fr|conduit:fr|conduis:fr
+fr	co	comme:fr|comment:fr|connais:fr
+-	I would co	come:en|could:en|comme:fr
+fr	cod	code:fr|codes:fr|cody:fr
+-	I would cod	code:en|cody:en|codes:en
+fr	es	est:fr|espère:fr|essaie:fr
+fr	esp	espère:fr|esprit:fr|espèce:fr
+fr	espo	espoir:fr|espoirs:fr|esposito:fr
+fr	vi	vie:fr|viens:fr|vite:fr
+-	I would vi	vie:fr|viens:fr|vite:fr
+fr	vid	vide:fr|vidéo:fr|vidéos:fr
+-	I would vid	video:en|vide:fr|vidéo:fr
+fr	vidé	vidéo:fr|vidéos:fr|vidée:fr
+-	I would vidé	vidéo:fr|vidéos:fr|vidée:fr
+fr	al	alors:fr|allez:fr|aller:fr
+fr	ale	alex:fr|alerte:fr|alexander:fr
+fr	bo	bon:fr|bonne:fr|bonjour:fr
+-	I would bo	boy:en|bon:fr|both:en
+fr	bom	bombe:fr|bombes:fr|bombay:fr
+-	I would bom	bomb:en|bombe:fr|bombs:en
+fr	bomb	bombe:fr|bombes:fr|bombay:fr
+-	I would bomb	bombe:fr|bombs:en|bombing:en
+fr	ta	tard:fr|tant:fr|table:fr
+fr	tan	tant:fr|tante:fr|tandis:fr
+fr	tant	tante:fr|tantôt:fr|tantes:fr
+fr	ma	mais:fr|maintenant:fr|mal:fr
+-	I would ma	man:en|make:en|mais:fr
+fr	mag	magnifique:fr|magasin:fr|magie:fr
+-	I would mag	magic:en|magazine:en|magnifique:fr
+fr	maga	magasin:fr|magazine:fr|magasins:fr
+-	I would maga	magazine:en|magasin:fr|magazines:en
+fr	ai	aime:fr|aider:fr|air:fr
+ar	ما	ماذا:ar|مالذي:ar|مات:ar
+ar	ماذ	ماذا:ar|ماذلك:ar
+ar	إل	إلى:ar|إلهي:ar|إليك:ar
+-	I would إل	إلى:ar|إلهي:ar|إليك:ar
+ar	نع	نعم:ar|نعرف:ar|نعلم:ar
+-	I would نع	نعم:ar|نعرف:ar|نعلم:ar
+ar	لي	ليس:ar|ليست:ar|ليلة:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الآ	الآن:ar|الآخر:ar|الآخرين:ar
+ar	إذ	إذا:ar|إذن:ar|إذهب:ar
+-	I would إذ	إذا:ar|إذن:ar|إذهب:ar
+ar	إن	إنه:ar|إنها:ar|إنهم:ar
+ar	ان	أنا:ar|أنت:ar|انا:ar
+-	I would ان	أنا:ar|أنت:ar|انا:ar
+ar	جد	جدا:ar|جديد:ar|جديدة:ar
+-	I would جد	جدا:ar|جديد:ar|جديدة:ar
+ar	لم	لماذا:ar|لما:ar|لمدة:ar
+ar	لما	لماذا:ar|لماذ:ar|لمادا:ar
+ar	لماذ	لماذا:ar|لماذلك:ar
+ar	بع	بعد:ar|بعض:ar|بعيدا:ar
+ar	مر	مرحبا:ar|مرة:ar|مرات:ar
+-	I would مر	مرحبا:ar|مرة:ar|مرات:ar
+ar	مرح	مرحبا:ar|مرحلة:ar|مرحى:ar
+-	I would مرح	مرحبا:ar|مرحلة:ar|مرحى:ar
+ar	مرحب	مرحبا:ar
+-	I would مرحب	مرحبا:ar
+ar	ول	ولكن:ar|ولا:ar|ولم:ar
+-	I would ول	ولكن:ar|ولا:ar|ولم:ar
+ar	ولك	ولكن:ar|ولكني:ar|ولكنه:ar
+-	I would ولك	ولكن:ar|ولكني:ar|ولكنه:ar
+ar	ان	أنا:ar|أنت:ar|انا:ar
+ar	تل	تلك:ar|تلعب:ar|تلقيت:ar
+ar	أر	أريد:ar|أرجوك:ar|أردت:ar
+-	I would أر	أريد:ar|أرجوك:ar|أردت:ar
+ar	أري	أريد:ar|أريدك:ar|أرى:ar
+-	I would أري	أريد:ar|أريدك:ar|أرى:ar
+ar	ان	أنا:ar|أنت:ar|انا:ar
+ar	لد	لدي:ar|لديك:ar|لدينا:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الو	الوقت:ar|الوحيد:ar|الواقع:ar
+-	I would الو	الوقت:ar|الوحيد:ar|الواقع:ar
+ar	الوق	الوقت:ar|الوقوف:ar|الوقود:ar
+-	I would الوق	الوقت:ar|الوقوف:ar|الوقود:ar
+ar	يم	يمكن:ar|يمكنك:ar|يمكنني:ar
+ar	يمك	يمكن:ar|يمكنك:ar|يمكنني:ar
+ar	يمكن	يمكنك:ar|يمكنني:ar|يمكننا:ar
+ar	جي	جيد:ar|جيدة:ar|جيدا:ar
+-	I would جي	جيد:ar|جيدة:ar|جيدا:ar
+ar	لذ	لذا:ar|لذلك:ar|لذيذ:ar
+ar	كم	كما:ar|كمية:ar|كمبيوتر:ar
+-	I would كم	كما:ar|كمية:ar|كمبيوتر:ar
+ar	لد	لدي:ar|لديك:ar|لدينا:ar
+ar	لدي	لديك:ar|لدينا:ar|لديه:ar
+ar	أل	أليس:ar|ألا:ar|ألم:ar
+-	I would أل	أليس:ar|ألا:ar|ألم:ar
+ar	ألي	أليس:ar|أليكس:ar|أليست:ar
+-	I would ألي	أليس:ar|أليكس:ar|أليست:ar
+ar	مر	مرحبا:ar|مرة:ar|مرات:ar
+ar	تع	تعرف:ar|تعلم:ar|تعال:ar
+-	I would تع	تعرف:ar|تعلم:ar|تعال:ar
+ar	تعر	تعرف:ar|تعرفين:ar|تعرفي:ar
+-	I would تعر	تعرف:ar|تعرفين:ar|تعرفي:ar
+ar	أن	أنا:ar|أنت:ar|أنه:ar
+ar	أنه	أنها:ar|أنهم:ar|أنهما:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الر	الرجل:ar|الرجال:ar|الرئيس:ar
+-	I would الر	الرجل:ar|الرجال:ar|الرئيس:ar
+ar	الرج	الرجل:ar|الرجال:ar|الرجاء:ar
+-	I would الرج	الرجل:ar|الرجال:ar|الرجاء:ar
+ar	أن	أنا:ar|أنت:ar|أنه:ar
+ar	أنن	أنني:ar|أننا:ar|أننى:ar
+ar	وا	واحد:ar|واحدة:ar|والآن:ar
+-	I would وا	واحد:ar|واحدة:ar|والآن:ar
+ar	واح	واحد:ar|واحدة:ar|واحدا:ar
+-	I would واح	واحد:ar|واحدة:ar|واحدا:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الن	الناس:ar|النار:ar|النوم:ar
+ar	النا	الناس:ar|النار:ar|النافذة:ar
+ar	اذ	إذا:ar|اذا:ar|اذهب:ar
+-	I would اذ	إذا:ar|اذا:ar|اذهب:ar
+ar	وق	وقت:ar|وقد:ar|وقتا:ar
+ar	قل	قلت:ar|قليلا:ar|قليل:ar
+-	I would قل	قلت:ar|قليلا:ar|قليل:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الك	الكثير:ar|الكبير:ar|الكلام:ar
+ar	الكث	الكثير:ar|الكثيرين:ar|الكثيرون:ar
+ar	به	بها:ar|بهذا:ar|بهذه:ar
+ar	بهذ	بهذا:ar|بهذه:ar|بهذان:ar
+ar	مع	معك:ar|معي:ar|معه:ar
+-	I would مع	معك:ar|معي:ar|معه:ar
+ar	بذ	بذلك:ar|بذاك:ar|بذلت:ar
+ar	بذل	بذلك:ar|بذلت:ar|بذلة:ar
+ar	يو	يوجد:ar|يوم:ar|يوما:ar
+-	I would يو	يوجد:ar|يوم:ar|يوما:ar
+ar	يوج	يوجد:ar|يوجين:ar|يوجه:ar
+-	I would يوج	يوجد:ar|يوجين:ar|يوجه:ar
+ar	يح	يحدث:ar|يحصل:ar|يحاول:ar
+ar	يحد	يحدث:ar|يحدق:ar|يحدد:ar
+ar	يو	يوجد:ar|يوم:ar|يوما:ar
+-	I would يو	يوجد:ar|يوم:ar|يوما:ar
+ar	با	بالطبع:ar|بالتأكيد:ar|بالنسبة:ar
+ar	بال	بالطبع:ar|بالتأكيد:ar|بالنسبة:ar
+ar	بالط	بالطبع:ar|بالطريقة:ar|بالطابق:ar
+ar	تع	تعرف:ar|تعلم:ar|تعال:ar
+-	I would تع	تعرف:ar|تعلم:ar|تعال:ar
+ar	تعل	تعلم:ar|تعلمين:ar|تعلمون:ar
+-	I would تعل	تعلم:ar|تعلمين:ar|تعلمون:ar
+ar	أل	أليس:ar|ألا:ar|ألم:ar
+ar	إذ	إذا:ar|إذن:ar|إذهب:ar
+-	I would إذ	إذا:ar|إذن:ar|إذهب:ar
+ar	فع	فعل:ar|فعلت:ar|فعله:ar
+ar	قل	قلت:ar|قليلا:ar|قليل:ar
+-	I would قل	قلت:ar|قليلا:ar|قليل:ar
+ar	قلي	قليلا:ar|قليل:ar|قليلة:ar
+-	I would قلي	قليلا:ar|قليل:ar|قليلة:ar
+ar	قليل	قليلا:ar|قليلة:ar|قليله:ar
+-	I would قليل	قليلا:ar|قليلة:ar|قليله:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الا	الآن:ar|الأمر:ar|الان:ar
+ar	فع	فعل:ar|فعلت:ar|فعله:ar
+-	I would فع	فعل:ar|فعلت:ar|فعله:ar
+ar	فعل	فعلت:ar|فعله:ar|فعلا:ar
+-	I would فعل	فعلت:ar|فعله:ar|فعلا:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الج	الجميع:ar|الجحيم:ar|الجنس:ar
+ar	الجم	الجميع:ar|الجميلة:ar|الجميل:ar
+ar	لد	لدي:ar|لديك:ar|لدينا:ar
+-	I would لد	لدي:ar|لديك:ar|لدينا:ar
+ar	لدي	لديك:ar|لدينا:ar|لديه:ar
+-	I would لدي	لديك:ar|لدينا:ar|لديه:ar
+ar	من	منذ:ar|منك:ar|مني:ar
+ar	مج	مجرد:ar|مجددا:ar|مجنون:ar
+-	I would مج	مجرد:ar|مجددا:ar|مجنون:ar
+ar	مجر	مجرد:ar|مجرم:ar|مجرى:ar
+-	I would مجر	مجرد:ar|مجرم:ar|مجرى:ar
+ar	كث	كثيرا:ar|كثير:ar|كثيرة:ar
+ar	كثي	كثيرا:ar|كثير:ar|كثيرة:ar
+ar	كثير	كثيرا:ar|كثيرة:ar|كثيره:ar
+ar	حا	حال:ar|حالك:ar|حالة:ar
+-	I would حا	حال:ar|حالك:ar|حالة:ar
+ar	فح	فحسب:ar|فحص:ar|فحصت:ar
+ar	فحس	فحسنا:ar|فحسب:ar|فحسن:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الس	السيد:ar|السيارة:ar|السبب:ar
+-	I would الس	السيد:ar|السيارة:ar|السبب:ar
+ar	السي	السيد:ar|السيارة:ar|السيدة:ar
+-	I would السي	السيد:ar|السيارة:ar|السيدة:ar
+ar	عن	عندما:ar|عنه:ar|عند:ar
+ar	بش	بشكل:ar|بشأن:ar|بشيء:ar
+-	I would بش	بشكل:ar|بشأن:ar|بشيء:ar
+ar	بشأ	بشأن:ar|بشأنه:ar|بشأنك:ar
+-	I would بشأ	بشأن:ar|بشأنه:ar|بشأنك:ar
+ar	بأ	بأن:ar|بأنك:ar|بأنه:ar
+-	I would بأ	بأن:ar|بأنك:ar|بأنه:ar
+ar	بأن	بأنك:ar|بأنه:ar|بأنني:ar
+-	I would بأن	بأنك:ar|بأنه:ar|بأنني:ar
+ar	في	فيه:ar|فيها:ar|فيما:ar
+ar	تو	توقف:ar|توجد:ar|توم:ar
+-	I would تو	توقف:ar|توجد:ar|توم:ar
+ar	توق	توقف:ar|توقفي:ar|توقفوا:ar
+-	I would توق	توقف:ar|توقفي:ar|توقفوا:ar
+ar	إل	إلى:ar|إلهي:ar|إليك:ar
+ar	حص	حصلت:ar|حصل:ar|حصلنا:ar
+-	I would حص	حصلت:ar|حصل:ar|حصلنا:ar
+ar	حصل	حصلت:ar|حصلنا:ar|حصلوا:ar
+-	I would حصل	حصلت:ar|حصلنا:ar|حصلوا:ar
+ar	با	بالطبع:ar|بالتأكيد:ar|بالنسبة:ar
+-	I would با	بالطبع:ar|بالتأكيد:ar|بالنسبة:ar
+ar	بال	بالطبع:ar|بالتأكيد:ar|بالنسبة:ar
+-	I would بال	بالطبع:ar|بالتأكيد:ar|بالنسبة:ar
+ar	بالن	بالنسبة:ar|بالنظر:ar|بالناس:ar
+-	I would بالن	بالنسبة:ar|بالنظر:ar|بالناس:ar
+ar	ست	ستكون:ar|ستة:ar|ستفعل:ar
+ar	ستك	ستكون:ar|ستكونين:ar|ستكوني:ar
+ar	ستكو	ستكون:ar|ستكونين:ar|ستكوني:ar
+ar	تق	تقول:ar|تقوم:ar|تقريبا:ar
+-	I would تق	تقول:ar|تقوم:ar|تقريبا:ar
+ar	تقو	تقول:ar|تقوم:ar|تقولين:ar
+-	I would تقو	تقول:ar|تقوم:ar|تقولين:ar
+ar	لم	لماذا:ar|لما:ar|لمدة:ar
+ar	أر	أريد:ar|أرجوك:ar|أردت:ar
+-	I would أر	أريد:ar|أرجوك:ar|أردت:ar
+ar	أرد	أردت:ar|أردنا:ar|أردته:ar
+-	I would أرد	أردت:ar|أردنا:ar|أردته:ar
+ar	هؤ	هؤلاء:ar|هؤلا:ar
+ar	هؤل	هؤلاء:ar|هؤلا:ar
+ar	هؤلا	هؤلاء:ar
+ar	بح	بحاجة:ar|بحق:ar|بحقك:ar
+-	I would بح	بحاجة:ar|بحق:ar|بحقك:ar
+ar	بحا	بحاجة:ar|بحالة:ar|بحال:ar
+-	I would بحا	بحاجة:ar|بحالة:ar|بحال:ar
+ar	بحاج	بحاجة:ar|بحاجتك:ar|بحاجته:ar
+-	I would بحاج	بحاجة:ar|بحاجتك:ar|بحاجته:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الح	الحقيقة:ar|الحياة:ar|الحصول:ar
+ar	الحي	الحياة:ar|الحيوانات:ar|الحين:ar
+ar	بح	بحاجة:ar|بحق:ar|بحقك:ar
+-	I would بح	بحاجة:ar|بحق:ar|بحقك:ar
+ar	نف	نفسك:ar|نفس:ar|نفسي:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الذ	الذي:ar|الذهاب:ar|الذين:ar
+-	I would الذ	الذي:ar|الذهاب:ar|الذين:ar
+ar	الذي	الذين:ar|الذئب:ar|الذيل:ar
+-	I would الذي	الذين:ar|الذئب:ar|الذيل:ar
+ar	بأ	بأن:ar|بأنك:ar|بأنه:ar
+ar	حي	حيث:ar|حياتي:ar|حين:ar
+-	I would حي	حيث:ar|حياتي:ar|حين:ar
+ar	آس	آسف:ar|آسفة:ar|آسفه:ar
+ar	آسف	آسفة:ar|آسفه:ar|آسفون:ar
+ar	لك	لكن:ar|لكم:ar|لكي:ar
+-	I would لك	لكن:ar|لكم:ar|لكي:ar
+ar	اع	أعرف:ar|أعتقد:ar|أعلم:ar
+ar	اعت	أعتقد:ar|اعتقد:ar|اعتقدت:ar
+ar	اعتق	أعتقد:ar|اعتقد:ar|اعتقدت:ar
+ar	مش	مشكلة:ar|مشاكل:ar|مشاهدة:ar
+-	I would مش	مشكلة:ar|مشاكل:ar|مشاهدة:ar
+ar	مشك	مشكلة:ar|مشكلتك:ar|مشكلتي:ar
+-	I would مشك	مشكلة:ar|مشكلتك:ar|مشكلتي:ar
+ar	مشكل	مشكلة:ar|مشكلتك:ar|مشكلتي:ar
+-	I would مشكل	مشكلة:ar|مشكلتك:ar|مشكلتي:ar
+ar	قم	قمت:ar|قمنا:ar|قمة:ar
+-	I would قم	قمت:ar|قمنا:ar|قمة:ar
+ar	تب	تبدو:ar|تبا:ar|تبقى:ar
+ar	لأ	لأن:ar|لأنه:ar|لأنك:ar
+-	I would لأ	لأن:ar|لأنه:ar|لأنك:ar
+ar	لأن	لأنه:ar|لأنك:ar|لأنني:ar
+-	I would لأن	لأنه:ar|لأنك:ar|لأنني:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الش	الشيء:ar|الشرطة:ar|الشخص:ar
+ar	الشخ	الشخص:ar|الشخصية:ar|الشخصي:ar
+ar	به	بها:ar|بهذا:ar|بهذه:ar
+-	I would به	بها:ar|بهذا:ar|بهذه:ar
+ar	بهذ	بهذا:ar|بهذه:ar|بهذان:ar
+-	I would بهذ	بهذا:ar|بهذه:ar|بهذان:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الأ	الأمر:ar|الأمور:ar|الأشياء:ar
+ar	بن	بنا:ar|بنفسك:ar|بنفسي:ar
+-	I would بن	بنا:ar|بنفسك:ar|بنفسي:ar
+ar	فت	فتاة:ar|فتى:ar|فترة:ar
+ar	فتا	فتاة:ar|فتاتي:ar|فتاتك:ar
+ar	ما	ماذا:ar|مالذي:ar|مات:ar
+-	I would ما	ماذا:ar|مالذي:ar|مات:ar
+ar	مال	مالذي:ar|مالك:ar|مالا:ar
+-	I would مال	مالذي:ar|مالك:ar|مالا:ar
+ar	مالذ	مالذي:ar
+-	I would مالذ	مالذي:ar
+ar	اج	أجل:ar|اجل:ar|اجلس:ar
+ar	أن	أنا:ar|أنت:ar|أنه:ar
+-	I would أن	أنا:ar|أنت:ar|أنه:ar
+ar	أنه	أنها:ar|أنهم:ar|أنهما:ar
+-	I would أنه	أنها:ar|أنهم:ar|أنهما:ar
+ar	مم	مما:ar|ممكن:ar|ممتاز:ar
+ar	وا	واحد:ar|واحدة:ar|والآن:ar
+-	I would وا	واحد:ar|واحدة:ar|والآن:ar
+ar	وال	والآن:ar|والدك:ar|والدي:ar
+-	I would وال	والآن:ar|والدك:ar|والدي:ar
+ar	والآ	والآن:ar|والآخر:ar|والآخرين:ar
+-	I would والآ	والآن:ar|والآخر:ar|والآخرين:ar
+ar	في	فيه:ar|فيها:ar|فيما:ar
+ar	فيه	فيها:ar|فيهم:ar|فيهما:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الس	السيد:ar|السيارة:ar|السبب:ar
+-	I would الس	السيد:ar|السيارة:ar|السبب:ar
+ar	السب	السبب:ar|السبت:ar|السباحة:ar
+-	I would السب	السبب:ar|السبت:ar|السباحة:ar
+ar	بك	بكل:ar|بكثير:ar|بكم:ar
+ar	لل	للغاية:ar|للتو:ar|للمنزل:ar
+-	I would لل	للغاية:ar|للتو:ar|للمنزل:ar
+ar	للت	للتو:ar|للتحدث:ar|للتفكير:ar
+-	I would للت	للتو:ar|للتحدث:ar|للتفكير:ar
+ar	فع	فعل:ar|فعلت:ar|فعله:ar
+ar	فعل	فعلت:ar|فعله:ar|فعلا:ar
+ar	اذ	إذا:ar|اذا:ar|اذهب:ar
+-	I would اذ	إذا:ar|اذا:ar|اذهب:ar
+ar	اذه	اذهب:ar|أذهب:ar|اذهبي:ar
+-	I would اذه	اذهب:ar|أذهب:ar|اذهبي:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الو	الوقت:ar|الوحيد:ar|الواقع:ar
+ar	الوا	الواقع:ar|الواضح:ar|الواحد:ar
+ar	اع	أعرف:ar|أعتقد:ar|أعلم:ar
+-	I would اع	أعرف:ar|أعتقد:ar|أعلم:ar
+ar	اعر	أعرف:ar|اعرف:ar|أعرفه:ar
+-	I would اعر	أعرف:ar|اعرف:ar|أعرفه:ar
+ar	هن	هنا:ar|هناك:ar|هنالك:ar
+ar	هنا	هناك:ar|هنالك:ar
+ar	هنال	هنالك:ar
+ar	أو	أوه:ar|أولا:ar|أود:ar
+-	I would أو	أوه:ar|أولا:ar|أود:ar
+ar	أول	أولا:ar|أولئك:ar|أولاد:ar
+-	I would أول	أولا:ar|أولئك:ar|أولاد:ar
+ar	ول	ولكن:ar|ولا:ar|ولم:ar
+ar	بع	بعد:ar|بعض:ar|بعيدا:ar
+-	I would بع	بعد:ar|بعض:ar|بعيدا:ar
+ar	بعي	بعيدا:ar|بعيد:ar|بعيدة:ar
+-	I would بعي	بعيدا:ar|بعيد:ar|بعيدة:ar
+ar	بعيد	بعيدا:ar|بعيدة:ar|بعيدين:ar
+-	I would بعيد	بعيدا:ar|بعيدة:ar|بعيدين:ar
+ar	جم	جميعا:ar|جميع:ar|جميلة:ar
+ar	جمي	جميعا:ar|جميع:ar|جميلة:ar
+ar	جميل	جميلة:ar|جميلا:ar|جميلات:ar
+ar	أن	أنا:ar|أنت:ar|أنه:ar
+-	I would أن	أنا:ar|أنت:ar|أنه:ar
+ar	أنظ	أنظر:ar|أنظري:ar|أنظروا:ar
+-	I would أنظ	أنظر:ar|أنظري:ar|أنظروا:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الخ	الخاص:ar|الخير:ar|الخاصة:ar
+ar	الخا	الخاص:ar|الخاصة:ar|الخارج:ar
+ar	يع	يعني:ar|يعرف:ar|يعمل:ar
+-	I would يع	يعني:ar|يعرف:ar|يعمل:ar
+ar	يعم	يعمل:ar|يعملون:ar|يعملان:ar
+-	I would يعم	يعمل:ar|يعملون:ar|يعملان:ar
+ar	جم	جميعا:ar|جميع:ar|جميلة:ar
+ar	جمي	جميعا:ar|جميع:ar|جميلة:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الا	الآن:ar|الأمر:ar|الان:ar
+-	I would الا	الآن:ar|الأمر:ar|الان:ar
+ar	الام	الأمر:ar|الامر:ar|الأمور:ar
+-	I would الام	الأمر:ar|الامر:ar|الأمور:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الم	المكان:ar|المنزل:ar|المال:ar
+ar	المد	المدينة:ar|المدرسة:ar|المدير:ar
+ar	إل	إلى:ar|إلهي:ar|إليك:ar
+-	I would إل	إلى:ar|إلهي:ar|إليك:ar
+ar	دع	دعنا:ar|دعني:ar|دعونا:ar
+ar	دعن	دعنا:ar|دعني:ar|دعنى:ar
+ar	تع	تعرف:ar|تعلم:ar|تعال:ar
+-	I would تع	تعرف:ar|تعلم:ar|تعال:ar
+ar	تعل	تعلم:ar|تعلمين:ar|تعلمون:ar
+-	I would تعل	تعلم:ar|تعلمين:ar|تعلمون:ar
+ar	تعلم	تعلمين:ar|تعلمون:ar|تعلمت:ar
+-	I would تعلم	تعلمين:ar|تعلمون:ar|تعلمت:ar
+ar	إل	إلى:ar|إلهي:ar|إليك:ar
+ar	إلي	إليك:ar|إليه:ar|إليها:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الط	الطريق:ar|الطريقة:ar|الطفل:ar
+-	I would الط	الطريق:ar|الطريقة:ar|الطفل:ar
+ar	الطر	الطريق:ar|الطريقة:ar|الطرق:ar
+-	I would الطر	الطريق:ar|الطريقة:ar|الطرق:ar
+ar	عظ	عظيم:ar|عظيمة:ar|عظيما:ar
+ar	عظي	عظيم:ar|عظيمة:ar|عظيما:ar
+ar	أن	أنا:ar|أنت:ar|أنه:ar
+-	I would أن	أنا:ar|أنت:ar|أنه:ar
+ar	أنت	أنتم:ar|أنتي:ar|أنتظر:ar
+-	I would أنت	أنتم:ar|أنتي:ar|أنتظر:ar
+ar	ذه	ذهبت:ar|ذهب:ar|ذهبنا:ar
+ar	ذهب	ذهبت:ar|ذهبنا:ar|ذهبوا:ar
+ar	تر	تريد:ar|تريدين:ar|ترى:ar
+-	I would تر	تريد:ar|تريدين:ar|ترى:ar
+ar	عا	عام:ar|عائلة:ar|عاما:ar
+ar	او	أوه:ar|اوه:ar|أولا:ar
+-	I would او	أوه:ar|اوه:ar|أولا:ar
+ar	لد	لدي:ar|لديك:ar|لدينا:ar
+ar	لدي	لديك:ar|لدينا:ar|لديه:ar
+ar	لديه	لديها:ar|لديهم:ar|لديهما:ar
+ar	له	لها:ar|لهذا:ar|لهم:ar
+-	I would له	لها:ar|لهذا:ar|لهم:ar
+ar	لك	لكن:ar|لكم:ar|لكي:ar
+ar	لكن	لكنه:ar|لكني:ar|لكنني:ar
+ar	شي	شيء:ar|شيئا:ar|شيئ:ar
+-	I would شي	شيء:ar|شيئا:ar|شيئ:ar
+ar	عن	عندما:ar|عنه:ar|عند:ar
+ar	يت	يتم:ar|يتحدث:ar|يتعلق:ar
+-	I would يت	يتم:ar|يتحدث:ar|يتعلق:ar
+ar	أه	أهلا:ar|أهذا:ar|أهتم:ar
+ar	أهل	أهلا:ar|أهلي:ar|أهلك:ar
+ar	ما	ماذا:ar|مالذي:ar|مات:ar
+-	I would ما	ماذا:ar|مالذي:ar|مات:ar
+ar	من	منذ:ar|منك:ar|مني:ar
+ar	منه	منها:ar|منهم:ar|منهما:ar
+ar	فق	فقط:ar|فقد:ar|فقدت:ar
+-	I would فق	فقط:ar|فقد:ar|فقدت:ar
+ar	مع	معك:ar|معي:ar|معه:ar
+ar	معه	معها:ar|معهم:ar|معهد:ar
+ar	سع	سعيد:ar|سعيدة:ar|سعيدا:ar
+-	I would سع	سعيد:ar|سعيدة:ar|سعيدا:ar
+ar	سعي	سعيد:ar|سعيدة:ar|سعيدا:ar
+-	I would سعي	سعيد:ar|سعيدة:ar|سعيدا:ar
+ar	سعيد	سعيدة:ar|سعيدا:ar|سعيدين:ar
+-	I would سعيد	سعيدة:ar|سعيدا:ar|سعيدين:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الر	الرجل:ar|الرجال:ar|الرئيس:ar
+ar	الرئ	الرئيس:ar|الرئيسي:ar|الرئيسية:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الأ	الأمر:ar|الأمور:ar|الأشياء:ar
+-	I would الأ	الأمر:ar|الأمور:ar|الأشياء:ar
+ar	الأق	الأقل:ar|الأقدام:ar|الأقراص:ar
+-	I would الأق	الأقل:ar|الأقدام:ar|الأقراص:ar
+ar	أق	أقول:ar|أقصد:ar|أقوم:ar
+ar	أقص	أقصد:ar|أقصى:ar|أقصده:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الأ	الأمر:ar|الأمور:ar|الأشياء:ar
+-	I would الأ	الأمر:ar|الأمور:ar|الأشياء:ar
+ar	الأو	الأولى:ar|الأول:ar|الأولاد:ar
+-	I would الأو	الأولى:ar|الأول:ar|الأولاد:ar
+ar	اح	أحد:ar|احد:ar|أحب:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الم	المكان:ar|المنزل:ar|المال:ar
+-	I would الم	المكان:ar|المنزل:ar|المال:ar
+ar	المد	المدينة:ar|المدرسة:ar|المدير:ar
+-	I would المد	المدينة:ar|المدرسة:ar|المدير:ar
+ar	حي	حيث:ar|حياتي:ar|حين:ar
+ar	لن	لنا:ar|لنذهب:ar|لنفسك:ar
+-	I would لن	لنا:ar|لنذهب:ar|لنفسك:ar
+ar	لنذ	لنذهب:ar|لنذل:ar|لنذير:ar
+-	I would لنذ	لنذهب:ar|لنذل:ar|لنذير:ar
+ar	لنذه	لنذهب:ar
+-	I would لنذه	لنذهب:ar
+ar	هل	هلا:ar|هلم:ar|هلوسة:ar
+ar	إن	إنه:ar|إنها:ar|إنهم:ar
+-	I would إن	إنه:ar|إنها:ar|إنهم:ar
+ar	إنن	إنني:ar|إننا:ar|إننى:ar
+-	I would إنن	إنني:ar|إننا:ar|إننى:ar
+ar	بد	بدون:ar|بدأت:ar|بدأ:ar
+ar	بدأ	بدأت:ar|بدأنا:ar|بدأوا:ar
+ar	تق	تقول:ar|تقوم:ar|تقريبا:ar
+-	I would تق	تقول:ar|تقوم:ar|تقريبا:ar
+ar	تقو	تقول:ar|تقوم:ar|تقولين:ar
+-	I would تقو	تقول:ar|تقوم:ar|تقولين:ar
+ar	أق	أقول:ar|أقصد:ar|أقوم:ar
+ar	أقو	أقول:ar|أقوم:ar|أقوله:ar
+ar	رأ	رأيت:ar|رأيك:ar|رأيته:ar
+-	I would رأ	رأيت:ar|رأيك:ar|رأيته:ar
+ar	رأي	رأيت:ar|رأيك:ar|رأيته:ar
+-	I would رأي	رأيت:ar|رأيك:ar|رأيته:ar
+ar	شى	شىء:ar
+ar	دق	دقيقة:ar|دقائق:ar|دقيقتين:ar
+-	I would دق	دقيقة:ar|دقائق:ar|دقيقتين:ar
+ar	دقا	دقائق:ar|دقات:ar
+-	I would دقا	دقائق:ar|دقات:ar
+ar	دقائ	دقائق:ar
+-	I would دقائ	دقائق:ar
+ar	يع	يعني:ar|يعرف:ar|يعمل:ar
+ar	يعل	يعلم:ar|يعلمون:ar|يعلموا:ar
+ar	تق	تقول:ar|تقوم:ar|تقريبا:ar
+-	I would تق	تقول:ar|تقوم:ar|تقريبا:ar
+ar	تقر	تقريبا:ar|تقرير:ar|تقرأ:ar
+-	I would تقر	تقريبا:ar|تقرير:ar|تقرأ:ar
+ar	تقري	تقريبا:ar|تقرير:ar|تقريرا:ar
+-	I would تقري	تقريبا:ar|تقرير:ar|تقريرا:ar
+ar	رج	رجل:ar|رجاء:ar|رجال:ar
+ar	رجا	رجاء:ar|رجال:ar|رجاءا:ar
+ar	شخ	شخص:ar|شخصا:ar|شخصية:ar
+-	I would شخ	شخص:ar|شخصا:ar|شخصية:ar
+ar	شخص	شخصا:ar|شخصية:ar|شخصيا:ar
+-	I would شخص	شخصا:ar|شخصية:ar|شخصيا:ar
+ar	تح	تحت:ar|تحتاج:ar|تحاول:ar
+ar	تحت	تحتاج:ar|تحتاجين:ar|تحتاجه:ar
+ar	تحتا	تحتاج:ar|تحتاجين:ar|تحتاجه:ar
+ar	رؤ	رؤية:ar|رؤيتك:ar|رؤيته:ar
+-	I would رؤ	رؤية:ar|رؤيتك:ar|رؤيته:ar
+ar	رؤي	رؤية:ar|رؤيتك:ar|رؤيته:ar
+-	I would رؤي	رؤية:ar|رؤيتك:ar|رؤيته:ar
+ar	مع	معك:ar|معي:ar|معه:ar
+ar	معن	معنا:ar|معنى:ar|معني:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الج	الجميع:ar|الجحيم:ar|الجنس:ar
+-	I would الج	الجميع:ar|الجحيم:ar|الجنس:ar
+ar	الجن	الجنس:ar|الجنود:ar|الجنون:ar
+-	I would الجن	الجنس:ar|الجنود:ar|الجنون:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الس	السيد:ar|السيارة:ar|السبب:ar
+ar	السا	الساعة:ar|السابقة:ar|السابق:ar
+ar	ول	ولكن:ar|ولا:ar|ولم:ar
+-	I would ول	ولكن:ar|ولا:ar|ولم:ar
+ar	ولي	وليس:ar|وليست:ar|وليام:ar
+-	I would ولي	وليس:ar|وليست:ar|وليام:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الص	الصباح:ar|الصغير:ar|الصغيرة:ar
+ar	الصغ	الصغير:ar|الصغيرة:ar|الصغار:ar
+ar	أي	أين:ar|أيضا:ar|أيها:ar
+ar	أيا	أيام:ar|أياه:ar|أيامي:ar
+ar	عن	عندما:ar|عنه:ar|عند:ar
+-	I would عن	عندما:ar|عنه:ar|عند:ar
+ar	عنه	عنها:ar|عنهم:ar|عنهما:ar
+-	I would عنه	عنها:ar|عنهم:ar|عنهما:ar
+ar	نح	نحن:ar|نحتاج:ar|نحو:ar
+ar	نحت	نحتاج:ar|نحتاجه:ar|نحتفل:ar
+ar	نحتا	نحتاج:ar|نحتاجه:ar|نحتاجك:ar
+ar	حي	حيث:ar|حياتي:ar|حين:ar
+-	I would حي	حيث:ar|حياتي:ar|حين:ar
+ar	حيا	حياتي:ar|حياة:ar|حياتك:ar
+-	I would حيا	حياتي:ar|حياة:ar|حياتك:ar
+ar	حيات	حياتي:ar|حياتك:ar|حياته:ar
+-	I would حيات	حياتي:ar|حياتك:ar|حياته:ar
+ar	وم	ومن:ar|وماذا:ar|وما:ar
+ar	وما	وماذا:ar|ومالذي:ar|ومات:ar
+ar	وماذ	وماذا:ar|وماذلك:ar
+ar	تك	تكون:ar|تكن:ar|تكوني:ar
+-	I would تك	تكون:ar|تكن:ar|تكوني:ar
+ar	تكو	تكون:ar|تكوني:ar|تكونين:ar
+-	I would تكو	تكون:ar|تكوني:ar|تكونين:ar
+ar	تكون	تكوني:ar|تكونين:ar|تكونوا:ar
+-	I would تكون	تكوني:ar|تكونين:ar|تكونوا:ar
+ar	يق	يقول:ar|يقوم:ar|يقولون:ar
+ar	يقو	يقول:ar|يقوم:ar|يقولون:ar
+ar	يو	يوجد:ar|يوم:ar|يوما:ar
+-	I would يو	يوجد:ar|يوم:ar|يوما:ar
+ar	يوم	يوما:ar|يومين:ar|يومك:ar
+-	I would يوم	يوما:ar|يومين:ar|يومك:ar
+ar	خط	خطأ:ar|خطر:ar|خطة:ar
+ar	وه	وهذا:ar|وهو:ar|وهي:ar
+-	I would وه	وهذا:ar|وهو:ar|وهي:ar
+ar	أر	أريد:ar|أرجوك:ar|أردت:ar
+ar	أرا	أراك:ar|أراد:ar|أراهن:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الب	الباب:ar|البيت:ar|البعض:ar
+-	I would الب	الباب:ar|البيت:ar|البعض:ar
+ar	البق	البقاء:ar|البقية:ar|البقر:ar
+-	I would البق	البقاء:ar|البقية:ar|البقر:ar
+ar	اك	أكثر:ar|أكون:ar|اكثر:ar
+ar	اكث	أكثر:ar|اكثر:ar|أكثرهم:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الم	المكان:ar|المنزل:ar|المال:ar
+-	I would الم	المكان:ar|المنزل:ar|المال:ar
+ar	الما	المال:ar|الماضي:ar|الماء:ar
+-	I would الما	المال:ar|الماضي:ar|الماء:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الع	العمل:ar|العالم:ar|العودة:ar
+ar	العا	العالم:ar|العام:ar|العائلة:ar
+ar	جز	جزء:ar|جزيلا:ar|جزءا:ar
+-	I would جز	جزء:ar|جزيلا:ar|جزءا:ar
+ar	يم	يمكن:ar|يمكنك:ar|يمكنني:ar
+ar	يمك	يمكن:ar|يمكنك:ar|يمكنني:ar
+ar	يمكن	يمكنك:ar|يمكنني:ar|يمكننا:ar
+ar	أخ	أخرى:ar|أخبرني:ar|أخبرك:ar
+-	I would أخ	أخرى:ar|أخبرني:ar|أخبرك:ar
+ar	أص	أصبح:ar|أصبحت:ar|أصدق:ar
+ar	أصب	أصبح:ar|أصبحت:ar|أصبت:ar
+ar	أصبح	أصبحت:ar|أصبحنا:ar|أصبحوا:ar
+ar	حا	حال:ar|حالك:ar|حالة:ar
+-	I would حا	حال:ar|حالك:ar|حالة:ar
+ar	حاو	حاولت:ar|حاول:ar|حاولي:ar
+-	I would حاو	حاولت:ar|حاول:ar|حاولي:ar
+ar	حاول	حاولت:ar|حاولي:ar|حاولوا:ar
+-	I would حاول	حاولت:ar|حاولي:ar|حاولوا:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الم	المكان:ar|المنزل:ar|المال:ar
+ar	الما	المال:ar|الماضي:ar|الماء:ar
+ar	تظ	تظن:ar|تظهر:ar|تظنين:ar
+-	I would تظ	تظن:ar|تظهر:ar|تظنين:ar
+ar	وك	وكان:ar|وكل:ar|وكيف:ar
+ar	وكا	وكان:ar|وكانت:ar|وكالة:ar
+ar	تح	تحت:ar|تحتاج:ar|تحاول:ar
+-	I would تح	تحت:ar|تحتاج:ar|تحاول:ar
+ar	تحا	تحاول:ar|تحاولين:ar|تحاولي:ar
+-	I would تحا	تحاول:ar|تحاولين:ar|تحاولي:ar
+ar	تحاو	تحاول:ar|تحاولين:ar|تحاولي:ar
+-	I would تحاو	تحاول:ar|تحاولين:ar|تحاولي:ar
+ar	عل	على:ar|عليك:ar|علي:ar
+ar	علي	عليك:ar|عليه:ar|علينا:ar
+ar	عليه	عليها:ar|عليهم:ar|عليهما:ar
+ar	سأ	سأكون:ar|سأذهب:ar|سأفعل:ar
+-	I would سأ	سأكون:ar|سأذهب:ar|سأفعل:ar
+ar	سأف	سأفعل:ar|سأفعله:ar|سأفعلها:ar
+-	I would سأف	سأفعل:ar|سأفعله:ar|سأفعلها:ar
+ar	سأفع	سأفعل:ar|سأفعله:ar|سأفعلها:ar
+-	I would سأفع	سأفعل:ar|سأفعله:ar|سأفعلها:ar
+ar	صغ	صغيرة:ar|صغير:ar|صغيرا:ar
+ar	صغي	صغيرة:ar|صغير:ar|صغيرا:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الم	المكان:ar|المنزل:ar|المال:ar
+ar	المش	المشكلة:ar|المشاكل:ar|المشتبه:ar
+ar	بخ	بخير:ar|بخصوص:ar|بخلاف:ar
+-	I would بخ	بخير:ar|بخصوص:ar|بخلاف:ar
+ar	بخص	بخصوص:ar|بخصوصه:ar|بخصوصك:ar
+-	I would بخص	بخصوص:ar|بخصوصه:ar|بخصوصك:ar
+ar	بخصو	بخصوص:ar|بخصوصه:ar|بخصوصك:ar
+-	I would بخصو	بخصوص:ar|بخصوصه:ar|بخصوصك:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الخ	الخاص:ar|الخير:ar|الخاصة:ar
+ar	الخر	الخروج:ar|الخريطة:ar|الخريف:ar
+ar	يذ	يذهب:ar|يذهبون:ar|يذكر:ar
+-	I would يذ	يذهب:ar|يذهبون:ar|يذكر:ar
+ar	يذه	يذهب:ar|يذهبون:ar|يذهبوا:ar
+-	I would يذه	يذهب:ar|يذهبون:ar|يذهبوا:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الل	الليلة:ar|اللعنة:ar|الله:ar
+ar	اللع	اللعنة:ar|اللعين:ar|اللعبة:ar
+ar	ان	أنا:ar|أنت:ar|انا:ar
+-	I would ان	أنا:ar|أنت:ar|انا:ar
+ar	انظ	انظر:ar|انظري:ar|انظروا:ar
+-	I would انظ	انظر:ar|انظري:ar|انظروا:ar
+ar	انظر	انظري:ar|انظروا:ar|انظرى:ar
+-	I would انظر	انظري:ar|انظروا:ar|انظرى:ar
+ar	بل	بلا:ar|بلى:ar|بلدي:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	قص	قصة:ar|قصيرة:ar|قصير:ar
+ar	أع	أعرف:ar|أعتقد:ar|أعلم:ar
+-	I would أع	أعرف:ar|أعتقد:ar|أعلم:ar
+ar	أعط	أعطني:ar|أعطيك:ar|أعطيني:ar
+-	I would أعط	أعطني:ar|أعطيك:ar|أعطيني:ar
+ar	أعطن	أعطني:ar|أعطنا:ar
+-	I would أعطن	أعطني:ar|أعطنا:ar
+ar	اخ	آخر:ar|أخرى:ar|اخرى:ar
+ar	اخر	أخرى:ar|اخرى:ar|اخرج:ar
+ar	أص	أصبح:ar|أصبحت:ar|أصدق:ar
+-	I would أص	أصبح:ar|أصبحت:ar|أصدق:ar
+ar	أصد	أصدق:ar|أصدقاء:ar|أصدقائي:ar
+-	I would أصد	أصدق:ar|أصدقاء:ar|أصدقائي:ar
+ar	دع	دعنا:ar|دعني:ar|دعونا:ar
+ar	دعو	دعونا:ar|دعوني:ar|دعوة:ar
+ar	دعون	دعونا:ar|دعوني:ar|دعونى:ar
+ar	عل	على:ar|عليك:ar|علي:ar
+-	I would عل	على:ar|عليك:ar|علي:ar
+ar	عا	عام:ar|عائلة:ar|عاما:ar
+ar	عائ	عائلة:ar|عائلتي:ar|عائلتك:ar
+ar	عائل	عائلة:ar|عائلتي:ar|عائلتك:ar
+ar	حق	حقا:ar|حقيقي:ar|حقيقة:ar
+-	I would حق	حقا:ar|حقيقي:ar|حقيقة:ar
+ar	حقي	حقيقي:ar|حقيقة:ar|حقيقية:ar
+-	I would حقي	حقيقي:ar|حقيقة:ar|حقيقية:ar
+ar	حقيق	حقيقي:ar|حقيقة:ar|حقيقية:ar
+-	I would حقيق	حقيقي:ar|حقيقة:ar|حقيقية:ar
+ar	مث	مثل:ar|مثلك:ar|مثير:ar
+ar	مثل	مثلك:ar|مثلي:ar|مثلما:ar
+ar	زل	زلت:ar|زلنا:ar|زلزال:ar
+-	I would زل	زلت:ar|زلنا:ar|زلزال:ar
+ar	سي	سيدي:ar|سيكون:ar|سيد:ar
+ar	سيد	سيدي:ar|سيدة:ar|سيدتي:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الع	العمل:ar|العالم:ar|العودة:ar
+-	I would الع	العمل:ar|العالم:ar|العودة:ar
+ar	العش	العشاء:ar|العشب:ar|العشرين:ar
+-	I would العش	العشاء:ar|العشب:ar|العشرين:ar
+ar	تح	تحت:ar|تحتاج:ar|تحاول:ar
+ar	تحص	تحصل:ar|تحصلي:ar|تحصلين:ar
+ar	أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
+-	I would أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
+ar	أتي	أتيت:ar|أتينا:ar|أتيتم:ar
+-	I would أتي	أتيت:ar|أتينا:ar|أتيتم:ar
+ar	حق	حقا:ar|حقيقي:ar|حقيقة:ar
+ar	حقي	حقيقي:ar|حقيقة:ar|حقيقية:ar
+ar	حقيق	حقيقي:ar|حقيقة:ar|حقيقية:ar
+ar	خم	خمسة:ar|خمس:ar|خمسون:ar
+-	I would خم	خمسة:ar|خمس:ar|خمسون:ar
+ar	خمس	خمسة:ar|خمسون:ar|خمسين:ar
+-	I would خمس	خمسة:ar|خمسون:ar|خمسين:ar
+ar	بي	بين:ar|بينما:ar|بيت:ar
+ar	سا	ساعة:ar|سام:ar|ساعات:ar
+-	I would سا	ساعة:ar|سام:ar|ساعات:ar
+ar	ساع	ساعة:ar|ساعات:ar|ساعدني:ar
+-	I would ساع	ساعة:ar|ساعات:ar|ساعدني:ar
+ar	ساعا	ساعات:ar|سأعاود:ar|سأعالج:ar
+-	I would ساعا	ساعات:ar|سأعاود:ar|سأعالج:ar
+ar	به	بها:ar|بهذا:ar|بهذه:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الم	المكان:ar|المنزل:ar|المال:ar
+-	I would الم	المكان:ar|المنزل:ar|المال:ar
+ar	المو	الموت:ar|الموضوع:ar|الموسيقى:ar
+-	I would المو	الموت:ar|الموضوع:ar|الموسيقى:ar
+ar	عم	عمل:ar|عما:ar|عملية:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الأ	الأمر:ar|الأمور:ar|الأشياء:ar
+-	I would الأ	الأمر:ar|الأمور:ar|الأشياء:ar
+ar	الأش	الأشياء:ar|الأشخاص:ar|الأشجار:ar
+-	I would الأش	الأشياء:ar|الأشخاص:ar|الأشجار:ar
+ar	لك	لكن:ar|لكم:ar|لكي:ar
+ar	وك	وكان:ar|وكل:ar|وكيف:ar
+-	I would وك	وكان:ar|وكل:ar|وكيف:ar
+ar	ني	نيويورك:ar|نيك:ar|نيل:ar
+ar	نيو	نيويورك:ar|نيوتن:ar|نيومان:ar
+ar	نيوي	نيويورك:ar
+ar	أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
+-	I would أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
+ar	أتع	أتعلم:ar|أتعرف:ar|أتعلمين:ar
+-	I would أتع	أتعلم:ar|أتعرف:ar|أتعلمين:ar
+ar	أتعر	أتعرف:ar|أتعرفين:ar|أتعرفون:ar
+-	I would أتعر	أتعرف:ar|أتعرفين:ar|أتعرفون:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الق	القيام:ar|القادمة:ar|القضية:ar
+ar	القا	القادمة:ar|القائد:ar|القانون:ar
+ar	بو	بواسطة:ar|بول:ar|بوب:ar
+-	I would بو	بواسطة:ar|بول:ar|بوب:ar
+ar	بوا	بواسطة:ar|بوابة:ar|بوارو:ar
+-	I would بوا	بواسطة:ar|بوابة:ar|بوارو:ar
+ar	بواس	بواسطة:ar|بواسطته:ar|بواسطتك:ar
+-	I would بواس	بواسطة:ar|بواسطته:ar|بواسطتك:ar
+ar	أه	أهلا:ar|أهذا:ar|أهتم:ar
+ar	أهذ	أهذا:ar|أهذه:ar
+ar	مك	مكان:ar|مكتب:ar|مكانك:ar
+-	I would مك	مكان:ar|مكتب:ar|مكانك:ar
+ar	مكت	مكتب:ar|مكتبي:ar|مكتوب:ar
+-	I would مكت	مكتب:ar|مكتبي:ar|مكتوب:ar
+ar	له	لها:ar|لهذا:ar|لهم:ar
+ar	لهذ	لهذا:ar|لهذه:ar|لهذين:ar
+ar	بد	بدون:ar|بدأت:ar|بدأ:ar
+-	I would بد	بدون:ar|بدأت:ar|بدأ:ar
+ar	تح	تحت:ar|تحتاج:ar|تحاول:ar
+ar	تحد	تحدث:ar|تحدثت:ar|تحديد:ar
+ar	ان	أنا:ar|أنت:ar|انا:ar
+-	I would ان	أنا:ar|أنت:ar|انا:ar
+ar	انن	أنني:ar|انني:ar|أننا:ar
+-	I would انن	أنني:ar|انني:ar|أننا:ar
+ar	بل	بلا:ar|بلى:ar|بلدي:ar
+ar	يف	يفعل:ar|يفترض:ar|يفعله:ar
+-	I would يف	يفعل:ar|يفترض:ar|يفعله:ar
+ar	يفت	يفترض:ar|يفتح:ar|يفتقد:ar
+-	I would يفت	يفترض:ar|يفتح:ar|يفتقد:ar
+ar	يفتر	يفترض:ar
+-	I would يفتر	يفترض:ar
+ar	بش	بشكل:ar|بشأن:ar|بشيء:ar
+ar	بشي	بشيء:ar|بشئ:ar|بشيئ:ar
+ar	تب	تبدو:ar|تبا:ar|تبقى:ar
+ar	تبق	تبقى:ar|تبقي:ar|تبقين:ar
+ar	عم	عمل:ar|عما:ar|عملية:ar
+-	I would عم	عمل:ar|عما:ar|عملية:ar
+ar	عمل	عملية:ar|عملت:ar|عملي:ar
+-	I would عمل	عملية:ar|عملت:ar|عملي:ar
+ar	عملي	عملية:ar|عمليات:ar|عمليا:ar
+-	I would عملي	عملية:ar|عمليات:ar|عمليا:ar
+ar	عد	عدم:ar|عدة:ar|عدد:ar
+ar	صو	صورة:ar|صوت:ar|صور:ar
+-	I would صو	صورة:ar|صوت:ar|صور:ar
+ar	صور	صورة:ar|صورا:ar|صورتك:ar
+-	I would صور	صورة:ar|صورا:ar|صورتك:ar
+ar	مج	مجرد:ar|مجددا:ar|مجنون:ar
+ar	مجم	مجموعة:ar|مجموعات:ar|مجمع:ar
+ar	مجمو	مجموعة:ar|مجموعات:ar|مجموع:ar
+ar	عا	عام:ar|عائلة:ar|عاما:ar
+-	I would عا	عام:ar|عائلة:ar|عاما:ar
+ar	عام	عاما:ar|عامل:ar|عامين:ar
+-	I would عام	عاما:ar|عامل:ar|عامين:ar
+ar	وق	وقت:ar|وقد:ar|وقتا:ar
+ar	وقت	وقتا:ar|وقتك:ar|وقتها:ar
+ar	وص	وصلت:ar|وصل:ar|وصلنا:ar
+ar	وصل	وصلت:ar|وصلنا:ar|وصلوا:ar
+ar	إذ	إذا:ar|إذن:ar|إذهب:ar
+-	I would إذ	إذا:ar|إذن:ar|إذهب:ar
+ar	إذه	إذهب:ar|إذهبي:ar|إذهبوا:ar
+-	I would إذه	إذهب:ar|إذهبي:ar|إذهبوا:ar
+ar	سو	سوف:ar|سوى:ar|سويا:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الم	المكان:ar|المنزل:ar|المال:ar
+-	I would الم	المكان:ar|المنزل:ar|المال:ar
+ar	المل	الملك:ar|الملابس:ar|الملازم:ar
+-	I would المل	الملك:ar|الملابس:ar|الملازم:ar
+ar	تف	تفعل:ar|تفعله:ar|تفعلين:ar
+ar	تفه	تفهم:ar|تفهمين:ar|تفهمني:ar
+ar	في	فيه:ar|فيها:ar|فيما:ar
+-	I would في	فيه:ar|فيها:ar|فيما:ar
+ar	فيم	فيما:ar|فيمكنك:ar|فيمكننا:ar
+-	I would فيم	فيما:ar|فيمكنك:ar|فيمكننا:ar
+ar	عد	عدم:ar|عدة:ar|عدد:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الج	الجميع:ar|الجحيم:ar|الجنس:ar
+-	I would الج	الجميع:ar|الجحيم:ar|الجنس:ar
+ar	الجد	الجديد:ar|الجديدة:ar|الجدار:ar
+-	I would الجد	الجديد:ar|الجديدة:ar|الجدار:ar
+ar	كه	كهذا:ar|كهذه:ar|كهف:ar
+ar	كهذ	كهذا:ar|كهذه:ar|كهذان:ar
+ar	ان	أنا:ar|أنت:ar|انا:ar
+-	I would ان	أنا:ar|أنت:ar|انا:ar
+ar	انت	انتظر:ar|انتهى:ar|انتظري:ar
+-	I would انت	انتظر:ar|انتهى:ar|انتظري:ar
+ar	انته	انتهى:ar|انتهت:ar|انتهيت:ar
+-	I would انته	انتهى:ar|انتهت:ar|انتهيت:ar
+ar	تأ	تأتي:ar|تأخذ:ar|تأكيد:ar
+ar	تأخ	تأخذ:ar|تأخرت:ar|تأخر:ar
+ar	بي	بين:ar|بينما:ar|بيت:ar
+-	I would بي	بين:ar|بينما:ar|بيت:ar
+ar	بين	بينما:ar|بيننا:ar|بيني:ar
+-	I would بين	بينما:ar|بيننا:ar|بيني:ar
+ar	بينن	بيننا:ar
+-	I would بينن	بيننا:ar
+ar	وا	واحد:ar|واحدة:ar|والآن:ar
+-	I would وا	واحد:ar|واحدة:ar|والآن:ar
+ar	واح	واحد:ar|واحدة:ar|واحدا:ar
+-	I would واح	واحد:ar|واحدة:ar|واحدا:ar
+ar	واحد	واحدة:ar|واحدا:ar|وأحدهم:ar
+-	I would واحد	واحدة:ar|واحدا:ar|وأحدهم:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الح	الحقيقة:ar|الحياة:ar|الحصول:ar
+ar	تو	توقف:ar|توجد:ar|توم:ar
+ar	قو	قول:ar|قوة:ar|قوية:ar
+-	I would قو	قول:ar|قوة:ar|قوية:ar
+ar	قي	قيد:ar|قيمة:ar|قيادة:ar
+ar	تش	تشعر:ar|تشارلي:ar|تشعرين:ar
+-	I would تش	تشعر:ar|تشارلي:ar|تشعرين:ar
+ar	تشا	تشارلي:ar|تشارلز:ar|تشاك:ar
+-	I would تشا	تشارلي:ar|تشارلز:ar|تشاك:ar
+ar	تشار	تشارلي:ar|تشارلز:ar|تشارلى:ar
+-	I would تشار	تشارلي:ar|تشارلز:ar|تشارلى:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الو	الوقت:ar|الوحيد:ar|الواقع:ar
+ar	الوا	الواقع:ar|الواضح:ar|الواحد:ar
+ar	إن	إنه:ar|إنها:ar|إنهم:ar
+-	I would إن	إنه:ar|إنها:ar|إنهم:ar
+ar	إنت	إنتظر:ar|إنتهى:ar|إنتظري:ar
+-	I would إنت	إنتظر:ar|إنتهى:ar|إنتظري:ar
+ar	إنتظ	إنتظر:ar|إنتظري:ar|إنتظار:ar
+-	I would إنتظ	إنتظر:ar|إنتظري:ar|إنتظار:ar
+ar	أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
+ar	أتر	أتريد:ar|أترى:ar|أتريدين:ar
+ar	أتري	أتريد:ar|أتريدين:ar|أترين:ar
+ar	أث	أثناء:ar|أثق:ar|أثر:ar
+-	I would أث	أثناء:ar|أثق:ar|أثر:ar
+ar	أثن	أثناء:ar|أثنان:ar|أثنين:ar
+-	I would أثن	أثناء:ar|أثنان:ar|أثنين:ar
+ar	أثنا	أثناء:ar|أثنان:ar
+-	I would أثنا	أثناء:ar|أثنان:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الز	الزواج:ar|الزمن:ar|الزفاف:ar
+ar	الزو	الزواج:ar|الزوجة:ar|الزوج:ar
+ar	ست	ستكون:ar|ستة:ar|ستفعل:ar
+-	I would ست	ستكون:ar|ستة:ar|ستفعل:ar
+ar	مل	مليون:ar|ملابس:ar|ملك:ar
+ar	ملي	مليون:ar|مليئة:ar|مليء:ar
+ar	مليو	مليون:ar|مليونا:ar|مليونير:ar
+ar	ذا	ذات:ar|ذاهب:ar|ذاك:ar
+-	I would ذا	ذات:ar|ذاهب:ar|ذاك:ar
+ar	تو	توقف:ar|توجد:ar|توم:ar
+ar	توق	توقف:ar|توقفي:ar|توقفوا:ar
+ar	توقف	توقفي:ar|توقفوا:ar|توقفت:ar
+ar	ان	أنا:ar|أنت:ar|انا:ar
+-	I would ان	أنا:ar|أنت:ar|انا:ar
+ar	انت	انتظر:ar|انتهى:ar|انتظري:ar
+-	I would انت	انتظر:ar|انتهى:ar|انتظري:ar
+ar	انتظ	انتظر:ar|انتظري:ar|انتظروا:ar
+-	I would انتظ	انتظر:ar|انتظري:ar|انتظروا:ar
+ar	ير	يريد:ar|يرام:ar|يريدون:ar
+ar	يري	يريد:ar|يريدون:ar|يريده:ar
+ar	يريد	يريدون:ar|يريده:ar|يريدك:ar
+ar	عد	عدم:ar|عدة:ar|عدد:ar
+-	I would عد	عدم:ar|عدة:ar|عدد:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الص	الصباح:ar|الصغير:ar|الصغيرة:ar
+ar	الصع	الصعب:ar|الصعود:ar|الصعبة:ar
+ar	عذ	عذرا:ar|عذر:ar|عذراء:ar
+-	I would عذ	عذرا:ar|عذر:ar|عذراء:ar
+ar	عذر	عذرا:ar|عذراء:ar|عذرك:ar
+-	I would عذر	عذرا:ar|عذراء:ar|عذرك:ar
+ar	لأ	لأن:ar|لأنه:ar|لأنك:ar
+ar	لأن	لأنه:ar|لأنك:ar|لأنني:ar
+ar	لأنه	لأنها:ar|لأنهم:ar|لأنهما:ar
+ar	مس	مساعدتك:ar|مستحيل:ar|مستعد:ar
+-	I would مس	مساعدتك:ar|مستحيل:ar|مستعد:ar
+ar	مسا	مساعدتك:ar|مساعدة:ar|مساء:ar
+-	I would مسا	مساعدتك:ar|مساعدة:ar|مساء:ar
+ar	أر	أريد:ar|أرجوك:ar|أردت:ar
+-	I would أر	أريد:ar|أرجوك:ar|أردت:ar
+ar	أرب	أربعة:ar|أربع:ar|أربعون:ar
+-	I would أرب	أربعة:ar|أربع:ar|أربعون:ar
+ar	أربع	أربعة:ar|أربعون:ar|أربعين:ar
+-	I would أربع	أربعة:ar|أربعون:ar|أربعين:ar
+ar	يع	يعني:ar|يعرف:ar|يعمل:ar
+ar	يعو	يعود:ar|يعودوا:ar|يعودون:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الس	السيد:ar|السيارة:ar|السبب:ar
+-	I would الس	السيد:ar|السيارة:ar|السبب:ar
+ar	السم	السماء:ar|السماح:ar|السمك:ar
+-	I would السم	السماء:ar|السماح:ar|السمك:ar
+ar	أب	أبدا:ar|أبي:ar|أبحث:ar
+ar	أبح	أبحث:ar|أبحاث:ar|أبحر:ar
+ar	بع	بعد:ar|بعض:ar|بعيدا:ar
+-	I would بع	بعد:ar|بعض:ar|بعيدا:ar
+ar	بعد	بعدها:ar|بعدما:ar|بعدم:ar
+-	I would بعد	بعدها:ar|بعدما:ar|بعدم:ar
+ar	بعده	بعدها:ar|بعدة:ar|بعدهم:ar
+-	I would بعده	بعدها:ar|بعدة:ar|بعدهم:ar
+ar	بك	بكل:ar|بكثير:ar|بكم:ar
+ar	بكث	بكثيرا:ar|بكثير:ar|بكثيرة:ar
+ar	بكثي	بكثيرا:ar|بكثير:ar|بكثيرة:ar
+ar	اس	أستطيع:ar|آسف:ar|استطيع:ar
+-	I would اس	أستطيع:ar|آسف:ar|استطيع:ar
+ar	اسم	اسمع:ar|اسمه:ar|اسمي:ar
+-	I would اسم	اسمع:ar|اسمه:ar|اسمي:ar
+ar	قض	قضية:ar|قضيت:ar|قضاء:ar
+ar	قضي	قضية:ar|قضيت:ar|قضيب:ar
+ar	لل	للغاية:ar|للتو:ar|للمنزل:ar
+-	I would لل	للغاية:ar|للتو:ar|للمنزل:ar
+ar	للع	للعمل:ar|للعيش:ar|للعودة:ar
+-	I would للع	للعمل:ar|للعيش:ar|للعودة:ar
+ar	للعم	للعمل:ar|للعملية:ar|للعميل:ar
+-	I would للعم	للعمل:ar|للعملية:ar|للعميل:ar
+ar	شر	شركة:ar|شرطة:ar|شرطي:ar
+ar	شرط	شرطة:ar|شرطي:ar|شرطيا:ar
+ar	مع	معك:ar|معي:ar|معه:ar
+-	I would مع	معك:ar|معي:ar|معه:ar
+ar	معه	معها:ar|معهم:ar|معهد:ar
+-	I would معه	معها:ar|معهم:ar|معهد:ar
+ar	أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
+ar	أتع	أتعلم:ar|أتعرف:ar|أتعلمين:ar
+ar	أتعل	أتعلم:ar|أتعلمين:ar|أتعلمون:ar
+ar	عش	عشر:ar|عشرة:ar|عشاء:ar
+-	I would عش	عشر:ar|عشرة:ar|عشاء:ar
+ar	عشر	عشرة:ar|عشرون:ar|عشرين:ar
+-	I would عشر	عشرة:ar|عشرون:ar|عشرين:ar
+ar	اك	أكثر:ar|أكون:ar|اكثر:ar
+ar	اكو	أكون:ar|اكون:ar|أكواب:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الت	التي:ar|التحدث:ar|التى:ar
+-	I would الت	التي:ar|التحدث:ar|التى:ar
+ar	التا	التالي:ar|التاريخ:ar|التالية:ar
+-	I would التا	التالي:ar|التاريخ:ar|التالية:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الد	الدم:ar|الدكتور:ar|الداخل:ar
+ar	الدا	الداخل:ar|الداخلية:ar|الداخلي:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الث	الثانية:ar|الثاني:ar|الثالث:ar
+-	I would الث	الثانية:ar|الثاني:ar|الثالث:ar
+ar	الثا	الثانية:ar|الثاني:ar|الثالث:ar
+-	I would الثا	الثانية:ar|الثاني:ar|الثالث:ar
+ar	يا	يارجل:ar|يأتي:ar|يارفاق:ar
+ar	يار	يارجل:ar|يارفاق:ar|ياردة:ar
+ar	يارج	يارجل:ar|يارجال:ar
+ar	وأ	وأنا:ar|وأنت:ar|وأن:ar
+-	I would وأ	وأنا:ar|وأنت:ar|وأن:ar
+ar	هذ	هذا:ar|هذه:ar|هذان:ar
+ar	جز	جزء:ar|جزيلا:ar|جزءا:ar
+-	I would جز	جزء:ar|جزيلا:ar|جزءا:ar
+ar	جزي	جزيلا:ar|جزيرة:ar|جزيئات:ar
+-	I would جزي	جزيلا:ar|جزيرة:ar|جزيئات:ar
+ar	جزيل	جزيلا:ar
+-	I would جزيل	جزيلا:ar
+ar	بك	بكل:ar|بكثير:ar|بكم:ar
+ar	مخ	مختلف:ar|مختلفة:ar|مخدرات:ar
+-	I would مخ	مختلف:ar|مختلفة:ar|مخدرات:ar
+ar	مخت	مختلف:ar|مختلفة:ar|مختلفا:ar
+-	I would مخت	مختلف:ar|مختلفة:ar|مختلفا:ar
+ar	مختل	مختلف:ar|مختلفة:ar|مختلفا:ar
+-	I would مختل	مختلف:ar|مختلفة:ar|مختلفا:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الب	الباب:ar|البيت:ar|البعض:ar
+ar	البح	البحث:ar|البحر:ar|البحرية:ar
+ar	ست	ستكون:ar|ستة:ar|ستفعل:ar
+-	I would ست	ستكون:ar|ستة:ar|ستفعل:ar
+ar	ستف	ستفعل:ar|ستفعلين:ar|ستفعله:ar
+-	I would ستف	ستفعل:ar|ستفعلين:ar|ستفعله:ar
+ar	ستفع	ستفعل:ar|ستفعلين:ar|ستفعله:ar
+-	I would ستفع	ستفعل:ar|ستفعلين:ar|ستفعله:ar
+ar	جه	جهاز:ar|جهة:ar|جهدي:ar
+ar	جها	جهاز:ar|جهازي:ar|جهازك:ar
+ar	أه	أهلا:ar|أهذا:ar|أهتم:ar
+-	I would أه	أهلا:ar|أهذا:ar|أهتم:ar
+ar	أهت	أهتم:ar|أهتمام:ar
+-	I would أهت	أهتم:ar|أهتمام:ar
+ar	مر	مرحبا:ar|مرة:ar|مرات:ar
+ar	مرا	مرات:ar|مراقبة:ar|مرارا:ar
+ar	أم	أمي:ar|أمر:ar|أمك:ar
+-	I would أم	أمي:ar|أمر:ar|أمك:ar
+ar	تو	توقف:ar|توجد:ar|توم:ar
+ar	اق	أقول:ar|اقول:ar|أقصد:ar
+-	I would اق	أقول:ar|اقول:ar|أقصد:ar
+ar	اقو	أقول:ar|اقول:ar|أقوم:ar
+-	I would اقو	أقول:ar|اقول:ar|أقوم:ar
+ar	لو	لويس:ar|لوس:ar|لوك:ar
+ar	لوي	لويس:ar|لويد:ar|لويز:ar
+ar	نر	نريد:ar|نرى:ar|نرحل:ar
+-	I would نر	نريد:ar|نرى:ar|نرحل:ar
+ar	بن	بنا:ar|بنفسك:ar|بنفسي:ar
+ar	خط	خطأ:ar|خطر:ar|خطة:ar
+-	I would خط	خطأ:ar|خطر:ar|خطة:ar
+ar	مخ	مختلف:ar|مختلفة:ar|مخدرات:ar
+ar	مخت	مختلف:ar|مختلفة:ar|مختلفا:ar
+ar	مختل	مختلف:ar|مختلفة:ar|مختلفا:ar
+ar	عا	عام:ar|عائلة:ar|عاما:ar
+-	I would عا	عام:ar|عائلة:ar|عاما:ar
+ar	عال	عالم:ar|عالية:ar|عالي:ar
+-	I would عال	عالم:ar|عالية:ar|عالي:ar
+ar	لف	لفترة:ar|لفعل:ar|لفعله:ar
+ar	لفت	لفترة:ar|لفتاة:ar|لفتح:ar
+ar	لفتر	لفترة:ar|لفترات:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الم	المكان:ar|المنزل:ar|المال:ar
+-	I would الم	المكان:ar|المنزل:ar|المال:ar
+ar	المن	المنزل:ar|المناسب:ar|المنطقة:ar
+-	I would المن	المنزل:ar|المناسب:ar|المنطقة:ar
+ar	طب	طبعا:ar|طبيب:ar|طبيعي:ar
+ar	طبع	طبعا:ar|طبعة:ar|طبعت:ar
+ar	مؤ	مؤخرا:ar|مؤخرتك:ar|مؤخرة:ar
+-	I would مؤ	مؤخرا:ar|مؤخرتك:ar|مؤخرة:ar
+ar	مؤخ	مؤخرا:ar|مؤخرتك:ar|مؤخرة:ar
+-	I would مؤخ	مؤخرا:ar|مؤخرتك:ar|مؤخرة:ar
+ar	مؤخر	مؤخرا:ar|مؤخرتك:ar|مؤخرة:ar
+-	I would مؤخر	مؤخرا:ar|مؤخرتك:ar|مؤخرة:ar
+ar	طا	طالما:ar|طائرة:ar|طابت:ar
+ar	طال	طالما:ar|طالب:ar|طالبة:ar
+ar	طالم	طالما:ar
+ar	من	منذ:ar|منك:ar|مني:ar
+-	I would من	منذ:ar|منك:ar|مني:ar
+ar	منت	منتصف:ar|منتج:ar|منتجات:ar
+-	I would منت	منتصف:ar|منتج:ar|منتجات:ar
+ar	منتص	منتصف:ar|منتصب:ar
+-	I would منتص	منتصف:ar|منتصب:ar
+ar	بإ	بإمكانك:ar|بإمكاني:ar|بإمكاننا:ar
+ar	بإم	بإمكانك:ar|بإمكاني:ar|بإمكاننا:ar
+ar	بإمك	بإمكانك:ar|بإمكاني:ar|بإمكاننا:ar
+ar	عا	عام:ar|عائلة:ar|عاما:ar
+-	I would عا	عام:ar|عائلة:ar|عاما:ar
+ar	عاد	عادة:ar|عادت:ar|عادي:ar
+-	I would عاد	عادة:ar|عادت:ar|عادي:ar
+ar	بع	بعد:ar|بعض:ar|بعيدا:ar
+ar	بعم	بعمل:ar|بعمر:ar|بعملك:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الس	السيد:ar|السيارة:ar|السبب:ar
+-	I would الس	السيد:ar|السيارة:ar|السبب:ar
+ar	السن	السنة:ar|السنوات:ar|السنين:ar
+-	I would السن	السنة:ar|السنوات:ar|السنين:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الا	الآن:ar|الأمر:ar|الان:ar
+ar	الاش	الأشياء:ar|الاشياء:ar|الأشخاص:ar
+ar	طب	طبعا:ar|طبيب:ar|طبيعي:ar
+-	I would طب	طبعا:ar|طبيب:ar|طبيعي:ar
+ar	طبي	طبيب:ar|طبيعي:ar|طبيعية:ar
+-	I would طبي	طبيب:ar|طبيعي:ar|طبيعية:ar
+ar	نف	نفسك:ar|نفس:ar|نفسي:ar
+ar	نفس	نفسك:ar|نفسي:ar|نفسه:ar
+ar	نفسه	نفسها:ar|نفسهم:ar
+ar	فأ	فأنا:ar|فأنت:ar|فأن:ar
+-	I would فأ	فأنا:ar|فأنت:ar|فأن:ar
+ar	فأن	فأنا:ar|فأنت:ar|فأنه:ar
+-	I would فأن	فأنا:ar|فأنت:ar|فأنه:ar
+ar	وا	واحد:ar|واحدة:ar|والآن:ar
+ar	وال	والآن:ar|والدك:ar|والدي:ar
+ar	والذ	والذي:ar|والذى:ar|والذين:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الط	الطريق:ar|الطريقة:ar|الطفل:ar
+-	I would الط	الطريق:ar|الطريقة:ar|الطفل:ar
+ar	الطا	الطائرة:ar|الطابق:ar|الطاقة:ar
+-	I would الطا	الطائرة:ar|الطابق:ar|الطاقة:ar
+ar	فل	فلا:ar|فلن:ar|فلم:ar
+ar	أع	أعرف:ar|أعتقد:ar|أعلم:ar
+-	I would أع	أعرف:ar|أعتقد:ar|أعلم:ar
+ar	أو	أوه:ar|أولا:ar|أود:ar
+ar	أول	أولا:ar|أولئك:ar|أولاد:ar
+ar	أولئ	أولئك:ar
+ar	هر	هراء:ar|هرب:ar|هربت:ar
+-	I would هر	هراء:ar|هرب:ar|هربت:ar
+ar	هرا	هراء:ar|هرائك:ar
+-	I would هرا	هراء:ar|هرائك:ar
+ar	فع	فعل:ar|فعلت:ar|فعله:ar
+ar	فعل	فعلت:ar|فعله:ar|فعلا:ar
+ar	فعله	فعلها:ar|فعلهم:ar|فعلة:ar
+ar	هن	هنا:ar|هناك:ar|هنالك:ar
+-	I would هن	هنا:ar|هناك:ar|هنالك:ar
+ar	هنر	هنري:ar|هنريك:ar
+-	I would هنر	هنري:ar|هنريك:ar
+ar	حق	حقا:ar|حقيقي:ar|حقيقة:ar
+ar	حقي	حقيقي:ar|حقيقة:ar|حقيقية:ar
+ar	حقيق	حقيقي:ar|حقيقة:ar|حقيقية:ar
+ar	صد	صديقي:ar|صديق:ar|صديقك:ar
+-	I would صد	صديقي:ar|صديق:ar|صديقك:ar
+ar	صدي	صديقي:ar|صديق:ar|صديقك:ar
+-	I would صدي	صديقي:ar|صديق:ar|صديقك:ar
+ar	صديق	صديقي:ar|صديقك:ar|صديقة:ar
+-	I would صديق	صديقي:ar|صديقك:ar|صديقة:ar
+ar	اب	أبدا:ar|أبي:ar|ابدا:ar
+ar	ابن	ابني:ar|ابنتي:ar|ابنك:ar
+ar	مي	ميت:ar|ميلاد:ar|ميل:ar
+-	I would مي	ميت:ar|ميلاد:ar|ميل:ar
+ar	ميل	ميلاد:ar|ميلر:ar|ميلادي:ar
+-	I would ميل	ميلاد:ar|ميلر:ar|ميلادي:ar
+ar	ميلا	ميلاد:ar|ميلادي:ar|ميلادك:ar
+-	I would ميلا	ميلاد:ar|ميلادي:ar|ميلادك:ar
+ar	وج	وجدت:ar|وجود:ar|وجه:ar
+ar	أج	أجل:ar|أجلك:ar|أجد:ar
+-	I would أج	أجل:ar|أجلك:ar|أجد:ar
+ar	حو	حول:ar|حوالي:ar|حولك:ar
+ar	حوا	حوالي:ar|حوالى:ar|حوادث:ar
+ar	حوال	حوالي:ar|حوالى:ar
+ar	حا	حال:ar|حالك:ar|حالة:ar
+-	I would حا	حال:ar|حالك:ar|حالة:ar
+ar	حاج	حاجة:ar|حاجز:ar|حاجتي:ar
+-	I would حاج	حاجة:ar|حاجز:ar|حاجتي:ar
+ar	أن	أنا:ar|أنت:ar|أنه:ar
+ar	أنت	أنتم:ar|أنتي:ar|أنتظر:ar
+ar	أنتم	أنتما:ar|أنتمي:ar
+ar	دل	دليل:ar|دليلا:ar|دلتا:ar
+-	I would دل	دليل:ar|دليلا:ar|دلتا:ar
+ar	دلي	دليل:ar|دليلا:ar|دليلك:ar
+-	I would دلي	دليل:ar|دليلا:ar|دليلك:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الق	القيام:ar|القادمة:ar|القضية:ar
+ar	القا	القادمة:ar|القائد:ar|القانون:ar
+ar	ول	ولكن:ar|ولا:ar|ولم:ar
+-	I would ول	ولكن:ar|ولا:ar|ولم:ar
+ar	ولق	ولقد:ar|ولقتل:ar|ولقاء:ar
+-	I would ولق	ولقد:ar|ولقتل:ar|ولقاء:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الص	الصباح:ar|الصغير:ar|الصغيرة:ar
+ar	الصح	الصحيح:ar|الصحراء:ar|الصحافة:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الب	الباب:ar|البيت:ar|البعض:ar
+-	I would الب	الباب:ar|البيت:ar|البعض:ar
+ar	البل	البلدة:ar|البلاد:ar|البلد:ar
+-	I would البل	البلدة:ar|البلاد:ar|البلد:ar
+ar	أس	أستطيع:ar|أسمع:ar|أسرع:ar
+ar	أسف	أسفل:ar|أسفة:ar|أسفه:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الص	الصباح:ar|الصغير:ar|الصغيرة:ar
+-	I would الص	الصباح:ar|الصغير:ar|الصغيرة:ar
+ar	الصو	الصورة:ar|الصور:ar|الصوت:ar
+-	I would الصو	الصورة:ar|الصور:ar|الصوت:ar
+ar	تر	تريد:ar|تريدين:ar|ترى:ar
+ar	ترغ	ترغب:ar|ترغبين:ar|ترغبي:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الخ	الخاص:ar|الخير:ar|الخاصة:ar
+-	I would الخ	الخاص:ar|الخير:ar|الخاصة:ar
+ar	تز	تزال:ar|تزوجت:ar|تزداد:ar
+ar	تزا	تزال:ar|تزالين:ar|تزايد:ar
+ar	يت	يتم:ar|يتحدث:ar|يتعلق:ar
+-	I would يت	يتم:ar|يتحدث:ar|يتعلق:ar
+ar	يتع	يتعلق:ar|يتعين:ar|يتعامل:ar
+-	I would يتع	يتعلق:ar|يتعين:ar|يتعامل:ar
+ar	يتعل	يتعلق:ar|يتعلم:ar|يتعلمون:ar
+-	I would يتعل	يتعلق:ar|يتعلم:ar|يتعلمون:ar
+ar	يج	يجب:ar|يجري:ar|يجعل:ar
+ar	يجع	يجعل:ar|يجعلك:ar|يجعلني:ar
+ar	تف	تفعل:ar|تفعله:ar|تفعلين:ar
+-	I would تف	تفعل:ar|تفعله:ar|تفعلين:ar
+ar	تفع	تفعل:ar|تفعله:ar|تفعلين:ar
+-	I would تفع	تفعل:ar|تفعله:ar|تفعلين:ar
+ar	تفعل	تفعله:ar|تفعلين:ar|تفعلي:ar
+-	I would تفعل	تفعله:ar|تفعلين:ar|تفعلي:ar
+ar	عن	عندما:ar|عنه:ar|عند:ar
+ar	عند	عندما:ar|عندي:ar|عندك:ar
+ar	عنده	عندها:ar|عندهم:ar
+ar	دا	دائما:ar|داخل:ar|داني:ar
+-	I would دا	دائما:ar|داخل:ar|داني:ar
+ar	دان	داني:ar|دانيال:ar|دانييل:ar
+-	I would دان	داني:ar|دانيال:ar|دانييل:ar
+ar	يس	يستطيع:ar|يستحق:ar|يسمح:ar
+ar	يست	يستطيع:ar|يستحق:ar|يستخدم:ar
+ar	يستح	يستحق:ar|يستحسن:ar|يستحقون:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الق	القيام:ar|القادمة:ar|القضية:ar
+-	I would الق	القيام:ar|القادمة:ar|القضية:ar
+ar	القه	القهوة:ar|القهري:ar|ألقه:ar
+-	I would القه	القهوة:ar|القهري:ar|ألقه:ar
+ar	اب	أبدا:ar|أبي:ar|ابدا:ar
+ar	مو	موعد:ar|موجود:ar|موقع:ar
+-	I would مو	موعد:ar|موجود:ar|موقع:ar
+ar	موق	موقع:ar|موقف:ar|موقعك:ar
+-	I would موق	موقع:ar|موقف:ar|موقعك:ar
+ar	عم	عمل:ar|عما:ar|عملية:ar
+ar	عمل	عملية:ar|عملت:ar|عملي:ar
+ar	شب	شباب:ar|شبكة:ar|شبح:ar
+-	I would شب	شباب:ar|شبكة:ar|شبح:ar
+ar	شبا	شباب:ar|شبابي:ar|شباك:ar
+-	I would شبا	شباب:ar|شبابي:ar|شباك:ar
+ar	حي	حيث:ar|حياتي:ar|حين:ar
+ar	حين	حينما:ar|حينها:ar|حينئذ:ar
+ar	حينه	حينها:ar
+ar	أم	أمي:ar|أمر:ar|أمك:ar
+-	I would أم	أمي:ar|أمر:ar|أمك:ar
+ar	أمل	أملك:ar|أملي:ar|أملكه:ar
+-	I would أمل	أملك:ar|أملي:ar|أملكه:ar
+ar	مر	مرحبا:ar|مرة:ar|مرات:ar
+ar	لل	للغاية:ar|للتو:ar|للمنزل:ar
+-	I would لل	للغاية:ar|للتو:ar|للمنزل:ar
+ar	للح	للحصول:ar|للحظة:ar|للحياة:ar
+-	I would للح	للحصول:ar|للحظة:ar|للحياة:ar
+ar	للحص	للحصلت:ar|للحصل:ar|للحصول:ar
+-	I would للحص	للحصلت:ar|للحصل:ar|للحصول:ar
+ar	لأ	لأن:ar|لأنه:ar|لأنك:ar
+ar	لأن	لأنه:ar|لأنك:ar|لأنني:ar
+ar	لأنن	لأنني:ar|لأننا:ar|لأننى:ar
+ar	تج	تجد:ar|تجعل:ar|تجربة:ar
+-	I would تج	تجد:ar|تجعل:ar|تجربة:ar
+ar	يد	يديك:ar|يدعى:ar|يدك:ar
+ar	يدي	يديك:ar|يدير:ar|يديه:ar

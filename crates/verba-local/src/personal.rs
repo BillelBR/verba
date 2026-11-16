@@ -2,10 +2,16 @@
 //! learned from what the user wrote.
 //!
 //! - **Words the user keeps** (`add_word`): never flagged by the spelling correction, and offered as completions.
-//! - **Learning** (`learn_text`, off unless the app calls it): a word that is in no dictionary is counted; seen 3 times, it becomes
-//!   a personal word. Pairs of words are counted too, to predict the next word. **Only single words and pair counts are
-//!   stored: never a sentence, never the order of more than two words.** Numbers, addresses, e-mails, paths, identifiers, hex
-//!   strings, acronyms and very short or very long words are not kept at all.
+//! - **Learning** (`learn_text`, off unless the app calls it) keeps three kinds of counts, and nothing else:
+//!   1. a word that is in no dictionary is counted; seen 3 times, it becomes a personal word;
+//!   2. a word that IS in a dictionary is counted too (its **usage**), with a count that fades slowly, and a word the user writes
+//!      more often than the dictionary says is ranked higher among the completions (see `usage_completions`);
+//!   3. pairs of neighbouring words are counted, to predict the next word.
+//!
+//!   **Only single words with counts (common words included) and pairs of neighbouring words with counts are stored: never a
+//!   sentence, never the order of more than two words, never a date or a place.** Numbers, addresses, e-mails, paths, identifiers,
+//!   hex strings, acronyms, words the spelling correction takes for typos, and words under 3 or over 24 letters are not kept as
+//!   words (a pair can still hold a short word such as `of`). At most 5 000 words of each kind and 20 000 pairs are kept.
 //! - **Files** are plain text a person can read and edit: `personal.txt` (one word per line) and `learned.txt` (counts).
 //!   The engine knows no folder: the app passes the paths in. Writing is atomic (temp file, then rename); a missing or damaged
 //!   file only gives a smaller dictionary.
@@ -18,7 +24,7 @@ use std::path::Path;
 
 use verba_core::{Lang, is_arabic, is_arabic_mark, is_arabic_word, match_case, strip_arabic_marks};
 
-use crate::fold::{fold, is_core_arabic};
+use crate::fold::{fold, is_core_arabic, starts_leniently};
 use crate::nextword::{Tok, scan, tail_words};
 use crate::{AR_PARTICLES, LocalEngine, WordList};
 
@@ -26,6 +32,8 @@ use crate::{AR_PARTICLES, LocalEngine, WordList};
 pub const PROMOTE_AT: u32 = 3;
 /// At most this many words are tracked (candidates and promoted ones); the least seen, then the oldest, are forgotten first.
 pub const MAX_LEARNED_WORDS: usize = 5000;
+/// At most this many dictionary words are tracked for their usage; the least used, then the oldest, are forgotten first.
+pub const MAX_USAGE_WORDS: usize = 5000;
 /// At most this many word pairs are tracked.
 pub const MAX_PAIRS: usize = 20_000;
 /// A pair is used for prediction once it was seen this many times.
@@ -56,6 +64,44 @@ struct Learned {
     suspect: bool,
 }
 
+/// How often the user wrote a word that is in a dictionary. The count fades with the logical clock: the value stored is the count
+/// as it was at `last`; see `PersonalDict::fade`.
+#[derive(Clone, Copy, Debug)]
+struct Usage {
+    count: f32,
+    last: u64,
+    /// The spelling correction takes the word for a typo of another word (the lists hold some, `wich`): counted, never boosted.
+    suspect: bool,
+}
+
+/// The dials of the usage ranking. `Default` holds the values chosen from the simulation in docs/ACCURACY.md.
+/// (Public and hidden only so that `examples/usage_simulation.rs` can sweep them.)
+#[doc(hidden)]
+#[derive(Clone, Debug)]
+pub struct UsageParams {
+    /// Half-life of a count, in `learn_text` calls (about one per finished sentence).
+    pub half_life: f64,
+    /// A word the user wrote at least this many times (after fading) can be boosted.
+    pub min_count: f64,
+    /// The boost is `1 + k * ln(r)`, bounded by `max_boost`; `r` is the count, or with `lift` the count over what the dictionary leads
+    /// one to expect from this many words.
+    pub k: f64,
+    pub max_boost: f64,
+    pub lift: bool,
+    /// With `lift`: how many writings the dictionary's expectation is padded with, so that a word seen a couple of times by chance is not taken for a habit.
+    pub prior: f64,
+    /// With `lift`: the boost needs the count to exceed what is expected by this many standard deviations, so that chance repeats of a word do not count.
+    pub min_z: f64,
+    /// A pair of words is used for the next-word suggestions once seen this many times.
+    pub pair_min: u32,
+}
+
+impl Default for UsageParams {
+    fn default() -> Self {
+        Self { half_life: 4000.0, min_count: 2.0, k: 3.0, max_boost: 12.0, lift: true, prior: 2.0, min_z: 6.0, pair_min: MIN_PAIR_USE }
+    }
+}
+
 #[derive(Clone, Copy, Debug)]
 struct Pair {
     count: u32,
@@ -73,6 +119,11 @@ pub struct PersonalDict {
     learned: BTreeMap<String, Learned>,
     /// Pairs of words seen by `learn_text`: (first, second) -> counts. Lower case.
     pairs: BTreeMap<(String, String), Pair>,
+    /// Dictionary words the user wrote: comparison key (accents and hamza folded) -> faded count.
+    usage: BTreeMap<String, Usage>,
+    /// How many words the user wrote in all (faded the same way): (count at `last`, `last`).
+    usage_total: (f64, u64),
+    usage_params: UsageParams,
     clock: u64,
     words_dirty: bool,
     learned_dirty: bool,
@@ -188,6 +239,9 @@ impl PersonalDict {
         if self.learned.remove(&key).is_some_and(|l| l.count >= PROMOTE_AT) {
             removed = true;
         }
+        if self.usage.remove(&fold(&key)).is_some() {
+            removed = true;
+        }
         if removed {
             self.blocked.insert(key);
             self.words_dirty = true;
@@ -241,11 +295,13 @@ impl PersonalDict {
     /// Forgets everything learned: the counts, the promoted words and the pairs. The words added by hand, and the words the user
     /// removed (so that they are not learned again), stay.
     pub fn clear_learned(&mut self) {
-        if self.learned.is_empty() && self.pairs.is_empty() && self.clock == 0 {
+        if self.learned.is_empty() && self.pairs.is_empty() && self.usage.is_empty() && self.clock == 0 {
             return;
         }
         self.learned.clear();
         self.pairs.clear();
+        self.usage.clear();
+        self.usage_total = (0.0, 0);
         self.clock = 0;
         self.learned_dirty = true;
     }
@@ -271,6 +327,7 @@ impl PersonalDict {
         for span in scan(text, true, learn_token) {
             match span.tok {
                 Tok::Word(key) => {
+                    self.bump_total();
                     if let Some(p) = prev.take() {
                         let pair = self.pairs.entry((p, key.clone())).or_insert(Pair { count: 0, last: 0 });
                         pair.count = pair.count.saturating_add(1);
@@ -300,7 +357,11 @@ impl PersonalDict {
         }
         let arabic = is_arabic_word(lower);
         let key = key_of(lower);
-        if self.blocked.contains(&key) || self.added.contains_key(&key) || known(lower, arabic) {
+        if self.blocked.contains(&key) || self.added.contains_key(&key) {
+            return;
+        }
+        if known(lower, arabic) {
+            self.count_usage(lower, suspect);
             return;
         }
         // how it is written: the capitals typed in the middle of a sentence are the user's; at the start of one they prove nothing
@@ -330,6 +391,81 @@ impl PersonalDict {
         }
     }
 
+    // ───────────── usage of dictionary words ─────────────
+
+    /// The factor by which a count has faded since it was written at `last`.
+    fn fade(&self, last: u64) -> f64 {
+        0.5f64.powf(self.clock.saturating_sub(last) as f64 / self.usage_params.half_life.max(1.0))
+    }
+
+    /// How many words the user wrote in all, faded.
+    fn total_now(&self) -> f64 {
+        self.usage_total.0 * self.fade(self.usage_total.1)
+    }
+
+    fn bump_total(&mut self) {
+        self.usage_total = (self.total_now() + 1.0, self.clock);
+        self.learned_dirty = true;
+    }
+
+    /// Counts one more writing of a word that is in a dictionary. The spelling correction is asked once, when the count is about to
+    /// reach the least that counts for the ranking: a word it takes for a typo is never boosted.
+    fn count_usage(&mut self, lower: &str, suspect: &dyn Fn(&str) -> bool) {
+        let key = fold(lower);
+        let (clock, min) = (self.clock, self.usage_params.min_count);
+        let before = self.usage.get(&key).map(|u| (u.count as f64 * self.fade(u.last), u.suspect));
+        self.learned_dirty = true;
+        match before {
+            None => {
+                self.usage.insert(key, Usage { count: 1.0, last: clock, suspect: false });
+            }
+            Some((now, was_suspect)) => {
+                let crossing = now < min && now + 1.0 >= min;
+                let flag = was_suspect || (crossing && suspect(lower));
+                self.usage.insert(key, Usage { count: (now + 1.0) as f32, last: clock, suspect: flag });
+            }
+        }
+    }
+
+    /// How many times the user wrote this dictionary word, faded to now (0 when never).
+    pub fn usage_count(&self, word: &str) -> f64 {
+        self.usage.get(&fold(word.trim())).map_or(0.0, |u| u.count as f64 * self.fade(u.last))
+    }
+
+    /// How many dictionary words have a usage count.
+    pub fn usage_len(&self) -> usize {
+        self.usage.len()
+    }
+
+    /// Sets the dials of the usage ranking (for measuring).
+    #[doc(hidden)]
+    pub fn set_usage_params(&mut self, p: UsageParams) {
+        self.usage_params = p;
+    }
+
+    /// The factor (1 or more) by which a dictionary word of the given `share` of its list is ranked up, from how often the user wrote it.
+    pub(crate) fn usage_boost(&self, count_now: f64, share: f64) -> f64 {
+        let p = &self.usage_params;
+        if count_now < p.min_count {
+            return 1.0;
+        }
+        let expected = self.total_now() * share;
+        if p.lift && count_now - expected < p.min_z * (expected + p.prior.max(0.1)).sqrt() {
+            return 1.0;
+        }
+        let r = if p.lift { count_now / (expected + p.prior.max(0.1)) } else { count_now };
+        (1.0 + p.k * r.ln()).clamp(1.0, p.max_boost.max(1.0))
+    }
+
+    /// The words with a usage count (not typos) whose comparison key starts with `prefix`: (key, count now).
+    pub(crate) fn usage_with_prefix<'a>(&'a self, prefix: &'a str) -> impl Iterator<Item = (&'a str, f64)> + 'a {
+        self.usage
+            .range(prefix.to_string()..)
+            .take_while(move |(k, _)| k.starts_with(prefix))
+            .filter(|(_, u)| !u.suspect)
+            .map(|(k, u)| (k.as_str(), u.count as f64 * self.fade(u.last)))
+    }
+
     /// Keeps the tables within their limits: the words seen least, then the oldest, go first (a promoted word is never evicted
     /// before one that is only being counted).
     fn enforce_caps(&mut self) {
@@ -340,6 +476,27 @@ impl PersonalDict {
             let drop = self.learned.len() - MAX_LEARNED_WORDS * 9 / 10;
             for (_, _, _, k) in order.into_iter().take(drop) {
                 self.learned.remove(&k);
+            }
+        }
+        // counts that faded to nothing go now and then; the cap holds always
+        if self.usage.len() > MAX_USAGE_WORDS || (self.clock % 64 == 0 && !self.usage.is_empty()) {
+            let faded: Vec<(String, f64, u64)> = self.usage.iter().map(|(k, u)| (k.clone(), u.count as f64 * self.fade(u.last), u.last)).collect();
+            for (k, now, _) in &faded {
+                if *now < 0.2 {
+                    self.usage.remove(k);
+                }
+            }
+            if self.usage.len() > MAX_USAGE_WORDS {
+                let mut order: Vec<(u64, u64, String)> = faded
+                    .into_iter()
+                    .filter(|(k, _, _)| self.usage.contains_key(k))
+                    .map(|(k, now, last)| ((now * 1000.0) as u64, last, k))
+                    .collect();
+                order.sort();
+                let drop = self.usage.len() - MAX_USAGE_WORDS * 9 / 10;
+                for (_, _, k) in order.into_iter().take(drop) {
+                    self.usage.remove(&k);
+                }
             }
         }
         if self.pairs.len() > MAX_PAIRS {
@@ -399,7 +556,7 @@ impl PersonalDict {
             .pairs
             .range((w2.clone(), String::new())..)
             .take_while(|((a, _), _)| a == w2)
-            .filter(|((_, b), p)| p.count >= MIN_PAIR_USE && !self.blocked.contains(&key_of(b)))
+            .filter(|((_, b), p)| p.count >= self.usage_params.pair_min && !self.blocked.contains(&key_of(b)))
             .map(|((_, b), p)| (p.count, p.last, b.as_str()))
             .collect();
         found.sort_by(|a, b| b.0.cmp(&a.0).then(b.1.cmp(&a.1)).then_with(|| a.2.cmp(b.2)));
@@ -454,6 +611,19 @@ impl PersonalDict {
                         self.learned.insert(k, Learned { form, count: count.min(1_000_000), last, suspect: flag.trim() == "typo" });
                     }
                 }
+                ["u", key, count, last, flag] => {
+                    let (Some((k, _)), Ok(count), Ok(last)) = (hand_word(key), count.trim().parse::<f32>(), last.trim().parse::<u64>()) else { continue };
+                    if fold(&k) == *key && count.is_finite() && count > 0.0 {
+                        self.usage.insert(k, Usage { count: count.min(1_000_000.0), last, suspect: flag.trim() == "typo" });
+                    }
+                }
+                ["utotal", n, last] => {
+                    if let (Ok(n), Ok(last)) = (n.trim().parse::<f64>(), last.trim().parse::<u64>()) {
+                        if n.is_finite() && n >= 0.0 {
+                            self.usage_total = (n.min(1e12), last);
+                        }
+                    }
+                }
                 ["b", a, b, count, last] => {
                     let (Some(a), Some(b), Ok(count), Ok(last)) = (learn_token(a), learn_token(b), count.trim().parse::<u32>(), last.trim().parse::<u64>()) else { continue };
                     if count > 0 {
@@ -463,7 +633,16 @@ impl PersonalDict {
                 _ => {}
             }
         }
-        self.clock = self.clock.max(self.learned.values().map(|l| l.last).chain(self.pairs.values().map(|p| p.last)).max().unwrap_or(0));
+        self.clock = self.clock.max(
+            self.learned
+                .values()
+                .map(|l| l.last)
+                .chain(self.pairs.values().map(|p| p.last))
+                .chain(self.usage.values().map(|u| u.last))
+                .chain([self.usage_total.1])
+                .max()
+                .unwrap_or(0),
+        );
     }
 
     /// Writes what changed since the last load or save: `personal.txt` and `learned.txt`, each through a temp file and a rename, so a
@@ -487,9 +666,13 @@ impl PersonalDict {
         }
         if self.learned_dirty {
             let mut out = String::from(
-                "# Verba learned words (word, how often, when) and word pairs. No sentences are stored.\n# Delete this file to forget everything that was learned.\n",
+                "# Verba learned words (w lines), how often you write words that are in the dictionary (u lines), and pairs of neighbouring words (b lines).\n# No sentences are stored. Delete this file to forget everything that was learned.\n",
             );
             out.push_str(&format!("clock\t{}\n", self.clock));
+            out.push_str(&format!("utotal\t{:.2}\t{}\n", self.usage_total.0, self.usage_total.1));
+            for (k, u) in &self.usage {
+                out.push_str(&format!("u\t{k}\t{:.2}\t{}\t{}\n", u.count, u.last, if u.suspect { "typo" } else { "-" }));
+            }
             for (k, l) in &self.learned {
                 out.push_str(&format!("w\t{k}\t{}\t{}\t{}\t{}\n", l.form, l.count, l.last, if l.suspect { "typo" } else { "-" }));
             }
@@ -551,6 +734,20 @@ fn dress(typed: &str, form: &str, arabic: bool) -> String {
     }
 }
 
+impl WordList {
+    /// The entry of the list that stands for a comparison key (its canonical spelling), when it starts like `typed` (exactly or leniently):
+    /// (word, share of the list, whether it starts exactly like `typed`). The word typed itself is not returned.
+    fn usage_entry(&self, key: &str, typed_key: &str) -> Option<(&str, f64, bool)> {
+        let start = self.entries.partition_point(|e| e.key.as_str() < key);
+        let e = self.entries[start..].iter().take_while(|e| e.key == key).find(|e| e.canonical)?;
+        let exact = e.word.starts_with(typed_key);
+        if e.word == typed_key || (!exact && !starts_leniently(&e.word, typed_key)) {
+            return None;
+        }
+        Some((e.word.as_str(), e.count as f64 / self.total, exact))
+    }
+}
+
 // ───────────── the engine ─────────────
 
 impl LocalEngine {
@@ -596,6 +793,42 @@ impl LocalEngine {
                     key.strip_prefix(p).is_some_and(|stem| stem.chars().count() >= MIN_WORD && held(stem))
                 })
         })
+    }
+
+    /// Dictionary words the user writes more often than the dictionary says, ranked up: for each such word that starts like what was typed
+    /// (leniently, as the completions do), its dictionary score times the boost. They come in addition to the ordinary completions, which
+    /// still hold the word at its plain score, so a boosted word is never lost and the others are never touched. Empty when the user never
+    /// used learning, which is what keeps the engine exactly as it was.
+    pub(crate) fn usage_completions(&self, typed_key: &str, limit: usize, langs: &[(Lang, &WordList)], bias: &[f64]) -> Vec<(String, f64, Lang)> {
+        if self.personal.usage_len() == 0 || langs.is_empty() {
+            return Vec::new();
+        }
+        let prefix = fold(typed_key);
+        let mut best: Vec<(String, f64, Lang)> = Vec::new();
+        for (key, count) in self.personal.usage_with_prefix(&prefix) {
+            if key == prefix {
+                continue;
+            }
+            for ((lang, list), factor) in langs.iter().zip(bias) {
+                let Some((word, share, exact)) = list.usage_entry(key, typed_key) else { continue };
+                if self.personal.added.contains_key(&key_of(word)) {
+                    continue;
+                }
+                let boost = self.personal.usage_boost(count, share);
+                if boost <= 1.0 {
+                    continue;
+                }
+                let score = share * factor * boost * if exact { 1.0 } else { crate::LENIENT_PENALTY };
+                match best.iter_mut().find(|b| b.0 == word) {
+                    Some(b) if b.1 >= score => {}
+                    Some(b) => *b = (word.to_string(), score, *lang),
+                    None => best.push((word.to_string(), score, *lang)),
+                }
+            }
+        }
+        best.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal).then_with(|| a.0.cmp(&b.0)));
+        best.truncate(limit);
+        best
     }
 
     /// The user's own words that start like `typed`, ranked in the unit of the lists' shares, each with the language it is offered under

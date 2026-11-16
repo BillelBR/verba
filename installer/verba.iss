@@ -1,4 +1,4 @@
-; Inno Setup 6.3 or later script for Verba.
+ï»¿; Inno Setup 6.3 or later script for Verba.
 ;
 ; Build it with scripts\build-installer.ps1 (which passes the version), or by hand:
 ;     ISCC.exe /DAppVersion=0.3.0 installer\verba.iss
@@ -54,10 +54,10 @@ english.TaskAutostart=Start Verba when Windows starts
 english.TaskGroupOptions=Options:
 english.LaunchVerba=Launch Verba
 english.AskDeleteSettings=Also delete your Verba settings (the theme, languages and program list you chose)?
-french.TaskAutostart=Démarrer Verba au démarrage de Windows
+french.TaskAutostart=DÃ©marrer Verba au dÃ©marrage de Windows
 french.TaskGroupOptions=Options :
 french.LaunchVerba=Lancer Verba
-french.AskDeleteSettings=Supprimer aussi vos réglages Verba (thème, langues et liste de programmes choisis) ?
+french.AskDeleteSettings=Supprimer aussi vos rÃ©glages Verba (thÃ¨me, langues et liste de programmes choisis) ?
 
 [Tasks]
 Name: "autostart"; Description: "{cm:TaskAutostart}"; GroupDescription: "{cm:TaskGroupOptions}"
@@ -69,8 +69,9 @@ Source: "..\target\release\verba.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\data\words\*.txt"; DestDir: "{app}\data\words"; Flags: ignoreversion
 Source: "word-lists-notice.txt"; DestDir: "{app}"; DestName: "WORD-LISTS-LICENSE.txt"; Flags: ignoreversion
 Source: "..\README.md"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\LICENSE-MIT"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\LICENSE-APACHE"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\LICENSE"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\NOTICE"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\COMMERCIAL.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\THIRD-PARTY.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\docs\DATA.md"; DestDir: "{app}"; Flags: ignoreversion
 

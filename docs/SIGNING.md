@@ -20,27 +20,18 @@ Verba also installs a low-level keyboard hook (to read Tab and Esc while its pop
 
 The conditions SignPath Foundation states: an OSI-approved license with no commercial dual licensing and no proprietary parts; the project is actively maintained and **already released** in the form to be signed; binaries are built from source in a verifiable automated build (GitHub Actions); the signing team owns the repository and signs only its own code; software that sends user data must have a privacy policy; installation comes with uninstallation; **multi-factor authentication** for everyone with access; defined roles (authors, reviewers, approvers); a **code signing policy on the project's home page** that includes "Free code signing provided by SignPath.io, certificate by SignPath Foundation"; product name and version metadata set the same way in every build.
 
-## Where Verba stands against SignPath's conditions
+## Where Verba stands (license: PolyForm Noncommercial 1.0.0)
 
-| Condition | State |
-|---|---|
-| OSI license, no dual commercial license, no proprietary code | Yes: MIT OR Apache-2.0. The word lists are separate downloads (CC-BY-SA-4.0). |
-| Already released, maintained | Yes: v0.3.0 is released; the repository must be public first. |
-| Verifiable automated build | Yes: `.github/workflows/release.yml` builds on a tag. |
-| Privacy | Yes: Verba has no network code (see Privacy in `INSTALL.md`). |
-| Uninstallation | Yes: the installer registers an uninstaller. |
-| Product name and version metadata | Yes: `build.rs` writes them from Cargo.toml. |
-| MFA on GitHub for every maintainer | **To do by the maintainer.** |
-| Code signing policy on the home page (README) | **To do** once accepted: roles and the attribution line. |
+SignPath Foundation only signs projects under an OSI-approved open-source license with no commercial dual licensing. Verba is source-available (PolyForm Noncommercial) and sells commercial licenses, so **the free SignPath route is closed** while that license stays.
+If the license ever goes back to an OSI one (MIT, Apache-2.0, AGPL without a commercial option), the route reopens: see the conditions above.
 
-## Plan
+Left for Verba:
 
-1. Make the repository public (the maintainer decides when). Turn on two-factor authentication for the GitHub account.
-2. Apply to SignPath Foundation with the repository link.
-3. When accepted, add their GitHub Action to `.github/workflows/release.yml` between "build the installer" and "publish the release": upload the unsigned `Verba-Setup-<version>.exe` as an artifact, let SignPath sign it, download the signed file, then compute the `.sha256` of the **signed** file. Also sign `verba.exe` itself before Inno Setup packs it.
-4. Add the code signing policy to the README.
+1. **A paid certificate** in the maintainer's own name (the publisher then shows that name). Roughly 200 to 500 USD a year, with an identity check. Check what the issuer accepts from your country before paying.
+2. **Azure Artifact Signing**, 9.99 USD a month, only if the maintainer is in a supported country (USA, Canada for individuals).
+3. **Stay unsigned** and explain the warning in `INSTALL.md` (done). Reputation then builds slowly with downloads.
 
-Until then the installer stays unsigned, and `docs/INSTALL.md` tells users how to continue (More info, Run anyway) and how to check the SHA-256.
+Whichever is chosen, the release workflow signs `verba.exe` before Inno Setup packs it, and the installer after; the `.sha256` is computed on the signed file.
 
 ## What to avoid
 

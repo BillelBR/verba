@@ -1,6 +1,6 @@
 # Verba
 
-> Working name. Open-source writing assistant for every app on your computer.
+> Working name. Writing assistant for every app on your computer. Source-available, free for noncommercial use.
 
 Verba helps you write anywhere: it suggests the next word as you type, in a small popup above the text, and (next) fixes mistakes on the spot.
 It is built to work for every major language, to run fully on your own device, and to cost nothing.
@@ -54,7 +54,7 @@ English, French and Arabic (Modern Standard Arabic) work. Arabic suggestions rea
 
 - **Private by default.** Nothing you type leaves your computer unless you choose an online engine (none exists yet).
 - **Works offline.** The default engine is local, with no internet and no account.
-- **No subscription.** Free and open source. If you want a cloud model later, you bring your own API key.
+- **No subscription.** Free for personal and other noncommercial use, and the source is public. Using it for work needs a commercial license ([COMMERCIAL.md](COMMERCIAL.md)). If you want a cloud model later, you bring your own API key.
 - **Every major language.** Engines and data are built per language, starting with English, French and Arabic.
 - **Engines are plugins.** A local engine or an API engine can be swapped without touching the rest of the app.
 
@@ -100,8 +100,12 @@ Next: instant correction, more languages, a proper settings window, Mac and Linu
 
 ## License
 
-Verba's code is dual-licensed under **[MIT](LICENSE-MIT) OR [Apache-2.0](LICENSE-APACHE)**, at your choice.
-Unless you say otherwise, any contribution you submit for inclusion is licensed the same way, with no extra terms.
+Verba's code is under the **[PolyForm Noncommercial License 1.0.0](LICENSE)**.
+You can read, run and change it for personal use, study, hobby projects, research, and for charities, schools and public institutions.
+Using it in a business or to earn money needs a commercial license: see [COMMERCIAL.md](COMMERCIAL.md).
+This is a *source-available* license, not an OSI "open source" one.
+
+To contribute code, read [CONTRIBUTING.md](CONTRIBUTING.md) first (it explains the contribution terms).
 
 The word lists Verba uses are separate data with their own license (CC-BY-SA-4.0) and are downloaded, not stored here;
 see [docs/DATA.md](docs/DATA.md) and [THIRD-PARTY.md](THIRD-PARTY.md). Models must allow free use:

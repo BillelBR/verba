@@ -1,6 +1,6 @@
 # Third-party software and data
 
-Verba's own code is dual-licensed under **MIT OR Apache-2.0** (see `LICENSE-MIT` and `LICENSE-APACHE`).
+Verba's own code is under the **PolyForm Noncommercial License 1.0.0** (see `LICENSE`; commercial use: `COMMERCIAL.md`).
 It builds on the following, which keep their own licenses.
 
 ## Rust libraries (checked on 2026-11-16 with `cargo metadata`)

@@ -12,8 +12,14 @@
 
 mod clean;
 mod fold;
+mod nextword;
+mod personal;
 mod spell;
 
+#[doc(hidden)]
+pub use nextword::{BuildParams, NextBuilder, NextParams, word_runs};
+pub use nextword::NextTable;
+pub use personal::PersonalDict;
 #[doc(hidden)]
 pub use spell::SpellParams;
 
@@ -223,11 +229,21 @@ pub struct LocalEngine {
     disabled: HashSet<Lang>,
     /// Words the user dismissed (lower case): the correction leaves them alone for the rest of the session.
     ignored: HashSet<String>,
+    /// The words the user keeps and what was learned from their text (see `personal.rs`).
+    personal: PersonalDict,
+    /// The bundled next-word tables (see `nextword.rs`).
+    next_tables: HashMap<Lang, NextTable>,
 }
 
 impl LocalEngine {
     pub fn new() -> Self {
-        Self { lists: HashMap::new(), disabled: HashSet::new(), ignored: HashSet::new() }
+        Self {
+            lists: HashMap::new(),
+            disabled: HashSet::new(),
+            ignored: HashSet::new(),
+            personal: PersonalDict::new(),
+            next_tables: HashMap::new(),
+        }
     }
 
     pub fn add(&mut self, lang: Lang, list: WordList) {
@@ -245,6 +261,7 @@ impl LocalEngine {
                 Err(e) => return Err(e),
             }
         }
+        engine.load_next_words_dir(dir);
         engine.remove_bleed();
         Ok(engine)
     }
@@ -449,11 +466,15 @@ impl LocalEngine {
                 found.extend(self.arabic_by_stem(list, &typed_key, max).into_iter().map(|(w, s)| (w, s, *lang)));
             }
         }
+        // the user's own words, already written the way they are to be offered
+        let own = self.personal_completions(typed, arabic, max, &langs, &bias);
+        let verbatim: HashSet<String> = own.iter().map(|o| o.0.clone()).collect();
+        found.extend(own);
         found.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
 
         let mut out: Vec<Suggestion> = Vec::new();
         for (word, _, lang) in found {
-            let text = if arabic { word } else { match_case(typed, &word) };
+            let text = if arabic || verbatim.contains(&word) { word } else { match_case(typed, &word) };
             if !out.iter().any(|s| s.text == text) {
                 out.push(Suggestion { text, lang });
             }

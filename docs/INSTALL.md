@@ -18,7 +18,7 @@ Click **More info**, then **Run anyway**.
 To be sure the file is the one the project published, compare its SHA-256 with the `.sha256` file next to it on the Releases page:
 
 ```powershell
-Get-FileHash .\Verba-Setup-0.5.0.exe -Algorithm SHA256
+Get-FileHash .\Verba-Setup-0.6.0.exe -Algorithm SHA256
 ```
 
 The two hashes must be identical. The source code is in this repository, and the Releases are built by GitHub Actions from it.
@@ -39,7 +39,7 @@ Why the warning exists and what can remove it: [SIGNING.md](SIGNING.md).
 
 ### Start, quit, uninstall
 
-- **Start:** Start Menu > Verba.
+- **Start:** Start Menu > Verba. A short animation of the logo plays while the word lists load. When Windows starts Verba at sign-in (`--startup`), there is no animation: it just appears in the tray.
 - **Quit:** the tray icon's menu > *Quit Verba*, or press **Ctrl+Alt+Shift+Q**.
 - **Pause:** **Ctrl+Alt+Shift+V**, or the tray menu.
 - **Not working in one program?** Tray menu > *Check a text field (3 s)…*, then click in that field. A report says which step of reading the field worked (program and class names only, never the text). Windows' own Start menu and search box may never show the popup: Windows draws them above every normal window, and only a signed program with special rights can go over them.
@@ -83,10 +83,10 @@ Other pieces: `scripts/make_icon.py` regenerates `crates/verba-app/assets/verba.
 2. Tag and push the tag. The tag must be `v` plus that exact version:
 
    ```
-   git tag v0.5.0
-   git push origin v0.5.0
+   git tag v0.6.0
+   git push origin v0.6.0
    ```
 
-3. The **Release** workflow (`.github/workflows/release.yml`) builds the installer and creates the GitHub Release with the Setup and its `.sha256`. It is marked *pre-release* when the version starts with `0.` or the tag has a hyphen (`v0.5.0-beta1`).
+3. The **Release** workflow (`.github/workflows/release.yml`) builds the installer and creates the GitHub Release with the Setup and its `.sha256`. It is marked *pre-release* when the version starts with `0.` or the tag has a hyphen (`v0.6.0-beta1`).
 
 The **CI** workflow builds and tests every push to `main` and every pull request.

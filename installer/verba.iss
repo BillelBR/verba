@@ -1,14 +1,14 @@
 ﻿; Inno Setup 6.3 or later script for Verba.
 ;
 ; Build it with scripts\build-installer.ps1 (which passes the version), or by hand:
-;     ISCC.exe /DAppVersion=0.5.0 installer\verba.iss
+;     ISCC.exe /DAppVersion=0.6.0 installer\verba.iss
 ; Output: dist\Verba-Setup-<version>.exe
 ;
 ; Per-user by default (no administrator rights needed); the "dialog" override lets the user choose
 ; to install for all users instead.
 
 #ifndef AppVersion
-  #define AppVersion "0.5.0"
+  #define AppVersion "0.6.0"
 #endif
 
 [Setup]
@@ -82,7 +82,7 @@ Name: "{autodesktop}\Verba"; Filename: "{app}\verba.exe"; Tasks: desktopicon
 [Registry]
 ; the same per-user value the program itself writes from its tray menu ("Start with Windows")
 Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Verba"; \
-  ValueData: """{app}\verba.exe"""; Flags: uninsdeletevalue; Tasks: autostart
+  ValueData: """{app}\verba.exe"" --startup"; Flags: uninsdeletevalue; Tasks: autostart
 
 [Run]
 Filename: "{app}\verba.exe"; Description: "{cm:LaunchVerba}"; Flags: nowait postinstall skipifsilent

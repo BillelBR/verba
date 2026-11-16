@@ -25,7 +25,7 @@ mod settings_window;
 use settings::{Settings, ThemeMode};
 use verba_core::{Engine, Lang, Suggestion, current_word, current_word_dz};
 use verba_local::{LocalEngine, PersonalDict};
-use verba_win::{Locator, Look, Overlay, Snapshot, Theme, describe_foreground, foreground_app};
+use verba_win::{Locator, Look, Overlay, Snapshot, Theme, describe_foreground, foreground_app, run_with_splash};
 use windows::Win32::Foundation::{ERROR_ALREADY_EXISTS, GetLastError, HINSTANCE, HWND, LPARAM, LRESULT, POINT, WPARAM};
 use windows::Win32::Graphics::Gdi::{CreateBitmap, DeleteObject};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
@@ -130,13 +130,20 @@ fn main() {
         }
 
         let settings = Settings::load();
-        let mut engine = load_engine();
-        let files = Settings::dir().map(|d| (d.join("personal.txt"), d.join("learned.txt")));
-        if let Some((words, learned)) = &files {
-            engine.set_personal(PersonalDict::load(words, learned));
-        }
-        let words_stamp = files.as_ref().and_then(|(w, _)| stamp_of(w));
-        engine.add_dz_seed();
+        // the word lists, the personal dictionary and the built-in Darija lists: read on another thread while the splash plays.
+        // Windows starts Verba with `--startup` at sign-in: then there is no splash, it just appears in the tray.
+        let load = || {
+            let mut engine = load_engine();
+            let files = Settings::dir().map(|d| (d.join("personal.txt"), d.join("learned.txt")));
+            if let Some((words, learned)) = &files {
+                engine.set_personal(PersonalDict::load(words, learned));
+            }
+            let words_stamp = files.as_ref().and_then(|(w, _)| stamp_of(w));
+            engine.add_dz_seed();
+            (engine, files, words_stamp)
+        };
+        let (mut engine, files, words_stamp) =
+            if std::env::args().any(|a| a == "--startup") { load() } else { run_with_splash(look_for(&settings), load) };
         for lang in [Lang::En, Lang::Fr, Lang::Ar, Lang::Dz] {
             engine.set_enabled(lang, settings.lang_on(lang));
         }
@@ -245,7 +252,8 @@ pub(crate) fn set_autostart(on: bool) {
     unsafe {
         if on {
             let Ok(exe) = std::env::current_exe() else { return };
-            let value: Vec<u16> = format!("\"{}\"", exe.display()).encode_utf16().chain(std::iter::once(0)).collect();
+            // `--startup` tells the program that Windows started it at sign-in: no splash then
+            let value: Vec<u16> = format!("\"{}\" --startup", exe.display()).encode_utf16().chain(std::iter::once(0)).collect();
             let _ = RegSetKeyValueW(HKEY_CURRENT_USER, RUN_KEY, w!("Verba"), REG_SZ.0, Some(value.as_ptr() as *const _), (value.len() * 2) as u32);
         } else {
             let _ = RegDeleteKeyValueW(HKEY_CURRENT_USER, RUN_KEY, w!("Verba"));

@@ -25,6 +25,15 @@ The Windows installer ships them as separate files in `data\words\` with a notic
 If you copy a list into another project, its CC-BY-SA-4.0 terms (attribution, same license for the data) apply to that copy.
 See [docs/DATA.md](docs/DATA.md).
 
+## Next-word tables (data, built from a download)
+
+| What | License |
+|---|---|
+| Next-word counts (English, French, Arabic) built by `scripts/fetch-bigrams.ps1` from sentences of [Tatoeba](https://tatoeba.org), (c) Tatoeba contributors | **CC BY 2.0 FR** (attribution) |
+
+The tables hold counts only, no sentence. They are not part of the source repository. A copy of a table must keep the attribution above.
+See [docs/DATA.md](docs/DATA.md).
+
 ## Tools used to build the installer (not shipped)
 
 Inno Setup (its own license; the installer it makes is not covered by it).

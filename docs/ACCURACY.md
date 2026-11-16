@@ -338,3 +338,170 @@ punctuation typed after the word and the capital letter. Seven right fixes canno
 2. Word pairs (bigrams) to tell `their` from `there` and to rank candidates by the sentence.
 3. Hunspell dictionaries (each with its license) as a second opinion on what is a word, so that a rare valid word stops being flagged.
 4. An Arabic stemmer or dictionary, then retune the Arabic ratios.
+
+## Next-word prediction
+
+`LocalEngine::next_words(only, before_caret, max)` is used when the caret is right after a finished word and a space
+(`I would like |` -> `to`, `a`, `the`). The code is `crates/verba-local/src/nextword.rs`; the tables are built by
+`scripts/fetch-bigrams.ps1` from Tatoeba sentences ([DATA.md](DATA.md)); the numbers come from
+`cargo run --release -p verba-local --example nextword_accuracy -- --lang en|fr|ar [--sweep]` (deterministic: the split is by sentence id),
+the cases from `crates/verba-local/tests/nextword.rs`.
+
+### How it decides
+
+1. The text must end with a plain word and one or more spaces. A comma, a full stop, a line break, a number, an address or a hyphenated
+   word before the caret gives nothing (the text is cut into runs of plain words; no pair is made across a cut).
+2. The user's own pairs (learned, seen at least twice) come first, most often first.
+3. Then the bundled table of the language: the 6 likeliest followers of the last word. For the 20 000 commonest pairs of words the table also
+   holds the followers of the pair (`would like` -> `to`), blended with the one-word table with the weight `n / (n + 20)`, `n` being how
+   often the pair was seen.
+4. A word is offered only when it follows with a probability of at least 2%. When the last word is not in the table, nothing is offered:
+   **no frequent word is ever used as a filler.**
+5. English and French both on, no keyboard language: each table is weighted by how well the words before the caret fit the language
+   (the same vote as for completions). `i` is written `I`.
+
+### Method
+
+The corpus is split by sentence id: 1 sentence in 40 is held out (50 841 English, 18 242 French, 1 773 Arabic). A table is built from the
+rest with the code that builds the shipped tables, then every position of every held-out sentence is a question: the word before is the
+context (and the one before it), the next word is the answer. **Overall** counts a position where nothing is offered as a miss, which is what
+the user sees; **when shown** counts only the positions where something is offered. The baseline is the strongest dumb rule:
+**always offer the 3 most frequent words** of the training part (`the to I` / `de je est` / `في من أن`), not counting corpus-only words such as `Tom`.
+
+Three test sets, because one alone is not honest:
+
+- **novel**: held-out sentences, without exact copies of a training sentence and without sentences that share 60% or more of their word
+  triples with the training part. Tatoeba holds many near-copies (`Tom ate an apple` / `Mary ate an apple`), so this drops 72% of the English
+  held-out sentences. What stays is the unusual part of the corpus: **pessimistic**.
+- **loose**: all held-out sentences except exact copies. **Optimistic** (near-copies of training sentences are in it).
+- **hand**: 30 everyday messages per language that I wrote for this measurement (thanks, meetings, questions: 313 / 257 / 217 positions),
+  not taken from the corpus. It is the closest to what people type, but it is small and one author's idea of an everyday message, written
+  knowing the corpus style, so treat it as a sanity check, not as a number to quote.
+
+### Results (shipped settings)
+
+| | set | positions | baseline top-3 | shown | top-1 overall | top-3 overall | top-1 when shown | top-3 when shown |
+|---|---|---|---|---|---|---|---|---|
+| English | novel | 89 115 | 6.7% | 84.2% | 10.8% | **18.8%** | 12.8% | 22.4% |
+| English | loose | 329 265 | 8.6% | 86.9% | 19.1% | **31.3%** | 22.0% | 36.1% |
+| English | hand | 313 | 13.4% | 97.8% | 31.9% | **54.0%** | 32.7% | 55.2% |
+| French | novel | 41 171 | 5.8% | 91.5% | 11.6% | **21.3%** | 12.6% | 23.3% |
+| French | loose | 99 543 | 6.7% | 94.4% | 18.9% | **32.3%** | 20.1% | 34.2% |
+| French | hand | 257 | 5.1% | 99.2% | 28.8% | **51.0%** | 29.0% | 51.4% |
+| Arabic | novel | 5 383 | 7.0% | 79.6% | 9.1% | **14.7%** | 11.5% | 18.5% |
+| Arabic | loose | 5 914 | 7.5% | 80.0% | 10.0% | **15.9%** | 12.5% | 19.9% |
+| Arabic | hand | 217 | 12.4% | 94.9% | 18.0% | **29.0%** | 18.9% | 30.6% |
+
+(Baseline top-1 is 3.0% to 5.4% everywhere.)
+
+**Verdict.** All three languages beat the baseline clearly: top-3 overall is 2.1 to 10 times the baseline's and top-1 is 2.6 to 7.4 times,
+on every set, so all three tables are used. **Arabic is the weakest**: 14.7% top-3 on unusual sentences and 29% on everyday ones, from a corpus 50 times
+smaller than the English one (0.3 million words; attached particles such as `و` and `ال` split the counts further). It is clearly better than the
+baseline, but the popup will often be wrong; a bigger Arabic corpus is the first thing to improve (DATA.md says what was ruled out). English and French on
+unusual sentences (19-21% top-3) are about what a one- or two-word context can give: next-word prediction is hard, and these are hits within three
+guesses, not words written for you. The hit rate to expect on real messages lies between the novel and the loose rows, and nearer the loose one for common phrases.
+
+### What the dials do (English; French and Arabic move the same way)
+
+| Setting | novel top-3 | loose top-3 | hand top-3 | size |
+|---|---|---|---|---|
+| one-word context, 5 000 contexts, 8 followers, no floor | 15.9% | 25.2% | 39.9% | 336 KB |
+| same, floor 2% | 15.7% | 24.9% | 39.9% | 336 KB |
+| same, floor 5% | 14.1% | 22.6% | 34.8% | 336 KB |
+| same, floor 10% | 10.0% | 16.6% | 27.2% | 336 KB |
+| 10 000 contexts (floor 2%) | 17.1% | 25.6% | 39.9% | 594 KB |
+| 2 000 contexts | 13.6% | 23.4% | 39.3% | 142 KB |
+| 5 followers instead of 8 | 15.7% | 24.9% | 39.9% | 233 KB |
+| no corpus filter (the names `Tom`, `Mary` kept) | 16.8% | 28.5% | 38.3% | 341 KB |
+| + 5 000 pair contexts | 16.9% | 29.0% | 51.8% | 589 KB |
+| **+ 20 000 pair contexts, 10 000 contexts, 6 followers (shipped)** | **18.8%** | **31.3%** | **54.0%** | 1.4 MB |
+| + 50 000 pair contexts | 18.1% | 31.6% | 55.0% | 2.1 MB |
+
+- **The previous two words help a lot** (about +3 points on unusual sentences, +14 on everyday ones), so the pair contexts are kept; beyond 20 000
+  pairs the gain is under 1 point for 50% more size. The weight constant (5, 20 or 60) makes no measurable difference.
+- **The 2% floor costs nothing** (it only removes answers that almost never hit); a floor of 5% or more loses hits. Only 3 answers are shown, so 8
+  followers per word is no better than 5; 6 are kept so that `max` up to 5 has something to fall back on.
+- **The corpus filter** (no `Tom`, `Mary`, nothing the subtitle list does not know) costs 1 point on the novel set and 3.6 on the loose one, which is full of
+  them, and gains 1.6 on the everyday set, which is why it is on.
+- For French the picture is the same (pairs: +2.6 novel, +16.8 hand). For Arabic the pair contexts add under half a point: the table is mostly one-word
+  context. Using the subtitle list as the vocabulary, as for English and French, gives 11.3% on novel Arabic against 14.7% with an open vocabulary and
+  lower thresholds (the subtitle list lacks the forms with attached particles), so Arabic is built the second way.
+
+### Cost
+
+| | English | French | Arabic |
+|---|---|---|---|
+| table on disk | 1.4 MB | 1.1 MB | 0.5 MB |
+| contexts | 29 990 | 29 395 | 10 446 |
+| load (parse the text) | 27 ms | 23 ms | 7.5 ms |
+| memory when loaded | 6.6 MB | 5.6 MB | 1.8 MB |
+| `next_words` p50 / p95 / p99 / max | 3.8 / 7.6 / 10.2 / 35 µs | 3.6 / 7.0 / 9.2 / 33 µs | 4.2 / 8.7 / 13 / 30 µs |
+
+Release build on this machine, over every position of the held-out sentences (89 115 / 41 171 / 5 383 calls). The memory is counted by a counting
+allocator around the parse; the in-memory form is not compact (a boxed string per word) and could be about 3 times smaller if it matters.
+
+### Known weaknesses
+
+- Everyday phrases that are not translation exercises are often missing: `Happy |` gives `to with here`, not `birthday`; `Good |` gives `at idea time`; `See you |`
+  gives `again in at`. `tests/nextword.rs::known_gaps` lists them (`-- --ignored`). A corpus of e-mails and chat would help most.
+- Only the last two words are used: `thank you very |` works, `I would like to ask you |` does not.
+- After a sentence end or a comma nothing is offered: a table of sentence openers would be a separate feature.
+- Followers are lower case (`I` and `I'm` excepted), which suits the middle of a sentence.
+- Tatoeba's English mixes American and British, its French is mostly European, its Arabic is a macro-language (`ara`) that includes some dialect.
+
+## Personal dictionary
+
+`PersonalDict` (code: `crates/verba-local/src/personal.rs`; tests: `crates/verba-local/tests/personal.rs`, 25 cases, which need no downloaded data except
+two checks on the real lists).
+
+### Words the user keeps
+
+`add_word` takes a single word of 2 to 40 letters of one script (an apostrophe or hyphen inside is fine) and keeps its capitals (`Snow`, `iPhone`).
+Kept words are never flagged by the correction, and are offered as completions, per script, whatever the language of the keyboard.
+
+**Ranking.** A kept word counts as `3.0e-4` of the list's total frequency (a word learned by the engine: `1.5e-4`, up to 1.6 times more when
+seen often). On the real English list that is about the 330th most frequent word (`police`, 3.05e-4). Measured on the real lists with words added by hand:
+
+| typed | offered |
+|---|---|
+| `po` | police, **Positiv**, point |
+| `pos` | **Positiv**, possible, position |
+| `posi` | **Positiv**, position, positive |
+| `sn` | **Snow**, snow, snake |
+| `ve` | very, **Verba**, vehicle |
+| `be` | been, because, before (`Benchmark` was added: it needs `ben`) |
+
+A very common word (`people`, `very`, `been`, `because`: ranks under 150) beats the user's word on two letters; with three letters or more the user's word is
+among the first. A word the user kept beats every dictionary word rarer than the 330th, which is how a name or a term of the trade gets through; if that
+feels too eager, the constants `ADDED_SCORE` and `LEARNED_SCORE` in `personal.rs` are the dials. The capitals of the typing are respected (`POS` -> `POSITIV`).
+The ranking is tested (`a_very_common_word_still_wins_on_a_short_prefix_but_a_rare_one_does_not`).
+
+### Learning (off unless the app calls `learn_text`)
+
+- **Counted:** words of 3 to 24 letters of one script that are in no dictionary that is on (exact word for Latin; for Arabic also with a
+  particle attached), once per occurrence. Promoted to personal at 3 sightings.
+- **Refused:** numbers and anything with a digit, URLs, e-mail addresses, paths and slashes, identifiers (`snake_case`, `getUserName`: two or more
+  lower-to-upper switches), hex strings of 6 letters or more, acronyms and shouting (`NASA`, `OK`), hyphenated words, stretched sounds (`aaah`),
+  words under 3 or over 24 letters, words the user removed (they stay removed; adding one by hand lifts that), and **words the correction takes for a
+  typo** (checked when a word is about to be promoted: `recieve` typed three times is not learned; the user can still keep it on purpose).
+- **Capitals:** the form kept is the one typed in the middle of a sentence (`Quillon`), not the one at its start.
+- **Caps:** 5 000 words (candidates and promoted; the least seen, then the oldest, are forgotten first, and a promoted word goes last) and 20 000 pairs.
+  Only the last 20 000 characters of a text are read.
+- **Pairs** (for next-word prediction): two neighbouring plain words, not across punctuation, a line break, a number or an address; used once seen twice.
+- **Cost:** `learn_text` on 200 words: 340 µs. `suggest` with 1 900 learned words that all match the typed prefix: 410 µs (the worst case; a normal prefix
+  matches a few words: 1-6 µs). `save` with 4 500 words and 14 000 pairs: 7 ms, 330 KB.
+
+### Privacy
+
+Stored: single words (lower case, or as typed in mid-sentence), how often each was seen, a counter of when (a number that goes up by one per
+`learn_text`, **not a date or a time**), and pairs of two neighbouring words with their counts. **Never stored:** a sentence, three words in a row,
+the app, the place, the date. Whoever reads `learned.txt` sees the words and pairs the user uses most (`thank you`): that is the data, and
+that is why it is a plain, editable file that `clear_learned` and deleting the file both wipe. The test `what_is_stored_never_holds_a_sentence` checks the
+shape of every line written. The app must never call `learn_text` for a password field, an excluded app, or text the user did not type: the engine cannot tell.
+
+### Files
+
+`personal.txt` and `learned.txt` are plain UTF-8 text; a byte order mark, Windows line endings, comments, blank lines and invalid lines are accepted
+and skipped. Writing goes to `<name>.tmp` then renames over the file, creates the folder if needed, and writes nothing when nothing changed
+(`is_dirty`). A missing, damaged or non-UTF-8 file gives a smaller dictionary, never an error. Tested with garbage bytes, half-written lines, absurd
+numbers, a folder where a file should be, and a rename that fails.

@@ -508,7 +508,7 @@ impl LocalEngine {
         }
 
         let lower = if arabic { strip_arabic_marks(word) } else { word.to_lowercase() };
-        if self.ignored.contains(&lower) {
+        if self.ignored.contains(&lower) || self.personal.contains(&lower) {
             return None;
         }
         // the same word written earlier in the visible text: meant

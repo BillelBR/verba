@@ -9,13 +9,19 @@
 //! - Arabic words with the attached article or particle (`ال`, `و`, `ب`, `ل`, `ك`, `ف`) are completed
 //!   through their stem when the list does not hold that exact form;
 //! - when English and French are both on, the words before the caret lean the choice towards the right one.
+//! - Algerian Darija in Latin letters (`Lang::Dz`, see `dz.rs`) has its own embedded seed list, is off until switched on, and is never
+//!   loaded by `load_dir` (use `add_dz_seed` or `load_dz`).
 
 mod clean;
+mod dz;
 mod fold;
 mod nextword;
 mod personal;
 mod spell;
 
+pub use dz::{DZ_SEED, DzList};
+#[doc(hidden)]
+pub use dz::dz_sound_key;
 #[doc(hidden)]
 pub use nextword::{BuildParams, NextBuilder, NextParams, word_runs};
 pub use nextword::NextTable;
@@ -233,16 +239,20 @@ pub struct LocalEngine {
     personal: PersonalDict,
     /// The bundled next-word tables (see `nextword.rs`).
     next_tables: HashMap<Lang, NextTable>,
+    /// Algerian Darija in Latin letters (see `dz.rs`). Off until switched on.
+    dz: Option<DzList>,
 }
 
 impl LocalEngine {
     pub fn new() -> Self {
+        // Darija is the one language that is off until it is switched on: it is not a language every user types
         Self {
             lists: HashMap::new(),
-            disabled: HashSet::new(),
+            disabled: HashSet::from([Lang::Dz]),
             ignored: HashSet::new(),
             personal: PersonalDict::new(),
             next_tables: HashMap::new(),
+            dz: None,
         }
     }
 
@@ -297,6 +307,9 @@ impl LocalEngine {
     /// The languages that have a list (whether they are switched on or not).
     pub fn languages(&self) -> Vec<Lang> {
         let mut v: Vec<Lang> = self.lists.keys().copied().collect();
+        if self.dz.is_some() {
+            v.push(Lang::Dz);
+        }
         v.sort_by_key(|l| l.code());
         v
     }
@@ -309,10 +322,13 @@ impl LocalEngine {
 
     /// How many words the list of a language holds after cleaning (0 when it is not loaded).
     pub fn word_count(&self, lang: Lang) -> usize {
+        if lang == Lang::Dz {
+            return self.dz.as_ref().map_or(0, DzList::len);
+        }
         self.lists.get(&lang).map_or(0, WordList::len)
     }
 
-    /// Switches a language on or off. Every language is on until it is switched off.
+    /// Switches a language on or off. Every language is on until it is switched off, except Darija (`Lang::Dz`), which is off until it is switched on.
     /// A language that is off never appears in `suggest`; the others fill the places it leaves.
     pub fn set_enabled(&mut self, lang: Lang, on: bool) {
         if on {
@@ -433,6 +449,10 @@ impl LocalEngine {
     }
 
     fn suggest_filtered(&self, only: Option<Lang>, before_caret: &str, max: usize) -> Vec<Suggestion> {
+        // a word with digit-letters (`sa7`, `3la`) can only be Darija
+        if let Some(found) = self.dz_digit_word(only, before_caret, max) {
+            return found;
+        }
         let typed = current_word(before_caret);
         let arabic = is_arabic_word(typed);
         // short vowels do not count as letters, and an Arabic word is matched without them
@@ -470,6 +490,9 @@ impl LocalEngine {
         let own = self.personal_completions(typed, arabic, max, &langs, &bias);
         let verbatim: HashSet<String> = own.iter().map(|o| o.0.clone()).collect();
         found.extend(own);
+        if !arabic {
+            self.dz_merge(only, before_caret, typed, &langs, max, &mut found);
+        }
         found.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
 
         let mut out: Vec<Suggestion> = Vec::new();

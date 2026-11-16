@@ -1,0 +1,446 @@
+# Verba - Algerian Darija written in Latin letters ("Arabizi"): SEED word list.
+#
+# Written by the Verba authors from their own knowledge of how Algerians type. It is NOT taken from any corpus.
+# License: MIT OR Apache-2.0 (same as the code). It is an estimate, not a measurement: see docs/ACCURACY.md.
+#
+# Format (read by crates/verba-local/src/dz.rs):
+#   - lines starting with '#' are comments;
+#   - a word is lower case: letters a-z and the digit-letters 2 3 5 6 7 8 9
+#     (3 = ain, 7 = h, 9 = q, 5 = kh, 8 = gh, 6 = t, 2 = hamza);
+#   - "word 500" gives the word its weight (about how often it is typed, relative to the other words of this file);
+#   - a word with no number takes the weight of the last "@N" line (until the next "@N");
+#   - spelling variants are separate words, there is no standard spelling: the commonest variant gets the highest weight.
+#
+# Vulgar words are left out on purpose: a suggestion popup must not offer them.
+# The last section ("UNSURE") holds words and spellings the authors are not certain of: the Algerian reviewer decides.
+
+# ============================================================ the most frequent words
+wach 9000 rani 6500 ana 6500 nta 5200 ki 4500 rah 3500 kifach 3000 nti 3000
+salam 3000 rabi 3000 wesh 3000 bezzaf 2500 kayen 2500 rahi 2500 rak 2500 makach 1500
+3lach 2500 ghir 2200 mazal 2200 rahou 2200 dima 2000 machi 2000 kima 2000 ya 4000
+raki 2000 3la 3500 howa 1800 kayna 1100 kayn 1800 fin 1500 win 1500 saha 1500
+labas 1500 hiya 1200 3and 1500 3andi 1200 hadi 1200 hada 1500 hadik 800 hadak 800
+hadouk 600 hadou 400 hadouma 350 had 1200
+
+# ============================================================ question words
+wech 800 ouach 600 wash 400 shkoun 300 kifah 800 kifech 700 kifesh 200 kifache 100
+alach 700 3lah 600 3lech 300 3lache 100 chkoun 1200 chkon 500 chkun 350 chkoune 100
+chhal 1000 ch7al 900 shhal 300 chehal 250 chal 200 chhel 100 9adeh 400 9adach 350
+9deh 300 9dach 200 qadach 120 9addach 100 9edach 80 waqtach 400 wa9tach 400 waktach 150
+wa9teh 250 waktech 100 mnin 400 mnine 150 fine 200 wine 300 chnou 100
+lach 200
+
+# ============================================================ pronouns
+enta 700 ntiya 350 ntia 500 enti 300 hwa 600 houa 500 huwa 300 hia 900
+hya 500 ne7na 700 nahna 300 n7na 400 na7na 150 nehna 150 nhna 100 ntouma 600
+ntoma 400 ntuma 300 houma 700 huma 400 homa 400 houm 150 hom 200
+rahom 1200 rahoum 900 rahna 700 rakom 500 rakoum 500 ranni 80 anaya 100
+raani 100 ranii 100
+
+# ============================================================ here, there, this, that, thing
+hnaya 500 hna 1200 hnak 400 hnaka 100 lahna 100 temma 500 tmma 200
+hakda 600 hakka 300 hakdak 300 haka 150 haja 400 7aja 300
+hajet 80 7ajat 100 hadja 100 chwiya 800
+chwia 700 chouia 400 shwiya 300 shwia 150 chwya 100 chouya 100 chewia 100 kolchi 700
+kollchi 200 kolech 100 koulchi 150 kamel 300 kamla 100 kamlin 80 kamal 80 koul 400
+kol 300 koulyoum 200 ga3 400 gaa3 150 kach 300 kech 300 kachma 100 kechma 80
+elli 300 ili 100 illi 100
+
+# ============================================================ yes, no, and, or, but, because, if
+ih 400 ewa 600 ewah 150 iyeh 100 eyyeh 80 ah 300 ayeh 100 wah 300
+la 1500 non 400 lla 300 lala 200 walou 500 walo 200 wallou 150 walu 60
+yak 600 yakhi 400 yekhi 100 yaki 100 sah 600 s7i7 400 sahih 150 s7ih 100
+sa7i7 100 seh 50 mashi 300 machii 60 wella 400 wela 200 wlla 150 ola 150
+walla 100 bessah 600 bsah 250 bessa7 250 besah 400 bsa7 150 bes7 80 lakin 150
+walakin 100 lakan 80 bach 1500 bash 200 bch 150 bah 100 hit 400 7it 200
+hitach 150 lhit 60 ila 200 ida 150 kan 2000 kanou 200 kant 150 kont 300
+konti 100 konna 150 kanet 100 kunt 100 khater 100 khatar 80 3lakhater 100
+
+# ============================================================ prepositions with their pronoun endings
+3end 600 3nd 400 3andek 700 3andou 500 3andha 300 3andna 400 3andkom 100 3andhom 200
+3endi 400 3endek 300 3endou 200 3endha 100 andi 300 andek 100 3ndi 300 3ndek 200
+3ndou 100 3andkoum 100 3andhoum 100 ma3a 400 m3a 1000 m3ak 800 m3aya 500 m3ah 400
+m3ana 250 m3aha 300 m3akom 100 m3ahom 150 ma3ak 300 ma3aya 150 ma3ah 100 m3akoum 100
+3lih 400 3liha 200 3lik 500 3lia 400 3lina 300 3likom 150 3lihom 150 3likoum 100
+3lihoum 100 3liya 100 ala 100 fi 3000 fih 300 fiha 250 fik 250 fiya 200
+fina 200 fikom 80 fihom 100 li 4000 lia 500 lik 400 lih 400 liha 200
+lina 250 likom 80 lihom 100 liya 100 men 2500 mn 200 mnek 300 mni 300
+mnou 200 mnha 100 mena 100 mnhom 100 bih 150 biha 100 bik 100 bia 100
+bel 300 bil 100 bla 400 bela 150 blaa 60 bdoun 100 bedoun 100 9bal 300
+9bel 200 kbal 150 gbal 100 ba3d 300 mba3d 400 mb3d 300 b3d 200 ba3da 150
+mba3ad 150 fo9 300 fouq 100 louta 150 tahet 150 ta7et 100 tehet 60 9odam 150
+9eddam 150 9ouddam 100 wara 150 wra 100 mora 100 kharej 150 binatna 150 bayna 80
+ta3 1200 ta3i 800 ta3ek 400 ta3ou 400 ta3ha 250 ta3na 300 ta3kom 100 ta3hom 150
+
+# ============================================================ time and place
+lyoum 1200 elyoum 300 lyom 500 ghodwa 600 ghodoua 250 ghoudwa 150 ghdwa 150 ghedwa 100
+lbare7 600 lbarh 300 lbarah 150 lbar7 250 elbare7 100 doka 1500 dok 800 douka 400
+douk 200 bekri 300 bkri 200 mbekri 100 tard 200 sbah 400
+sba7 600 3chiya 250 3chia 150 lila 300 lil 150 nhar 400 nharek 100 nharkom 100
+wa9t 600 waqt 200 wakt 300 wa9et 150 waqet 80 sa3a 500 sa3at 150 da9i9a 200
+d9i9a 100 dqiqa 100 sman 80 chhar 400 chahr 150 chehr 100 3am 400
+snin 100 sna 250 sena 100 litnin 200 letnin 100 ttlata 100 larba3 150 larb3a 100
+lekhmis 150 lkhmis 150 jem3a 250 jouma3a 100 jom3a 100 sebt 150 sabt 80 lahad 150
+lhed 100 lahed 100 awel 200 lawel 100 lakhra 100 lakher 100 tani 250 thani 100
+talet 100 marra 400 mara 100 mrat 100 merra 100 dayman 500 dayma 200 dayem 80
+dar 700 dari 200 darna 100 bit 150 blad 300 bled 250 blade 100 bledna 100
+mdina 200 medina 100 wahran 300 dzayer 600 dzair 800 djazair 500
+aljazair 100 aljazayer 100 eldjazair 100 dz 400 dzaer 100 djazayer 100 aldjazair 100
+elbahdja 100 lbahdja 100 bahdja 60 9acentina 100 qacentina 150
+bejaia 80 bgayet 60 tizi 60 ouzou 80 tlemcen 100 tlemsen 100
+tilimsen 60 ghardaia 80 ghardaya 60 ouargla 60 wargla 60 biskra 80 bechar 60
+skikda 60 jijel 60 mila 60 medea 60 lemdia 60 chlef 60 tipaza 60 bouira 60
+boumerdes 60 tebessa 60 tbessa 60 guelma 60 laghouat 60 tamanrasset 60 adrar 60 saida 60
+mascara 60 relizane 60 tiaret 60 djelfa 60 msila 60 khenchela 60 tindouf 60 temouchent 60
+souk 100 souq 60 dzairi 600 dzayri 300 dzayeri 100 jazayri 100 djazayri 100 dzairiya 150
+dzayriya 100 dzairia 100 dzayria 60 dzayriyin 60 dzairiyin 60 dzairiyine 60 wilaya 150 daira 60
+baladiya 60 baladia 40 dachra 100 dechra 60 douar 80 mechta 60
+
+# ============================================================ greetings and everyday phrases
+salem 400 slm 200 assalam 500 assalamou 400 aleykoum 500 alikoum 200 3alikoum 300 wa3alaykoum 250
+3alaykoum 250 wa3alikoum 150 slam 300 salamou 150 ahla 600 ahlan 400 ahlen 100 marhba 500
+marhaba 600 mer7ba 300 mrahba 100 mrhba 150 slt 150
+bsr 100 bjr 100 msa 300 mssa 100 tsbah 100 tesbah 60 tsba7 100 tsbahou 60
+tsba7ou 60 tosbah 100 tosba7 100 lkhir 300 khir 800 kheir 200 bkhir 150 bakhir 100
+bslama 400 besslama 300 beslama 200 bsalama 150 bsslama 100 tahya 100 tahia 60 salamat 100
+tbarkellah 400 tbarkallah 300 tbarak 150 tbarkela 100 barkellah 80 barakallah 150 barakallahou 100 baraka 300
+barka 200 bark 400 ybarek 200 yberek 150 rabbi 400 rbi 500 allah 2500 inchallah 3000
+inchaallah 800 inshallah 900 inchalah 1200 nchallah 500 nchalah 300 inchallh 100 incha 200 inshaallah 150
+nchaallah 80 inchaalah 100 machallah 900 mashallah 500 machalah 400 mchallah 150 machaallah 100 mashaallah 150
+wallah 2500 wallahi 700 wellah 600 walah 300 wlh 200 wa7yat 60 wahyat 80
+3adim 100 l3adim 60 el3adim 60 hamdoullah 1200 hamdolah 200 hamdullah 300 hamdoulah 700 hamdoulilah 600
+hamdolilah 400 elhamdoulilah 700 el7amdoulillah 300 alhamdoulilah 300 alhamdulillah 300 lhamdoulillah 300 lhamdolilah 150 7amdoullah 300
+hamdoulillah 800 7amdoulah 150 hamdolillah 200 hamdoulila 150 alhamdolilah 200 lhamdoulilah 100 7amdolilah 100 elhamdolilah 150
+alhamdoulillah 300 subhanallah 400 soubhanallah 300 sobhanallah 200 soubhan 100 sobhan 60 subhan 60 astaghfirullah 200
+astaghfiroullah 150 astaghfirallah 150 astaghfiroulah 100 astaghfirou 60 staghfirallah 80 astaghfir 60 bismillah 400 bismellah 200
+besmellah 200 bismilah 150 besmilah 100 bismillahi 80 jazak 100 jazakallah 200 jazakallahu 100 jazaka 60
+jazakoum 60 yerham 200 yerhamou 250 yerhmou 300 yarhamou 150 yerhamha 100 yerhamhom 100 yrhmou 100
+rahma 150 rahmat 60 rahimahou 100 yahdik 250 yahdi 100 yahdikom 60 yahfdek 150 yahfedek 150
+yahfedhom 60 yahfdou 60 yehdik 150 yehdikom 60 yehfdek 150 yehdih 60 ya3tik 600 ya3tikom 150
+essa7a 300 ssa7a 200 essaha 200 sa7a 1200 sa7it 900
+sahit 700 sahha 400 sahtek 60 sa7tek 80 sahet 100 sahitek 40 sahitkom 60
+tsaha 200 bsa7a 150 bessa7a 200 bessaha 150 bsaha 100 bessa7tek 80 3id 400 3idek 100
+3idkom 100 mabrouk 700 mebrouk 300 mabrouka 100 mbrouk 250 l3id 200 el3id 150 lad7a 100
+lfitr 50 ftour 200 ftourek 120 ftor 100 ftorek 80 s7our 100 sahour 80 tarawih 80
+tarawi7 100 ramadan 400 ramdhan 150 ramdan 100 ramdane 100 ramadane 100 ramadhan 150 rmadan 100
+mobarek 150 mubarak 100 mbarek 100 mbarak 100 mbarka 150 karim 150 y3awnek 150 y3awnak 100
+y3awen 80 y3awnou 80 yfar7ek 80 yjib 100 yjibek 40 yjibou 60 yjibha 60
+ysahel 100 ysahhel 100 ysahlek 60 ysahl 100 tfadhal 200 tfadal 200 tfadhel 100 tfaddal 100
+tfaddel 100 tfadlou 100 tfadlo 80 smah 300 smahli 300 smahni 100 smahouli 50 sm7li 100
+samehni 80 samahni 80 samhouni 60 3afak 150
+chokran 400 choukran 400 shokran 200 chkran 100 chokrane 80 choukrane 60 mrc 100
+jazilan 60 la3fo 100 3afwan 150 3afwen 60 mahlek 100 mahlak 60 rasi 300
+rasek 100 rassi 100 rassek 60 ras 100
+
+# ============================================================ family, friends, people
+khouya 1500 khoya 600 5ouya 400 khouia 300 khouyia 100 khoua 200 khouye 80 khoy 80
+5oya 100 khouyaa 60 khti 800 okhti 400 ukhti 200 5ti 200 khtia 100 khtiya 100
+okhty 100 khty 100 khtiti 100 mama 800 yema 700 yma 200 ima 150 yemma 100
+mami 100 yemmi 100 ymma 60 mamati 100 maman 300 baba 1000 papa 500 bba 100
+babati 60 bbati 60 jeddi 300 jedi 150 jedda 200 jdi 100 jda 80 jaddi 60
+jeddati 100 jadda 60 jdati 60 3ami 400 3mi 300 3amti 150 khali 300 khalti 300
+3amou 80 3ammi 100 3mamti 60 3mam 100 weldi 400 wlidi 150 bnti 300
+benti 200 bnet 100 wled 600 wlad 500 ouled 200 oulad 100 bent 200 benat 100
+wldi 150 weldek 100 weldou 60 wladi 150 wladek 100 wld 150 wlid 150 bnat 150
+bentek 60 rajel 300 rajli 300 radjel 150 radjli 100 mrati 400 mra 300 mrata 100
+zouji 200 zoudj 100 zouj 100 zoujha 40 zoujek 60 rajlek 80 rajlha 80 mratek 80
+mratou 60 3ezri 100 3ezeb 100 3azri 60 3azeb 60 3azba 60 3ezba 60 3roussa 100
+3rousa 100 3ris 100 3rous 100 3aris 60 3arousa 60 sahbi 1000 sa7bi 700
+sahbti 200 sa7bti 150 sa7ebi 150 sahbek 80 sa7bek 80 sahebi 100 sa7bat 60 sahbat 60
+sahabi 60 sahbou 60 sahib 100 sahiba 60 sa7iba 40 sdi9i 60 sdiqi 100 sadiqi 100
+3ziz 300 3zizi 400 3ziza 100 3zizti 100 3azizi 100 3aziz 100 3azizti 60
+habibi 1000 7bibi 900 hbibi 700 habibti 300 7bibti 200 hbibti 250 7abibi 100 7abibti 80
+hbiba 80 7biba 80 habiba 100 habib 150 7abib 100 hbib 150 7bib 150 hbab 100
+7bab 80 3ayni 150 rouhi 300 ro7i 300 9albi 500 galbi 100 9elbi 200 kbidti 100
+3omri 500 hayati 200 7yati 150 3youni 150 3younek 60 9albek 100 qalbi 100 9alb 300
+galb 60 3omer 100 3mri 150 3omrek 60 3omr 150 hayat 100 7ayat 100 rouh 150
+ro7 100 rou7i 100 sidi 300 lalla 200 hadj 100 si 150 ssi 80
+oustad 150 ustad 100 ostad 60 oustaz 80 oustaza 60
+doctour 150 doctor 100 doktor 100 doktour 60 tbib 150 hakim 100
+m3alem 80 mou3alem 80 mo3alem 60 mou3alim 60 chikh 100 cheikh 100 chikha 60
+cheikha 60 chbab 150 chab 150 chaba 100 chabab 60 chebab 100 cheb 100 cheba 100
+chabbab 40 sghir 400 sghira 150 seghir 150 sghar 100 sghiri 60 sghirek 60 3ajouz 80
+3jouz 80 3ajouza 60 3jouza 60 tfol 60 tfal 60 drari 400 drary 60 ghrib 100
+ghariba 60 gharib 60 ghorba 100 nass 300 nas 400 nasse 100 bnadem 150 bnadam 150
+benadem 100 benadam 60 benadmin 60 bnadmin 60
+
+# ============================================================ adjectives, adverbs, feelings
+mlih 700 mliha 150 mlah 150 mli7 300 zwin 500 zouin 200 zwina 300 zwinin 80
+zouine 100 zwine 100 zin 150 zine 100 khayeb 300 khayba 100 khayb 100 kbir 450
+kbira 150 kebir 200 kbar 100 twil 200 twila 100 tawil 80 9sir 150 9sira 80
+jdid 300 jdida 150 jedid 100 9dim 200 9dima 100 gdim 80 ghali 400 ghalia 100
+rkhis 250 rkhiss 100 rkhisa 100 skhoun 200 sakhoun 100 sakhen 100 bared 250 bard 300
+barda 100 brid 150 skhouna 80 mchghoul 150 machghoul 100 ta3ban 200 ta3bana 100 3yan 200
+3yane 100 3yit 250 3iyit 100 3yina 100 3yet 100 farhan 250 far7an 200 farhana 100
+fer7an 100 z3fan 200 za3fan 150 zaafan 80 hzin 250 hazin 200 7zin 200 7zina 100
+mrid 150 mrida 100 ghalat 150 ghelet 100 ghalta 100 kdeb 200 kdhab 150 kedheb 100
+kedab 80 3ajeb 150 3ajib 100 tayeb 400 tayab 100 tayba 100
+nichan 400 nichen 100 nishan 100 khayef 100 khayfa 60 hbel 100 hbal 60 mahboul 150
+yabes 100 3atchan 150 3atchane 100 3tchan 80 jou3an 100 jou3 150 jou3ane 100
+chb3an 120 chba3t 100 7lou 150 hlou 200 7louwa 100 helwa 80
+malh 100 mel7 80 bezaf 1200 bzaf 900 bzzaf 200
+bezef 150 bzef 100 bezzef 80 ba9i 300
+baqi 100 baqa 60 ba9ia 80 zada 150 zid 250 zidou 100 zayed 80
+ziyada 100 tanya 100 taniya 80 ghalb 100 ghaleb 80 ghalbana 60 7ata 200
+hata 200 7tta 100 yemken 400 yamken 150 mumkin 100 lazem 700 lazm 200
+lazma 100 lazemni 100 yelzem 100 ykhess 100 ykhassek 60 z3ama 300 za3ma 150
+zaama 60 t9ol 200 tgol 60 yaani 100 ya3ni 700 y3ni 400 yani 100
+
+# ============================================================ the "ch" negation and other everyday forms
+ma3rftch 300 ma3rfch 150 ma3raftch 100 3rftch 60 mafhemtch 200 mafhmtch 150 mafhamtch 80 mandirch 100
+ndirch 100 mamchitch 100 manchoufch 80 mabghitch 250 mabghitsh 80 mabghichi 100 manebghich 100 matebghich 60
+mayebghich 60 matkhafch 80 ma3andich 300 ma3andekch 100 ma3andouch 80 mazalch 50 matdirch 100 matkhdemch 60
+matroh 60 matrohch 80 mat3ayatch 60 matdkhalch 60 matfhemch 60 mat3rafch 60 mayjich 60 majitch 80
+mat9olch 80 ma9oltch 100 ma9olt 100 mal9itch 80 mal9ito 40 malgitch 60 masebtch 60 masbtch 50
+makanch 700 makayench 200 makayen 300 makaynch 150 makaynach 60 ma3lich 700 ma3lih 100
+ma3leche 100 mochkil 300 mouchkil 400 mouchkila 300 mochkila 150 machakil 150
+mouchkilat 100 khlass 200 khalas 150 khalass 100 khlas 300 khelles 120 dfa3 100 dfa3t 100
+flous 700 flouss 200 fleous 100 dourou 100 dinar 300 denar 80 dinars 150 sentim 100
+mlyoun 100 melyoun 100 milyoun 80 alf 150 alef 80 miya 250 mia 150 miyya 80
+douro 200
+
+# ============================================================ verbs: imperative, present (n- t- y-), past (-t -na), he/they
+# Algerian conjugation: present 1sg n-, 2sg and 3fs t-, 3ms y-; plural with -ou; past 1sg -t, 2sg -ti, 1pl -na, 3pl -ou.
+# go: roh, mchi
+roh 600 rohi 150 rohou 120 nroh 500 troh 300 yroh 300 nrohou 150 trohou 150
+yrohou 120 roht 300 rohet 100 rohna 150 rohti 100 rohtou 100 rahet 100 rohlou 60
+rohlek 60 mchit 600 mchina 200 mcha 300 mchaw 250 mchat 150 mchiti 150 mchitou 100
+nemchi 200 temchi 150 yemchi 150 nemchiw 100 temchiw 80 yemchiw 80 emchi 150 emchiw 100
+# do: dir
+dir 800 dirou 150 dirha 100 ndir 800 tdir 400 ydir 400 ndirou 200 tdirou 150
+ydirou 150 dert 500 derti 200 derna 200 derou 200 dart 100 dertou 100 dayer 300
+dayra 200 dayrin 100 ndirlek 80 ndirlou 60 dirli 100
+# come: aji, ji
+aji 600 ajiw 150 ajiou 100 arwa7 150 arwah 100 nji 400 tji 250 yji 250
+njiw 150 tjiw 150 yjiw 150 jit 500 jiti 200 jina 200 ja 600 jaw 300
+jat 200 jitou 100 jay 400 jaya 200 jayin 100 jitek 80 jitlek 80
+# see, look: chouf
+chouf 800 choufou 120 nchouf 400 tchouf 250 ychouf 250 nchoufou 100 tchoufou 100 ychoufou 100
+chouft 300 choufti 150 choufna 100 chaf 250 chafou 150 chafet 100 chouflek 60 choufli 100
+choufha 60 choufhom 40 chayef 150 chayfa 80 choftou 60 chouftek 100 chouftou 80 chouftha 60
+# eat: kol, nakoul
+koulou 100 nakoul 400 takoul 250 yakoul 250 klit 300
+kliti 100 klina 100 kla 150 klaw 100 klat 80 klitou 60 akel 100 makla 100
+makel 60
+# drink: chreb
+chreb 150 echrab 150 chrebou 60 nechrab 250 techrab 150 yechrab 150 nechrabou 80 techrabou 60
+yechrabou 60 chrebt 150 chrebti 80 chrebna 80 chareb 100
+# say: 9ol
+9ol 600 9oulou 120 n9oul 500 t9oul 300 y9oul 300 n9oulou 100 t9oulou 100 y9oulou 100
+9olt 400 9olti 150 9olna 100 9al 500 9alou 250 9alet 100 9oltou 80 9oulli 120
+9olli 150 9oulha 60 9olha 80 9oltlek 80 9oltlou 60 9altli 80 9allou 60 9allek 60
+gal 150 galou 80
+# work: khdem
+khdem 300 khdemou 80 nkhdem 300 tkhdem 200 ykhdem 200 nkhdemou 80 tkhdemou 60 ykhdemou 60
+khdemt 250 khdemna 100 khdmou 80 khdmat 60 khadem 200 khadma 100 khdma 700 khedma 500
+khedmti 60 khdmti 80 khdemti 80 3mel 100 n3mel 60 3melt 80 3mal 60
+# write: kteb
+kteb 250 ktebou 80 nekteb 250 tekteb 150 yekteb 150 nektbou 80 tektbou 60 yektbou 60
+ktebt 150 ktebna 80 ktebet 60 ktebli 100 ktebtlek 60 kteblek 60 ktab 300 kitab 100
+# read, study: 9ra
+9ra 400 9raw 100 n9ra 250 t9ra 200 y9ra 200 n9raw 80 t9raw 60 y9raw 60
+9rit 250 9riti 100 9rina 100 9rat 80 9raya 250 qraya 100 9rayt 100 9ari 60
+# speak: hder
+hder 250 hdrou 80 nahder 250 tahder 150 yahder 150 nahdrou 80 tahdrou 60 yahdrou 60
+nehder 100 hdert 150 hderna 80 hdrat 60 hdar 200 hadra 150 hadar 40 dwi 150
+dwiw 60 nedwi 80 tedwi 80 yedwi 80 dwit 100 dwina 60 dwa 60 dwaw 60
+# hear: sma3
+sma3 400 sma3ou 100 nsma3 250 tsma3 150 ysma3 150 sma3t 250 sma3na 100 sam3ou 80
+sma3ni 100 sma3tek 60 sma3tha 60
+# understand: fhem
+fhem 200 fhemou 80 nfhem 200 tfhem 150 yfhem 150 fhemt 400 fhemti 150 fhemna 100
+fhmou 80 fhemtek 60 fhemtou 60 fhmat 40
+# know: 3raf
+3raf 200 3rafou 60 n3ref 150 t3ref 150 y3ref 150 n3rfou 60 t3rfou 60 y3rfou 60
+3raft 500 3rafti 150 3rafna 100 3rfou 80 3rafet 40 3reft 80 3raftek 60 3raftha 60
+3arf 200 3arfa 100 3arfin 50 3raftou 60
+# forget: nsa
+nsa 150 nsit 250 nsiti 100 nsina 80 nsaw 60 nensa 100 tensa 100 yensa 100
+tensaw 40 nsitek 40 nsitha 40 matensach 60
+# want: bghit, nebghi
+bghit 800 bghiti 200 bghina 150 bgha 200 bghaw 120 bghat 100 bghitek 100 bghitha 80
+bghitou 80 nebghi 500 tebghi 300 yebghi 300 nebghiw 100 tebghiw 100 yebghiw 100 nbghi 200
+tbghi 150 ybghi 150 nbghiw 60 bghitni 40 bghani 60 bghitlek 40
+# love: n7eb
+n7eb 250 t7eb 150 y7eb 150 n7ebek 200 n7ebbek 200 n7ebou 60
+y7ebek 60 y7ebbek 60
+# can: n9der
+n9der 250 t9der 200 y9der 200 n9dou 60 t9dou 60 y9dou 60 9dert 150 9derti 80
+9derna 60 9der 150 9drou 60
+# find, get: sab
+sab 150 sabou 80 sabet 60 sebti 80 sebna 60
+seb 60 sebtha 40 sebtou 40 sebtek 40
+# give: 3ti
+3ti 200 3tiw 60 n3ti 150 t3ti 100 y3ti 100 3tit 100 3titek 60 3titou 60
+3tiha 60 3tini 100 a3tini 150 a3tih 60 a3tiha 60 a3tiw 40 3tatni 40 3tani 80
+# take: khoud
+khoud 300 khoudou 80 nakhod 200 takhod 150 yakhod 150 nakhdou 60 takhdou 60 yakhdou 60
+khdit 200 khditi 80 khdina 60 khda 100 khdaw 60 khdat 40 khoudha 80 khoudhom 40
+khodha 40 khod 150 dit 200 dina 100 da 200 daw 100 nedi 60 tedi 60
+yedi 60 dih 80 diha 60 dik 40 dili 60 diwha 40
+# put
+# enter, leave
+dkhol 200 dkholou 60 nedkhol 150 tedkhol 100 yedkhol 100 nedkhlou 40 dkhelt 200 dkhelna 80
+dkhal 100 dkhlou 60 dkhlat 40 dkhoul 100 dkhoulha 40 dkholi 40 dkhel 100 khroj 250
+khorjou 60 nekhrej 150 tekhrej 100 yekhrej 100 nekhrjou 40 khrejt 200 khrejna 80 khraj 100
+khrjou 60 khrejti 60 khrouj 80 khorj 80 khrej 100
+# return, go up, go down
+rja3 250 rj3ou 60 nerja3 150 terja3 100 yerja3 100 nerj3ou 40 rja3t 150 rja3na 60
+rj3at 40 rjou3 60 rjou3a 40 tla3 150 tl3ou 60 netla3 100 tetla3 80 yetla3 80
+tla3t 100 tla3na 60 tla3at 40 tlou3 40 nzel 150 nzlou 60 nenzel 100 tenzel 80
+yenzel 80 nzelt 100 nzelna 60 nzlat 40 nzoul 40 nzoula 40
+# buy, sell
+chri 150 chriw 60 nechri 150 techri 100 yechri 100 nechriw 60 chrit 200 chriti 80
+chrina 60 chra 100 chraw 60 chrat 40 chrithom 40 chritha 40 chrito 40 bi3 150
+bi3ou 60 nbi3 100 tbi3 80 ybi3 80 bi3t 100 bi3na 60 ba3 80 ba3ou 40
+bi3tha 40 bi3to 40
+# sleep, wake, sit, stand, wait, stop
+rgod 100 rgoud 100 nrgod 100 trgod 60 yrgod 60 rgadt 80 rgadna 40 rgad 100
+rgdou 40 n3as 80 n3ess 60 n3ast 40 9a3d 150 9a3ed 150
+9a3da 80 9a3din 60 9a3det 80 9a3dou 60 9a3dna 40 n9a3ed 60 t9a3ed 60 y9a3ed 60
+9a3dat 40 9a3dt 60 9a3dtou 40 wa9ef 100 w9ef 150 w9fou 60 w9eft 80 w9fna 40
+nw9ef 40 tw9ef 40 yw9ef 40 wa9fa 60 wa9fin 40 stenna 150 stena 150 stennaw 60
+stennit 100 stennina 40 nstenna 80 tstenna 60 ystenna 60 stennak 60
+skot 200
+# ask, answer, help, like, laugh, cry, watch, try, call, open, close, ride, miss, meet
+sa9sa 100 sa9saw 40 nsa9si 60 tsa9si 60 sa9sit 80 sa9sini 40 sa9sih 40 jaweb 100
+jawbou 40 njaweb 60 jawab 80 3awen 100 3awnou 40 n3awen 100 t3awen 80 3awnni 60
+3awnek 80 3awenni 80 n3awnek 100 3jebni 150 3jebek 60 3jebha 60 y3jbek 80 y3jebni 80
+t3jebni 60 3jebatni 60 edhek 150 dhak 100 nedhek 100 tedhek 80 yedhek 80 dhakt 80
+d7ak 80 bka 100 bkaw 40 nebki 80 tebki 60 yebki 60 bkit 80 tfarej 150
+tfarjou 60 ntfarej 100 tfarejt 100 netfarej 60 jreb 100 njreb 80 jrebt 80 jerbou 40
+3ayet 150 3aytou 60 n3ayet 100 t3ayet 80 y3ayet 80 3aytlek 60 3ayetli 60 3ayetlek 60
+n3ayetlek 60 fta7 150 ftah 100 nefta7 80 tefta7 60 yefta7 60 ftaht 60 ftahli 40
+ghlaq 100 ghlaqou 40 ghlaqt 60 ghlaqha 40 rkeb 80 rkebt 60 nerkeb 60 terkeb 40
+yerkeb 40 twahacht 150 twahachtek 150 twahchtek 100 twahachtou 60 twahachtkom 60 twahachtha 40 twahachtni 60
+ntla9aw 100 ntl9aw 60
+
+# ============================================================ numbers
+wahed 500 wa7ed 400 wahda 150 jouj 400 djouj 150 tlata 300 tlatha 100 arb3a 300
+arba3a 150 khamsa 300 5amsa 150 setta 200 sitta 100 sab3a 250 seb3a 100 tmenya 200
+tmania 100 tmanya 80 tes3a 200 tis3a 100 3achra 250 3chra 200 hdach 150 7dach 100
+tnach 150 tlatach 100 arba3tach 80 khmestach 80 sttach 60 sba3tach 50 tmentach 50 tsa3tach 50
+3chrin 150 tlatin 100 arb3in 100 khamsin 100 setin 80 sab3in 80 tmanin 80 tes3in 80
+nos 300 noss 250 rob3 100 tolt 80 marratin 60 darba 100
+
+# ============================================================ food and drink
+khobz 500 khobza 100 kesra 150 matloue 150 matlou3 100 chorba 300 frik 100 couscous 400
+kousksi 300 kosksi 200 keskes 100 tadjin 150 tajine 100 tajin 100 chakhchoukha 150 chekhchoukha 100
+rechta 150 makrout 150 makroud 150 baklawa 100 zlabia 100 zlabiya 100 kalentika 100 karantika 100
+garantita 120 mhajeb 100 mahjouba 100 bourek 150 brik 100 dolma 100 lham 300
+djaj 200 djedj 100 hout 150 7out 100 khodra 100 khoudra 100 batata 150 btata 150
+basla 100 bsal 100 toum 80 thoum 80 felfel 100 zitoun 100 zit 100
+lma 300 hlib 300 7lib 200 9ahwa 600 gahwa 100 qahwa 300 kahwa 100 kafe 200
+atay 300 skar 100 soukar 80 melh 100 3sir 150 3asir 100 gazouz 150
+gazouze 100 gazouza 100 ghda 200 ghada 100 3acha 150 3cha 150 tghada 100 tcha 100
+baget 60 tmer 100
+tamr 60 dgla 60 deglet 60 dglet 60 3nab 60 3inab 40 tefah 60 tfah 60
+limon 80 limoun 60 bortokal 80 mouz 80 dellah 60
+batikh 60 battikh 60 jben 60 bid 100 laban 80 lben 100
+chocola 80 3sal 80 7alwa 60 halwa 60 7lawa 200
+7lawiyat 80 gato 80 mechoui 40 merguez 60
+
+# ============================================================ house, school, work, money, transport, technology
+koujina 100 kouzina 100 hmam 100 twalit 80 bab 150 nafda 100
+tabla 100 korsi 100 kourssi 80 sarir 80 farach 80
+telfaz 60 tilfaz 60 portable 400 bortable 700 bortabl 200 portabl 200
+telefon 150 tilifoun 100 flexi 600 flexy 300 recharge 100 kart 100 karta 150
+ordi 100 fb 80 insta 100
+viber 60 imo 60 snap 80 compte 100 kompt 60
+mobilis 300 djezzy 400 ooredoo 300 ouredou 100 idoom 100 tomobil 700 tomobile 200 tonobil 150
+karhba 400 karossa 80 taksi 80
+tayara 150 tren 200 gar 150 mahta 200 mehta 100 trig 200
+tri9 150 trik 100 chari3 150 zenqa 100 zan9a 100 biro 80 magazen 100
+magasa 100 magasin 100 marchi 100 boutik 100 boutika 60 otel 60
+banka 100 bosta 150 bousta 60 sbitar 300 farmasi 60 farmassi 60
+boulanjri 60 madrassa 200 medersa 100 mdersa 100 jam3a 150 jamaa 100 jami3a 80
+fac 150 bac 400 bakalorya 100 imtihan 150 kahier 100
+stilo 100 stylo 100 kartabla 40 kelass 40 dars 100 doros 60
+7issa 60 hissa 60 nouta 60 natija 80 tasjil 40
+dosier 60 patrona 40
+rateb 100 ratib 50
+concour 60 diplom 60
+3amel 100
+
+# ============================================================ body, health, clothes, colors, animals, weather, nature
+3in 80 3inin 60 yed 100 rejl 80 rejli 60 fam 100
+snan 60 batn 60 kerchi 60 dhar 60 dhahr 40 wejh 80 wedjh 60 cha3r 80
+cha3ri 60 sba3 60 dem 60 3dam 40 jeld 40 nafs 60 nefs 60
+nefsi 80 s7a 100 sehha 80 doua 80 dwaya 60
+skhana 80 soukhouna 60
+kabout 60 sebbat 100 serwal 80 srwal 80 kamija 60
+qamija 40 jalaba 60 djellaba 60 gandoura 80 qandoura 60 burnous 40 bernous 40 hijab 100
+7ijab 80 melhfa 40 haik 40 kachabia 40 djeans 60
+nadhar 40 nadhara 40 chosson 60
+montra 40 ahmar 60 hmar 60 zerg 80 azrag 60 khdar 80 akhdar 60
+asfar 60 sfar 60 k7al 60 kahal 40 byed 60 abyad 60 wardi 40 rmadi 40
+zraq 40 kelb 100 9attou 60 9tou 60 kharouf 60
+baqra 40 bgra 40 3asfour 40 3sfour 40 far 40 3jel 40 hsan 60 3ouda 40
+jmel 60 jamal 40 ghezal 40 chta 150 chams 80 shams 60 rih 80
+sma 60 thelj 40 nouar 40 ghim 40 sahra 60 sahara 60 bahr 150
+behr 80 jbal 100 oued 60 wad 60 ghaba 40 plaj 60 plaja 60
+sama 40 ard 40 3achab 40 nbat 40 zhar 40 zahra 40
+warda 60 chajra 40 chejra 40 ouraq 40 ouroq 40
+
+# ============================================================ religion
+salat 100 salah 100 sala 60 sla 60 slat 60 dou3a 100 do3a 60 jnaza 60
+masjid 100 mesjed 100 djemaa 100 quran 100 9ouran 100 qoran 100 koran 80 hajj 100
+7ajj 80 omra 80 sadaqa 60 sadaka 60 zakat 60 sdaqa 60 siyam 60 sawm 60
+sbar 150 sabr 100 rzeq 150 rizk 60 rezq 60 maktoub 200 mektoub 200
+yarab 300 yarabi 200 iman 100 imane 60 islam 150
+muslim 100 moslem 100 mouslim 80 3ibada 60 3ibadat 40 jenna 100
+janna 100 jahannam 60 jahnam 60 dounia 150 dounya 100 denya 100 denia 80 akhira 60
+akhra 40 mawt 40 mout 80 ayat 60
+ayah 40 sourat 60 soura 60 hadith 60 sunna 60 sounna 60 din 100 dine 80
+diniya 40 akbar 150 rasoul 60 rasul 60 nabi 100
+mohamed 100 mouhamed 60 mohammed 80 muhammad 60 3issa 40 moussa 40 ibrahim 40
+
+# ============================================================ slang, Algerian expressions, French loanwords as typed
+hogra 300 harraga 200 harga 150 hrig 60 dacord 150 dakor 200 dacor 150 dakord 100
+chaoui 40 kabyl 60 amazigh 80 3arabi 100
+3arbi 100 3arbiya 60 frensa 60 fransa 100 franssa 60 amrika 60 amerika 60
+inglizi 40 aleman 40
+sper 60 genial 60 mortel 60
+tranquil 60 tranki 40 stresse 60
+bsahtek 100 bsa7tek 80 bsahtkom 60 bsa7tkom 50
+yezzi 150 yezi 100 yzi 60 yezzik 40
+fahamtek 40 fahamt 60
+yaw 150
+toul 100 tool 60 3latoul 100 3latool 60
+
+
+# ============================================================ more everyday words
+ma 5000 rayeh 300 ha 300 yallah 300 aya 300 b9a 200 balek 200 yalah 200
+khalli 200 rayh 150 n9dar 150 bqa 150 bali 150 koun 150 rayha 100 t9dar 100
+y9dar 100 yalla 100 khalouh 100 khallik 100 khalik 100 hbes 100 3awed 100 naklou 80
+taklou 80 yaklou 80 man9darch 80 ayya 80 manqdarch 60 b9aw 60 balou 60 rayhin 50
+
+# ============================================================ more everyday words, found missing when checked on real texts (dev part)
+el 800 al 300 wa 300 ou 300 rana 300 kif 300 anchalah 300 inshalah 300
+ghi 300 nta3 200 kount 200 bladi 200 mala 200 hado 200 3ala 150 ahna 150
+7na 150 loukan 150 loukane 150 ykoun 150 ngoul 150 wala 150 wla 150 raha 150
+min 150 bli 150 balli 150 youm 120 hak 120 mazel 120 mazelt 120 mazalt 120
+mazelni 120 mazalni 120 mazalha 120 mazalou 120 mazalhoum 120 drahem 120 we 100 ra7 100
+anta 100 ness 100 diri 100 qoulli 100 lazam 100 3andak 100 ma3andak 100
+bache 100 bassah 100 3aib 100 3ar 100 bi 100 akthar 100 aktar 100 ma3andna 100
+ma3andnach 100 ma3andi 100 ma3andek 100 ma3andou 100 ma3andha 100 akhouya 100 3alina 100 tkoun 80
+nkoun 80 ray 80 ghachi 80 khawa 80 qader 80 ma3ndich 80 nta3i 60
+nta3ek 60 nta3ou 60 nta3ha 60 nta3na 60 nta3kom 60 fe 60 3adna 60
+hadr 60 hadro 60 mehtaj 60 mehtaja 60 3alam 60 3alamna 60
+
+# ============================================================ UNSURE: to check by the Algerian reviewer (kept at a modest weight)
+# Why: shared with Moroccan or Tunisian Arabic (dyal, bahi, sir, kach), regional (dork/dorka in the west), spellings seen rarely,
+# or forms the authors could not confirm (nsib, hatit, 7bit, sakat). Delete any line that is wrong; nothing else depends on them.
+bahi 600 dyali 300 dyal 250 dorka 200 3ad 200 malich 200 nsib 200 hadchi 150
+hadoli 150 diali 150 dyalek 150 7ot 150 dyalou 120 hrira 120 wachnou 100 achnou 100
+ani 100 dyalha 100 dyalna 100 bahia 100 mer 100 mor 100 7bit 100 7bitek 100
+tsib 100 ysib 100 hot 100 tmatem 100 tfatter 100 tcharak 100 fenetra 100 sir 100
+dork 80 nhot 80 7tit 80 7at 80 skit 80 nel9ak 80 dyalhom 60 bzzef 60
+bezzaaf 60 bzaaf 60 hbit 60 nsibou 60 thot 60 yhot 60 hat 60 sakat 60
+skoutou 60 nskot 60 tskot 60 skout 60 ntla9a 60 wedhen 60 wedn 60 zoukam 60
+zokam 60 sou3al 60 so3al 60 kasket 60 azul 60 hedi 60 kheddam 60 brabi 60
+bazaf 50 3afakom 40 3afek 40 afak 40 3fak 40 mahbouul 40 7bou 40 7abbak 40
+hotou 40 7tito 40 7otha 40 7otou 40 hatit 40 hatha 40 hatou 40 7atha 40
+7atou 40 stennani 40 stennaha 40 stennouha 40 stenou 40 stennou 40 nelgak 40 kasketa 40
+chtaa 40 tanmirt 40 hedou 40 zbel 40 zbeli 40 brabbi 40
+chi 200 chay 150 dialna 60 dialo 60 dialha 60 dialhom 60 dial 60

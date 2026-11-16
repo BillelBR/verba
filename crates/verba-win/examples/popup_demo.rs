@@ -15,6 +15,7 @@ fn main() {
     let lang = match get("--lang").as_deref() {
         Some("fr") => Lang::Fr,
         Some("ar") => Lang::Ar,
+        Some("dz") => Lang::Dz,
         _ => Lang::En,
     };
     let delay: u64 = get("--delay").and_then(|s| s.parse().ok()).unwrap_or(3);
@@ -25,6 +26,7 @@ fn main() {
         Lang::En => &["hello", "help", "held"],
         Lang::Fr => &["bonjour", "bonsoir", "bon"],
         Lang::Ar => &["مرحبا", "مرحبًا بك", "مرحبتين"],
+        Lang::Dz => &["wach", "wesh", "wech"],
     };
     let suggestions: Vec<Suggestion> = words.iter().map(|w| Suggestion { text: (*w).to_string(), lang }).collect();
 

@@ -8,6 +8,9 @@ pub enum Lang {
     Fr,
     /// Modern Standard Arabic (فصحى).
     Ar,
+    /// Algerian Darija written in Latin letters ("Arabizi": `wach`, `kifach`, `sa7a`, `3lach`, `9ahwa`).
+    /// Left to right, Latin script, no standard spelling. Off until it is switched on (see `verba-local`).
+    Dz,
 }
 
 impl Lang {
@@ -22,6 +25,7 @@ impl Lang {
             Lang::En => "en",
             Lang::Fr => "fr",
             Lang::Ar => "ar",
+            Lang::Dz => "dz",
         }
     }
 }
@@ -77,6 +81,30 @@ pub fn current_word(before_caret: &str) -> &str {
     &before_caret[start..]
 }
 
+/// The digits Algerians type for Arabic letters: `2` (hamza), `3` (ain), `5` (kh), `6` (ta), `7` (ha), `8` (gh), `9` (qaf).
+pub fn is_dz_digit(c: char) -> bool {
+    matches!(c, '2' | '3' | '5' | '6' | '7' | '8' | '9')
+}
+
+/// Like `current_word`, but for Algerian Arabizi: the digit-letters belong to the word (`sa7`, `3la`, `9ahwa`).
+/// Empty when there is no letter in it (a number), and a run of two digits stops the word (`ab33` is not a word).
+/// For a word without digits it is the same as `current_word`.
+pub fn current_word_dz(before_caret: &str) -> &str {
+    let mut start = before_caret.len();
+    let mut prev_digit = false;
+    for (i, c) in before_caret.char_indices().rev() {
+        let digit = is_dz_digit(c);
+        if c.is_alphabetic() || is_arabic_mark(c) || (digit && !prev_digit) {
+            start = i;
+            prev_digit = digit;
+        } else {
+            break;
+        }
+    }
+    let word = &before_caret[start..];
+    if word.chars().any(|c| c.is_alphabetic()) { word } else { "" }
+}
+
 /// True when the word is written in Arabic script.
 pub fn is_arabic_word(word: &str) -> bool {
     word.chars().any(is_arabic)
@@ -118,6 +146,23 @@ mod tests {
         assert_eq!(current_word("été"), "été");
         assert_eq!(current_word("مرحبا بك"), "بك");
         assert_eq!(current_word("what is 12"), "");
+    }
+
+    #[test]
+    fn darija_digit_letters_belong_to_the_word() {
+        assert_eq!(current_word_dz("wach rani sa7"), "sa7");
+        assert_eq!(current_word_dz("3la"), "3la");
+        assert_eq!(current_word_dz("ya 9ahwa"), "9ahwa");
+        assert_eq!(current_word_dz("ma3lich"), "ma3lich");
+        // numbers, digit runs and the usual words
+        assert_eq!(current_word_dz("what is 12"), "");
+        assert_eq!(current_word_dz("room 35"), "");
+        assert_eq!(current_word_dz("ab33"), "");
+        assert_eq!(current_word_dz("x 100m"), "m");
+        assert_eq!(current_word_dz("hello wor"), "wor");
+        assert_eq!(current_word_dz("l'ami"), "ami");
+        assert_eq!(current_word_dz("hello "), "");
+        assert_eq!(current_word_dz("مرحبا بك"), "بك");
     }
 
     #[test]

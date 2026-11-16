@@ -184,7 +184,7 @@ fn key_pos(rows: &[&str; 3], c: char) -> Option<(f32, f32)> {
 /// Whether two letters are next to each other on the keyboard of the language (the usual cause of a typo).
 fn neighbours(lang: Lang, a: char, b: char) -> bool {
     let rows = match lang {
-        Lang::En => &QWERTY,
+        Lang::En | Lang::Dz => &QWERTY,
         Lang::Fr => &AZERTY,
         Lang::Ar => &ARABIC_KEYS,
     };
@@ -516,6 +516,10 @@ impl LocalEngine {
             return None;
         }
         if !arabic && !lower.chars().all(is_latin_letter) {
+            return None;
+        }
+        // Algerian Darija has no standard spelling: a word it knows is never a typo, and is never replaced
+        if !arabic && self.dz_knows(&lower) {
             return None;
         }
 

@@ -34,7 +34,7 @@ fn targets(dir: &Path, lang: Lang, n: usize) -> Vec<String> {
     let other = match lang {
         Lang::En => Some(Lang::Fr),
         Lang::Fr => Some(Lang::En),
-        Lang::Ar => None,
+        Lang::Ar | Lang::Dz => None,
     };
     let share = |l: Lang| -> std::collections::HashMap<String, f64> {
         let t = std::fs::read_to_string(dir.join(format!("{}.txt", l.code()))).unwrap_or_default();

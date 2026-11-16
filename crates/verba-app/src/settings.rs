@@ -81,6 +81,7 @@ impl Settings {
             Lang::En => self.english,
             Lang::Fr => self.french,
             Lang::Ar => self.arabic,
+            Lang::Dz => false, // not in the settings window yet
         }
     }
 
@@ -89,6 +90,7 @@ impl Settings {
             Lang::En => self.english = on,
             Lang::Fr => self.french = on,
             Lang::Ar => self.arabic = on,
+            Lang::Dz => {} // not in the settings window yet
         }
     }
 

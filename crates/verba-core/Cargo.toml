@@ -1,0 +1,7 @@
+[package]
+name = "verba-core"
+version.workspace = true
+edition.workspace = true
+description = "Verba: the engine interface shared by every platform"
+
+[dependencies]

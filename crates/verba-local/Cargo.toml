@@ -1,0 +1,8 @@
+[package]
+name = "verba-local"
+version.workspace = true
+edition.workspace = true
+description = "Verba's local engine: word completion from frequency lists, no internet needed"
+
+[dependencies]
+verba-core = { path = "../verba-core" }

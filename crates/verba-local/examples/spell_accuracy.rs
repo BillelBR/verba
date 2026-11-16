@@ -323,7 +323,15 @@ struct Data {
 }
 
 fn prepare(dir: &Path) -> Data {
-    let full = LocalEngine::load_dir(dir).expect("word lists");
+    // `--dz`: the same measures with Algerian Darija (both scripts) switched on, to see what it costs
+    let dz = std::env::args().any(|a| a == "--dz");
+    let mut full = LocalEngine::load_dir(dir).expect("word lists");
+    if dz {
+        full.add_dz_seed();
+        full.set_enabled(Lang::Dz, true);
+        println!("(Darija switched on)
+");
+    }
     let first_call = [Lang::En, Lang::Fr, Lang::Ar]
         .iter()
         .map(|l| {
@@ -346,7 +354,11 @@ fn prepare(dir: &Path) -> Data {
     let mut tails = Vec::new();
     for lang in [Lang::En, Lang::Fr, Lang::Ar] {
         let text = load(dir, lang);
-        let (engine, tail, head) = tail_engine(&text, lang, 30_000, 50_000);
+        let (mut engine, tail, head) = tail_engine(&text, lang, 30_000, 50_000);
+        if dz {
+            engine.add_dz_seed();
+            engine.set_enabled(Lang::Dz, true);
+        }
         let present: HashSet<String> = engine.list(lang).unwrap().iter_words().map(|(w, _)| if lang == Lang::Ar { afold(w) } else { w.to_string() }).collect();
         let made = made_forms(lang, &head, &present);
         tails.push((lang, engine, tail, head, made));

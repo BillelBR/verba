@@ -50,8 +50,8 @@ accent colour, scales per monitor (high-DPI), fades in, highlights the candidate
 
 English, French and Arabic (Modern Standard Arabic) work. Arabic suggestions read from the right.
 
-Algerian Darija written in Latin letters ("Arabizi": `wach`, `kifach`, `sa7a`, `3lach`) is available in the engine as `Lang::Dz`, off until it is switched on,
-with a built-in word list; it is not in the Settings window yet. See [docs/ACCURACY.md](docs/ACCURACY.md).
+Algerian Darija, written in Latin letters ("Arabizi": `wach`, `kifach`, `sa7a`, `3lach`) or in Arabic letters (واش، كيفاش، بزاف), is the engine's `Lang::Dz`:
+one switch, off until it is switched on, with built-in word lists for both scripts. See [docs/ACCURACY.md](docs/ACCURACY.md).
 
 ## Principles
 

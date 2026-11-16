@@ -519,7 +519,7 @@ impl LocalEngine {
             return None;
         }
         // Algerian Darija has no standard spelling: a word it knows is never a typo, and is never replaced
-        if !arabic && self.dz_knows(&lower) {
+        if self.dz_knows(&lower) {
             return None;
         }
 

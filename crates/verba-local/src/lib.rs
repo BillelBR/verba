@@ -19,9 +19,9 @@ mod nextword;
 mod personal;
 mod spell;
 
-pub use dz::{DZ_SEED, DzList};
+pub use dz::{DZ_AR_SEED, DZ_SEED, DzList};
 #[doc(hidden)]
-pub use dz::dz_sound_key;
+pub use dz::{dz_ar_key, dz_sound_key};
 #[doc(hidden)]
 pub use nextword::{BuildParams, NextBuilder, NextParams, word_runs};
 pub use nextword::NextTable;
@@ -170,6 +170,12 @@ impl WordList {
         self.entries[start..].iter().take_while(|e| e.key == key).map(|e| e.count as f64).sum::<f64>() / self.total
     }
 
+    /// True when the list holds this word or a spelling with the same comparison key (another accent, another hamza). For tools that measure the engine.
+    #[doc(hidden)]
+    pub fn contains_word(&self, word: &str) -> bool {
+        self.share_of(word) > 0.0
+    }
+
     /// How often exactly this word occurs (not a variant spelling).
     fn count_of(&self, word: &str) -> u64 {
         let key = fold(word);
@@ -243,6 +249,8 @@ pub struct LocalEngine {
     next_tables: HashMap<Lang, NextTable>,
     /// Algerian Darija in Latin letters (see `dz.rs`). Off until switched on.
     dz: Option<DzList>,
+    /// The same in Arabic letters. The one `Lang::Dz` switch covers both.
+    dz_ar: Option<DzList>,
 }
 
 impl LocalEngine {
@@ -255,6 +263,7 @@ impl LocalEngine {
             personal: PersonalDict::new(),
             next_tables: HashMap::new(),
             dz: None,
+            dz_ar: None,
         }
     }
 
@@ -309,7 +318,7 @@ impl LocalEngine {
     /// The languages that have a list (whether they are switched on or not).
     pub fn languages(&self) -> Vec<Lang> {
         let mut v: Vec<Lang> = self.lists.keys().copied().collect();
-        if self.dz.is_some() {
+        if self.dz.is_some() || self.dz_ar.is_some() {
             v.push(Lang::Dz);
         }
         v.sort_by_key(|l| l.code());
@@ -325,7 +334,7 @@ impl LocalEngine {
     /// How many words the list of a language holds after cleaning (0 when it is not loaded).
     pub fn word_count(&self, lang: Lang) -> usize {
         if lang == Lang::Dz {
-            return self.dz.as_ref().map_or(0, DzList::len);
+            return self.dz.as_ref().map_or(0, DzList::len) + self.dz_ar.as_ref().map_or(0, DzList::len);
         }
         self.lists.get(&lang).map_or(0, WordList::len)
     }
@@ -496,6 +505,9 @@ impl LocalEngine {
         found.extend(self.usage_completions(&typed_key, max, &langs, &bias));
         if !arabic {
             self.dz_merge(only, before_caret, typed, &langs, max, &mut found);
+        } else {
+            let ar = langs.iter().find(|(l, _)| *l == Lang::Ar).map(|(_, l)| *l);
+            self.dz_ar_merge(only, before_caret, typed, &typed_key, ar, max, &mut found);
         }
         found.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
 

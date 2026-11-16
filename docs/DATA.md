@@ -12,6 +12,8 @@ The lists are **not stored in this repository**: `scripts/fetch-data.ps1` downlo
 | Arabic | `data/words/ar.txt` | same project, `content/2018/ar/ar_50k.txt` | CC-BY-SA-4.0 |
 | Algerian Darija in Latin letters, **built in** (seed) | `crates/verba-local/seed/dz-seed.txt` (embedded in the program) | written by the Verba authors, no corpus | PolyForm Noncommercial 1.0.0 (same as the code) |
 | Algerian Darija in Latin letters, **optional** | `data/words/dz.txt`, built by `scripts/fetch-dz.ps1` | [NArabizi treebank](https://universaldependencies.org/treebanks/qaf_arabizi/) (UD_Maghrebi_Arabic_French-Arabizi): the tokens labelled Algerian, counted | CC BY-SA 4.0 |
+| Algerian Darija in Arabic letters, **built in** (seed) | `crates/verba-local/seed/dz-ar-seed.txt` (embedded in the program) | written by the Verba authors, no corpus | PolyForm Noncommercial 1.0.0 (same as the code) |
+| Algerian Darija in Arabic letters, **optional** | `data/words/dz-ar.txt`, built by `scripts/fetch-dz-ar.ps1` | [Algerian Dialect](https://data.mendeley.com/datasets/zzwg3nnhsz/2), 45 000 YouTube comments from Algerian press channels (Benmounah and Boulesnane, Mendeley Data V2, doi 10.17632/zzwg3nnhsz.2): the words the Arabic list lacks, counted | CC BY 4.0 |
 
 - The project's code is MIT; its generated lists are CC-BY-SA-4.0 (checked on 2026-11-16 in its README).
 - The lists were built from OpenSubtitles (opus.nlpl.eu/OpenSubtitles2018.php): they are spoken, subtitle-style language.
@@ -70,7 +72,26 @@ Used by `LocalEngine::next_words`: after a finished word and a space, the words 
   Its text is comments from an Algerian newspaper's web forum (Cotterell et al., 2014) and song lyrics; whatever rights the original writers have in
   it are not something this project can vouch for. Both reasons keep it a separate download that never enters the repository or a release file.
 - **Attribution:** NArabizi corpus, Seddah et al. 2020 and Riabi et al. 2023, CC BY-SA 4.0.
-- Looked at and not used (not word lists): ELNER-DZ (named entities, CC BY 4.0) and a 45 000-comment YouTube sentiment dataset (Mendeley Data, CC BY 4.0, mostly Arabic script).
+- Looked at and not used (not word lists): ELNER-DZ (named entities, CC BY 4.0).
+
+### Algerian Darija in Arabic letters
+
+The one "Darija" switch (`Lang::Dz`) covers both scripts.
+
+- **Seed, in the program:** `crates/verba-local/seed/dz-ar-seed.txt`, original work of the Verba authors (PolyForm Noncommercial 1.0.0, like the code), embedded in the binary. Same
+  `word weight` format as the Latin seed; no short vowels, no spaces. It holds Algerian vocabulary; what may be Moroccan, Tunisian or regional, or that the authors could not
+  confirm, is in its `UNSURE` section for the Algerian reviewer. It also holds everyday words that Modern Standard Arabic shares, because Algerians write them in Darija texts.
+- **Optional download:** `scripts/fetch-dz-ar.ps1` downloads the dataset "Algerian Dialect" (Zakaria Benmounah, Abdennour Boulesnane; Mendeley Data, V2, doi 10.17632/zzwg3nnhsz.2) into
+  `data/dz/ar-youtube/` and writes `data/words/dz-ar.txt`: the words of the comments that the 50 000-word Arabic list lacks and that occur at least 4 times, with their counts
+  (`cargo run --release -p verba-local --example build_dz_ar`). `LocalEngine::load_dz` merges it with the seed. License text, from the dataset's page on Mendeley Data: "Creative Commons
+  Attribution 4.0 International (CC BY 4.0). You can share, copy and modify this dataset so long as you give appropriate credit, provide a link to the CC BY license, and indicate if changes
+  were made, but you may not do so in a way that suggests the rights holder has endorsed you or your use of the dataset. Note that further permission may be required for any content within
+  the dataset that is identified as belonging to a third party." The comments are written by YouTube users: the dataset licence does not settle their rights, so the list stays a
+  separate download (it keeps `word count` lines only, no comment) and never enters the repository or a release file.
+- **Attribution:** Benmounah, Z. and Boulesnane, A., "Algerian Dialect", Mendeley Data, V2, 2023, doi 10.17632/zzwg3nnhsz.2, CC BY 4.0, changed: words counted, the Modern Standard Arabic words removed.
+- Also used for measuring only, never shipped: the same comments (see [ACCURACY.md](ACCURACY.md#algerian-darija-in-arabic-letters)).
+- Looked at and not used: PADIC (parallel Algiers and Annaba dialect corpus; its SourceForge project says GPLv3, built from film and sitcom scripts: not an Arabic-script word list under a
+  licence fit for this project).
 
 ## Known limits of these lists
 

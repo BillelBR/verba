@@ -741,3 +741,124 @@ Over all positions, learning gains 13-15 points in English and French and 7 in A
 words written in all (`utotal`), a counter that goes up by one per `learn_text` (not a date), and pairs of two neighbouring words with a count (`b`). **Never**: a sentence, three words in a
 row, a date, the program, the place. At most 5 000 words of each kind and 20 000 pairs. Someone who reads the file learns which words and pairs the user writes most, and roughly how much they wrote
 (the total), which is why it is a plain file that *Forget what it learned* or deleting it erases; `docs/INSTALL.md` says the same in the user's words.
+
+## Algerian Darija in Arabic letters
+
+Measured on 2026-11-16 with `cargo run --release -p verba-local --example dz_ar_accuracy` (`-- --misses 20` lists misses, `-- --quick` stops before the real-text part, which takes
+a few minutes) and `spell_accuracy` with and without `--dz`. Tests: `crates/verba-local/tests/dz_arabic.rs`. Code: `dz.rs` (the same `DzList` as the Latin script, with Arabic keys).
+The one `Lang::Dz` switch covers both scripts.
+
+### Read this first: the seed list is written by the authors
+
+The program ships a **seed of 3 573 words** in Arabic letters (`crates/verba-local/seed/dz-ar-seed.txt`, PolyForm Noncommercial 1.0.0), written from the authors' knowledge, with estimated weights.
+2 054 of them are not in the 50 000-word Arabic list; the others are everyday words that Modern Standard Arabic shares. 95 are in the `UNSURE` section (may be Moroccan or Tunisian, or regional).
+No Algerian reviewer has checked it yet. So the numbers measured on the seed's own words (sections 1 and 1b) are **optimistic**; only the real-text part (3) is not, and even there the first
+5 000 comments were looked at to add about 190 plainly missing words (`راهي`, `تع`, `نتاع`, `يشفيك`...), which is why they are reported apart from the sealed part.
+
+### A real corpus exists for the Arabic script, and it is used for measuring
+
+"Algerian Dialect" (Zakaria Benmounah, Abdennour Boulesnane; Mendeley Data V2, doi 10.17632/zzwg3nnhsz.2): 45 000 YouTube comments from more than 30 Algerian press channels, mostly in Arabic letters,
+labelled for sentiment (the labels are not used). Licence, from its Mendeley Data record: **Creative Commons Attribution 4.0 International (CC BY 4.0)**, "You can share, copy and modify this dataset so long as
+you give appropriate credit, provide a link to the CC BY license, and indicate if changes were made [...] Note that further permission may be required for any content within the dataset that is identified as belonging
+to a third party." It allows use, so: the comments are a **separate optional download** (`scripts/fetch-dz-ar.ps1` builds `data/words/dz-ar.txt`, `word count` lines only, from the words the Arabic list lacks), never copied
+into the repository, and used to measure. It has no word-level dialect labels, so "Darija" below is operationally "words the Arabic list does not have" and "words the Darija list knows"; those two sets include misspellings,
+stretched letters (`بزاااف`), names and Latin-script slang written in Arabic letters. About 37% of the words of the comments are outside the Arabic list: mostly dialect, but not only.
+PADIC (Algiers and Annaba dialects, film and sitcom scripts) was looked at and not used: its SourceForge project says GPLv3.
+
+### How it works
+
+- A word typed in Arabic letters is looked up in the Arabic list as before; Darija is an extra pool next to it (`dz_ar_merge`), used for the Arabic keyboard (`suggest_in(Lang::Ar | Lang::Dz)`, or no keyboard hint).
+- **Keys:** short vowels, hamza on alef, ta marbuta, alef maqsura (the existing `fold`), `ڨ گ` = `ق`, `ڤ` = `ف`, `پ` = `ب`, `چ` = `ش`, `ث` = `ت`, `ذ` = `د`, `ظ` = `ض`, a lone hamza dropped. Three tiers like the Latin
+  script: exact prefix, same key (`قا` finds `ڨاع`), the consonants without `ا و ي` (`بزف` finds `بزاف`). Several spellings of one word are one suggestion, the one that looks like what is typed.
+  The attached article and particles (`وكيفاش`, `بالطوموبيل`) are handled with the Arabic list's own particle logic.
+- **Score:** `DZ_AR_PRIOR = 0.05` times the share in the Darija list, and a Darija word is offered only if it beats the best Arabic candidate (it never fills the free places of the popup). When the words just before are
+  Darija (a word of the Darija list that the Arabic list holds 10 times less often votes for it, an Arabic-list word that Darija does not know votes against), Darija counts x1.5 and the Arabic list x0.3.
+- **The suggestions carry `Lang::Ar`, not `Lang::Dz`**: they read right to left and the popup lays text out by the language of the suggestion (`Lang::Dz` is left to right). `Lang::Dz` stays for the Latin script.
+- **Spelling correction:** it never writes a Darija word (the Darija pool is not one of its lists), and leaves alone a word Dz knows: listed, another spelling with the same strict key (a word that is also in the Arabic list
+  is left to the Arabic list), or a listed word with a particle, `ما`/`م`, `ن ت ي`, `ش` and a pronoun around it (`ماعرفتش`, `نشوفك`, `وكيفاش`). The strict key does not drop a hamza or collapse doubled letters, so that
+  `النساء` and its typos are not taken for `نسا`.
+- Dz off: nothing changes (test `with_darija_off_nothing_changes_in_arabic`, and the tool, on 1 500 prefixes and typos).
+
+### 1. The seed's own words (optimistic)
+
+3 118 seed words of 4+ letters typed letter by letter with the Arabic list and Dz on, 3 suggestions (top-1 / top-3):
+
+| context | 2 letters | 3 letters | 4 letters |
+|---|---|---|---|
+| nothing before, or Modern Standard Arabic before (`ذهبت الى`) | 2.4% / 6.1% | 20.5% / 34.8% | 43.2% / 62.6% |
+| `واش راني` before (Darija) | 7.5% / 22.5% | 31.9% / 61.4% | 54.8% / 83.5% |
+
+Low without a Darija context because the Arabic list (50 000 words, subtitles, with some everyday speech) holds many words with the same start, and a Darija word has to beat them: `كيف` gives `كيفية` first, `علا`
+gives `علاقة` first. (Modern Standard before gives the same as nothing: an Arabic context never helps Darija.) **Spelling held out (1b):** 83 spellings that have a sibling spelling were removed and typed to 3 letters
+(Darija alone): a sibling is in the top 3 for 33.7%. Weaker than for the Latin script (61.5%), because the Arabic spellings differ mostly by letters that the key already merges.
+
+### 2. False alarms and spelling correction on Modern Standard Arabic
+
+The 3000 most frequent words (4+ letters) of the Arabic list typed letter by letter, 3 suggestions, Dz on against the Arabic list alone:
+
+| letters | any new suggestion in the top 3 | a Darija-only word (not in the Arabic list) in the top 3 | it is the first suggestion |
+|---|---|---|---|
+| 2 | 1.00% | 0.63% | 0.63% |
+| 3 | 0.57% | 0.33% | 0.33% |
+| 4 | 1.26% | 0.66% | 0.66% |
+
+Typical: `علا` -> `علاش` first, `كيف` -> `كيفاش` first, `هاد` -> `هادا`. They are Darija words an Algerian might mean, not wrong words. `DZ_AR_PRIOR` was chosen from this: 0.02 gives 0.0 to 0.2% but finds
+Darija words only after a Darija context; 0.1 gives 1.3 to 1.9% Darija-only; 0.3 gives 7 to 9%. Guard in the tests: under 2% of the prefixes of ordinary words may show a new suggestion.
+
+**Typo recovery with Dz on, against off** (`spell_accuracy`, the 3000-rank test, Arabic, `correct(Some(Ar))`):
+
+| | top-1 | top-3 | nothing offered |
+|---|---|---|---|
+| Dz off (as before) | 62.6% | 70.1% | 23.7% |
+| **Dz on** | **62.1%** | **69.4%** | 24.5% |
+
+By kind (top-1, off to on): transposition 80.5 to 79.4, extra letter 86.9 to 86.7, neighbour key 73.6 to 72.9, other letter 78.0 to 77.2, two slips 24.2 to 24.2, letter missing 21.5 to 20.7.
+Rarer words (ranks 3000 to 12000): top-1 31.0% to 30.7%. **Words wrongly fixed:** dictionary words ranked 2000 to 30000: 2.1% (582 of 27 822) to 2.0% (552); the 14 355 words of ranks 30000 to 50000 that this
+dictionary lacks (names, rare words, inflections) get a fix 13.8% of the time, then 13.3%. So Dz on costs 0.5 to 0.8 points of recovery (typos that happen to look like a Darija word, such as `لدنيا` read as `ل` + `دنيا`,
+`الحومة`, `تعيطني`, are no longer fixed) and removes some wrong fixes. The tool's own typos (`dz_ar_accuracy`, 5+ letter words, swapped / doubled / dropped letters, top-1): 83.7 / 86.7 / 29.3% with Dz against 84.5 / 86.7 / 29.9% without.
+The English and French rows of `spell_accuracy --dz` move by 0.1 to 0.5 points with both scripts on (the Latin script alone was measured in its own section).
+
+### 3. Real text: the YouTube comments (CC BY 4.0, measured on, not copied)
+
+Each word typed as a prefix after the (up to 3) words before it in its comment; every 4th word, 3 suggestions. "Exact word" = the spelling the writer used.
+**dev** = comments 1 to 5 000 (read while finishing the seed). **sealed** = comments 25 001 to 45 000 (never read). Comments 5 001 to 25 000 are used only to build the optional list.
+
+| set | words (3+ letters) | not in the Arabic list | the Darija list knows | of those not in the Arabic list |
+|---|---|---|---|---|
+| dev | 49 427 | 37.2% | 40.7% | 33.9% |
+| **sealed** | 201 751 | 37.7% | **40.4%** | **33.0%** |
+
+Exact word in the top 3 / first, Dz on against without Dz (sealed; dev is within 0.6 points):
+
+| words | letters | words typed | top-3 on | top-3 off | top-1 on | top-1 off |
+|---|---|---|---|---|---|---|
+| all | 2 | 40 371 | 12.3% | 7.9% | 6.3% | 3.7% |
+| all | 3 | 25 834 | 17.5% | 13.8% | 8.6% | 6.5% |
+| the Arabic list lacks | 2 | 18 010 | 4.7% | 0.0% | 2.9% | 0.0% |
+| the Arabic list lacks | 3 | 13 640 | 7.8% | 0.5% | 3.5% | 0.1% |
+| the Darija list knows | 3 | 7 109 | 32.8% | 14.7% | 17.5% | 6.8% |
+
+The Arabic list alone finds almost none of the words it lacks, as expected; with Darija on, 8% of them after 3 letters (the seed knows a third of them). Completion of all the words rises from 13.8% to 17.5%
+(top-3, 3 letters). Some hits are lost where the Darija context pushes a Modern Standard word down (`--misses` lists them); the net is positive.
+
+**Spelling correction on the real words** (sealed): of 6 000 words the Arabic list lacks, **10.4% get a Fix with Dz on, 16.1% without**; of 6 000 words the Arabic list has, 0.8% against 1.5%.
+A Fix on a word the dictionary lacks is not always wrong (some are typos), so this says "fewer words rewritten", not "fewer mistakes": the real words are not labelled.
+
+**With the optional list** (`scripts/fetch-dz-ar.ps1`; here built from comments 5 001 to 25 000 only, 3 005 words, and measured on the sealed part): the list knows 50.3% of all words and 55.3% of those the Arabic list lacks; exact word
+in the top 3 for all words 14.3% / 21.4% (2 / 3 letters), for words the Arabic list lacks 10.1% / 16.3%; Fixes on words the Arabic list lacks 5.9%. Real, but it is the same kind of text (YouTube comments from the same channels) as the sealed part,
+so it says what a corpus of this kind brings, not what any Algerian text would get.
+
+### Speed
+
+One `suggest()` call in an Arabic sentence (release build): about 80 microseconds with Darija on, 8 without; the Darija scan is linear over the 3 600-word list. `dz_knows` tries about 4 000 prefix and suffix combinations on an unknown
+Arabic word in the worst case, and only when a word has just been finished.
+
+### Known weaknesses and what to check
+
+- **The numbers on the seed's own words are optimistic**, and the dev part of the real text was used to add words. The sealed part is the number to read: about a third of the dialect words known, 8% of them found after 3 letters (17.5% of all words, against 13.8% without Darija).
+- **Without a Darija context Darija is deliberately timid** (it must beat the Arabic list): one word like `واش` before is enough to switch it on, a first word is not.
+- **No standard spelling.** Spellings that differ by more than the merged letters (`كيفاش` / `كفاش` / `كيفاه`, vowel letters dropped; `ڨ` for `ق` is merged but `ك` for `ق` is not) are found only through the consonant tier, after 2 or 3 letters.
+- **The seed mixes Algerian with what is shared**: `UNSURE` holds the Moroccan-looking (`ديال`, `شنو`, `فاش`), Tunisian-looking (`توا`, `باهي`, `هكا`) and regional forms (`دوك` / `دورك`, `كيفاه`, `علاه`). Politics, football and religion dominate the comments, so the seed
+  is thinner for everyday speech than for those.
+- **The correction protects a Darija word only if Dz knows it**; an unlisted word is still checked like any Arabic word. Politically charged and vulgar vocabulary is left out of the seed on purpose.
+- **Popup direction:** Darija suggestions are tagged `Lang::Ar` so the popup draws them right to left; code that wants to tell them from Arabic-list suggestions has to look them up in `DzList::seed_ar()`.

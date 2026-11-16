@@ -186,7 +186,7 @@ fn build_controls(win: HWND, _hinst: HINSTANCE) {
     child(win, button, "English", BS_AUTOCHECKBOX | tab, 0, (36, 206, 124, 22), ID_EN);
     child(win, button, "Français", BS_AUTOCHECKBOX | tab, 0, (166, 206, 124, 22), ID_FR);
     child(win, button, "العربية", BS_AUTOCHECKBOX | tab, 0, (296, 206, 148, 22), ID_AR);
-    child(win, button, "Algerian Darija in Latin letters (wach, kifach, 3lach…)", BS_AUTOCHECKBOX | tab, 0, (36, 232, 408, 22), ID_DZ);
+    child(win, button, "Algerian Darija (Latin or Arabic letters)", BS_AUTOCHECKBOX | tab, 0, (36, 232, 408, 22), ID_DZ);
     child(win, label, "Verba suggests in the language of the keyboard you are typing with. Turn this off to guess it from the letters instead.", 0, 0, (36, 256, 408, 34), 0);
 
     // Look

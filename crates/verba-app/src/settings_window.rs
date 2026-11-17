@@ -181,7 +181,7 @@ fn languages(ui: &mut Ui, s: &mut Settings) {
 }
 
 fn translate(ui: &mut Ui, s: &mut Settings) {
-    ui.page_begin("Translate", "Select a word, press the shortcut, and its translations appear. It works offline.");
+    ui.page_begin("Translate", "Select a word or a sentence, press the shortcut, and the translation appears. It works offline.");
     ui.section("Translate into");
     ui.card_begin();
     let mut into = match s.translate_to {
@@ -210,7 +210,7 @@ fn translate(ui: &mut Ui, s: &mut Settings) {
     let default = Keys::default().translate;
     let row = ui.key_row(
         "key:translate",
-        "Translate the selected word",
+        "Translate the selection",
         Some("Works in every app. With nothing selected, it translates the word just before the cursor."),
         &current.label(),
         current == default,
@@ -227,13 +227,24 @@ fn translate(ui: &mut Ui, s: &mut Settings) {
         s.keys.translate = default;
         TRANSLATE_PROBLEM.with(|p| p.set(None));
     }
-    ui.note('\u{E946}', "Press the shortcut: the translations appear above the word. Choose with the arrow keys, put one in with Tab, close with Esc.");
+    ui.note('\u{E946}', "Press the shortcut: the translations appear above the text. Choose with the arrow keys, put one in with Tab, close with Esc.");
     ui.card_end();
     if let Some(problem) = TRANSLATE_PROBLEM.with(|p| p.get()) {
         ui.card_begin();
         ui.note('\u{E783}', problem);
         ui.card_end();
     }
+
+    ui.section("Sentences");
+    ui.card_begin();
+    let pairs = crate::sentence_pairs();
+    if pairs.is_empty() {
+        ui.info_row("Sentence translation is not installed.", Some("Run the Verba setup again and tick \"Sentence translation\". It needs about 170 MB."));
+    } else {
+        let names: Vec<String> = pairs.iter().map(|(f, t)| format!("{} \u{2192} {}", f.code().to_uppercase(), t.code().to_uppercase())).collect();
+        ui.info_row(&format!("Installed: {}", names.join(", ")), Some("Select a sentence or a short text (up to 1200 characters), then press the shortcut. Modern Standard Arabic works well; Algerian Darija does not."));
+    }
+    ui.card_end();
 
     ui.section("Dictionary");
     ui.card_begin();

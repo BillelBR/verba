@@ -30,6 +30,16 @@ Changed: the entries were reduced to short word translations, ranked, and inflec
 that license (you must keep the attribution and give a copy the same license); Verba's own program is not covered by it. Wiktionary's own
 statement of its license: https://en.wiktionary.org/wiki/Wiktionary:Copyrights
 
+Sentence translation (the optional "Sentence translation" part of this setup) uses a program of its own, verba-translate.exe, and two
+translation models in the "models" folder (ar-en and en-ar). The models are OPUS-MT networks by the Language Technology Research Group
+at the University of Helsinki (https://huggingface.co/Helsinki-NLP), converted for CTranslate2:
+
+    License of the models: Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0)
+
+The program contains CTranslate2 (MIT, SYSTRAN and the OpenNMT authors), oneDNN (Apache 2.0, Intel) and SentencePiece (Apache 2.0, Google);
+vcomp140.dll is a redistributable file of Microsoft. Details and the other libraries: THIRD-PARTY.md. A translation program makes mistakes:
+check a translation before you rely on it. Algerian Darija is not translated by it.
+
 Privacy: Verba reads only the few letters before the caret in the text box you are typing in, never in password
 boxes, keeps nothing, and sends nothing over the network.
 

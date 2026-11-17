@@ -4,6 +4,7 @@
 //!
 //! Click into any text field during the delay. The popup never takes the focus from it.
 //! `--fixed` shows it at a fixed place instead (no field needed); `--select N` highlights candidate N; `--hint "text"` sets the key cap.
+//! `--text "a whole sentence"` shows that one candidate instead (a translated sentence wraps in a card of its own); `--lead "AR → EN"` adds the label.
 
 use std::time::{Duration, Instant};
 
@@ -30,7 +31,11 @@ fn main() {
         Lang::Ar => &["مرحبا", "مرحبًا بك", "مرحبتين"],
         Lang::Dz => &["wach", "wesh", "wech"],
     };
-    let suggestions: Vec<Suggestion> = words.iter().map(|w| Suggestion { text: (*w).to_string(), lang }).collect();
+    let suggestions: Vec<Suggestion> = match get("--text") {
+        Some(text) => vec![Suggestion { text, lang }],
+        None => words.iter().map(|w| Suggestion { text: (*w).to_string(), lang }).collect(),
+    };
+    let lead = get("--lead");
 
     let fixed = args.iter().any(|a| a == "--fixed");
     let select: usize = get("--select").and_then(|s| s.parse().ok()).unwrap_or(0);
@@ -51,7 +56,7 @@ fn main() {
     match located {
         Some(anchor) => {
             println!("anchor: {:?} left={} top={} right={} bottom={}", anchor.kind, anchor.rect.left, anchor.rect.top, anchor.rect.right, anchor.rect.bottom);
-            overlay.show(anchor, &suggestions, select, look);
+            overlay.show_with(anchor, &suggestions, select, look, lead.as_deref());
             let r = overlay.rect();
             println!("popup:  left={} top={} right={} bottom={}", r.left, r.top, r.right, r.bottom);
         }

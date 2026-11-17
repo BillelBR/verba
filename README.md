@@ -10,7 +10,7 @@ It is built to work for every major language, to run fully on your own device, a
 1. **Suggestions** – while you type, Verba offers the word you are likely to write. *(working, v0)*
 2. **Instant correction** – when you finish a word that looks misspelled (you type a space or punctuation), a small **Fix** popup offers the right spelling; **Tab** applies it and keeps your space or punctuation. It is **off by default**: turn it on in Settings. It never changes your text by itself.
 
-3. **Word translation** – select a word (or put the cursor after it) and press **Ctrl+Alt+T**: its translations between English, French and Arabic appear above it; the arrows choose, **Tab** puts one in place. It works offline from a dictionary built from Wiktionary (CC BY-SA 4.0). Translating whole sentences is planned. Algerian Darija is translated only for its commonest words, in Arabic and in Latin letters (a small glossary, not checked by an Algerian yet).
+3. **Word translation** – select a word (or put the cursor after it) and press **Ctrl+Alt+T**: its translations between English, French and Arabic appear above it; the arrows choose, **Tab** puts one in place. It works offline from a dictionary built from Wiktionary (CC BY-SA 4.0). **Sentences** work too, between Arabic and English: select a sentence or a short text (up to 1200 characters) and press the same shortcut; the translation appears above it and **Tab** types it over the selection, with the line breaks kept. A small neural translation model (OPUS-MT, int8, about 80 MB per direction) runs on your PC, offline, in a separate program (`verba-translate.exe`) that starts at the first sentence and ends itself after ten minutes without work. Modern Standard Arabic is translated well; Algerian Darija is **not** (the model invents words), see [docs/ACCURACY.md](docs/ACCURACY.md#sentence-translation-arabic--english). Algerian Darija is translated only for its commonest words, in Arabic and in Latin letters (a small glossary, not checked by an Algerian yet).
 
 ## Try it (Windows)
 
@@ -79,6 +79,7 @@ A Rust workspace:
 | `verba-local` | local engine: word completion from frequency lists |
 | `verba-win` | Windows: finds where you type, reads the word before the caret, draws the popup |
 | `verba-app` | the tray program that ties them together |
+| `verba-translate` | the sentence translator (CTranslate2 and OPUS-MT models), a program of its own; not built by a plain `cargo build` (it compiles C++ for about 7 minutes): use `scripts/build-translate.ps1` |
 | `spike/` | throw-away experiments (`caret-probe` measures what each app lets us know) |
 
 Useful tools: `cargo run -p verba-win --example read_focus` prints what Verba can read from the field you are in (numbers only, never the text);

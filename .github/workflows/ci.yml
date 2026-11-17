@@ -31,8 +31,9 @@ jobs:
         shell: pwsh
         run: ./scripts/fetch-data.ps1
 
+      # the sentence translator (CTranslate2 and oneDNN compiled with CMake: about 7 minutes) is built by the release workflow, not here
       - name: Build
-        run: cargo build --workspace --all-targets
+        run: cargo build --workspace --all-targets --exclude verba-translate
 
       - name: Test
-        run: cargo test --workspace
+        run: cargo test --workspace --exclude verba-translate

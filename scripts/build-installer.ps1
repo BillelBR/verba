@@ -3,7 +3,16 @@
 #   powershell -ExecutionPolicy Bypass -File scripts\build-installer.ps1
 #
 # Needs: Rust (cargo), Inno Setup 6 (ISCC.exe), and the word lists, the next-word tables and the translation dictionary (built here if missing).
+# Sentence translation (the translator program and the Arabic <-> English models) is built here too when missing: the program takes about
+# 10 minutes and 8 GB of disk space the first time (scripts\build-translate.ps1, needs CMake), the models a few minutes (scripts\fetch-models.ps1,
+# needs Python 3.10 to 3.13). Pass -NoSentences for a small installer without them.
 # Inno Setup is looked for in: the ISCC environment variable, PATH, then the usual install folders.
+
+param(
+    [switch]$NoSentences,
+    # a Python 3.10 to 3.13 for the model conversion, when the first Python found is not suitable
+    [string]$PythonExe = ""
+)
 
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
@@ -59,6 +68,25 @@ if (-not (Test-Path (Join-Path $words "dict.txt"))) {
     if (-not (Test-Path (Join-Path $words "dict.txt"))) { Fail "the word-translation dictionary could not be built (data\words\dict.txt)" }
 }
 
+# the sentence translator and its models (optional parts of the installer)
+$withSentences = $false
+if (-not $NoSentences) {
+    $mtExe = Join-Path $root "target\mt\release\verba-translate.exe"
+    if (-not (Test-Path $mtExe)) {
+        Write-Host "building the sentence translator (about 10 minutes the first time) ..."
+        & (Join-Path $PSScriptRoot "build-translate.ps1")
+        if ($LASTEXITCODE -ne 0 -or -not (Test-Path $mtExe)) { Fail "the sentence translator could not be built (use -NoSentences to leave it out)" }
+    }
+    $models = Join-Path $root "models"
+    if (-not ((Test-Path (Join-Path $models "ar-en\model.bin")) -and (Test-Path (Join-Path $models "en-ar\model.bin")))) {
+        Write-Host "downloading and converting the translation models ..."
+        if ($PythonExe) { & (Join-Path $PSScriptRoot "fetch-models.ps1") -PythonExe $PythonExe } else { & (Join-Path $PSScriptRoot "fetch-models.ps1") }
+        if ($LASTEXITCODE -ne 0 -or -not (Test-Path (Join-Path $models "en-ar\model.bin"))) { Fail "the translation models could not be prepared (use -NoSentences to leave them out)" }
+    }
+    $withSentences = $true
+}
+Write-Host ("sentence translation: " + $(if ($withSentences) { "included" } else { "left out" }))
+
 # 4. Inno Setup
 function Find-Iscc {
     if ($env:ISCC -and (Test-Path $env:ISCC)) { return $env:ISCC }
@@ -80,7 +108,9 @@ Write-Host "Inno Setup: $iscc"
 
 # 5. the installer
 New-Item -ItemType Directory -Force (Join-Path $root "dist") | Out-Null
-& $iscc "/DAppVersion=$version" "/Qp" (Join-Path $root "installer\verba.iss")
+$isccArgs = @("/DAppVersion=$version", "/Qp")
+if ($withSentences) { $isccArgs += "/DWithSentences" }
+& $iscc @isccArgs (Join-Path $root "installer\verba.iss")
 if ($LASTEXITCODE -ne 0) { Fail "Inno Setup failed (see the messages above)" }
 $setup = Join-Path $root "dist\Verba-Setup-$version.exe"
 if (-not (Test-Path $setup)) { Fail "the installer was not produced: $setup" }

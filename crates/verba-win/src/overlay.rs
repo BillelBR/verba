@@ -382,12 +382,25 @@ fn build_and_present(
 
         let mut widths = Vec::new();
         let mut items: Vec<Item> = Vec::new();
+        // a sentence (a translation of a whole selection) is wrapped in a card of a reasonable width, and the card grows downwards
+        let max_text_w = ((work.right - work.left) as f32 * 0.5).min(520.0 * s);
+        let mut row_h = item_h;
         for sug in suggestions {
-            let (layout, tw, th) = text_layout(&sug.text, sug.lang.is_rtl(), font_px, false)?;
+            let (layout, mut tw, mut th) = text_layout(&sug.text, sug.lang.is_rtl(), font_px, false)?;
+            if tw > max_text_w {
+                layout.SetMaxWidth(max_text_w)?;
+                let mut m = DWRITE_TEXT_METRICS::default();
+                layout.GetMetrics(&mut m)?;
+                // the box keeps the full width: a right-to-left text is placed against the right edge of its box
+                tw = max_text_w;
+                th = m.height;
+                row_h = row_h.max(th + 14.0 * s);
+            }
             let w = (tw + 2.0 * pad_x).max(40.0 * s);
             widths.push(w);
             items.push(Item { layout, rect: Rf::default(), tw, th });
         }
+        let item_h = row_h;
         let (hint_layout, hint_tw, hint_th) = text_layout(st.hint.as_str(), false, small_px, false)?;
         let chip_w = hint_tw + 14.0 * s;
         // an empty hint means no key cap at all (a short notice, not a list to choose from)

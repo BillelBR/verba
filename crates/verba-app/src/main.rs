@@ -15,11 +15,12 @@
 use std::cell::RefCell;
 use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant, SystemTime};
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 use std::sync::atomic::{AtomicBool, AtomicIsize, AtomicU32, AtomicUsize, Ordering};
 
 mod keys;
 mod learning;
+mod sentences;
 mod settings;
 mod settings_window;
 
@@ -36,7 +37,7 @@ use windows::Win32::System::Threading::CreateMutexW;
 use windows::Win32::UI::Input::KeyboardAndMouse::{
     GetKeyState, INPUT, INPUT_0, INPUT_KEYBOARD, KEYBD_EVENT_FLAGS, KEYBDINPUT, KEYEVENTF_KEYUP, KEYEVENTF_UNICODE, MOD_ALT,
     MOD_CONTROL, MOD_NOREPEAT, MOD_SHIFT, RegisterHotKey, SendInput, UnregisterHotKey, VIRTUAL_KEY, VK_BACK, VK_CONTROL,
-    VK_MENU, VK_SHIFT,
+    VK_MENU, VK_RETURN, VK_SHIFT,
 };
 use windows::Win32::UI::Shell::{
     NIF_ICON, NIF_MESSAGE, NIF_TIP, NIM_ADD, NIM_DELETE, NIM_MODIFY, NOTIFYICONDATAW, Shell_NotifyIconW,
@@ -62,6 +63,8 @@ const WM_MOVE: u32 = WM_APP + 5;
 const WM_TRANSLATE: u32 = WM_APP + 6;
 /// A notice has been on the screen long enough: wParam is its number.
 const WM_NOTICE_END: u32 = WM_APP + 7;
+/// A sentence translation is done (or failed): its result is waiting in `SENTENCE_DONE`.
+const WM_SENTENCE: u32 = WM_APP + 8;
 /// wParam of `WM_ACCEPT` that means "the highlighted one" (a click sends the number of the candidate instead).
 const ACCEPT_HIGHLIGHTED: usize = usize::MAX;
 /// How often the worker thread looks at the app being typed in.
@@ -86,6 +89,8 @@ static POPUP_VISIBLE: AtomicBool = AtomicBool::new(false);
 static TRANSLATE_REQUEST: AtomicBool = AtomicBool::new(false);
 /// What the reader thread read for a translation (outer `Some` = new, not yet taken; inner `None` = nothing readable).
 static PICKED: Mutex<Option<Option<Picked>>> = Mutex::new(None);
+/// What the thread that translated a selection found: its request number, the direction, and the text or the reason it failed.
+static SENTENCE_DONE: Mutex<Option<(usize, Lang, Lang, Result<String, String>)>> = Mutex::new(None);
 /// The shortcut that is registered with Windows now.
 static TRANSLATE_KEY: Mutex<Option<Binding>> = Mutex::new(None);
 /// How many candidates the popup shows now.
@@ -129,6 +134,10 @@ struct App {
     /// Set while the popup shows translations: how many characters before the caret to erase when one is chosen (0: the word was
     /// selected, typing replaces it).
     translating: Option<usize>,
+    /// The program that translates sentences (started at the first one), and the number of the last request: an answer for an
+    /// older one is dropped (the user pressed Esc, moved on, or asked again).
+    sentences: Arc<sentences::Translator>,
+    sentence_seq: usize,
     /// A short notice is on the screen (not a list to choose from), and the number of the last one.
     notice: bool,
     notice_seq: usize,
@@ -202,7 +211,7 @@ fn main() {
 
         APP.with(|a| {
             *a.borrow_mut() =
-                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, last_check: Instant::now() });
+                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, last_check: Instant::now() });
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
@@ -356,6 +365,13 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
             }
             LRESULT(0)
         }
+        WM_SENTENCE => {
+            let done = SENTENCE_DONE.lock().ok().and_then(|mut d| d.take());
+            if let Some((seq, from, to, result)) = done {
+                with_app(|app| show_sentence(app, seq, from, to, result));
+            }
+            LRESULT(0)
+        }
         WM_NOTICE_END => {
             with_app(|app| {
                 if app.notice && app.notice_seq == wp.0 {
@@ -375,6 +391,7 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
                     app.engine.ignore_word(&fix.original);
                 }
                 app.dismissed = Some(app.last_text.clone());
+                app.sentence_seq += 1;
                 hide(app);
             });
             LRESULT(0)
@@ -508,6 +525,8 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
         return;
     };
     app.translating = None;
+    // the selection may be gone: a translation still on its way is for text that is no longer there
+    app.sentence_seq += 1;
     let previous = std::mem::replace(&mut app.last_text, snap.before_caret.clone());
     if app.settings.learn && app.settings.allows_app(&snap.app) {
         if let Some((word, separators)) = learning::finished_word(&previous, &snap.before_caret) {
@@ -584,13 +603,18 @@ fn show_translation(app: &mut App, picked: Option<Picked>) {
         return;
     };
     let anchor = Some(picked.anchor);
-    if !app.engine.has_dictionary() {
-        notice(app, anchor, "The dictionary is not installed.");
+    let words = picked.text.split_whitespace().count();
+    // more than a few words: a sentence, whether or not the word dictionary is installed
+    if words > 3 || picked.text.chars().count() > 40 {
+        start_sentence(app, picked);
         return;
     }
-    let words = picked.text.split_whitespace().count();
-    if words > 3 || picked.text.chars().count() > 40 {
-        notice(app, anchor, "Select one word. Sentences are not translated yet.");
+    if !app.engine.has_dictionary() {
+        if picked.selected && words >= 2 && !app.sentences.installed().is_empty() {
+            start_sentence(app, picked);
+            return;
+        }
+        notice(app, anchor, "The dictionary is not installed.");
         return;
     }
     // into the language chosen in the settings; a word already in it goes to English, then French, then Arabic
@@ -605,8 +629,78 @@ fn show_translation(app: &mut App, picked: Option<Picked>) {
             app.translating = Some(if picked.selected { 0 } else { picked.text.chars().count() });
         }
         None => {
+            // two or three selected words that are not in the dictionary as such: the sentence translator may know them
+            if picked.selected && words >= 2 && !app.sentences.installed().is_empty() {
+                start_sentence(app, picked);
+                return;
+            }
             let text = format!("No translation for \u{201C}{}\u{201D}.", picked.text.trim());
             notice(app, anchor, &text);
+        }
+    }
+}
+
+/// A selection of more than a word: translate it with the sentence translator, on a thread of its own (the first time it also loads
+/// the model, which takes a moment). The popup says so meanwhile, and shows the translation when it is there.
+fn start_sentence(app: &mut App, picked: Picked) {
+    let anchor = Some(picked.anchor);
+    if !picked.selected {
+        notice(app, anchor, "Select the sentence first, then press the shortcut.");
+        return;
+    }
+    if picked.text.chars().count() > verba_local::sentence::MAX_CHARS {
+        let text = format!("Select at most {} characters at a time.", verba_local::sentence::MAX_CHARS);
+        notice(app, anchor, &text);
+        return;
+    }
+    let installed = app.sentences.installed();
+    if installed.is_empty() {
+        notice(app, anchor, "Sentence translation is not installed. Run the Verba setup again and tick it.");
+        return;
+    }
+    let Some((from, to)) = verba_local::sentence::pair_for(&picked.text, picked.layout, app.settings.translate_to, &installed) else {
+        notice(app, anchor, "This language pair is not installed (Arabic and English are).");
+        return;
+    };
+    app.sentence_seq += 1;
+    let seq = app.sentence_seq;
+    app.anchor = Some(picked.anchor);
+    show_notice(app, anchor, "Translating\u{2026}", false);
+    let translator = Arc::clone(&app.sentences);
+    let text = picked.text;
+    std::thread::spawn(move || {
+        let result = translator.translate(from, to, &text);
+        if let Ok(mut slot) = SENTENCE_DONE.lock() {
+            *slot = Some((seq, from, to, result));
+        }
+        let controller = CONTROLLER.load(Ordering::SeqCst);
+        if controller != 0 {
+            unsafe {
+                let _ = PostMessageW(Some(HWND(controller as *mut _)), WM_SENTENCE, WPARAM(0), LPARAM(0));
+            }
+        }
+    });
+}
+
+/// The translator answered: show the translation (Tab types it over the selection) or say why not.
+fn show_sentence(app: &mut App, seq: usize, from: Lang, to: Lang, result: Result<String, String>) {
+    if seq != app.sentence_seq {
+        return; // the user pressed Esc, moved on or asked again
+    }
+    let anchor = app.anchor;
+    match result {
+        Ok(text) => {
+            let Some(anchor) = anchor else { return };
+            let label = format!("{} \u{2192} {}", from.code().to_uppercase(), to.code().to_uppercase());
+            app.fix = None;
+            app.typed_len = 0;
+            present(app, anchor, vec![Suggestion { text, lang: to }], Some(label));
+            // the selection is still there: typing replaces it
+            app.translating = Some(0);
+        }
+        Err(why) => {
+            log(&format!("sentence translation failed: {why}"));
+            notice(app, anchor, "The sentence could not be translated.");
         }
     }
 }
@@ -614,6 +708,11 @@ fn show_translation(app: &mut App, picked: Option<Picked>) {
 /// A short message in the popup's style, that goes away by itself after a moment (it is not a list to choose from: no key cap,
 /// and the keys of the popup are not taken).
 fn notice(app: &mut App, anchor: Option<Anchor>, text: &str) {
+    show_notice(app, anchor, text, true);
+}
+
+/// The same, and with `auto_hide` false it stays until something else is shown (a result is on its way).
+fn show_notice(app: &mut App, anchor: Option<Anchor>, text: &str, auto_hide: bool) {
     let anchor = anchor.or(app.anchor).unwrap_or_else(|| {
         // no field to point at: near the mouse
         let mut at = POINT::default();
@@ -627,6 +726,9 @@ fn notice(app: &mut App, anchor: Option<Anchor>, text: &str) {
     app.shown.clear();
     app.notice = true;
     app.notice_seq += 1;
+    if !auto_hide {
+        return;
+    }
     let seq = app.notice_seq;
     std::thread::spawn(move || {
         std::thread::sleep(std::time::Duration::from_millis(2800));
@@ -637,6 +739,11 @@ fn notice(app: &mut App, anchor: Option<Anchor>, text: &str) {
             }
         }
     });
+}
+
+/// The directions the sentence translator can do now (empty when it is not installed): for the settings window.
+pub(crate) fn sentence_pairs() -> Vec<(Lang, Lang)> {
+    APP.with(|a| a.try_borrow().ok().and_then(|b| b.as_ref().map(|app| app.sentences.installed())).unwrap_or_default())
 }
 
 /// How many words the dictionary holds (summed over its directions), `None` when it is not installed: for the settings window.
@@ -719,6 +826,10 @@ fn accept(app: &mut App, index: usize) {
                 Typed::Backspace => {
                     inputs.push(key(VK_BACK, 0, KEYBD_EVENT_FLAGS(0)));
                     inputs.push(key(VK_BACK, 0, KEYEVENTF_KEYUP));
+                }
+                Typed::Enter => {
+                    inputs.push(key(VK_RETURN, 0, KEYBD_EVENT_FLAGS(0)));
+                    inputs.push(key(VK_RETURN, 0, KEYEVENTF_KEYUP));
                 }
                 Typed::Unit(unit) => {
                     inputs.push(key(VIRTUAL_KEY(0), unit, KEYEVENTF_UNICODE));
@@ -1039,13 +1150,24 @@ fn key_action(k: &KeyState) -> KeyAction {
 #[derive(Debug, PartialEq, Eq)]
 enum Typed {
     Backspace,
+    /// A line break in a translated selection: the Enter key (a character 0x0A typed as text is ignored by many programs).
+    Enter,
     Unit(u16),
 }
 
 /// `erase` backspaces, then `text` (as UTF-16 units, which is what Windows types).
 fn replace_keys(erase: usize, text: &str) -> Vec<Typed> {
     let mut keys: Vec<Typed> = (0..erase).map(|_| Typed::Backspace).collect();
-    keys.extend(text.encode_utf16().map(Typed::Unit));
+    for c in text.chars() {
+        match c {
+            '\r' => {}
+            '\n' => keys.push(Typed::Enter),
+            _ => {
+                let mut units = [0u16; 2];
+                keys.extend(c.encode_utf16(&mut units).iter().copied().map(Typed::Unit));
+            }
+        }
+    }
     keys
 }
 
@@ -1145,8 +1267,19 @@ mod tests {
     fn accepting_replaces_the_typed_part_and_adds_a_space() {
         let keys = replace_keys(3, "like ");
         assert_eq!(&keys[..3], [Typed::Backspace, Typed::Backspace, Typed::Backspace]);
-        let units: Vec<u16> = keys[3..].iter().map(|k| match k { Typed::Unit(u) => *u, Typed::Backspace => panic!("late backspace") }).collect();
+        let units: Vec<u16> = keys[3..].iter().map(|k| match k { Typed::Unit(u) => *u, Typed::Backspace | Typed::Enter => panic!("late backspace") }).collect();
         assert_eq!(String::from_utf16(&units).unwrap(), "like ");
+    }
+
+    #[test]
+    fn a_translated_selection_with_line_breaks_types_them_as_the_enter_key() {
+        let keys = replace_keys(0, "one\r\ntwo\n\nمرحبا");
+        assert_eq!(keys.iter().filter(|k| **k == Typed::Enter).count(), 3, "every line break is one Enter, a CR is dropped");
+        let units: Vec<u16> = keys.iter().filter_map(|k| if let Typed::Unit(u) = k { Some(*u) } else { None }).collect();
+        assert_eq!(String::from_utf16(&units).unwrap(), "onetwoمرحبا");
+        // a character outside the basic plane is two units, sent in order
+        let emoji: Vec<u16> = replace_keys(0, "a\u{1F600}").iter().filter_map(|k| if let Typed::Unit(u) = k { Some(*u) } else { None }).collect();
+        assert_eq!(String::from_utf16(&emoji).unwrap(), "a\u{1F600}");
     }
 
     #[test]

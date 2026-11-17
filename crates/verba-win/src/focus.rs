@@ -77,8 +77,11 @@ impl Locator {
     }
 }
 
+/// How much of a selection is read: a word, or a few sentences to translate (the caller refuses what is too long for it).
+const SELECTION_READ_MAX: usize = 1300;
+
 impl Locator {
-    /// The word to translate, read right now: the text selected in the focused field, or else the word just before the caret.
+    /// The word or the sentences to translate, read right now: the text selected in the focused field, or else the word just before the caret.
     /// Nothing is kept: the text is returned to the caller. Password fields are never read. `None` when there is no readable field
     /// or no word.
     pub fn pick(&self, max_chars: i32) -> Option<Picked> {
@@ -90,7 +93,7 @@ impl Locator {
             let anchor = classic_caret().map(|rect| Anchor { rect, kind: AnchorKind::Caret }).or_else(|| uia_anchor(&el))?;
             let layout = crate::apps::keyboard_lang();
             let app = crate::apps::foreground_app().unwrap_or_default();
-            if let Some(text) = uia_selection(&el).or_else(|| classic_edit_selection(400)) {
+            if let Some(text) = uia_selection(&el).or_else(|| classic_edit_selection(SELECTION_READ_MAX)) {
                 return Some(Picked { text, anchor, layout, app, selected: true });
             }
             let before = text_before_caret(&el, max_chars).or_else(|| classic_edit_before_caret(max_chars))?;
@@ -277,7 +280,7 @@ unsafe fn uia_selection(el: &IUIAutomationElement) -> Option<String> {
             return None;
         }
         let range = selection.GetElement(0).ok()?;
-        let text = range.GetText(400).ok()?.to_string();
+        let text = range.GetText(SELECTION_READ_MAX as i32).ok()?.to_string();
         (!text.trim().is_empty()).then_some(text)
     }
 }

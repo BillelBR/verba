@@ -1360,3 +1360,42 @@ spelling such as `واش`, `شحال` or `برك`).
 `crates/verba-local/seed/dict-fixes.txt` holds hand-written first candidates for the Arabic words that the Wiktionary data gets wrong. Two rounds, both judged by the maintainer's AI assistant (not an Algerian reviewer): about 140 everyday words, then the 560 commonest words of the Arabic frequency list (mostly small words and words with a pronoun attached, such as `لدي`, `معي`, `عليك`). Before the second round about one in five of those small words had a wrong first candidate in English or French (`يجب` gave "respond", `إذن` "ear", `تم` "swan", `كم` "your"). The fixes put the right word first; the dictionary's own candidates follow. Words further down the list (the 600th word and later) have not been checked one by one. Letters that look alike once folded (`على`/`علي`, `لدى`/`لدي`) share one entry, so a fix for one is a fix for both.
 
 Third round: the words from rank 560 to 1000 of the Arabic list were read the same way (about 400 more words), and about 140 Algerian Darija words written in Arabic letters were added to the same file (`واش`, `كيفاش`, `بزاف`, `قداش` / `ڨداش`, `نقدر`, `راني`, `كاين`, `ماكاينش` ...), because the Wiktionary data has no Darija spellings. The Darija part was written from general knowledge and has **not** been checked by an Algerian: it is marked as such in the file, and the reviewer should read it. Darija written in Latin letters (`wach`, `bezzaf`, `3andi`, `hamdoullah`) is translated from a separate glossary of about 400 spellings (`crates/verba-local/seed/dz-latin-glossary.txt`, into English, French and Arabic). A Latin word is looked up as English or French first, and only a word they do not know is looked up there (a few spellings such as `wesh`, `ana`, `dima` are marked to go first). A spelling that is not listed is still found when it differs only in doubled letters or vowels (`bzaf`, `bezaf`, `bzzaf`), unless two entries would share the same consonants. Like the Arabic-letter Darija above it was written from general knowledge and has not been checked by an Algerian reviewer. Words beyond the thousand commonest of the list have not been checked one by one.
+
+## Sentence translation (Arabic ↔ English)
+
+Select a sentence, press the translate shortcut: `verba-translate.exe` runs an OPUS-MT network (Helsinki-NLP/opus-mt-ar-en or -en-ar, int8, CTranslate2 with oneDNN) on the CPU. Where the models come from: [DATA.md](DATA.md#sentence-translation-models-modelspair).
+
+### Quality
+
+Measured in a one-day spike (2026-11-17) on 20 Arabic sentences (14 Modern Standard Arabic, 6 Algerian Darija) for Arabic → English, and on the first 20 of 50 English sentences for English → Arabic. Every output was read and given 0 (wrong or invented), 1 (understandable, with an error) or 2 (correct and natural) **by the AI agent that ran the spike, not by a bilingual person**. There is no BLEU score and no independent test set, and 14 or 20 sentences are few: read these as "what to expect", not as a measurement of accuracy.
+
+| Direction | Average of 2 | Sentences |
+|---|---|---|
+| Arabic (MSA) → English | **1.93** | 14 |
+| Algerian Darija → English | **0.00** | 6 |
+| English → Arabic | 1.60 | 20 |
+
+- **Modern Standard Arabic into English is good.** `هل يمكنك أن ترسل لي الملف قبل الساعة الخامسة؟` gives "Can you send me the file before 5:00?" (2); `الأطفال يلعبون في الحديقة بينما نحضر العشاء` gives "The kids are playing in the park while we're at dinner." (1: "while we prepare dinner" is meant).
+- **Algerian Darija does not work, and it fails by inventing words**: `حبيت نروح للدار دروك` became "We liked to go to Darhawk.", `ما فهمتش والو` became "I don't get it. Wallace, please come back.", `واش راك؟ ماكاينش مشكل` became "McCainch is a problem." The model never saw Darija; it reads the words as foreign names. Verba says so in the settings and in the setup, and does not try to hide it: use the word translation (which knows the commonest Darija words) for Darija, not this.
+- **English into Arabic** gives correct, readable Modern Standard Arabic for plain sentences (`Please find attached the report you asked for.` gives `أرفق طيه التقرير الذي طلبته.`); idioms come out literally (`Break a leg` gives "break your leg"). The input starts with the model's own language token `>>ara<<`, passed as one piece (through the sentence splitter it would be cut into letters and copied into the answer): the program checks that it never comes back.
+- Seen in the test run of the finished program: English → Arabic dropped the final full stop of one sentence and put a tanween on `شكراً`. Small, but the text is not copied as it is: read it.
+- Idioms, business phrases and names are the weak points of this size of model in both directions. Check a translation before you send it.
+
+### Speed and memory
+
+The finished program, measured on a Ryzen 7 PRO 4750G (8 cores, AVX2), Windows 10, 4 threads, beam 4, median of 10 runs, model already loaded:
+
+| Direction | Words | Time |
+|---|---|---|
+| Arabic → English | 6 | 73 ms |
+| Arabic → English | 16 | 259 ms |
+| Arabic → English | 28 | 325 ms |
+| English → Arabic | 8 | 88 ms |
+| English → Arabic | 22 | 222 ms |
+| English → Arabic | 29 | 282 ms |
+
+- **First sentence:** starting the program and loading a model took 0.84 to 0.98 s (files in the disk cache). A model is loaded when a direction is used first; at most two stay in memory; the program ends itself after ten minutes without work.
+- **Threads and beam:** 8 threads gave no gain over 4 (251 ms against 259 ms for 16 words); beam 2 instead of 4 took 221 ms for the same sentence. Verba uses 4 and beam 4, the setting the quality was read at.
+- **The OpenMP runtime matters:** the first Rust build, without it, took 295 ms for 16 words and 595 ms for 29 on English → French; with `openmp-runtime-comp` the 28-word sentence takes 325 ms. The Python build of CTranslate2 is still about 1.5 to 2 times faster (135 ms for the 16-word Arabic sentence); the cause is not found.
+- **Longer text** is cut into sentences first (and a sentence of more than 60 words at a comma), and the sentences go to the model as one batch.
+- **Not measured:** other CPUs (a laptop with half the speed would take twice these times), the memory of the Rust program (the Python process peaked at 140 to 149 MB with one model, interpreter included, so expect about 100 MB per loaded direction), loading from a cold disk, and the popup on screens other than the author's.

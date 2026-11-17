@@ -55,6 +55,26 @@ jobs:
         timeout-minutes: 25
         run: ./scripts/fetch-dict.ps1
 
+      # Sentence translation. Two parts, both built here so that the installer has them (build-installer.ps1 includes them when they exist
+      # and stops if it cannot make them):
+      #  - the translator program: CTranslate2 and oneDNN compiled from source with CMake (CMake and the C++ tools are on the image).
+      #    Measured on a PC: 7 minutes 23 seconds and about 5 GB of build files. NOT yet measured on a GitHub runner.
+      #  - the Arabic <-> English models: downloaded from Hugging Face (Helsinki-NLP/opus-mt-ar-en and -en-ar) and converted with a temporary
+      #    Python environment (PyTorch is only needed for the conversion). Measured on a PC: about 2 minutes each.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build the sentence translator
+        shell: pwsh
+        timeout-minutes: 45
+        run: ./scripts/build-translate.ps1
+
+      - name: Prepare the translation models
+        shell: pwsh
+        timeout-minutes: 30
+        run: ./scripts/fetch-models.ps1
+
       # Inno Setup 6 is on the windows-latest image; install it only if it is missing
       - name: Make sure Inno Setup is installed
         shell: pwsh

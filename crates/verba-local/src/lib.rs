@@ -17,6 +17,7 @@ mod dz;
 mod fold;
 mod nextword;
 mod personal;
+pub mod sentence;
 mod spell;
 mod translate;
 

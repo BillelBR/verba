@@ -105,6 +105,17 @@ file is **not stored in this repository**: `scripts/fetch-dict.ps1` downloads th
   so the order of the first candidates is the weakest point for very common words with several meanings. Arabic entries are fewer (about 19 500 headwords with glosses), and Arabic forms with attached particles (`وبالكتاب`, `سيارتك`) are mostly missing: the engine would have to strip
   the article, prepositions and pronoun endings before the lookup.
 
+## Sentence translation models (`models/<pair>/`)
+
+| What | Source | License |
+|---|---|---|
+| `ar-en`, `en-ar`: one OPUS-MT network per direction (Marian transformer, about 77 million parameters) | [Helsinki-NLP/opus-mt-ar-en](https://huggingface.co/Helsinki-NLP/opus-mt-ar-en) and [-en-ar](https://huggingface.co/Helsinki-NLP/opus-mt-en-ar) on Hugging Face (Tiedemann and Thottingal, "OPUS-MT - Building open translation services for the world", EAMT 2020) | **Apache-2.0** on both model cards (checked 2026-11-17) |
+
+`scripts/fetch-models.ps1` downloads the original weights, converts them to int8 for CTranslate2 (78 MB per direction instead of about 300 MB) and writes `SOURCE.txt` with the repository and the exact revision. The conversion is deterministic: a second run gave a byte-identical `model.bin`. The models are **not part of the source repository** (`models/` is in `.gitignore`); the installer ships them as separate files.
+
+- **What is not checked.** The cards say Apache-2.0 for the network. They train on OPUS parallel text, whose corpora have their own licenses, and the `en-ar` card names Tatoeba data among them. Whether those licenses allow selling a program that ships the trained weights was **not** checked by a lawyer. Verba is free for non-commercial use under PolyForm Noncommercial, so this does not matter today; **have it checked before any commercial license is sold with the models inside**, or leave them out of that edition.
+- **Not used:** NLLB-200 and similar models with a non-commercial license (see the license section of the README).
+
 ## Personal dictionary files (written by the app, not downloaded)
 
 `personal.txt` (one word per line, editable; a line starting with `-` is a word never to learn automatically) and `learned.txt`

@@ -46,6 +46,20 @@ Word translations from Wiktionary (https://en.wiktionary.org), (c) Wiktionary co
 The file is **not part of the source repository** (`scripts/fetch-dict.ps1` downloads the data and builds it). It is a derivative of Wiktionary and keeps CC BY-SA 4.0 (ShareAlike): it stays a separate file, so the license does not reach Verba's code.
 The Windows installer ships it as a separate file in `data\words\` with the notice in `WORD-LISTS-LICENSE.txt`. License text checked on 2026-11-17, with the wording quoted, in [docs/DATA.md](docs/DATA.md#word-translation-datawordsdicttxt).
 
+## Sentence translation (program and models)
+
+`verba-translate.exe` is a separate program built from `crates/verba-translate`. It contains the following (licenses read from the source files that are compiled in, and from `cargo metadata` on 2026-11-17):
+
+| What | License |
+|---|---|
+| [CTranslate2](https://github.com/OpenNMT/CTranslate2) (SYSTRAN and the OpenNMT authors), compiled in through [ct2rs](https://github.com/jkawamoto/ctranslate2-rs) (Junpei Kawamoto) | MIT |
+| [oneDNN](https://github.com/oneapi-src/oneDNN) (Intel and contributors), compiled in through `onednn-src` | Apache-2.0 |
+| [SentencePiece](https://github.com/google/sentencepiece) (Google), through `sentencepiece-sys` | Apache-2.0 |
+| Rust libraries it pulls in: `anyhow`, `cxx` family, `prost`, `bytes`, `itertools`, `indexmap`, `hashbrown`, `foldhash` (Zlib), `unicode-ident` and others | MIT, Apache-2.0, or both; none is copyleft |
+| `vcomp140.dll`, the Visual C++ OpenMP runtime, shipped next to the program | a redistributable file of Microsoft (Visual Studio "Redist" files) |
+
+The translation models (`models\ar-en`, `models\en-ar`) are OPUS-MT networks by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), converted to int8: **Apache-2.0** per their model cards. See [docs/DATA.md](docs/DATA.md#sentence-translation-models-modelspair) for where they come from and what was not checked (the licenses of the training data).
+
 ## Tools used to build the installer (not shipped)
 
 Inno Setup (its own license; the installer it makes is not covered by it).

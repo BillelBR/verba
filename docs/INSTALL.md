@@ -19,6 +19,12 @@ Every one of these keys can be changed in Settings > Keyboard: click a key, then
 
 Select a word in any app and press **Ctrl+Alt+T** (changeable in Settings > Translate). With nothing selected, the word just before the cursor is used. The translations appear above the word: the arrows choose, **Tab** replaces the word with the chosen one, **Esc** closes. Choose the language to translate into in Settings > Translate; a word that is already in that language goes to the next one. French and Arabic are linked through English when there is no direct entry, which is less exact. Words with attached particles in Arabic (`والكتاب`, `سيارتك`) are found too. The dictionary is Modern Standard Arabic with a few Maghrebi words; it knows no Darija spellings. Everything is offline, and the selected word is read only when you press the shortcut.
 
+### Translating a sentence
+
+Select a sentence (or a few lines, up to 1200 characters) in any app and press the same shortcut, **Ctrl+Alt+T**. Verba says "Translating..." and shows the translation above the selection a moment later (about a second the first time, while the model loads; a fraction of a second after that). **Tab** types it over the selection, **Esc** closes. Spaces and line breaks stay where they were. Arabic goes to English, and text in Latin letters goes to Arabic. It needs the "Sentence translation" option of the setup (about 170 MB on disk) and works offline.
+
+It is Modern Standard Arabic, the Arabic of news and writing. **Algerian Darija is not understood**: the model writes words that do not exist. Check a translation before you send it; a translation program makes mistakes, especially with idioms and names.
+
 ### "Windows protected your PC" (SmartScreen)
 
 The installer is **not code-signed yet** (a certificate costs money and the project is new), so Windows may warn that the publisher is unknown.
@@ -42,6 +48,7 @@ Why the warning exists and what can remove it: [SIGNING.md](SIGNING.md).
 |---|---|
 | The program, `verba.exe` | `%LOCALAPPDATA%\Programs\Verba` (all users: `C:\Program Files\Verba`) |
 | The word lists (English, French, Arabic) | `data\words` inside that folder. CC-BY-SA-4.0, see `WORD-LISTS-LICENSE.txt` |
+| Sentence translation (if ticked): `verba-translate.exe`, `vcomp140.dll` and two models | the same folder and `models\ar-en`, `models\en-ar`. Apache-2.0 and MIT, see `THIRD-PARTY.md` |
 | A Start Menu shortcut (and a desktop one if you tick it) | Start Menu |
 | "Start with Windows" (if ticked) | one value `Verba` in your own `HKCU\...\CurrentVersion\Run` |
 | Your choices (theme, languages, programs) | `%APPDATA%\Verba\settings.txt`, written by the program, not the installer |
@@ -83,6 +90,8 @@ powershell -ExecutionPolicy Bypass -File scripts\build-installer.ps1
 It builds the release program, downloads the word lists if they are missing, runs Inno Setup, and writes `dist\Verba-Setup-<version>.exe` and `dist\Verba-Setup-<version>.exe.sha256`.
 If Inno Setup is not found, set the `ISCC` environment variable to the full path of `ISCC.exe`.
 The version comes from `[workspace.package]` in the root `Cargo.toml`.
+
+The same script builds the sentence translator (`scripts\build-translate.ps1`: CTranslate2 and oneDNN compiled with CMake, about 7 minutes and 7 GB of build files in `target\mt`, needs CMake and the Visual C++ tools) and prepares the two models (`scripts\fetch-models.ps1`: downloads Helsinki-NLP/opus-mt-ar-en and -en-ar and converts them to int8 with a temporary Python 3.10 to 3.13 environment, about 2 minutes each). `-NoSentences` leaves both out for a small installer (`-PythonExe` names the Python to use). `cargo build` and `cargo test` leave `verba-translate` out on purpose (`default-members` in the root `Cargo.toml`). The test that runs the real translator is marked `--ignored`: `cargo test -p verba-app sentences -- --ignored --nocapture` (set `VERBA_TRANSLATE_EXE` and `VERBA_MODELS` if the files are not where the program looks: next to it, then up to six folders above, `target\mt\release` and `models`).
 
 Other pieces: `scripts/make_icon.py` regenerates `crates/verba-app/assets/verba.ico`; `crates/verba-app/build.rs` puts the icon, version information and manifest into `verba.exe` (it needs `rc.exe` from the Windows SDK, and only warns if it is missing); `.cargo/config.toml` links the C runtime statically.
 

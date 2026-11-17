@@ -56,6 +56,8 @@ pub struct Settings {
     pub learn: bool,
     /// The keys that drive the popup: accept, previous, next, close (Tab, left, right and Esc unless the user changed them).
     pub keys: Keys,
+    /// The language a word is translated into (a word in that language goes to the next one: English, then French, then Arabic).
+    pub translate_to: Lang,
     /// Suggest in the language of the keyboard layout (instead of guessing from the letters typed).
     pub follow_keyboard: bool,
     pub app_mode: AppMode,
@@ -76,6 +78,7 @@ impl Default for Settings {
             predict_next: false,
             learn: false,
             keys: Keys::default(),
+            translate_to: Lang::En,
             follow_keyboard: true,
             app_mode: AppMode::AllExcept,
             apps: Vec::new(),
@@ -173,6 +176,16 @@ impl Settings {
                 "key_accept" => s.keys.accept = Binding::parse(value).unwrap_or(Keys::default().accept),
                 "key_prev" => s.keys.prev = Binding::parse(value).unwrap_or(Keys::default().prev),
                 "key_next" => s.keys.next = Binding::parse(value).unwrap_or(Keys::default().next),
+                "key_translate" => {
+                    s.keys.translate = Binding::parse(value).filter(|b| Binding::usable_hotkey(b.vk, b.mods)).unwrap_or(Keys::default().translate)
+                }
+                "translate_to" => {
+                    s.translate_to = match value {
+                        "fr" => Lang::Fr,
+                        "ar" => Lang::Ar,
+                        _ => Lang::En,
+                    }
+                }
                 "key_close" => s.keys.close = Binding::parse(value).unwrap_or(Keys::default().close),
                 "follow_keyboard" => s.follow_keyboard = on,
                 "app_mode" => s.app_mode = if value == "only" { AppMode::OnlyThese } else { AppMode::AllExcept },
@@ -196,7 +209,7 @@ impl Settings {
         let flag = |b: bool| if b { "1" } else { "0" };
         let mode = if self.app_mode == AppMode::OnlyThese { "only" } else { "except" };
         format!(
-            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nfollow_keyboard={}\napp_mode={mode}\napps={}\n",
+            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\ntranslate_to={}\nfollow_keyboard={}\napp_mode={mode}\napps={}\n",
             flag(self.english),
             flag(self.french),
             flag(self.arabic),
@@ -209,6 +222,8 @@ impl Settings {
             self.keys.get(Action::Prev).render(),
             self.keys.get(Action::Next).render(),
             self.keys.get(Action::Close).render(),
+            self.keys.translate.render(),
+            self.translate_to.code(),
             flag(self.follow_keyboard),
             self.apps.join(";")
         )
@@ -310,6 +325,18 @@ mod tests {
         let back = Settings::parse(&s.render());
         assert_eq!(back.keys, s.keys);
         assert_eq!(back, s);
+    }
+
+    #[test]
+    fn the_translate_settings_default_and_survive_a_save() {
+        let d = Settings::default();
+        assert_eq!((d.translate_to, d.keys.translate), (Lang::En, Keys::default().translate));
+        let mut s = Settings::default();
+        s.translate_to = Lang::Ar;
+        s.keys.translate = Binding::new(0x44, crate::keys::MOD_CTRL | crate::keys::MOD_ALT);
+        assert_eq!(Settings::parse(&s.render()), s);
+        // a shortcut that is not a shortcut (no Ctrl or Alt) falls back to the default
+        assert_eq!(Settings::parse("key_translate=9:0").keys.translate, Keys::default().translate);
     }
 
     #[test]

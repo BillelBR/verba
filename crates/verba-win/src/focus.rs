@@ -78,6 +78,32 @@ impl Locator {
 }
 
 impl Locator {
+    /// The word to translate, read right now: the text selected in the focused field, or else the word just before the caret.
+    /// Nothing is kept: the text is returned to the caller. Password fields are never read. `None` when there is no readable field
+    /// or no word.
+    pub fn pick(&self, max_chars: i32) -> Option<Picked> {
+        unsafe {
+            let el = self.uia.GetFocusedElement().ok()?;
+            if is_password(&el) {
+                return None;
+            }
+            let anchor = classic_caret().map(|rect| Anchor { rect, kind: AnchorKind::Caret }).or_else(|| uia_anchor(&el))?;
+            let layout = crate::apps::keyboard_lang();
+            let app = crate::apps::foreground_app().unwrap_or_default();
+            if let Some(text) = uia_selection(&el).or_else(|| classic_edit_selection(400)) {
+                return Some(Picked { text, anchor, layout, app, selected: true });
+            }
+            let before = text_before_caret(&el, max_chars).or_else(|| classic_edit_before_caret(max_chars))?;
+            let word = verba_core::current_word(&before);
+            if word.is_empty() {
+                return None;
+            }
+            Some(Picked { text: word.to_string(), anchor, layout, app, selected: false })
+        }
+    }
+}
+
+impl Locator {
     /// A step-by-step account of reading the focused field, for finding out why a field cannot be read.
     /// It never contains the text itself, only which steps worked.
     pub fn diagnose(&self) -> String {
@@ -125,6 +151,18 @@ impl Locator {
         }
         out
     }
+}
+
+/// What `Locator::pick` found: the word to translate.
+pub struct Picked {
+    pub text: String,
+    pub anchor: Anchor,
+    /// The language of the keyboard in use.
+    pub layout: Option<verba_core::Lang>,
+    /// The program in front, as its file name.
+    pub app: String,
+    /// The text was selected (typing replaces it); otherwise it is the word before the caret (it must be erased to be replaced).
+    pub selected: bool,
 }
 
 /// What `Locator::snapshot` found.
@@ -230,6 +268,74 @@ fn classic_edit_before_caret(max_chars: i32) -> Option<String> {
     }
 }
 
+/// The text selected in the field, through its text pattern (empty selection: `None`).
+unsafe fn uia_selection(el: &IUIAutomationElement) -> Option<String> {
+    unsafe {
+        let tp = el.GetCurrentPatternAs::<IUIAutomationTextPattern>(UIA_TextPatternId).ok()?;
+        let selection = tp.GetSelection().ok()?;
+        if selection.Length().ok()? < 1 {
+            return None;
+        }
+        let range = selection.GetElement(0).ok()?;
+        let text = range.GetText(400).ok()?.to_string();
+        (!text.trim().is_empty()).then_some(text)
+    }
+}
+
+/// The text selected in a classic Windows edit box (Notepad, WinForms, dialogs), read through its own messages.
+/// At most `max_chars` characters; a longer selection gives `None`. Password boxes are skipped.
+fn classic_edit_selection(max_chars: usize) -> Option<String> {
+    unsafe {
+        let mut gti = GUITHREADINFO { cbSize: std::mem::size_of::<GUITHREADINFO>() as u32, ..Default::default() };
+        GetGUIThreadInfo(0, &mut gti).ok()?;
+        classic_edit_selection_of(gti.hwndFocus, max_chars)
+    }
+}
+
+/// The same for one given window (the one with the focus is found by the caller).
+fn classic_edit_selection_of(hwnd: HWND, max_chars: usize) -> Option<String> {
+    use windows::Win32::UI::WindowsAndMessaging::{GWL_STYLE, GetClassNameW, GetWindowLongW, SMTO_ABORTIFHUNG, SendMessageTimeoutW};
+    const EM_GETSEL: u32 = 0x00B0;
+    const WM_GETTEXT: u32 = 0x000D;
+    const WM_GETTEXTLENGTH: u32 = 0x000E;
+    const ES_PASSWORD: u32 = 0x0020;
+    unsafe {
+        if hwnd.is_invalid() {
+            return None;
+        }
+        let mut name = [0u16; 64];
+        let n = GetClassNameW(hwnd, &mut name);
+        let class = String::from_utf16_lossy(&name[..n.max(0) as usize]).to_ascii_lowercase();
+        if !(class == "edit" || class.contains(".edit.") || class.starts_with("richedit")) {
+            return None;
+        }
+        if GetWindowLongW(hwnd, GWL_STYLE) as u32 & ES_PASSWORD != 0 {
+            return None;
+        }
+        let ask = |msg: u32, wp: usize, lp: isize| -> Option<isize> {
+            let mut result = 0usize;
+            let r = SendMessageTimeoutW(hwnd, msg, WPARAM(wp), LPARAM(lp), SMTO_ABORTIFHUNG, 150, Some(&mut result));
+            (r.0 != 0).then_some(result as isize)
+        };
+        let (mut start, mut end) = (0u32, 0u32);
+        ask(EM_GETSEL, &mut start as *mut u32 as usize, &mut end as *mut u32 as isize)?;
+        if end <= start || (end - start) as usize > max_chars {
+            return None;
+        }
+        let len = ask(WM_GETTEXTLENGTH, 0, 0)?.clamp(0, 200_000) as usize;
+        if len == 0 || end as usize > len {
+            return None;
+        }
+        let mut buf = vec![0u16; len + 1];
+        let got = ask(WM_GETTEXT, buf.len(), buf.as_mut_ptr() as isize)?.clamp(0, len as isize) as usize;
+        if (end as usize) > got {
+            return None;
+        }
+        let text = String::from_utf16_lossy(&buf[start as usize..end as usize]);
+        (!text.trim().is_empty()).then_some(text)
+    }
+}
+
 /// Up to `max_chars` characters just before the caret, through the field's text pattern.
 unsafe fn text_before_caret(el: &IUIAutomationElement, max_chars: i32) -> Option<String> {
     unsafe {
@@ -284,4 +390,69 @@ fn read_doubles(sa: *mut SAFEARRAY) -> Vec<f64> {
         let _ = SafeArrayDestroy(sa);
     }
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use windows::Win32::System::LibraryLoader::GetModuleHandleW;
+    use windows::core::w;
+    use windows::Win32::UI::WindowsAndMessaging::{CreateWindowExW, DestroyWindow, SendMessageW, SetWindowTextW, WINDOW_EX_STYLE, WINDOW_STYLE, WS_POPUP};
+
+    /// A real, hidden edit box with some text: the way the classic selection reader sees Notepad. No focus and no keys are involved.
+    fn edit_box(text: &str, style: u32) -> HWND {
+        unsafe {
+            let hinst = GetModuleHandleW(None).unwrap();
+            let hwnd = CreateWindowExW(WINDOW_EX_STYLE(0), w!("EDIT"), w!(""), WINDOW_STYLE(WS_POPUP.0 | style), 0, 0, 300, 40, None, None, Some(hinst.into()), None).unwrap();
+            let wide: Vec<u16> = text.encode_utf16().chain(std::iter::once(0)).collect();
+            SetWindowTextW(hwnd, windows::core::PCWSTR(wide.as_ptr())).unwrap();
+            hwnd
+        }
+    }
+
+    fn select(hwnd: HWND, start: usize, end: usize) {
+        const EM_SETSEL: u32 = 0x00B1;
+        unsafe {
+            SendMessageW(hwnd, EM_SETSEL, Some(WPARAM(start)), Some(LPARAM(end as isize)));
+        }
+    }
+
+    #[test]
+    fn the_selected_text_of_an_edit_box_is_read() {
+        let hwnd = edit_box("please say hello again", 0);
+        select(hwnd, 11, 16);
+        assert_eq!(classic_edit_selection_of(hwnd, 400).as_deref(), Some("hello"));
+        // an Arabic word, counted in UTF-16 units like Windows does
+        let ar = edit_box("\u{0645}\u{0631}\u{062D}\u{0628}\u{0627} \u{0628}\u{0643}", 0);
+        select(ar, 0, 5);
+        assert_eq!(classic_edit_selection_of(ar, 400).as_deref(), Some("\u{0645}\u{0631}\u{062D}\u{0628}\u{0627}"));
+        unsafe {
+            let _ = DestroyWindow(hwnd);
+            let _ = DestroyWindow(ar);
+        }
+    }
+
+    #[test]
+    fn nothing_selected_or_too_much_selected_gives_nothing() {
+        let hwnd = edit_box("one two three", 0);
+        select(hwnd, 4, 4);
+        assert_eq!(classic_edit_selection_of(hwnd, 400), None, "only a caret");
+        select(hwnd, 0, 13);
+        assert_eq!(classic_edit_selection_of(hwnd, 5), None, "longer than the limit");
+        assert_eq!(classic_edit_selection_of(hwnd, 400).as_deref(), Some("one two three"));
+        unsafe {
+            let _ = DestroyWindow(hwnd);
+        }
+    }
+
+    #[test]
+    fn a_password_box_is_never_read() {
+        const ES_PASSWORD: u32 = 0x0020;
+        let hwnd = edit_box("secret", ES_PASSWORD);
+        select(hwnd, 0, 6);
+        assert_eq!(classic_edit_selection_of(hwnd, 400), None);
+        unsafe {
+            let _ = DestroyWindow(hwnd);
+        }
+    }
 }

@@ -390,7 +390,9 @@ fn build_and_present(
         }
         let (hint_layout, hint_tw, hint_th) = text_layout(st.hint.as_str(), false, small_px, false)?;
         let chip_w = hint_tw + 14.0 * s;
-        let hint_w = gap + chip_w;
+        // an empty hint means no key cap at all (a short notice, not a list to choose from)
+        let no_hint = st.hint.is_empty();
+        let hint_w = if no_hint { 0.0 } else { gap + chip_w };
         // the label before the candidates, in the UI language (not the language of the words)
         let lead = match lead_text {
             Some(text) => Some(text_layout(text, false, small_px, true)?),
@@ -473,7 +475,7 @@ fn build_and_present(
         let keep_hover = st.shown.as_ref().and_then(|p| p.hover).filter(|i| *i < items.len());
         let mut shown = Shown {
             items,
-            hint: Some(Hint { layout: hint_layout, chip, divider_x, tw: hint_tw, th: hint_th }),
+            hint: if no_hint { None } else { Some(Hint { layout: hint_layout, chip, divider_x, tw: hint_tw, th: hint_th }) },
             lead,
             selected: selected.min(suggestions.len() - 1),
             hover: keep_hover,

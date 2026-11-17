@@ -7,6 +7,7 @@
 use std::cell::Cell;
 use std::sync::atomic::{AtomicIsize, Ordering};
 
+use verba_core::Lang;
 use verba_win::running_apps;
 use verba_win::ui::{self, ButtonStyle, Config, Ui};
 use verba_win::{Look, Theme};
@@ -28,6 +29,8 @@ const MENU_APP_BASE: usize = 3000;
 thread_local! {
     /// Why the last key the user pressed was not taken (shown on the Keyboard page until the next good key).
     static KEY_PROBLEM: Cell<Option<&'static str>> = const { Cell::new(None) };
+    /// The same for the translate shortcut on the Translate page.
+    static TRANSLATE_PROBLEM: Cell<Option<&'static str>> = const { Cell::new(None) };
     /// Whether "Start with Windows" is on: asked of the registry once, not at every frame.
     static AUTOSTART: Cell<Option<bool>> = const { Cell::new(None) };
 }
@@ -73,10 +76,11 @@ fn draw(ui: &mut Ui) {
     ui.sidebar_begin("Verba", concat!("Version ", env!("CARGO_PKG_VERSION")));
     ui.nav_item("nav:writing", '\u{E70F}', "Writing help", 0);
     ui.nav_item("nav:languages", '\u{E774}', "Languages", 1);
-    ui.nav_item("nav:keys", '\u{E765}', "Keyboard", 2);
-    ui.nav_item("nav:apps", '\u{E71D}', "Apps", 3);
-    ui.nav_item("nav:look", '\u{E790}', "Appearance", 4);
-    ui.nav_item("nav:general", '\u{E713}', "General", 5);
+    ui.nav_item("nav:translate", '\u{E8C1}', "Translate", 2);
+    ui.nav_item("nav:keys", '\u{E765}', "Keyboard", 3);
+    ui.nav_item("nav:apps", '\u{E71D}', "Apps", 4);
+    ui.nav_item("nav:look", '\u{E790}', "Appearance", 5);
+    ui.nav_item("nav:general", '\u{E713}', "General", 6);
     let mut on = !s.paused;
     if ui.sidebar_switch("master", "Suggestions", if on { "On" } else { "Paused" }, &mut on) {
         s.paused = !on;
@@ -85,9 +89,10 @@ fn draw(ui: &mut Ui) {
     match ui.page() {
         0 => writing(ui, &mut s),
         1 => languages(ui, &mut s),
-        2 => keyboard(ui, &mut s),
-        3 => apps(ui, &mut s),
-        4 => appearance(ui, &mut s),
+        2 => translate(ui, &mut s),
+        3 => keyboard(ui, &mut s),
+        4 => apps(ui, &mut s),
+        5 => appearance(ui, &mut s),
         _ => general(ui),
     }
 
@@ -173,6 +178,83 @@ fn languages(ui: &mut Ui, s: &mut Settings) {
         true,
     );
     ui.card_end();
+}
+
+fn translate(ui: &mut Ui, s: &mut Settings) {
+    ui.page_begin("Translate", "Select a word, press the shortcut, and its translations appear. It works offline.");
+    ui.section("Translate into");
+    ui.card_begin();
+    let mut into = match s.translate_to {
+        Lang::Fr => 1,
+        Lang::Ar => 2,
+        _ => 0,
+    };
+    if ui.segmented_row(
+        "translate-to",
+        "Translate into",
+        Some("A word that is already in this language goes to English, then French, then Arabic."),
+        &["English", "Français", "العربية"],
+        &mut into,
+    ) {
+        s.translate_to = match into {
+            1 => Lang::Fr,
+            2 => Lang::Ar,
+            _ => Lang::En,
+        };
+    }
+    ui.card_end();
+
+    ui.section("Shortcut");
+    ui.card_begin();
+    let current = s.keys.translate;
+    let default = Keys::default().translate;
+    let row = ui.key_row(
+        "key:translate",
+        "Translate the selected word",
+        Some("Works in every app. With nothing selected, it translates the word just before the cursor."),
+        &current.label(),
+        current == default,
+    );
+    if let Some((vk, mods)) = row.captured {
+        if Binding::usable_hotkey(vk, mods) {
+            s.keys.translate = Binding::new(vk, mods);
+            TRANSLATE_PROBLEM.with(|p| p.set(None));
+        } else {
+            TRANSLATE_PROBLEM.with(|p| p.set(Some("A shortcut that works in every app needs Ctrl or Alt together with another key.")));
+        }
+    }
+    if row.reset {
+        s.keys.translate = default;
+        TRANSLATE_PROBLEM.with(|p| p.set(None));
+    }
+    ui.note('\u{E946}', "Press the shortcut: the translations appear above the word. Choose with the arrow keys, put one in with Tab, close with Esc.");
+    ui.card_end();
+    if let Some(problem) = TRANSLATE_PROBLEM.with(|p| p.get()) {
+        ui.card_begin();
+        ui.note('\u{E783}', problem);
+        ui.card_end();
+    }
+
+    ui.section("Dictionary");
+    ui.card_begin();
+    match crate::dictionary_words() {
+        Some(n) => ui.info_row(&format!("English, French and Arabic: {} entries", group_thousands(n)), Some("Built from Wiktionary (CC BY-SA 4.0). It never goes online.")),
+        None => ui.info_row("The dictionary is not installed.", Some("The Setup installs it next to the program, in data\\words\\dict.txt.")),
+    }
+    ui.card_end();
+}
+
+/// 12345 -> "12,345".
+fn group_thousands(n: usize) -> String {
+    let digits = n.to_string();
+    let mut out = String::new();
+    for (i, c) in digits.chars().enumerate() {
+        if i > 0 && (digits.len() - i) % 3 == 0 {
+            out.push(',');
+        }
+        out.push(c);
+    }
+    out
 }
 
 fn keyboard(ui: &mut Ui, s: &mut Settings) {

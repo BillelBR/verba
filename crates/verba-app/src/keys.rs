@@ -43,6 +43,11 @@ impl Binding {
         matches!(vk, VK_TAB | VK_RETURN | VK_ESCAPE | 0x21..=0x28 | 0x2D | 0x2E | 0x70..=0x87)
     }
 
+    /// Whether a key can be a shortcut that works in every app (registered with Windows): it needs Ctrl or Alt with it.
+    pub fn usable_hotkey(vk: u32, mods: u8) -> bool {
+        mods & (MOD_CTRL | MOD_ALT) != 0 && Self::usable(vk, mods)
+    }
+
     /// `9:0` for Tab, `39:1` for Ctrl+Right.
     pub fn render(self) -> String {
         format!("{}:{}", self.vk, self.mods)
@@ -113,6 +118,8 @@ pub struct Keys {
     pub prev: Binding,
     pub next: Binding,
     pub close: Binding,
+    /// The shortcut that translates the selected word, in every app (not only while the popup is open).
+    pub translate: Binding,
 }
 
 /// Tab picks, the left and right arrows move, Esc closes.
@@ -121,6 +128,7 @@ pub const DEFAULT_KEYS: Keys = Keys {
     prev: Binding::new(VK_LEFT, 0),
     next: Binding::new(VK_RIGHT, 0),
     close: Binding::new(VK_ESCAPE, 0),
+    translate: Binding::new(0x54, MOD_CTRL | MOD_ALT), // Ctrl+Alt+T
 };
 
 impl Default for Keys {
@@ -223,6 +231,18 @@ mod tests {
                 assert_ne!(a, b);
             }
         }
+    }
+
+    #[test]
+    fn the_translate_shortcut_needs_ctrl_or_alt_and_is_not_swapped_with_the_popup_keys() {
+        assert_eq!(Keys::default().translate.label(), "Ctrl+Alt+T");
+        assert!(Binding::usable_hotkey(0x54, MOD_CTRL | MOD_ALT));
+        assert!(Binding::usable_hotkey(0x71, MOD_ALT), "Alt+F2");
+        assert!(!Binding::usable_hotkey(VK_TAB, 0), "a plain Tab can not be a shortcut for every app");
+        assert!(!Binding::usable_hotkey(0x54, MOD_SHIFT), "Shift alone neither");
+        let mut k = Keys::default();
+        k.assign(Action::Accept, Binding::new(VK_RETURN, 0));
+        assert_eq!(k.translate, DEFAULT_KEYS.translate, "assigning a popup key leaves the shortcut alone");
     }
 
     #[test]

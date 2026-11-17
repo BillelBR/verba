@@ -27,7 +27,7 @@ use keys::{Binding, DEFAULT_KEYS, Keys};
 use settings::{Settings, ThemeMode};
 use verba_core::{Engine, Lang, Suggestion, current_word, current_word_dz};
 use verba_local::{LocalEngine, PersonalDict};
-use verba_win::{Anchor, Locator, Look, Overlay, Snapshot, Theme, describe_foreground, foreground_app, run_with_splash};
+use verba_win::{Anchor, AnchorKind, Locator, Picked, Look, Overlay, Snapshot, Theme, describe_foreground, foreground_app, run_with_splash};
 use windows::Win32::Foundation::{ERROR_ALREADY_EXISTS, GetLastError, HINSTANCE, HWND, LPARAM, LRESULT, POINT, WPARAM};
 use windows::Win32::Graphics::Gdi::{CreateBitmap, DeleteObject};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
@@ -58,6 +58,10 @@ const WM_DISMISS: u32 = WM_APP + 3;
 const WM_SNAPSHOT: u32 = WM_APP + 4;
 /// A key moved the highlight: wParam is 0 for the left key, 1 for the right key.
 const WM_MOVE: u32 = WM_APP + 5;
+/// The reader thread read the word to translate: it is waiting in `PICKED`.
+const WM_TRANSLATE: u32 = WM_APP + 6;
+/// A notice has been on the screen long enough: wParam is its number.
+const WM_NOTICE_END: u32 = WM_APP + 7;
 /// wParam of `WM_ACCEPT` that means "the highlighted one" (a click sends the number of the candidate instead).
 const ACCEPT_HIGHLIGHTED: usize = usize::MAX;
 /// How often the worker thread looks at the app being typed in.
@@ -65,6 +69,7 @@ const POLL_MS: u64 = 120;
 const HOTKEY_QUIT: i32 = 1;
 const HOTKEY_PAUSE: i32 = 2;
 const HOTKEY_APP: i32 = 3;
+const HOTKEY_TRANSLATE: i32 = 4;
 const CMD_PAUSE: usize = 1001;
 const CMD_QUIT: usize = 1002;
 const CMD_APP: usize = 1003;
@@ -77,6 +82,12 @@ const VERBA_KEY_MARK: usize = 0x5645_5242; // "VERB"
 
 // what the keyboard hook needs to know without touching the rest of the program
 static POPUP_VISIBLE: AtomicBool = AtomicBool::new(false);
+/// The translate shortcut was pressed: the reader thread should read the word now.
+static TRANSLATE_REQUEST: AtomicBool = AtomicBool::new(false);
+/// What the reader thread read for a translation (outer `Some` = new, not yet taken; inner `None` = nothing readable).
+static PICKED: Mutex<Option<Option<Picked>>> = Mutex::new(None);
+/// The shortcut that is registered with Windows now.
+static TRANSLATE_KEY: Mutex<Option<Binding>> = Mutex::new(None);
 /// How many candidates the popup shows now.
 static POPUP_COUNT: AtomicUsize = AtomicUsize::new(0);
 /// The key (virtual key code) whose press the hook kept from the app, so that its release is kept too; 0 when none.
@@ -114,7 +125,13 @@ struct App {
     /// The candidate the accept key will pick (the previous and next keys move it), where the popup is, and its label ("Fix").
     selected: usize,
     anchor: Option<Anchor>,
-    lead: Option<&'static str>,
+    lead: Option<String>,
+    /// Set while the popup shows translations: how many characters before the caret to erase when one is chosen (0: the word was
+    /// selected, typing replaces it).
+    translating: Option<usize>,
+    /// A short notice is on the screen (not a list to choose from), and the number of the last one.
+    notice: bool,
+    notice_seq: usize,
     /// The words typed since the last end of a sentence, waiting to be learned (only collected when the user turned learning on).
     learn_buf: String,
     learn_words: usize,
@@ -185,7 +202,7 @@ fn main() {
 
         APP.with(|a| {
             *a.borrow_mut() =
-                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, learn_buf: String::new(), learn_words: 0, files, words_stamp, last_check: Instant::now() });
+                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, last_check: Instant::now() });
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
@@ -194,6 +211,7 @@ fn main() {
         }
         let _ = RegisterHotKey(Some(hwnd), HOTKEY_PAUSE, mods, 'V' as u32);
         let _ = RegisterHotKey(Some(hwnd), HOTKEY_APP, mods, 'A' as u32);
+        with_app(|app| sync_translate_hotkey(hwnd, app.settings.keys.translate));
 
         with_app(|app| app.overlay.set_click_target(hwnd, WM_ACCEPT));
         add_tray(hwnd);
@@ -295,6 +313,8 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
                 HOTKEY_PAUSE => update_settings(|s| s.paused = !s.paused),
                 // the app the user is in right now (the hotkey does not move the focus)
                 HOTKEY_APP => toggle_app(foreground_app()),
+                // the reader thread reads the word (UI Automation must not be called from this thread)
+                HOTKEY_TRANSLATE => TRANSLATE_REQUEST.store(true, Ordering::SeqCst),
                 _ => {}
             }
             LRESULT(0)
@@ -326,6 +346,21 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
             with_app(|app| {
                 let index = if wp.0 == ACCEPT_HIGHLIGHTED { app.selected } else { wp.0 };
                 accept(app, index)
+            });
+            LRESULT(0)
+        }
+        WM_TRANSLATE => {
+            let picked = PICKED.lock().ok().and_then(|mut p| p.take());
+            if let Some(picked) = picked {
+                with_app(|app| show_translation(app, picked));
+            }
+            LRESULT(0)
+        }
+        WM_NOTICE_END => {
+            with_app(|app| {
+                if app.notice && app.notice_seq == wp.0 {
+                    hide(app);
+                }
             });
             LRESULT(0)
         }
@@ -377,6 +412,8 @@ fn hide(app: &mut App) {
     app.shown.clear();
     app.fix = None;
     app.selected = 0;
+    app.translating = None;
+    app.notice = false;
     POPUP_COUNT.store(0, Ordering::SeqCst);
     POPUP_VISIBLE.store(false, Ordering::SeqCst);
 }
@@ -396,6 +433,33 @@ fn spawn_reader() {
         let mut was_paused = false;
         while !QUITTING.load(Ordering::SeqCst) {
             std::thread::sleep(std::time::Duration::from_millis(POLL_MS));
+            // the translate shortcut was pressed: read the selected word (or the one before the caret) now
+            if TRANSLATE_REQUEST.swap(false, Ordering::SeqCst) {
+                let front = foreground_app();
+                let allowed = RULES.lock().ok().and_then(|r| r.as_ref().map(|st| st.allows_app(front.as_deref().unwrap_or("")))).unwrap_or(true);
+                let mut picked = if allowed { locator.pick(48) } else { None };
+                // (a development build can be told which word to translate and where, to look at the popup without a focused field)
+                if cfg!(debug_assertions) {
+                    if let Ok(word) = std::env::var("VERBA_TEST_PICK") {
+                        picked = Some(Picked {
+                            text: word,
+                            anchor: Anchor { rect: windows::Win32::Foundation::RECT { left: 640, top: 520, right: 643, bottom: 540 }, kind: AnchorKind::Caret },
+                            layout: None,
+                            app: String::new(),
+                            selected: true,
+                        });
+                    }
+                }
+                if let Ok(mut slot) = PICKED.lock() {
+                    *slot = Some(picked);
+                }
+                let controller = CONTROLLER.load(Ordering::SeqCst);
+                if controller != 0 {
+                    unsafe {
+                        let _ = PostMessageW(Some(HWND(controller as *mut _)), WM_TRANSLATE, WPARAM(0), LPARAM(0));
+                    }
+                }
+            }
             let paused = PAUSED.load(Ordering::SeqCst);
             // which program is in front: remembered for the tray menu, and checked BEFORE reading anything,
             // so a program the user switched Verba off in is never read at all
@@ -443,6 +507,7 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
         }
         return;
     };
+    app.translating = None;
     let previous = std::mem::replace(&mut app.last_text, snap.before_caret.clone());
     if app.settings.learn && app.settings.allows_app(&snap.app) {
         if let Some((word, separators)) = learning::finished_word(&previous, &snap.before_caret) {
@@ -484,7 +549,7 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
                         original: fix.original,
                         trailing: fix.trailing,
                     });
-                    present(app, snap.anchor, fix.candidates, Some("Fix"));
+                    present(app, snap.anchor, fix.candidates, Some("Fix".to_string()));
                     return;
                 }
             }
@@ -512,8 +577,86 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
     present(app, snap.anchor, found, None);
 }
 
+/// A translation was asked for: the reader thread read the word (or found nothing).
+fn show_translation(app: &mut App, picked: Option<Picked>) {
+    let Some(picked) = picked else {
+        notice(app, None, "Click in a text field, or select a word, then press the shortcut.");
+        return;
+    };
+    let anchor = Some(picked.anchor);
+    if !app.engine.has_dictionary() {
+        notice(app, anchor, "The dictionary is not installed.");
+        return;
+    }
+    let words = picked.text.split_whitespace().count();
+    if words > 3 || picked.text.chars().count() > 40 {
+        notice(app, anchor, "Select one word. Sentences are not translated yet.");
+        return;
+    }
+    // into the language chosen in the settings; a word already in it goes to English, then French, then Arabic
+    let targets = [app.settings.translate_to, Lang::En, Lang::Fr, Lang::Ar];
+    match app.engine.translate_word(&picked.text, &targets, picked.layout) {
+        Some(t) => {
+            let label = format!("{} \u{2192} {}", t.from.code().to_uppercase(), t.to.code().to_uppercase());
+            app.fix = None;
+            app.typed_len = 0;
+            present(app, picked.anchor, t.candidates, Some(label));
+            // present() ran with the old state: this popup is a translation
+            app.translating = Some(if picked.selected { 0 } else { picked.text.chars().count() });
+        }
+        None => {
+            let text = format!("No translation for \u{201C}{}\u{201D}.", picked.text.trim());
+            notice(app, anchor, &text);
+        }
+    }
+}
+
+/// A short message in the popup's style, that goes away by itself after a moment (it is not a list to choose from: no key cap,
+/// and the keys of the popup are not taken).
+fn notice(app: &mut App, anchor: Option<Anchor>, text: &str) {
+    let anchor = anchor.or(app.anchor).unwrap_or_else(|| {
+        // no field to point at: near the mouse
+        let mut at = POINT::default();
+        unsafe {
+            let _ = GetCursorPos(&mut at);
+        }
+        Anchor { rect: windows::Win32::Foundation::RECT { left: at.x, top: at.y, right: at.x + 2, bottom: at.y + 18 }, kind: AnchorKind::Caret }
+    });
+    app.overlay.set_hint("");
+    app.overlay.show_with(anchor, &[Suggestion { text: text.to_string(), lang: Lang::En }], 0, look_for(&app.settings), Some("Verba"));
+    app.shown.clear();
+    app.notice = true;
+    app.notice_seq += 1;
+    let seq = app.notice_seq;
+    std::thread::spawn(move || {
+        std::thread::sleep(std::time::Duration::from_millis(2800));
+        let controller = CONTROLLER.load(Ordering::SeqCst);
+        if controller != 0 {
+            unsafe {
+                let _ = PostMessageW(Some(HWND(controller as *mut _)), WM_NOTICE_END, WPARAM(seq), LPARAM(0));
+            }
+        }
+    });
+}
+
+/// How many words the dictionary holds (summed over its directions), `None` when it is not installed: for the settings window.
+pub(crate) fn dictionary_words() -> Option<usize> {
+    APP.with(|a| {
+        a.try_borrow().ok().and_then(|b| {
+            b.as_ref().and_then(|app| {
+                if !app.engine.has_dictionary() {
+                    return None;
+                }
+                let d = app.engine.dictionary();
+                let langs = [Lang::En, Lang::Fr, Lang::Ar];
+                Some(langs.iter().flat_map(|f| langs.iter().map(move |t| (*f, *t))).filter(|(f, t)| f != t).map(|(f, t)| d.len(f, t)).sum())
+            })
+        })
+    })
+}
+
 /// Shows the candidates. The highlighted one stays when the same words are shown again (the popup only moved).
-fn present(app: &mut App, anchor: Anchor, list: Vec<Suggestion>, lead: Option<&'static str>) {
+fn present(app: &mut App, anchor: Anchor, list: Vec<Suggestion>, lead: Option<String>) {
     let same = app.shown.len() == list.len() && app.shown.iter().zip(&list).all(|(a, b)| a.text == b.text);
     if !same {
         app.selected = 0;
@@ -521,6 +664,7 @@ fn present(app: &mut App, anchor: Anchor, list: Vec<Suggestion>, lead: Option<&'
     app.selected = app.selected.min(list.len().saturating_sub(1));
     app.anchor = Some(anchor);
     app.lead = lead;
+    app.notice = false;
     app.shown = list;
     redraw(app);
     POPUP_COUNT.store(app.shown.len(), Ordering::SeqCst);
@@ -533,7 +677,7 @@ fn redraw(app: &mut App) {
     let k = app.settings.keys;
     let hint = if app.shown.len() >= 2 { format!("{} {}  {}", k.prev.label(), k.next.label(), k.accept.label()) } else { k.accept.label() };
     app.overlay.set_hint(&hint);
-    app.overlay.show_with(anchor, &app.shown, app.selected, look_for(&app.settings), app.lead);
+    app.overlay.show_with(anchor, &app.shown, app.selected, look_for(&app.settings), app.lead.as_deref());
 }
 
 /// The "left" or "right" key (-1 or +1): highlight the candidate on that side, round the end. In an Arabic popup the first
@@ -561,9 +705,11 @@ fn highlight_after(selected: usize, count: usize, toward: isize, rtl: bool) -> u
 fn accept(app: &mut App, index: usize) {
     let Some(chosen) = app.shown.get(index).cloned() else { return };
     // a completion replaces the part of the word typed and adds a space; a fix replaces the whole word and puts back what followed it
-    let (erase, text) = match &app.fix {
-        Some(fix) => (fix.erase, format!("{}{}", chosen.text, fix.trailing)),
-        None => (app.typed_len, format!("{} ", chosen.text)),
+    let (erase, text) = match (&app.translating, &app.fix) {
+        // a translation replaces the selected word (typing over it) or the word before the caret, and adds nothing
+        (Some(erase), _) => (*erase, chosen.text.clone()),
+        (None, Some(fix)) => (fix.erase, format!("{}{}", chosen.text, fix.trailing)),
+        (None, None) => (app.typed_len, format!("{} ", chosen.text)),
     };
     hide(app);
     unsafe {
@@ -670,6 +816,7 @@ pub(crate) fn update_settings(change: impl FnOnce(&mut Settings)) {
         }
         PAUSED.store(app.settings.paused, Ordering::SeqCst);
         share_keys(&app.settings.keys);
+        sync_translate_hotkey(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _), app.settings.keys.translate);
         if !app.settings.learn {
             app.learn_buf.clear();
             app.learn_words = 0;
@@ -683,6 +830,31 @@ pub(crate) fn update_settings(change: impl FnOnce(&mut Settings)) {
     });
     // the settings window, when it is open, shows the new values
     settings_window::refresh();
+}
+
+/// Registers the translate shortcut with Windows (and drops the old one when the user changed it).
+fn sync_translate_hotkey(hwnd: HWND, binding: Binding) {
+    let Ok(mut current) = TRANSLATE_KEY.lock() else { return };
+    if *current == Some(binding) || hwnd.is_invalid() {
+        return;
+    }
+    unsafe {
+        let _ = UnregisterHotKey(Some(hwnd), HOTKEY_TRANSLATE);
+        let mut mods = MOD_NOREPEAT;
+        if binding.mods & keys::MOD_CTRL != 0 {
+            mods |= MOD_CONTROL;
+        }
+        if binding.mods & keys::MOD_ALT != 0 {
+            mods |= MOD_ALT;
+        }
+        if binding.mods & keys::MOD_SHIFT != 0 {
+            mods |= MOD_SHIFT;
+        }
+        if RegisterHotKey(Some(hwnd), HOTKEY_TRANSLATE, mods, binding.vk).is_err() {
+            log("could not register the translate shortcut (another program uses it): choose another in Settings > Translate");
+        }
+    }
+    *current = Some(binding);
 }
 
 fn share_keys(keys: &Keys) {

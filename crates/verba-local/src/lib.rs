@@ -18,6 +18,7 @@ mod fold;
 mod nextword;
 mod personal;
 mod spell;
+mod translate;
 
 pub use dz::{DZ_AR_SEED, DZ_SEED, DzList};
 #[doc(hidden)]
@@ -26,6 +27,7 @@ pub use dz::{dz_ar_key, dz_sound_key};
 pub use nextword::{BuildParams, NextBuilder, NextParams, word_runs};
 pub use nextword::NextTable;
 pub use personal::PersonalDict;
+pub use translate::{Dictionary, Translation};
 #[doc(hidden)]
 pub use personal::UsageParams;
 #[doc(hidden)]
@@ -247,6 +249,8 @@ pub struct LocalEngine {
     personal: PersonalDict,
     /// The bundled next-word tables (see `nextword.rs`).
     next_tables: HashMap<Lang, NextTable>,
+    /// The bilingual dictionary for word translation (see `translate.rs`).
+    dict: Dictionary,
     /// Algerian Darija in Latin letters (see `dz.rs`). Off until switched on.
     dz: Option<DzList>,
     /// The same in Arabic letters. The one `Lang::Dz` switch covers both.
@@ -262,6 +266,7 @@ impl LocalEngine {
             ignored: HashSet::new(),
             personal: PersonalDict::new(),
             next_tables: HashMap::new(),
+            dict: Dictionary::default(),
             dz: None,
             dz_ar: None,
         }
@@ -283,6 +288,10 @@ impl LocalEngine {
             }
         }
         engine.load_next_words_dir(dir);
+        // the bilingual dictionary, when it was downloaded (a missing or unreadable file only means no translation)
+        if let Ok(text) = std::fs::read_to_string(dir.join("dict.txt")) {
+            engine.load_dictionary(&text);
+        }
         engine.remove_bleed();
         Ok(engine)
     }

@@ -10,7 +10,7 @@ It is built to work for every major language, to run fully on your own device, a
 1. **Suggestions** – while you type, Verba offers the word you are likely to write. *(working, v0)*
 2. **Instant correction** – when you finish a word that looks misspelled (you type a space or punctuation), a small **Fix** popup offers the right spelling; **Tab** applies it and keeps your space or punctuation. It is **off by default**: turn it on in Settings. It never changes your text by itself.
 
-3. **Word translation** – select a word (or put the cursor after it) and press **Ctrl+Alt+T**: its translations between English, French and Arabic appear above it; the arrows choose, **Tab** puts one in place. It works offline from a dictionary built from Wiktionary (CC BY-SA 4.0). Translating whole sentences is planned. Algerian Darija is not translated (no good data exists).
+3. **Word translation** – select a word (or put the cursor after it) and press **Ctrl+Alt+T**: its translations between English, French and Arabic appear above it; the arrows choose, **Tab** puts one in place. It works offline from a dictionary built from Wiktionary (CC BY-SA 4.0). Translating whole sentences is planned. Algerian Darija is translated only for its commonest words, in Arabic and in Latin letters (a small glossary, not checked by an Algerian yet).
 
 ## Try it (Windows)
 

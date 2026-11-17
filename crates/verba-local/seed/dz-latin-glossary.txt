@@ -1,0 +1,265 @@
+# Verba - Algerian Darija written in LATIN letters: a small glossary for word translation (Darija -> English, French, Arabic).
+#
+# Written by the Verba authors from their own general knowledge of how Algerians write and what the words mean. It is NOT taken from a
+# corpus and it has NOT been checked by an Algerian reviewer: the reviewer should read it (see docs/ACCURACY.md).
+# License: PolyForm Noncommercial 1.0.0 (same as the code).
+#
+# Format: one entry per line, four fields separated by "|":
+#     spellings (comma separated) | English | French | Arabic
+#   - "; " separates several translations inside a field, most common first; "-" means no translation in that language.
+#   - the spellings are the ones people write (digits stand for letters: 3 = ع, 7 = ح, 9 = ق, 5 = خ). A spelling that is not listed is
+#     still found when it differs only in doubled letters or in vowels (bezzaf, bzaf, bezaf), unless that would be ambiguous.
+#   - a word that English or French knows is translated as English or French first (a Latin word is looked up there before here), unless
+#     the spelling starts with "!": then it is Darija first (wesh, ana, dima ...).
+
+# ============================================================ questions
+wach, wech, !wesh, wash, ouach, ouache | what; is it (question) | quoi; est-ce que | ماذا; هل
+kifach, kifah, kifech, kifesh, kifache, kifash | how | comment | كيف
+3lach, 3lah, 3lech, alach, 3lache, lach | why | pourquoi | لماذا
+win, wine, fine | where | où | أين
+chkoun, chkon, chkun, shkoun, chkoune | who | qui | من
+chhal, ch7al, shhal, chehal, chal | how much; how many | combien | كم
+9adach, 9adeh, 9deh, 9dach, qadach, 9addach, 9edach | how much; how many | combien | كم
+waqtach, wa9tach, waktach, wa9teh, wa9tech | when | quand | متى
+mnin, mnine | where from; when | d'où; quand | من أين
+
+# ============================================================ pronouns and "to be"
+!ana | I; me | je; moi | أنا
+nta, enta | you | tu; toi | أنت
+nti, ntiya, ntia, enti | you (f.) | tu; toi | أنتِ
+howa, hwa, houa, huwa | he; him | il; lui | هو
+hiya, !hia, hya | she; her | elle | هي
+ne7na, nahna, n7na, na7na, nehna, nhna | we | nous | نحن
+ntouma, ntoma, ntuma | you (pl.) | vous | أنتم
+houma, !huma, homa | they | ils; elles | هم
+rani, raani, ranni | I am | je suis | أنا
+!rak | you are | tu es | أنت
+!raki | you are (f.) | tu es | أنتِ
+rah, rahou | he is | il est | هو
+rahi | she is | elle est | هي
+rahna, rana | we are | nous sommes | نحن
+rahom, rahoum | they are | ils sont | هم
+rakom, rakoum | you are (pl.) | vous êtes | أنتم
+
+# ============================================================ there is, still, always, only
+kayen, kayn, kayna | there is | il y a | يوجد
+makach, makanch, makaynch, makayench | there is not | il n'y a pas | لا يوجد
+mazal, mazel, mzal | still; not yet | encore; pas encore | لا يزال
+!dima, dayman, dayma, dayem | always | toujours | دائما
+ghir | only; just; except | seulement; juste; sauf | فقط; غير
+machi, mashi, machii | not; no | pas; non | ليس
+kima | like; as | comme | مثل
+!ki | like; as; when | comme; quand | كما; عندما
+bezzaf, bezaf, bzaf, bzzaf, bezef, bzef, bezzef | a lot; very | beaucoup; très | كثيرا
+bessah, bsah, bessa7, besah, bsa7, bes7 | but; however | mais; pourtant | لكن
+!bach, bash, bch | in order to; so that | pour; afin de | من أجل
+hit, 7it, hitach, khater | because | parce que; car | لأن
+ila, ida | if | si | إذا
+wella, wela, wlla, ola | or | ou | أو
+ewa, ewah | well then; yes | alors; oui | إذن; نعم
+ih, iyeh, eyyeh, ayeh, wah | yes | oui | نعم
+lla, lala | no | non | لا
+!walou, walo, wallou | nothing | rien | لا شيء
+yakhi, yak, yekhi, yaki | right?; isn't it | n'est-ce pas; hein | أليس كذلك
+!sah, s7i7, sahih, s7ih, sa7i7 | true; right; okay | vrai; d'accord | صحيح
+labas | fine; all is well | ça va; bien | لا بأس
+ba9i | still; remaining | encore; reste | لا يزال
+zid, zidou, zayed | more; add | plus; ajoute | زد
+7ata, hata | even; until | même; jusqu'à | حتى
+yemken, yamken | maybe; possible | peut-être; possible | ربما
+lazem, lazm | must; it is necessary | il faut; devoir | يجب
+kolchi, kollchi, kolech, koulchi | everything | tout | كل شيء
+kamel, kamla, kamlin, kamal | all; whole | tout; tous | كل; كامل
+koul, kol | each; every; all | chaque; tout | كل
+ga3, gaa3 | all; at all | tout; du tout | كل; إطلاقا
+kach, kech | some; any | quelque | بعض
+kachma, kechma | something | quelque chose | شيء
+elli, ili, illi | who; which; that | qui; que | الذي
+
+# ============================================================ this, that, here, there
+hada | this | ce; ceci | هذا
+hadi | this (f.) | cette; ceci | هذه
+had | this | ce; cette | هذا
+hadik | that (f.) | celle-là | تلك
+hadak | that | celui-là | ذلك
+hadouk, hadou, hadouma | those; these | ceux-là; ceux-ci | هؤلاء
+hna, hnaya, lahna | here | ici | هنا
+temma, tmma, hnak, hnaka | there | là-bas | هناك
+hakda, hakka, hakdak, haka | like this | comme ça; ainsi | هكذا
+!haja, !7aja, hadja | thing; something | chose; truc | شيء
+hajet, 7ajat | things | choses | أشياء
+chwiya, chwia, !chouia, shwiya, shwia, chwya, chouya, chewia | a little | un peu | قليلا
+
+# ============================================================ small words with a pronoun
+3and, 3end, 3nd, andi, 3andi, 3endi, 3ndi | I have; at | j'ai; chez | عندي
+3andek, 3endek, andek, 3ndek | you have | tu as | عندك
+3andou, 3endou, 3ndou | he has | il a | عنده
+3andha, 3endha | she has | elle a | عندها
+3andna | we have | nous avons | عندنا
+3andhom, 3andhoum | they have | ils ont | عندهم
+m3a, ma3a | with | avec | مع
+m3aya, ma3aya | with me | avec moi | معي
+m3ak, ma3ak | with you | avec toi | معك
+m3ah, ma3ah | with him | avec lui | معه
+3la, ala | on; about | sur; à propos de | على
+3lih | on him | sur lui | عليه
+3lik | on you | sur toi | عليك
+3lia, 3liya | on me | sur moi | علي
+!fi | in | dans; en | في
+!fih | in it; in him | dedans; en lui | فيه
+!lia, liya | to me; for me | à moi; pour moi | لي
+lik | to you; for you | à toi; pour toi | لك
+lih | to him; for him | à lui; pour lui | له
+men, !mn | from; of | de; depuis | من
+mni | from me | de moi | مني
+mnek | from you | de toi | منك
+!bla, !bela | without | sans | بدون
+b3d, ba3d | after; some | après; quelques | بعد
+mba3d, mb3d | afterwards; then | ensuite; après | بعد ذلك
+9bal, 9bel, kbal | before | avant | قبل
+fo9, fouq | above; up | au-dessus; en haut | فوق
+tahet, ta7et | under | sous | تحت
+9odam, 9eddam | in front of | devant | أمام
+wara, wra | behind | derrière | وراء
+ta3 | of; belonging to | de; à | تاع
+ta3i | mine | à moi | تاعي
+ta3ek | yours | à toi | تاعك
+ta3ou | his | à lui | تاعه
+ta3ha | hers | à elle | تاعها
+ta3na | ours | à nous | تاعنا
+
+# ============================================================ time and place
+lyoum, elyoum, lyom | today | aujourd'hui | اليوم
+ghodwa, ghodoua, ghoudwa, ghdwa, ghedwa | tomorrow | demain | غدا
+lbare7, lbarh, lbarah, lbar7, elbare7 | yesterday | hier | أمس
+doka, dok, douka, douk | now | maintenant | الآن
+bekri, bkri, mbekri | early | tôt | باكرا
+sbah, sba7 | morning | matin | صباح
+3chiya, 3chia | evening | soir | مساء
+lila | night | nuit | ليل
+nhar | day | jour | نهار
+wa9t, waqt, wakt, wa9et | time | temps; fois | وقت
+sa3a | hour; watch | heure; montre | ساعة
+da9i9a, d9i9a, dqiqa | minute | minute | دقيقة
+chhar, chahr, chehr | month | mois | شهر
+3am | year | an; année | عام
+!sna, !sena, snin | year; years | année; ans | سنة
+marra, mara, mrat, merra | time; once | fois; une fois | مرة
+!dar | house; home | maison | بيت
+bit | room | chambre | غرفة
+blad, !bled, blade | country; town | pays; ville | بلد
+dzayer, dzair, djazair, !dz, dzaer, djazayer | Algeria; Algiers | Algérie; Alger | الجزائر
+dzairi, dzayri, dzayeri, djazayri | Algerian | algérien | جزائري
+wahran | Oran | Oran | وهران
+qacentina, 9acentina | Constantine | Constantine | قسنطينة
+
+# ============================================================ greetings and everyday phrases
+salam, slm, slam | hello; peace | salut; paix | سلام
+assalam, assalamou, aleykoum, 3alikoum, 3alaykoum, wa3alaykoum | peace be upon you | que la paix soit sur vous | السلام عليكم
+ahla, ahlan, ahlen | hello; welcome | salut; bienvenue | أهلا
+marhba, marhaba, mer7ba, mrhba | welcome; hello | bienvenue; bonjour | مرحبا
+msa, mssa | good evening | bonsoir | مساء الخير
+tsbah, tesbah, tsba7, tosbah | good morning | bonjour | صباح الخير
+bslama, besslama, beslama | goodbye | au revoir | مع السلامة
+inchallah, inchaallah, inshallah, inchalah, nchallah, nchalah, incha | God willing | si Dieu le veut | إن شاء الله
+machallah, mashallah, machalah | what God has willed (praise) | machallah; bravo | ما شاء الله
+!wallah, wallahi, wellah, walah, wlh | I swear; by God | je jure; par Dieu | والله
+hamdoullah, hamdolah, hamdullah, hamdoulah, hamdoulilah, hamdolilah, elhamdoulilah, alhamdoulilah | thank God | Dieu merci; louange à Dieu | الحمد لله
+bismillah, besmellah | in the name of God | au nom de Dieu | بسم الله
+subhanallah, soubhanallah, sobhanallah | glory to God | gloire à Dieu | سبحان الله
+tbarkellah, tbarkallah, tbarak, barakallah | God bless | que Dieu bénisse | بارك الله
+yerham, yerhamou, yerhmou, yarhamou | may God have mercy on him | que Dieu lui fasse miséricorde | يرحمه
+yahdik | may God guide you | que Dieu te guide | يهديك
+ya3tik | thank you (may God give you health) | merci | يعطيك الصحة
+mabrouk, mebrouk, mbrouk | congratulations | félicitations | مبروك
+smah, smahli, smahni, samehni | excuse me; sorry; forgive me | excuse-moi; pardon | سامحني
+3afak | please | s'il te plaît | من فضلك
+chokran, choukran, shokran | thank you | merci | شكرا
+saha, sa7a, essa7a, ssa7a, essaha, sa7it, sahit, sahha | thank you; well done; health | merci; bravo; santé | شكرا; صحة
+
+# ============================================================ family and people
+khouya, khoya, 5ouya, khouia | my brother; bro | mon frère; mec | أخي
+khti, okhti, ukhti | my sister | ma sœur | أختي
+yema, yma, ima | mom | maman | أمي
+baba | dad | papa | أبي
+jeddi, jedi | my grandfather | mon grand-père | جدي
+jedda, jeddati | my grandmother | ma grand-mère | جدتي
+3ami, 3mi | my uncle | mon oncle | عمي
+khali | my maternal uncle | mon oncle maternel | خالي
+khalti | my maternal aunt | ma tante maternelle | خالتي
+3amti | my aunt | ma tante | عمتي
+weldi, wlidi | my son | mon fils | ابني
+bnti, benti | my daughter | ma fille | ابنتي
+wled, wlad, ouled, oulad | boys; kids; sons | garçons; enfants; fils | أولاد
+benat, bnat | girls | filles | بنات
+rajel, radjel | man; husband | homme; mari | رجل
+mrati | my wife | ma femme | زوجتي
+mra | woman | femme | امرأة
+zouji, zoudj | my husband; my wife; spouse | mon mari; ma femme; mon conjoint | زوجي
+sahbi, sa7bi, sa7ebi, sahebi | my friend | mon ami | صديقي
+3ziz, 3zizi, 3azizi | dear | cher | عزيزي
+habibi, 7bibi, hbibi, habibti, 7bibti, hbibti | my dear; my love | mon chéri; ma chérie | حبيبي
+rouhi, ro7i | my soul; my dear | mon âme; mon chéri | روحي
+9albi, galbi | my heart | mon cœur | قلبي
+3omri | my life; my darling | ma vie; mon chéri | عمري
+sidi | sir; my lord | monsieur | سيدي
+lalla | madam | madame | سيدتي
+nass, nas | people | gens | الناس
+bnadem, bnadam, benadem | person; human being | personne; être humain | إنسان
+
+# ============================================================ adjectives
+mlih, mli7, mlah | good; fine | bon; bien | جيد
+zwin, zouin, zwina, zin, zine | beautiful; nice | beau; joli | جميل
+khayeb, khayba | bad | mauvais | سيء
+kbir, kbira, kebir | big; old | grand; vieux | كبير
+sghir, sghira, seghir | small; young | petit; jeune | صغير
+twil, twila | long; tall | long; grand | طويل
+jdid, jdida | new | nouveau | جديد
+9dim, 9dima | old | vieux; ancien | قديم
+ghali, ghalia | expensive | cher | غالي
+rkhis, rkhiss | cheap | bon marché | رخيص
+skhoun, sakhoun | hot | chaud | ساخن
+bared, bard | cold | froid | بارد
+ta3ban, ta3bana, 3yan, 3yit, 3iyit | tired | fatigué | تعبان
+farhan, far7an | happy | content; heureux | فرحان
+z3fan, za3fan | angry | en colère | زعفان
+hzin, hazin | sad | triste | حزين
+mrid | sick | malade | مريض
+ghalat, ghelet | wrong; mistake | faux; erreur | خطأ
+kdeb, kdhab | lie | mensonge; mentir | كذب
+tayeb | good; cooked | bon; cuit | طيب
+nichan | straight; exactly | tout droit; exactement | تماما
+khayef | afraid | peur; effrayé | خايف
+hbel, hbal, mahboul | crazy; nonsense | fou; n'importe quoi | مجنون
+jou3an, jou3 | hungry | affamé; faim | جائع
+3atchan | thirsty | assoiffé | عطشان
+7lou, hlou, helwa | sweet; nice | doux; sucré; joli | حلو
+
+# ============================================================ verbs (the way people type them: I / you / imperative)
+ndir, !dir, tdir | I do; do; you do | je fais; fais; tu fais | أفعل; افعل
+nroh, !roh, troh | I go; go; you go | je vais; va; tu vas | أذهب; اذهب
+nemchi, mchi, tmchi, mchit | I go; go; you go; I went | je vais; va; tu vas; je suis parti | أذهب; اذهب; ذهبت
+nji, !ja, tji, jit | I come; he came; you come; I came | je viens; il est venu; tu viens; je suis venu | آتي; جاء; أتيت
+njib, !jib, tjib | I bring; bring | j'apporte; apporte | أجلب; اجلب
+nakol, koul, takol | I eat; eat | je mange; mange | آكل; كل
+nechrab, echrab, tchrab | I drink; drink | je bois; bois | أشرب; اشرب
+nrgod, rgod, trgod | I sleep; sleep | je dors; dors | أنام; نم
+nahder, hder, thder | I talk; talk | je parle; parle | أتكلم; تكلم
+nechouf, chouf, tchouf | I see; look | je vois; regarde | أرى; انظر
+nsma3, sma3, tsma3 | I hear; listen | j'entends; écoute | أسمع; اسمع
+nkhdem, khdem, tkhdem | I work; work | je travaille; travaille | أعمل; اعمل
+nbghi, nabghi, bghit, tbghi, ybghi | I want; I love; I wanted; you want; he wants | je veux; j'aime; je voulais; tu veux; il veut | أريد; أحب
+n9der, 9der, t9der, ngdar | I can; can; you can | je peux; peux; tu peux | أستطيع
+3raf, n3ref, t3ref, ma3rftch | know; I know; you know; I do not know | savoir; je sais; tu sais; je ne sais pas | أعرف; لا أعرف
+fhemt, nfhem, tfhem | I understood; I understand; you understand | j'ai compris; je comprends; tu comprends | فهمت; أفهم
+nsit, nensa, tensa | I forgot; I forget; you forget | j'ai oublié; j'oublie; tu oublies | نسيت; أنسى
+kteb, nekteb | write; I write | écris; j'écris | اكتب; أكتب
+9ra, ne9ra, n9ra | read; I read; study | lis; je lis; étudier | اقرأ; أقرأ
+dkhol, dkhel, ndkhol | enter; go in; I enter | entre; entrer | ادخل; أدخل
+okhrodj, khrodj, nekhrodj | go out; I go out | sors; sortir | اخرج; أخرج
+tfah, tfaha | fall; fell | tomber; tombé | سقط
+hbet, nehbet | go down; I go down | descendre; je descends | انزل; أنزل
+tla3, netla3 | go up; I go up | monter; je monte | اصعد; أصعد
+3awed | repeat; again | répète; encore | أعد
+esna, stenna | wait | attends | انتظر
+sali, sali | finish | finis | أنهي

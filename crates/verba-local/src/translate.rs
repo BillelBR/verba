@@ -32,6 +32,102 @@ const PIVOT_WIDTH: usize = 3;
 #[derive(Default)]
 pub struct Dictionary {
     pairs: HashMap<(Lang, Lang), HashMap<String, Vec<String>>>,
+    /// Algerian Darija written in Latin letters (a small glossary shipped with the program).
+    latin: LatinGlossary,
+}
+
+/// One word of the Latin Darija glossary, with its translations.
+#[derive(Default)]
+struct LatinEntry {
+    en: Vec<String>,
+    fr: Vec<String>,
+    ar: Vec<String>,
+}
+
+/// Darija in Latin letters (`wach`, `bezzaf`, `3andi`): there is no standard spelling, so a word is found by the spellings listed for it,
+/// then by its consonants alone (`bzaf`, `bezaf`, `bzzaf` all have `bzf`), unless two entries share them.
+#[derive(Default)]
+struct LatinGlossary {
+    entries: Vec<LatinEntry>,
+    exact: HashMap<String, usize>,
+    /// consonant skeleton -> entry; `None` when two entries have the same skeleton (then it is not used)
+    skeleton: HashMap<String, Option<usize>>,
+    /// spellings (keys) that are Darija even though English or French has the same word (marked with `!` in the file)
+    priority: std::collections::HashSet<String>,
+}
+
+/// A Latin word as a key: lower case, letters and digits only, doubled letters made single (`bezzaf` -> `bezaf`).
+fn latin_key(word: &str) -> String {
+    let mut out = String::new();
+    for c in word.chars().flat_map(char::to_lowercase) {
+        if c.is_ascii_alphanumeric() && out.chars().last() != Some(c) {
+            out.push(c);
+        }
+    }
+    out
+}
+
+/// The key without vowels (`bezaf` -> `bzf`); digits stay, they stand for consonants.
+fn skeleton(key: &str) -> String {
+    key.chars().filter(|c| !"aeiouy".contains(*c)).collect()
+}
+
+impl LatinGlossary {
+    fn parse(text: &str) -> Self {
+        let mut g = Self::default();
+        for line in text.lines() {
+            let line = line.trim();
+            if line.is_empty() || line.starts_with('#') {
+                continue;
+            }
+            let fields: Vec<&str> = line.split('|').map(str::trim).collect();
+            if fields.len() < 4 {
+                continue;
+            }
+            let list = |f: &str| -> Vec<String> { if f == "-" { vec![] } else { f.split(';').map(|t| t.trim().to_string()).filter(|t| !t.is_empty()).collect() } };
+            let index = g.entries.len();
+            g.entries.push(LatinEntry { en: list(fields[1]), fr: list(fields[2]), ar: list(fields[3]) });
+            for spelling in fields[0].split(',') {
+                let spelling = spelling.trim();
+                let first = spelling.starts_with('!');
+                let key = latin_key(spelling);
+                if first && !key.is_empty() {
+                    g.priority.insert(key.clone());
+                }
+                if key.is_empty() {
+                    continue;
+                }
+                g.exact.entry(key.clone()).or_insert(index);
+                let sk = skeleton(&key);
+                if sk.chars().count() >= 3 {
+                    match g.skeleton.get(&sk) {
+                        Some(Some(other)) if *other != index => {
+                            g.skeleton.insert(sk, None);
+                        }
+                        Some(_) => {}
+                        None => {
+                            g.skeleton.insert(sk, Some(index));
+                        }
+                    }
+                }
+            }
+        }
+        g
+    }
+
+    fn find(&self, word: &str) -> Option<&LatinEntry> {
+        let key = latin_key(word);
+        if let Some(&i) = self.exact.get(&key) {
+            return self.entries.get(i);
+        }
+        let sk = skeleton(&key);
+        if sk.chars().count() >= 3 {
+            if let Some(Some(i)) = self.skeleton.get(&sk) {
+                return self.entries.get(*i);
+            }
+        }
+        None
+    }
 }
 
 /// The answer to a lookup.
@@ -97,6 +193,7 @@ impl Dictionary {
     pub fn parse_with_fixes(text: &str) -> Self {
         let mut dict = Self::parse(text);
         dict.apply_fixes(include_str!("../seed/dict-fixes.txt"));
+        dict.latin = LatinGlossary::parse(include_str!("../seed/dz-latin-glossary.txt"));
         dict
     }
 
@@ -214,6 +311,11 @@ impl Dictionary {
                 _ => vec![Lang::En, Lang::Fr],
             }
         };
+        if self.latin.priority.contains(&latin_key(asked)) && !is_arabic_word(asked) {
+            if let Some(t) = self.darija(asked, targets) {
+                return Some(t);
+            }
+        }
         for from in sources {
             for &to in targets.iter().filter(|t| **t != from) {
                 if let Some((list, via_english)) = self.lookup(from, to, asked) {
@@ -223,6 +325,32 @@ impl Dictionary {
                         .map(|t| Suggestion { text: if to == Lang::Ar { t } else { match_case(asked, &t) }, lang: to })
                         .collect();
                     return Some(Translation { from, to, word: asked.to_string(), candidates, via_english });
+                }
+            }
+        }
+        // a Latin word that neither English nor French knows may be Algerian Darija in Latin letters
+        self.darija(asked, targets)
+    }
+
+    /// A Latin word looked up in the Darija glossary.
+    fn darija(&self, asked: &str, targets: &[Lang]) -> Option<Translation> {
+        if asked.chars().all(|c| c.is_ascii_alphanumeric() || c == '\'' || c == '-') {
+            if let Some(entry) = self.latin.find(asked) {
+                for &to in targets {
+                    let list = match to {
+                        Lang::En => &entry.en,
+                        Lang::Fr => &entry.fr,
+                        Lang::Ar => &entry.ar,
+                        _ => continue,
+                    };
+                    if !list.is_empty() {
+                        let candidates = list
+                            .iter()
+                            .take(MAX_TRANSLATIONS)
+                            .map(|t| Suggestion { text: if to == Lang::Ar { t.clone() } else { match_case(asked, t) }, lang: to })
+                            .collect();
+                        return Some(Translation { from: Lang::Dz, to, word: asked.to_string(), candidates, via_english: false });
+                    }
                 }
             }
         }
@@ -354,6 +482,24 @@ mod tests {
         let mut shipped = Dictionary::default();
         shipped.apply_fixes(include_str!("../seed/dict-fixes.txt"));
         assert!(shipped.len(Lang::Ar, Lang::En) >= 10 && shipped.len(Lang::Ar, Lang::Fr) >= 10);
+    }
+
+    #[test]
+    fn darija_in_latin_letters_is_translated_when_english_and_french_do_not_know_the_word() {
+        let d = Dictionary::parse_with_fixes("en>fr\tfilm\tfilm\n");
+        let t = d.translate("bezzaf", &[Lang::En], None).unwrap();
+        assert_eq!((t.from, t.to), (Lang::Dz, Lang::En));
+        assert_eq!(t.candidates[0].text, "a lot");
+        // other spellings of the same word
+        for spelling in ["bzaf", "bezaf", "Bzzaf", "BEZZEF"] {
+            assert_eq!(d.translate(spelling, &[Lang::Fr], None).unwrap().candidates[0].text.to_lowercase(), "beaucoup", "{spelling}");
+        }
+        assert_eq!(d.translate("wach", &[Lang::Ar], None).unwrap().candidates[0].text, "ماذا");
+        assert_eq!(d.translate("3andi", &[Lang::En], None).unwrap().candidates[0].text, "I have");
+        assert_eq!(d.translate("Dima", &[Lang::Fr], None).unwrap().candidates[0].text, "Toujours", "a capital stays a capital");
+        // a French or English word is not taken for Darija
+        assert_eq!(d.translate("film", &[Lang::Fr], None).unwrap().from, Lang::En);
+        assert!(d.translate("qwertz", &[Lang::En], None).is_none());
     }
 
     #[test]

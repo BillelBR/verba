@@ -6,6 +6,8 @@ use std::path::PathBuf;
 
 use verba_core::Lang;
 
+use crate::keys::{Action, Binding, Keys};
+
 /// Programs where Verba is always off, whatever the user chose: it must never read what is typed into a vault.
 pub const ALWAYS_OFF: &[&str] = &[
     "verba.exe",
@@ -52,6 +54,8 @@ pub struct Settings {
     pub predict_next: bool,
     /// Learn the words the user types, on this PC only, to offer them later (off until the user turns it on).
     pub learn: bool,
+    /// The keys that drive the popup: accept, previous, next, close (Tab, left, right and Esc unless the user changed them).
+    pub keys: Keys,
     /// Suggest in the language of the keyboard layout (instead of guessing from the letters typed).
     pub follow_keyboard: bool,
     pub app_mode: AppMode,
@@ -71,6 +75,7 @@ impl Default for Settings {
             correction: false,
             predict_next: false,
             learn: false,
+            keys: Keys::default(),
             follow_keyboard: true,
             app_mode: AppMode::AllExcept,
             apps: Vec::new(),
@@ -165,6 +170,10 @@ impl Settings {
                 "correction" => s.correction = on,
                 "predict_next" => s.predict_next = on,
                 "learn" => s.learn = on,
+                "key_accept" => s.keys.accept = Binding::parse(value).unwrap_or(Keys::default().accept),
+                "key_prev" => s.keys.prev = Binding::parse(value).unwrap_or(Keys::default().prev),
+                "key_next" => s.keys.next = Binding::parse(value).unwrap_or(Keys::default().next),
+                "key_close" => s.keys.close = Binding::parse(value).unwrap_or(Keys::default().close),
                 "follow_keyboard" => s.follow_keyboard = on,
                 "app_mode" => s.app_mode = if value == "only" { AppMode::OnlyThese } else { AppMode::AllExcept },
                 "apps" => {
@@ -187,7 +196,7 @@ impl Settings {
         let flag = |b: bool| if b { "1" } else { "0" };
         let mode = if self.app_mode == AppMode::OnlyThese { "only" } else { "except" };
         format!(
-            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\nfollow_keyboard={}\napp_mode={mode}\napps={}\n",
+            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nfollow_keyboard={}\napp_mode={mode}\napps={}\n",
             flag(self.english),
             flag(self.french),
             flag(self.arabic),
@@ -196,6 +205,10 @@ impl Settings {
             flag(self.correction),
             flag(self.predict_next),
             flag(self.learn),
+            self.keys.get(Action::Accept).render(),
+            self.keys.get(Action::Prev).render(),
+            self.keys.get(Action::Next).render(),
+            self.keys.get(Action::Close).render(),
             flag(self.follow_keyboard),
             self.apps.join(";")
         )
@@ -284,6 +297,25 @@ mod tests {
         s.set_lang(Lang::Dz, false);
         assert!(!s.darija);
         assert_eq!(Settings::parse(&Settings { darija: true, ..Settings::default() }.render()).darija, true);
+    }
+
+    #[test]
+    fn the_keys_default_to_tab_left_right_esc_and_survive_a_save() {
+        let d = Settings::default();
+        assert_eq!(d.keys, Keys::default());
+        let mut s = Settings::default();
+        s.keys.assign(Action::Accept, Binding::new(0x0D, 0));
+        s.keys.assign(Action::Next, Binding::new(0x28, 0));
+        s.keys.assign(Action::Prev, Binding::new(0x26, 0));
+        let back = Settings::parse(&s.render());
+        assert_eq!(back.keys, s.keys);
+        assert_eq!(back, s);
+    }
+
+    #[test]
+    fn a_bad_key_in_the_file_falls_back_to_its_default() {
+        let s = Settings::parse("key_accept=65:0\nkey_next=oops\nkey_prev=37:0");
+        assert_eq!(s.keys, Keys::default(), "a letter alone cannot be a key, text that is not a key is ignored");
     }
 
     #[test]

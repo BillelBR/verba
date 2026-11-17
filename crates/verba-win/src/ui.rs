@@ -34,14 +34,14 @@ use windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT_UNKNOWN;
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::UI::HiDpi::{AdjustWindowRectExForDpi, DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, GetDpiForSystem, SetProcessDpiAwarenessContext};
 use windows::Win32::UI::Input::KeyboardAndMouse::{
-    GetKeyState, ReleaseCapture, SetCapture, TME_LEAVE, TRACKMOUSEEVENT, TrackMouseEvent, VK_DOWN, VK_ESCAPE, VK_LEFT, VK_RETURN, VK_RIGHT,
-    VK_SHIFT, VK_SPACE, VK_TAB, VK_UP,
+    GetKeyState, ReleaseCapture, SetCapture, TME_LEAVE, TRACKMOUSEEVENT, TrackMouseEvent, VK_CONTROL, VK_DOWN, VK_ESCAPE, VK_LEFT,
+    VK_MENU, VK_RETURN, VK_RIGHT, VK_SHIFT, VK_SPACE, VK_TAB, VK_UP,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
     CreateWindowExW, DefWindowProcW, DestroyWindow, GetClientRect, GetSystemMetrics, HICON, IDC_ARROW, IDC_HAND, IsWindow, KillTimer, LoadCursorW,
     RegisterClassW, SM_CXSCREEN, SM_CYSCREEN, SW_SHOW, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, SWP_SHOWWINDOW, SetCursor, SetForegroundWindow, SetTimer,
     SetWindowPos, ShowWindow, WINDOW_EX_STYLE, WM_CLOSE, WM_DESTROY, WM_ERASEBKGND, WM_KEYDOWN, WM_LBUTTONDOWN, WM_LBUTTONUP, WM_MOUSEMOVE,
-    WM_PAINT, WM_SETCURSOR, WM_SIZE, WM_TIMER, WNDCLASSW, WS_CAPTION, WS_MINIMIZEBOX, WS_OVERLAPPED, WS_SYSMENU,
+    WM_PAINT, WM_SETCURSOR, WM_SIZE, WM_SYSCHAR, WM_SYSKEYDOWN, WM_TIMER, WNDCLASSW, WS_CAPTION, WS_MINIMIZEBOX, WS_OVERLAPPED, WS_SYSMENU,
 };
 use windows::core::{BOOL, PCWSTR, w};
 use windows_numerics::{Matrix3x2, Vector2};
@@ -198,6 +198,15 @@ pub enum ButtonStyle {
     Danger,
 }
 
+/// What a key row tells back.
+#[derive(Clone, Copy, Default)]
+pub struct KeyRow {
+    /// The user pressed a key (virtual key code, modifiers: 1 Ctrl, 2 Alt, 4 Shift) while the row waited for one.
+    pub captured: Option<(u32, u8)>,
+    /// The user pressed the button that puts the original key back.
+    pub reset: bool,
+}
+
 /// What a widget tells back.
 #[derive(Clone, Copy, Default)]
 pub struct Resp {
@@ -232,6 +241,10 @@ struct Input {
     right: bool,
     up: bool,
     down_key: bool,
+    /// A key pressed while a key row was waiting for one (virtual key code, modifiers: 1 Ctrl, 2 Alt, 4 Shift).
+    captured: Option<(u32, u8)>,
+    /// Esc was pressed while a key row was waiting: give up.
+    capture_cancel: bool,
 }
 
 struct UiState {
@@ -249,6 +262,8 @@ struct UiState {
     view_h: f32,
     hand: bool,
     reveal: Option<R>,
+    /// The key row waiting for the user to press a key.
+    capture: Option<u64>,
     last: Instant,
 }
 
@@ -269,6 +284,7 @@ impl UiState {
             view_h: 0.0,
             hand: false,
             reveal: None,
+            capture: None,
             last: Instant::now(),
         }
     }
@@ -885,6 +901,66 @@ impl<'a> Ui<'a> {
         removed
     }
 
+    /// A row with a title, a description and a key cap: click it, then press the new key. `label` is the current key; `is_default`
+    /// says whether it is the original one (the reset button is only offered when it is not).
+    pub fn key_row(&mut self, name: &str, title: &str, desc: Option<&str>, label: &str, is_default: bool) -> KeyRow {
+        let id = id_of(name);
+        let (cap_w, reset_w) = (132.0, 32.0);
+        let r = self.row(title, desc, cap_w + 8.0 + reset_w, ROW_MIN);
+        let p = self.p;
+        let top = r.y + (r.h - 32.0) / 2.0;
+        let reset_r = R::new(r.right() - ROW_PAD_X - reset_w, top, reset_w, 32.0);
+        let cap = R::new(reset_r.x - 8.0 - cap_w, top, cap_w, 32.0);
+        let mut out = KeyRow::default();
+
+        let resp = self.hit(id, cap, true);
+        if resp.clicked {
+            self.s.capture = Some(id);
+            self.s.animating = true;
+        } else if self.s.capture == Some(id) {
+            if self.input.pressed && !self.pointer_inside(cap) {
+                // a click elsewhere gives up
+                self.s.capture = None;
+            } else if let Some(k) = self.input.captured {
+                out.captured = Some(k);
+                self.s.capture = None;
+                self.s.animating = true;
+            } else if self.input.capture_cancel {
+                self.s.capture = None;
+                self.s.animating = true;
+            }
+        }
+        let waiting = self.s.capture == Some(id);
+        let a = self.anim(id ^ 0x66, if waiting { 1.0 } else if resp.hover { 0.5 } else { 0.0 }, 0.12);
+        let fill = mix(p.field, mix(p.field, p.text, 0.12), a.min(0.6));
+        let stroke = if waiting { (p.accent, 2.0) } else { (p.border, 1.0) };
+        self.push(Cmd::Rect { r: cap, radius: 6.0, fill: Some(fill), stroke: Some(stroke) });
+        let (text, font, color) = if waiting { ("Press a key\u{2026}", Font::Text, p.muted) } else { (label, Font::Semibold, p.text) };
+        let (tw, th) = self.measure(text, 13.0, font, cap_w - 8.0);
+        self.text(cap.x + (cap.w - tw) / 2.0, cap.y + (cap.h - th) / 2.0, text, 13.0, font, color, cap_w - 8.0);
+        if resp.focused && self.s.focus_visible {
+            self.focus_ring(cap, 6.0);
+        }
+
+        // the button that puts the original key back
+        let rid = id_of(&format!("{name}:reset"));
+        let rresp = self.hit(rid, reset_r, !is_default);
+        if !is_default {
+            let ra = self.anim(rid ^ 0x77, if rresp.hover { 1.0 } else { 0.0 }, 0.1);
+            if ra > 0.0 {
+                self.push(Cmd::Rect { r: reset_r, radius: 6.0, fill: Some(with_alpha(p.hover, 1.4 * ra)), stroke: None });
+            }
+            self.glyph(reset_r, '\u{E7A7}', 14.0, p.text);
+            if rresp.focused && self.s.focus_visible {
+                self.focus_ring(reset_r, 6.0);
+            }
+            if rresp.clicked {
+                out.reset = true;
+            }
+        }
+        out
+    }
+
     /// Adds space under the last thing.
     pub fn space(&mut self, h: f32) {
         self.cy += h;
@@ -1119,7 +1195,22 @@ unsafe extern "system" fn wndproc(hwnd: HWND, msg: u32, wp: WPARAM, lp: LPARAM) 
                 let _ = InvalidateRect(Some(hwnd), None, false);
                 LRESULT(0)
             }
+            WM_SYSKEYDOWN => {
+                if capture_key(hwnd, wp.0 as u32) {
+                    return LRESULT(0);
+                }
+                DefWindowProcW(hwnd, msg, wp, lp)
+            }
+            WM_SYSCHAR => {
+                if with_ctx(|c| c.ui.capture.is_some()).unwrap_or(false) {
+                    return LRESULT(0);
+                }
+                DefWindowProcW(hwnd, msg, wp, lp)
+            }
             WM_KEYDOWN => {
+                if capture_key(hwnd, wp.0 as u32) {
+                    return LRESULT(0);
+                }
                 let vk = wp.0 as u16;
                 let shift = GetKeyState(VK_SHIFT.0 as i32) < 0;
                 let mut handled = true;
@@ -1170,6 +1261,31 @@ unsafe extern "system" fn wndproc(hwnd: HWND, msg: u32, wp: WPARAM, lp: LPARAM) 
             _ => DefWindowProcW(hwnd, msg, wp, lp),
         }
     }
+}
+
+/// While a key row waits for a key, every key is its: Esc gives up, a modifier alone is ignored, anything else is taken.
+/// Returns true when the key was used (the window must not act on it).
+fn capture_key(hwnd: HWND, vk: u32) -> bool {
+    let capturing = with_ctx(|c| c.ui.capture.is_some()).unwrap_or(false);
+    if !capturing {
+        return false;
+    }
+    unsafe {
+        let held = |k: u16| GetKeyState(k as i32) < 0;
+        let mods = (held(VK_CONTROL.0) as u8) | ((held(VK_MENU.0) as u8) << 1) | ((held(VK_SHIFT.0) as u8) << 2);
+        let modifier_key = matches!(vk, 0x10 | 0x11 | 0x12 | 0x14 | 0x5B | 0x5C | 0xA0..=0xA5);
+        if !modifier_key {
+            with_ctx(|c| {
+                if vk == VK_ESCAPE.0 as u32 {
+                    c.input.capture_cancel = true;
+                } else {
+                    c.input.captured = Some((vk, mods));
+                }
+            });
+            let _ = InvalidateRect(Some(hwnd), None, false);
+        }
+    }
+    true
 }
 
 /// One frame: runs the caller's `draw`, draws the result, then runs what the caller deferred.
@@ -1275,6 +1391,8 @@ fn paint(hwnd: HWND) {
             ctx.input.right = false;
             ctx.input.up = false;
             ctx.input.down_key = false;
+            ctx.input.captured = None;
+            ctx.input.capture_cancel = false;
             if released {
                 ctx.ui.active = None;
             }

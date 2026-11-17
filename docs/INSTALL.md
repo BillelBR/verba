@@ -10,6 +10,11 @@
 
 Verba then sits in the **system tray** (the `^` arrow by the clock). Open its menu with a click on the icon.
 
+### Using it without the mouse
+
+While the suggestion popup is open: **← and →** move the highlight (when there are two or more suggestions), **Tab** puts the highlighted one in, **Esc** closes the popup (the arrow keys then move the cursor as usual until you type again). In an Arabic list, which starts on the right, the highlight still moves the way the arrow points.
+Every one of these keys can be changed in Settings > Keyboard: click a key, then press the new one. A letter, a digit or Space on its own is refused (you would no longer be able to type); add Ctrl or Alt, or pick another key.
+
 ### "Windows protected your PC" (SmartScreen)
 
 The installer is **not code-signed yet** (a certificate costs money and the project is new), so Windows may warn that the publisher is unknown.
@@ -18,7 +23,7 @@ Click **More info**, then **Run anyway**.
 To be sure the file is the one the project published, compare its SHA-256 with the `.sha256` file next to it on the Releases page:
 
 ```powershell
-Get-FileHash .\Verba-Setup-0.7.0.exe -Algorithm SHA256
+Get-FileHash .\Verba-Setup-0.8.0.exe -Algorithm SHA256
 ```
 
 The two hashes must be identical. The source code is in this repository, and the Releases are built by GitHub Actions from it.
@@ -83,10 +88,10 @@ Other pieces: `scripts/make_icon.py` regenerates `crates/verba-app/assets/verba.
 2. Tag and push the tag. The tag must be `v` plus that exact version:
 
    ```
-   git tag v0.7.0
-   git push origin v0.7.0
+   git tag v0.8.0
+   git push origin v0.8.0
    ```
 
-3. The **Release** workflow (`.github/workflows/release.yml`) builds the installer and creates the GitHub Release with the Setup and its `.sha256`. It is marked *pre-release* when the version starts with `0.` or the tag has a hyphen (`v0.7.0-beta1`).
+3. The **Release** workflow (`.github/workflows/release.yml`) builds the installer and creates the GitHub Release with the Setup and its `.sha256`. It is marked *pre-release* when the version starts with `0.` or the tag has a hyphen (`v0.8.0-beta1`).
 
 The **CI** workflow builds and tests every push to `main` and every pull request.

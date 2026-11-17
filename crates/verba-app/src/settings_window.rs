@@ -18,6 +18,7 @@ use windows::Win32::UI::WindowsAndMessaging::{
 };
 use windows::core::{PCWSTR, w};
 
+use crate::keys::{Action, Binding, Keys};
 use crate::settings::{ALWAYS_OFF, AppMode, Settings, ThemeMode};
 
 /// The window being shown (0 when there is none): the menu of running programs needs it as its owner.
@@ -25,6 +26,8 @@ static WINDOW: AtomicIsize = AtomicIsize::new(0);
 const MENU_APP_BASE: usize = 3000;
 
 thread_local! {
+    /// Why the last key the user pressed was not taken (shown on the Keyboard page until the next good key).
+    static KEY_PROBLEM: Cell<Option<&'static str>> = const { Cell::new(None) };
     /// Whether "Start with Windows" is on: asked of the registry once, not at every frame.
     static AUTOSTART: Cell<Option<bool>> = const { Cell::new(None) };
 }
@@ -70,9 +73,10 @@ fn draw(ui: &mut Ui) {
     ui.sidebar_begin("Verba", concat!("Version ", env!("CARGO_PKG_VERSION")));
     ui.nav_item("nav:writing", '\u{E70F}', "Writing help", 0);
     ui.nav_item("nav:languages", '\u{E774}', "Languages", 1);
-    ui.nav_item("nav:apps", '\u{E71D}', "Apps", 2);
-    ui.nav_item("nav:look", '\u{E790}', "Appearance", 3);
-    ui.nav_item("nav:general", '\u{E713}', "General", 4);
+    ui.nav_item("nav:keys", '\u{E765}', "Keyboard", 2);
+    ui.nav_item("nav:apps", '\u{E71D}', "Apps", 3);
+    ui.nav_item("nav:look", '\u{E790}', "Appearance", 4);
+    ui.nav_item("nav:general", '\u{E713}', "General", 5);
     let mut on = !s.paused;
     if ui.sidebar_switch("master", "Suggestions", if on { "On" } else { "Paused" }, &mut on) {
         s.paused = !on;
@@ -81,8 +85,9 @@ fn draw(ui: &mut Ui) {
     match ui.page() {
         0 => writing(ui, &mut s),
         1 => languages(ui, &mut s),
-        2 => apps(ui, &mut s),
-        3 => appearance(ui, &mut s),
+        2 => keyboard(ui, &mut s),
+        3 => apps(ui, &mut s),
+        4 => appearance(ui, &mut s),
         _ => general(ui),
     }
 
@@ -98,14 +103,14 @@ fn writing(ui: &mut Ui, s: &mut Settings) {
     ui.toggle_row(
         "fix",
         "Fix spelling when I finish a word",
-        Some("A small “Fix” popup offers the right spelling. Press Tab to apply it, or Esc to keep your word."),
+        Some("A small “Fix” popup offers the right spelling. Apply it with your accept key (Tab by default), or press Esc to keep your word."),
         &mut s.correction,
         true,
     );
     ui.toggle_row(
         "next",
         "Suggest the next word",
-        Some("After a word and a space, the likely next word appears. Press Tab to accept it."),
+        Some("After a word and a space, the likely next word appears. Accept it with your accept key (Tab by default)."),
         &mut s.predict_next,
         true,
     );
@@ -167,6 +172,51 @@ fn languages(ui: &mut Ui, s: &mut Settings) {
         &mut s.darija,
         true,
     );
+    ui.card_end();
+}
+
+fn keyboard(ui: &mut Ui, s: &mut Settings) {
+    ui.page_begin("Keyboard", "The keys that drive the suggestions, so you never need the mouse.");
+    ui.section("While suggestions are shown");
+    ui.card_begin();
+    let rows = [
+        ("key:accept", Action::Accept, "Accept the highlighted suggestion", "It replaces the word you are typing."),
+        ("key:prev", Action::Prev, "Move the highlight to the left", "Works when two or more suggestions are shown. In an Arabic list, which starts on the right, it follows the key too."),
+        ("key:next", Action::Next, "Move the highlight to the right", "Works when two or more suggestions are shown."),
+        ("key:close", Action::Close, "Close the suggestions", "Until you type again, so the arrow keys move the cursor as usual."),
+    ];
+    let defaults = Keys::default();
+    for (name, action, title, desc) in rows {
+        let current = s.keys.get(action);
+        let row = ui.key_row(name, title, Some(desc), &current.label(), current == defaults.get(action));
+        if let Some((vk, mods)) = row.captured {
+            if Binding::usable(vk, mods) {
+                // when another action had that key, the two swap
+                s.keys.assign(action, Binding::new(vk, mods));
+                KEY_PROBLEM.with(|p| p.set(None));
+            } else {
+                KEY_PROBLEM.with(|p| p.set(Some("That key cannot be used: letters, digits and Space on their own are what you type. Add Ctrl or Alt, or pick another key.")));
+            }
+        }
+        if row.reset {
+            s.keys.assign(action, defaults.get(action));
+            KEY_PROBLEM.with(|p| p.set(None));
+        }
+    }
+    ui.card_end();
+
+    if let Some(problem) = KEY_PROBLEM.with(|p| p.get()) {
+        ui.card_begin();
+        ui.note('\u{E783}', problem);
+        ui.card_end();
+    }
+
+    ui.card_begin();
+    if ui.button_row("keys-reset", "Original keys", Some("Tab accepts, the left and right arrows move, Esc closes."), "Reset all", ButtonStyle::Secondary, s.keys != defaults) {
+        s.keys = defaults;
+        KEY_PROBLEM.with(|p| p.set(None));
+    }
+    ui.note('\u{E946}', "Click a key, then press the new one. Press Esc to cancel. If you give an action a key another one uses, the two swap.");
     ui.card_end();
 }
 

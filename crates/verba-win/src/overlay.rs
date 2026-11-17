@@ -185,6 +185,8 @@ struct State {
     visible: bool,
     /// Where a click on a candidate is reported: window and message (the candidate's number is the wParam).
     notify: Option<(HWND, u32)>,
+    /// The text of the key cap at the end of the card: the keys that choose and accept ("Tab", or "← →  Tab").
+    hint: String,
 }
 
 thread_local! {
@@ -240,9 +242,14 @@ impl Overlay {
             };
             let target = d2d.CreateDCRenderTarget(&props)?;
             target.SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE);
-            STATE.with(|s| *s.borrow_mut() = Some(State { gfx: Gfx { dwrite, target }, shown: None, visible: false, notify: None }));
+            STATE.with(|s| *s.borrow_mut() = Some(State { gfx: Gfx { dwrite, target }, shown: None, visible: false, notify: None, hint: "Tab".to_string() }));
             Ok(Self { hwnd })
         }
+    }
+
+    /// What the key cap at the end of the card says. Takes effect the next time the card is shown.
+    pub fn set_hint(&self, text: &str) {
+        with_state(|st, _| st.hint = text.to_string(), self.hwnd);
     }
 
     /// Tells the popup where to report a click on a candidate: `msg` is posted to `target` with the candidate's number as wParam.
@@ -381,7 +388,7 @@ fn build_and_present(
             widths.push(w);
             items.push(Item { layout, rect: Rf::default(), tw, th });
         }
-        let (hint_layout, hint_tw, hint_th) = text_layout("Tab", false, small_px, false)?;
+        let (hint_layout, hint_tw, hint_th) = text_layout(st.hint.as_str(), false, small_px, false)?;
         let chip_w = hint_tw + 14.0 * s;
         let hint_w = gap + chip_w;
         // the label before the candidates, in the UI language (not the language of the words)

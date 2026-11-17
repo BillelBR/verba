@@ -16,16 +16,18 @@ use std::cell::RefCell;
 use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant, SystemTime};
 use std::sync::Mutex;
-use std::sync::atomic::{AtomicBool, AtomicIsize, AtomicU32, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicIsize, AtomicU32, AtomicUsize, Ordering};
 
+mod keys;
 mod learning;
 mod settings;
 mod settings_window;
 
+use keys::{Binding, DEFAULT_KEYS, Keys};
 use settings::{Settings, ThemeMode};
 use verba_core::{Engine, Lang, Suggestion, current_word, current_word_dz};
 use verba_local::{LocalEngine, PersonalDict};
-use verba_win::{Locator, Look, Overlay, Snapshot, Theme, describe_foreground, foreground_app, run_with_splash};
+use verba_win::{Anchor, Locator, Look, Overlay, Snapshot, Theme, describe_foreground, foreground_app, run_with_splash};
 use windows::Win32::Foundation::{ERROR_ALREADY_EXISTS, GetLastError, HINSTANCE, HWND, LPARAM, LRESULT, POINT, WPARAM};
 use windows::Win32::Graphics::Gdi::{CreateBitmap, DeleteObject};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
@@ -34,7 +36,7 @@ use windows::Win32::System::Threading::CreateMutexW;
 use windows::Win32::UI::Input::KeyboardAndMouse::{
     GetKeyState, INPUT, INPUT_0, INPUT_KEYBOARD, KEYBD_EVENT_FLAGS, KEYBDINPUT, KEYEVENTF_KEYUP, KEYEVENTF_UNICODE, MOD_ALT,
     MOD_CONTROL, MOD_NOREPEAT, MOD_SHIFT, RegisterHotKey, SendInput, UnregisterHotKey, VIRTUAL_KEY, VK_BACK, VK_CONTROL,
-    VK_ESCAPE, VK_MENU, VK_SHIFT, VK_TAB,
+    VK_MENU, VK_SHIFT,
 };
 use windows::Win32::UI::Shell::{
     NIF_ICON, NIF_MESSAGE, NIF_TIP, NIM_ADD, NIM_DELETE, NIM_MODIFY, NOTIFYICONDATAW, Shell_NotifyIconW,
@@ -45,7 +47,7 @@ use windows::Win32::UI::WindowsAndMessaging::{
     MB_ICONINFORMATION, MB_OK, MessageBoxW, MF_GRAYED, MF_SEPARATOR, MF_STRING, MSG, PostMessageW, PostQuitMessage, RegisterClassW, RegisterWindowMessageW,
     SetForegroundWindow, SetWindowsHookExW, TPM_BOTTOMALIGN, TPM_RIGHTBUTTON, TrackPopupMenu, TranslateMessage,
     UnhookWindowsHookEx, WH_KEYBOARD_LL, WM_APP, WM_COMMAND, WM_DESTROY, WM_HOTKEY, WM_KEYDOWN, WM_KEYUP, WM_LBUTTONUP,
-    WM_NULL, WM_RBUTTONUP, WM_SYSKEYDOWN, WNDCLASSW, WS_EX_TOOLWINDOW, WS_POPUP,
+    WM_NULL, WM_RBUTTONUP, WM_SYSKEYDOWN, WM_SYSKEYUP, WNDCLASSW, WS_EX_TOOLWINDOW, WS_POPUP,
 };
 use windows::core::{PCWSTR, w};
 
@@ -54,6 +56,10 @@ const WM_ACCEPT: u32 = WM_APP + 2;
 const WM_DISMISS: u32 = WM_APP + 3;
 /// A fresh reading from the worker thread is waiting in `LATEST`.
 const WM_SNAPSHOT: u32 = WM_APP + 4;
+/// A key moved the highlight: wParam is 0 for the left key, 1 for the right key.
+const WM_MOVE: u32 = WM_APP + 5;
+/// wParam of `WM_ACCEPT` that means "the highlighted one" (a click sends the number of the candidate instead).
+const ACCEPT_HIGHLIGHTED: usize = usize::MAX;
 /// How often the worker thread looks at the app being typed in.
 const POLL_MS: u64 = 120;
 const HOTKEY_QUIT: i32 = 1;
@@ -71,7 +77,12 @@ const VERBA_KEY_MARK: usize = 0x5645_5242; // "VERB"
 
 // what the keyboard hook needs to know without touching the rest of the program
 static POPUP_VISIBLE: AtomicBool = AtomicBool::new(false);
-static SWALLOWED_TAB: AtomicBool = AtomicBool::new(false);
+/// How many candidates the popup shows now.
+static POPUP_COUNT: AtomicUsize = AtomicUsize::new(0);
+/// The key (virtual key code) whose press the hook kept from the app, so that its release is kept too; 0 when none.
+static KEPT_KEY: AtomicU32 = AtomicU32::new(0);
+/// The keys that drive the popup, as the user set them (the hook reads them here, it cannot reach the settings).
+static KEYS: Mutex<Keys> = Mutex::new(DEFAULT_KEYS);
 static CONTROLLER: AtomicIsize = AtomicIsize::new(0);
 static TASKBAR_CREATED: AtomicU32 = AtomicU32::new(0);
 static PAUSED: AtomicBool = AtomicBool::new(false);
@@ -100,6 +111,10 @@ struct App {
     last_text: String,
     /// Set while the popup shows a spelling fix instead of word completions.
     fix: Option<FixState>,
+    /// The candidate the accept key will pick (the previous and next keys move it), where the popup is, and its label ("Fix").
+    selected: usize,
+    anchor: Option<Anchor>,
+    lead: Option<&'static str>,
     /// The words typed since the last end of a sentence, waiting to be learned (only collected when the user turned learning on).
     learn_buf: String,
     learn_words: usize,
@@ -154,6 +169,7 @@ fn main() {
             engine.set_enabled(lang, settings.lang_on(lang));
         }
         PAUSED.store(settings.paused, Ordering::SeqCst);
+        share_keys(&settings.keys);
         share_rules(&settings);
         let overlay = Overlay::new().expect("could not make the popup window");
         let (icon_on, icon_off) = (make_icon(false), make_icon(true));
@@ -169,7 +185,7 @@ fn main() {
 
         APP.with(|a| {
             *a.borrow_mut() =
-                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, learn_buf: String::new(), learn_words: 0, files, words_stamp, last_check: Instant::now() });
+                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, learn_buf: String::new(), learn_words: 0, files, words_stamp, last_check: Instant::now() });
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
@@ -307,7 +323,14 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
         }
         // a key (Tab) or a click on a candidate: wParam is the candidate's number
         WM_ACCEPT => {
-            with_app(|app| accept(app, wp.0));
+            with_app(|app| {
+                let index = if wp.0 == ACCEPT_HIGHLIGHTED { app.selected } else { wp.0 };
+                accept(app, index)
+            });
+            LRESULT(0)
+        }
+        WM_MOVE => {
+            with_app(|app| move_highlight(app, if wp.0 == 0 { -1 } else { 1 }));
             LRESULT(0)
         }
         WM_DISMISS => {
@@ -353,6 +376,8 @@ fn hide(app: &mut App) {
     app.overlay.hide();
     app.shown.clear();
     app.fix = None;
+    app.selected = 0;
+    POPUP_COUNT.store(0, Ordering::SeqCst);
     POPUP_VISIBLE.store(false, Ordering::SeqCst);
 }
 
@@ -459,9 +484,7 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
                         original: fix.original,
                         trailing: fix.trailing,
                     });
-                    app.overlay.show_with(snap.anchor, &fix.candidates, 0, look_for(&app.settings), Some("Fix"));
-                    app.shown = fix.candidates;
-                    POPUP_VISIBLE.store(true, Ordering::SeqCst);
+                    present(app, snap.anchor, fix.candidates, Some("Fix"));
                     return;
                 }
             }
@@ -473,9 +496,7 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
             if !next.is_empty() {
                 app.fix = None;
                 app.typed_len = 0;
-                app.overlay.show_with(snap.anchor, &next, 0, look_for(&app.settings), None);
-                app.shown = next;
-                POPUP_VISIBLE.store(true, Ordering::SeqCst);
+                present(app, snap.anchor, next, None);
                 return;
             }
         }
@@ -488,9 +509,52 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
     // with Darija on, digit-letters (sa7, 3la) belong to the word
     let typed = if app.settings.darija { current_word_dz(&snap.before_caret) } else { current_word(&snap.before_caret) };
     app.typed_len = typed.chars().count();
-    app.overlay.show(snap.anchor, &found, 0, look_for(&app.settings));
-    app.shown = found;
+    present(app, snap.anchor, found, None);
+}
+
+/// Shows the candidates. The highlighted one stays when the same words are shown again (the popup only moved).
+fn present(app: &mut App, anchor: Anchor, list: Vec<Suggestion>, lead: Option<&'static str>) {
+    let same = app.shown.len() == list.len() && app.shown.iter().zip(&list).all(|(a, b)| a.text == b.text);
+    if !same {
+        app.selected = 0;
+    }
+    app.selected = app.selected.min(list.len().saturating_sub(1));
+    app.anchor = Some(anchor);
+    app.lead = lead;
+    app.shown = list;
+    redraw(app);
+    POPUP_COUNT.store(app.shown.len(), Ordering::SeqCst);
     POPUP_VISIBLE.store(true, Ordering::SeqCst);
+}
+
+/// Draws the popup with the current highlight. The key cap at its end names the keys: with several candidates "previous next  accept".
+fn redraw(app: &mut App) {
+    let Some(anchor) = app.anchor else { return };
+    let k = app.settings.keys;
+    let hint = if app.shown.len() >= 2 { format!("{} {}  {}", k.prev.label(), k.next.label(), k.accept.label()) } else { k.accept.label() };
+    app.overlay.set_hint(&hint);
+    app.overlay.show_with(anchor, &app.shown, app.selected, look_for(&app.settings), app.lead);
+}
+
+/// The "left" or "right" key (-1 or +1): highlight the candidate on that side, round the end. In an Arabic popup the first
+/// candidate is at the right, so "left" goes to the next one and "right" to the previous one: the highlight always moves the way
+/// the key points.
+fn move_highlight(app: &mut App, toward: isize) {
+    if app.shown.len() < 2 {
+        return;
+    }
+    let rtl = app.shown.first().is_some_and(|s| s.lang.is_rtl());
+    app.selected = highlight_after(app.selected, app.shown.len(), toward, rtl);
+    redraw(app);
+}
+
+/// Which candidate is highlighted after the left (-1) or right (+1) key. A list that starts on the right (Arabic) runs the other way.
+fn highlight_after(selected: usize, count: usize, toward: isize, rtl: bool) -> usize {
+    if count == 0 {
+        return 0;
+    }
+    let step = if rtl { -toward } else { toward };
+    (selected as isize + step).rem_euclid(count as isize) as usize
 }
 
 /// Tab, or a click: replace the typed part of the word with that suggestion, plus a space.
@@ -605,6 +669,7 @@ pub(crate) fn update_settings(change: impl FnOnce(&mut Settings)) {
             app.engine.set_enabled(lang, app.settings.lang_on(lang));
         }
         PAUSED.store(app.settings.paused, Ordering::SeqCst);
+        share_keys(&app.settings.keys);
         if !app.settings.learn {
             app.learn_buf.clear();
             app.learn_words = 0;
@@ -618,6 +683,12 @@ pub(crate) fn update_settings(change: impl FnOnce(&mut Settings)) {
     });
     // the settings window, when it is open, shows the new values
     settings_window::refresh();
+}
+
+fn share_keys(keys: &Keys) {
+    if let Ok(mut shared) = KEYS.lock() {
+        *shared = *keys;
+    }
 }
 
 fn share_rules(settings: &Settings) {
@@ -684,22 +755,42 @@ unsafe extern "system" fn keyboard_hook(code: i32, wp: WPARAM, lp: LPARAM) -> LR
             let ours = kb.dwExtraInfo == VERBA_KEY_MARK; // keys Verba itself sent
             let msg = wp.0 as u32;
             let ctrl_down = |vk: VIRTUAL_KEY| GetKeyState(vk.0 as i32) < 0;
-            let plain = !ctrl_down(VK_SHIFT) && !ctrl_down(VK_CONTROL) && !ctrl_down(VK_MENU);
+            let mods = (ctrl_down(VK_CONTROL) as u8) * keys::MOD_CTRL | (ctrl_down(VK_MENU) as u8) * keys::MOD_ALT | (ctrl_down(VK_SHIFT) as u8) * keys::MOD_SHIFT;
             let controller = HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _);
             let is_down = msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN;
-            let action = key_action(ours, is_down, msg == WM_KEYUP, kb.vkCode, POPUP_VISIBLE.load(Ordering::SeqCst), plain, SWALLOWED_TAB.load(Ordering::SeqCst));
-            match action {
+            let keys_now = KeyState {
+                ours,
+                is_down,
+                is_up: msg == WM_KEYUP || msg == WM_SYSKEYUP,
+                vk: kb.vkCode,
+                mods,
+                popup_visible: POPUP_VISIBLE.load(Ordering::SeqCst),
+                // the previous and next keys act only when there is something to choose between
+                several: POPUP_COUNT.load(Ordering::SeqCst) >= 2,
+                kept_key: KEPT_KEY.load(Ordering::SeqCst),
+                keys: KEYS.lock().map(|k| *k).unwrap_or_default(),
+            };
+            match key_action(&keys_now) {
                 KeyAction::Accept => {
-                    SWALLOWED_TAB.store(true, Ordering::SeqCst);
-                    let _ = PostMessageW(Some(controller), WM_ACCEPT, WPARAM(0), LPARAM(0));
+                    KEPT_KEY.store(kb.vkCode, Ordering::SeqCst);
+                    let _ = PostMessageW(Some(controller), WM_ACCEPT, WPARAM(ACCEPT_HIGHLIGHTED), LPARAM(0));
                     return LRESULT(1);
                 }
                 KeyAction::Dismiss => {
+                    KEPT_KEY.store(kb.vkCode, Ordering::SeqCst);
                     let _ = PostMessageW(Some(controller), WM_DISMISS, WPARAM(0), LPARAM(0));
                     return LRESULT(1);
                 }
-                KeyAction::SwallowTabRelease => {
-                    SWALLOWED_TAB.store(false, Ordering::SeqCst);
+                KeyAction::Move(next) => {
+                    KEPT_KEY.store(kb.vkCode, Ordering::SeqCst);
+                    let _ = PostMessageW(Some(controller), WM_MOVE, WPARAM(next as usize), LPARAM(0));
+                    return LRESULT(1);
+                }
+                KeyAction::Swallow => {
+                    // the release of a key that was kept ends it; a repeat of one that is still held changes nothing
+                    if keys_now.is_up {
+                        KEPT_KEY.store(0, Ordering::SeqCst);
+                    }
                     return LRESULT(1);
                 }
                 KeyAction::Pass => {}
@@ -718,26 +809,56 @@ enum KeyAction {
     Accept,
     /// Esc while the popup is open: keep it from the app and close the popup.
     Dismiss,
-    /// The release of a Tab we kept: keep that too, so the app never sees half a key press.
-    SwallowTabRelease,
+    /// The left (false) or the right (true) key while there are several candidates: move the highlight that way.
+    Move(bool),
+    /// Keep the key from the app without doing anything: the release of a key we kept (so the app never sees half a key press),
+    /// or the repeat of an accept or close key that is still held.
+    Swallow,
+}
+
+/// What the hook knows about one key event.
+struct KeyState {
+    /// A key Verba sent itself.
+    ours: bool,
+    is_down: bool,
+    is_up: bool,
+    /// Virtual key code.
+    vk: u32,
+    /// Which of Ctrl, Alt and Shift are held (`keys::MOD_*`).
+    mods: u8,
+    popup_visible: bool,
+    /// The popup shows two or more candidates.
+    several: bool,
+    /// The key whose press was kept and whose release is still to come (0 when none).
+    kept_key: u32,
+    keys: Keys,
 }
 
 /// The whole keyboard rule in one place (so it can be tested without a keyboard).
-/// Only plain Tab and Esc, only while the popup is open, and never the keys Verba sent itself.
-fn key_action(ours: bool, is_down: bool, is_up: bool, vk: u32, popup_visible: bool, plain: bool, tab_was_kept: bool) -> KeyAction {
-    if ours {
+/// Only the keys the user set (Tab, the left and right arrows and Esc unless changed), only while the popup is open,
+/// with exactly the modifiers set for them, and never the keys Verba sent itself.
+fn key_action(k: &KeyState) -> KeyAction {
+    if k.ours {
         return KeyAction::Pass;
     }
-    if is_down && popup_visible && plain {
-        if vk == VK_TAB.0 as u32 {
-            return KeyAction::Accept;
+    if k.is_down && k.popup_visible {
+        let pressed = Binding::new(k.vk, k.mods);
+        let held_again = k.kept_key != 0 && k.kept_key == k.vk;
+        if pressed == k.keys.accept {
+            return if held_again { KeyAction::Swallow } else { KeyAction::Accept };
         }
-        if vk == VK_ESCAPE.0 as u32 {
-            return KeyAction::Dismiss;
+        if pressed == k.keys.close {
+            return if held_again { KeyAction::Swallow } else { KeyAction::Dismiss };
+        }
+        if k.several && pressed == k.keys.next {
+            return KeyAction::Move(true);
+        }
+        if k.several && pressed == k.keys.prev {
+            return KeyAction::Move(false);
         }
     }
-    if is_up && vk == VK_TAB.0 as u32 && tab_was_kept {
-        return KeyAction::SwallowTabRelease;
+    if k.is_up && k.kept_key != 0 && k.vk == k.kept_key {
+        return KeyAction::Swallow;
     }
     KeyAction::Pass
 }
@@ -762,31 +883,90 @@ mod tests {
 
     const TAB: u32 = 0x09;
     const ESC: u32 = 0x1B;
+    const LEFT: u32 = 0x25;
+    const RIGHT: u32 = 0x27;
+    const ENTER: u32 = 0x0D;
+
+    /// A key going down while the popup is open with three candidates and the default keys.
+    fn down(vk: u32, mods: u8) -> KeyState {
+        KeyState { ours: false, is_down: true, is_up: false, vk, mods, popup_visible: true, several: true, kept_key: 0, keys: DEFAULT_KEYS }
+    }
 
     #[test]
     fn tab_accepts_only_when_the_popup_is_open_and_no_modifier_is_held() {
-        assert_eq!(key_action(false, true, false, TAB, true, true, false), KeyAction::Accept);
-        assert_eq!(key_action(false, true, false, TAB, false, true, false), KeyAction::Pass, "popup closed: Tab is the app's");
-        assert_eq!(key_action(false, true, false, TAB, true, false, false), KeyAction::Pass, "Shift/Ctrl/Alt+Tab is the app's");
+        assert_eq!(key_action(&down(TAB, 0)), KeyAction::Accept);
+        assert_eq!(key_action(&KeyState { popup_visible: false, ..down(TAB, 0) }), KeyAction::Pass, "popup closed: Tab is the app's");
+        assert_eq!(key_action(&down(TAB, keys::MOD_SHIFT)), KeyAction::Pass, "Shift+Tab is the app's");
+        assert_eq!(key_action(&down(TAB, keys::MOD_CTRL)), KeyAction::Pass, "Ctrl+Tab is the app's");
     }
 
     #[test]
     fn esc_closes_the_popup_only_when_it_is_open() {
-        assert_eq!(key_action(false, true, false, ESC, true, true, false), KeyAction::Dismiss);
-        assert_eq!(key_action(false, true, false, ESC, false, true, false), KeyAction::Pass);
+        assert_eq!(key_action(&down(ESC, 0)), KeyAction::Dismiss);
+        assert_eq!(key_action(&KeyState { popup_visible: false, ..down(ESC, 0) }), KeyAction::Pass);
     }
 
     #[test]
-    fn a_kept_tab_keeps_its_release_and_nothing_else_is_touched() {
-        assert_eq!(key_action(false, false, true, TAB, false, true, true), KeyAction::SwallowTabRelease);
-        assert_eq!(key_action(false, false, true, TAB, false, true, false), KeyAction::Pass, "no Tab was kept");
-        assert_eq!(key_action(false, true, false, 0x41, true, true, false), KeyAction::Pass, "letters are never touched");
-        assert_eq!(key_action(false, false, true, ESC, true, true, true), KeyAction::Pass);
+    fn the_arrows_choose_between_candidates_only_when_there_are_several() {
+        assert_eq!(key_action(&down(RIGHT, 0)), KeyAction::Move(true));
+        assert_eq!(key_action(&down(LEFT, 0)), KeyAction::Move(false));
+        assert_eq!(key_action(&KeyState { several: false, ..down(RIGHT, 0) }), KeyAction::Pass, "one candidate: the arrow moves the cursor");
+        assert_eq!(key_action(&KeyState { popup_visible: false, ..down(LEFT, 0) }), KeyAction::Pass, "no popup: the arrow is the app's");
+        assert_eq!(key_action(&down(LEFT, keys::MOD_SHIFT)), KeyAction::Pass, "Shift+arrow selects text: not ours");
+        assert_eq!(key_action(&down(RIGHT, keys::MOD_CTRL)), KeyAction::Pass, "Ctrl+arrow jumps a word: not ours");
+    }
+
+    #[test]
+    fn the_keys_follow_what_the_user_set() {
+        let mut custom = DEFAULT_KEYS;
+        custom.accept = Binding::new(ENTER, 0);
+        custom.next = Binding::new(0x28, 0); // down
+        custom.prev = Binding::new(0x26, 0); // up
+        let st = |vk, mods| KeyState { keys: custom, ..down(vk, mods) };
+        assert_eq!(key_action(&st(ENTER, 0)), KeyAction::Accept);
+        assert_eq!(key_action(&st(TAB, 0)), KeyAction::Pass, "Tab is no longer the accept key");
+        assert_eq!(key_action(&st(0x28, 0)), KeyAction::Move(true));
+        assert_eq!(key_action(&st(0x26, 0)), KeyAction::Move(false));
+        assert_eq!(key_action(&st(RIGHT, 0)), KeyAction::Pass, "the arrows are free again");
+        // a key with a modifier
+        custom.next = Binding::new(RIGHT, keys::MOD_CTRL);
+        assert_eq!(key_action(&KeyState { keys: custom, ..down(RIGHT, keys::MOD_CTRL) }), KeyAction::Move(true));
+        assert_eq!(key_action(&KeyState { keys: custom, ..down(RIGHT, 0) }), KeyAction::Pass);
+    }
+
+    #[test]
+    fn a_kept_key_keeps_its_release_and_nothing_else_is_touched() {
+        let up = |vk, kept| KeyState { is_down: false, is_up: true, kept_key: kept, ..down(vk, 0) };
+        assert_eq!(key_action(&up(TAB, TAB)), KeyAction::Swallow);
+        assert_eq!(key_action(&up(RIGHT, RIGHT)), KeyAction::Swallow);
+        assert_eq!(key_action(&up(TAB, 0)), KeyAction::Pass, "no key was kept");
+        assert_eq!(key_action(&up(ESC, TAB)), KeyAction::Pass, "another key was kept");
+        assert_eq!(key_action(&down(0x41, 0)), KeyAction::Pass, "letters are never touched");
+    }
+
+    #[test]
+    fn holding_accept_does_not_accept_twice_but_holding_an_arrow_keeps_moving() {
+        assert_eq!(key_action(&KeyState { kept_key: TAB, ..down(TAB, 0) }), KeyAction::Swallow);
+        assert_eq!(key_action(&KeyState { kept_key: ESC, ..down(ESC, 0) }), KeyAction::Swallow);
+        assert_eq!(key_action(&KeyState { kept_key: RIGHT, ..down(RIGHT, 0) }), KeyAction::Move(true));
+    }
+
+    #[test]
+    fn the_highlight_moves_the_way_the_key_points() {
+        // a left-to-right list: right goes to the next candidate, left to the previous one, round the end
+        assert_eq!(highlight_after(0, 3, 1, false), 1);
+        assert_eq!(highlight_after(2, 3, 1, false), 0, "round the end");
+        assert_eq!(highlight_after(0, 3, -1, false), 2);
+        // an Arabic list starts on the right: the right key goes back toward the first, the left key on to the next
+        assert_eq!(highlight_after(1, 3, 1, true), 0);
+        assert_eq!(highlight_after(1, 3, -1, true), 2);
+        assert_eq!(highlight_after(0, 3, 1, true), 2, "round the end the other way");
+        assert_eq!(highlight_after(0, 0, 1, false), 0);
     }
 
     #[test]
     fn keys_sent_by_verba_itself_pass_through() {
-        assert_eq!(key_action(true, true, false, TAB, true, true, false), KeyAction::Pass);
+        assert_eq!(key_action(&KeyState { ours: true, ..down(TAB, 0) }), KeyAction::Pass);
     }
 
     #[test]

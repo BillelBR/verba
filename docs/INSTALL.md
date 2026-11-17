@@ -15,6 +15,10 @@ Verba then sits in the **system tray** (the `^` arrow by the clock). Open its me
 While the suggestion popup is open: **← and →** move the highlight (when there are two or more suggestions), **Tab** puts the highlighted one in, **Esc** closes the popup (the arrow keys then move the cursor as usual until you type again). In an Arabic list, which starts on the right, the highlight still moves the way the arrow points.
 Every one of these keys can be changed in Settings > Keyboard: click a key, then press the new one. A letter, a digit or Space on its own is refused (you would no longer be able to type); add Ctrl or Alt, or pick another key.
 
+### Translating a word
+
+Select a word in any app and press **Ctrl+Alt+T** (changeable in Settings > Translate). With nothing selected, the word just before the cursor is used. The translations appear above the word: the arrows choose, **Tab** replaces the word with the chosen one, **Esc** closes. Choose the language to translate into in Settings > Translate; a word that is already in that language goes to the next one. French and Arabic are linked through English when there is no direct entry, which is less exact. Words with attached particles in Arabic (`والكتاب`, `سيارتك`) are found too. The dictionary is Modern Standard Arabic with a few Maghrebi words; it knows no Darija spellings. Everything is offline, and the selected word is read only when you press the shortcut.
+
 ### "Windows protected your PC" (SmartScreen)
 
 The installer is **not code-signed yet** (a certificate costs money and the project is new), so Windows may warn that the publisher is unknown.

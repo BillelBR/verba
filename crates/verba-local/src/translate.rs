@@ -102,15 +102,64 @@ impl Dictionary {
         self.pairs.get(&(from, to))?.get(&fold(word)).filter(|v| !v.is_empty())
     }
 
+    /// An Arabic word with its attached little words taken off: the article and the one-letter prepositions in front (`والكتاب`,
+    /// `بالبيت`, `للمدرسة`) and the pronoun endings behind (`سيارتك`, `رأيتك`). The first form the dictionary knows wins; the word itself
+    /// is tried first, so a real word is never mistaken for a form of another one.
+    fn direct_arabic(&self, from: Lang, to: Lang, word: &str) -> Option<&Vec<String>> {
+        if let Some(list) = self.direct(from, to, word) {
+            return Some(list);
+        }
+        let folded = fold(word);
+        let chars: Vec<char> = folded.chars().collect();
+        const PREFIXES: [&str; 15] = ["", "وال", "بال", "كال", "فال", "لل", "ال", "و", "ف", "ب", "ك", "ل", "س", "وب", "ول"];
+        const SUFFIXES: [&str; 16] = ["", "اتها", "اتهم", "اتنا", "اتك", "اته", "اتي", "ك", "ه", "ها", "هم", "هن", "كم", "نا", "ي", "ات"];
+        for prefix in PREFIXES {
+            let pl = prefix.chars().count();
+            let starts = chars.len() > pl && chars.iter().take(pl).copied().eq(prefix.chars());
+            let rests: Vec<String> = if starts { vec![chars[pl..].iter().collect()] } else { vec![] };
+            // `للمدرسة` is `ل` + `ال` + `مدرسة`: the article lost its alef after the preposition
+            let rests = if prefix == "لل" && starts { vec![chars[pl..].iter().collect(), format!("ال{}", chars[pl..].iter().collect::<String>())] } else { rests };
+            for rest in rests {
+                for suffix in SUFFIXES {
+                    let sl = suffix.chars().count();
+                    let rc: Vec<char> = rest.chars().collect();
+                    if rc.len() < sl + 2 || !rc[rc.len() - sl..].iter().copied().eq(suffix.chars()) {
+                        continue;
+                    }
+                    let core: String = rc[..rc.len() - sl].iter().collect();
+                    // the round `ة` turns into `ت` before an ending (`سيارتك`), and a plural `ات` hangs on the stem of `سيارة`
+                    let mut forms = vec![core.clone()];
+                    if let Some(stem) = core.strip_suffix('ت') {
+                        forms.push(format!("{stem}ه"));
+                    }
+                    if suffix.starts_with("ات") {
+                        forms.push(format!("{core}ه"));
+                    }
+                    let bare: Vec<String> = forms.iter().filter_map(|f| f.strip_prefix("ال").map(str::to_string)).collect();
+                    forms.extend(bare);
+                    for candidate in forms {
+                        if candidate.chars().count() >= 2 && (prefix != "" || !suffix.is_empty()) {
+                            if let Some(list) = self.direct(from, to, &candidate) {
+                                return Some(list);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        None
+    }
+
     /// The translations of `word` from `from` into `to`: direct, else through English. Returns the list and whether English was used.
     fn lookup(&self, from: Lang, to: Lang, word: &str) -> Option<(Vec<String>, bool)> {
-        if let Some(list) = self.direct(from, to, word) {
+        let find = |to: Lang, word: &str| if from == Lang::Ar { self.direct_arabic(from, to, word) } else { self.direct(from, to, word) };
+        if let Some(list) = find(to, word) {
             return Some((list.clone(), false));
         }
         if from == Lang::En || to == Lang::En {
             return None;
         }
-        let middle = self.direct(from, Lang::En, word)?;
+        let middle = find(Lang::En, word)?;
         let mut out: Vec<String> = Vec::new();
         for english in middle.iter().take(PIVOT_WIDTH) {
             if let Some(list) = self.direct(Lang::En, to, english) {
@@ -195,6 +244,9 @@ mod tests {
         en>ar\tcoffee\tقهوة\n\
         ar>en\tمرحبا\thello\n\
         ar>en\tقهوة\tcoffee\n\
+        ar>en\tسيارة\tcar\n\
+        ar>en\tكتاب\tbook\n\
+        ar>en\tمدرسة\tschool\n\
         ar>fr\tقهوة\tcafé\n\
         broken line without tabs\n\
         xx>yy\ta\tb\n";
@@ -252,6 +304,18 @@ mod tests {
         let direct = d.translate("قهوة", &[Lang::Fr], None).unwrap();
         assert!(!direct.via_english);
         assert_eq!(direct.candidates[0].text, "café");
+    }
+
+    #[test]
+    fn arabic_words_with_little_words_attached_are_found() {
+        let d = dict();
+        for (asked, expected) in [("سيارتك", "car"), ("والكتاب", "book"), ("للمدرسة", "school"), ("بالكتاب", "book"), ("سياراتها", "car"), ("المدرسة", "school")] {
+            let t = d.translate(asked, &[Lang::En], None).unwrap_or_else(|| panic!("{asked} not found"));
+            assert_eq!(t.candidates[0].text, expected, "{asked}");
+        }
+        // a word that is itself in the dictionary is taken as it is
+        assert_eq!(d.translate("قهوة", &[Lang::En], None).unwrap().candidates[0].text, "coffee");
+        assert!(d.translate("ببب", &[Lang::En], None).is_none());
     }
 
     #[test]

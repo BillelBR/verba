@@ -10,7 +10,7 @@ It is built to work for every major language, to run fully on your own device, a
 1. **Suggestions** – while you type, Verba offers the word you are likely to write. *(working, v0)*
 2. **Instant correction** – when you finish a word that looks misspelled (you type a space or punctuation), a small **Fix** popup offers the right spelling; **Tab** applies it and keeps your space or punctuation. It is **off by default**: turn it on in Settings. It never changes your text by itself.
 
-Translation is **not** part of the first version. It comes later, as a separate feature.
+3. **Word translation** – select a word (or put the cursor after it) and press **Ctrl+Alt+T**: its translations between English, French and Arabic appear above it; the arrows choose, **Tab** puts one in place. It works offline from a dictionary built from Wiktionary (CC BY-SA 4.0). Translating whole sentences is planned. Algerian Darija is not translated (no good data exists).
 
 ## Try it (Windows)
 
@@ -66,7 +66,7 @@ one switch, off until it is switched on, with built-in word lists for both scrip
 - Only the **few letters just before the caret**, from the text field that has the focus, through Windows' accessibility interface (UI Automation).
 - **Never password fields.**
 - It **keeps nothing**: no log, no file, no network.
-- The keyboard hook looks at **one thing**: whether the key is Tab or Esc while the popup is open. Other keys pass untouched.
+- The keyboard hook looks at **one thing**: whether the key is one of your popup keys (Tab, the arrows and Esc by default) while the popup is open. Other keys pass untouched.
 - Because it uses the accessibility interface, some browsers and apps (Chromium-based ones) may switch on their accessibility mode when Verba runs, which can cost a little speed in them.
 
 ## How it is built

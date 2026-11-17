@@ -16,6 +16,22 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+
+# Downloads a file and tries again when the server does not answer (GitHub's runners sometimes cannot reach a host for a minute).
+function Get-FileWithRetry([string]$Uri, [string]$OutFile) {
+    for ($try = 1; $try -le 6; $try++) {
+        try {
+            Invoke-WebRequest -Uri $Uri -OutFile $OutFile -UseBasicParsing -TimeoutSec 600
+            return
+        } catch {
+            if (Test-Path $OutFile) { Remove-Item $OutFile -Force -ErrorAction SilentlyContinue }
+            if ($try -eq 6) { throw }
+            Write-Host "download failed ($($_.Exception.Message)); trying again in $($try * 10) seconds ($try of 5 retries) ..."
+            Start-Sleep -Seconds ($try * 10)
+        }
+    }
+}
+
 $root = Split-Path -Parent $PSScriptRoot
 $dir = Join-Path $root "data\words"
 $src = Join-Path $dir "src"
@@ -51,7 +67,7 @@ foreach ($l in $Lang) {
     $tsv = Join-Path $src "${t}_sentences.tsv"
     if (-not (Test-Path (Join-Path $dir "$l.txt"))) { throw "data\words\$l.txt is missing: run scripts\fetch-data.ps1 first" }
     Write-Host "downloading Tatoeba $t sentences ..."
-    Invoke-WebRequest -Uri "https://downloads.tatoeba.org/exports/per_language/$t/${t}_sentences.tsv.bz2" -OutFile $bz -UseBasicParsing
+    Get-FileWithRetry "https://downloads.tatoeba.org/exports/per_language/$t/${t}_sentences.tsv.bz2" $bz
     Write-Host "unpacking ..."
     Expand-Bzip2 $bz $tsv
     Remove-Item $bz

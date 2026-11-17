@@ -55,6 +55,56 @@ Used by `LocalEngine::next_words`: after a finished word and a space, the words 
   small (0.3 million words) and holds many informal sentences. Tatoeba's Arabic is `ara`, a macro-language code: dialect sentences are in it.
 - **Unpacking `.bz2`:** Windows cannot open them, so the script uses Python 3, `bzip2` or 7-Zip, whichever is installed.
 
+## Word translation (`data/words/dict.txt`)
+
+Used by `LocalEngine::translate_word`: a selected word is looked up and its translations are offered (English, French, Arabic, in every direction). The format is
+documented at the top of `crates/verba-local/src/translate.rs` (`direction<TAB>headword<TAB>translation; translation; ...`, most common first). Like the word lists, the
+file is **not stored in this repository**: `scripts/fetch-dict.ps1` downloads the data and builds it (`cargo run --release -p verba-local --example build_dict` does the work).
+`scripts/build-installer.ps1` and the release workflow run the script when the file is missing, and fail when it cannot be built.
+
+| What | Source | License |
+|---|---|---|
+| Translations of English words into French and Arabic (the `translations` of the English entries); the English glosses of French and Arabic entries; the inflected forms of all of them | [Wiktionary](https://en.wiktionary.org) (English edition), as extracted by [wiktextract](https://github.com/tatuylonen/wiktextract) and published by [kaikki.org](https://kaikki.org): `https://kaikki.org/dictionary/{English,French,Arabic}/kaikki.org-dictionary-{English,French,Arabic}.jsonl.gz` (extracted on 2026-10-30 from the dump of 2026-10-01) | **CC BY-SA 4.0** and **GFDL** (dual license), see below |
+| Which words come first | the frequency lists `data/words/{en,fr,ar}.txt` (above) | CC-BY-SA-4.0 |
+
+- **License, checked on 2026-11-17.** English Wiktionary's own page [Wiktionary:Copyrights](https://en.wiktionary.org/wiki/Wiktionary:Copyrights) says: "The original texts of Wiktionary
+  entries are dual-licensed to the public under both the Creative Commons Attribution-ShareAlike 4.0 International License (CC-BY-SA) and the GNU Free Documentation License (GFDL)."
+  and, for people who reuse it: "If you want to use Wiktionary materials in your own books/articles/web sites or other publications, you may do so, but you have to follow CC-BY-SA / the
+  GFDL. CC-BY-SA entails the following requirements: your materials have to be licensed under the same, similar, or compatible license, you must attribute the work in the manner specified
+  by the author or licensor (but not in any way that suggests that they endorse you or your use of the work)". (That page carries a banner saying that it dates from 2002 and is outdated; its
+  licensing statement agrees with the Wikimedia Foundation's [Terms of Use](https://foundation.wikimedia.org/wiki/Policy:Terms_of_Use), which license contributed text under "Creative Commons
+  Attribution-ShareAlike 4.0 International License ("CC BY-SA 4.0"), and GNU Free Documentation License ("GFDL") (unversioned, with no invariant sections, front-cover texts, or back-cover
+  texts)", say that "Reusers may comply with either license or both", and allow attribution "through hyperlink (where possible) or URL to the article to which you contributed", through a link to
+  "an alternative, stable online copy" or through a list of authors.) kaikki.org says of its files: "This data is made available under the same licenses as Wiktionary - both CC-BY-SA and GFDL."
+  and asks users of the data to cite Tatu Ylonen, "Wiktextract: Wiktionary as Machine-Readable Structured Data", Proceedings of the 13th Conference on Language Resources and Evaluation (LREC),
+  pp. 1317-1325, Marseille, 20-25 June 2022.
+- **Attribution (what Verba does).** `dict.txt` opens with a header naming Wiktionary and the license and saying that the entries were changed. `THIRD-PARTY.md` and the installer's
+  `WORD-LISTS-LICENSE.txt` carry: "Word translations from Wiktionary (https://en.wiktionary.org), (c) Wiktionary contributors, CC BY-SA 4.0 and GFDL, extracted by wiktextract
+  (https://kaikki.org, Tatu Ylonen); changed: reduced to short word translations, ranked, inflected forms added." Wiktionary keeps its authors in the page histories of the entries;
+  the link to the project is how the Terms of Use allow the attribution to be given.
+- **ShareAlike.** `dict.txt` is a derivative of Wiktionary text and stays under CC BY-SA 4.0 (you may choose the GFDL instead). Keeping it a separate downloaded file keeps this license
+  from reaching Verba's code, in the same way as for the word lists. A copy of `dict.txt` that you pass on, or a file built from a modified copy, keeps the header and the same license.
+  The file holds words and short phrases only; the extract keeps no definition text, example sentence or etymology.
+- **What the build keeps** (details and numbers in [ACCURACY.md](ACCURACY.md#word-translation)):
+  - **en>fr, en>ar:** the translations listed in the English entries, plus the English glosses of French and Arabic entries read backwards. **fr>en, ar>en:** the English glosses of French and Arabic entries (only short ones that
+    read like a translation: one to three plain words, no definition, no "(...)" note, "to " dropped from verbs), plus the English translation tables read backwards. **fr>ar, ar>fr:** worked out from the other lists for the
+    30 000 commonest words of each language (the rest goes through English in the engine).
+  - Translations are put in order by the order of the senses in Wiktionary, how many senses and sources have them, and how frequent the translated word is in its own frequency list. At most 5 per headword.
+  - **Inflected forms** (plurals, feminine, conjugations, Arabic definite and case forms) are headwords of their own, with the translations of their lemma. They come from the `forms` of the entries and from the entries that are "form of" another entry.
+    Only forms of one-word lemmas are written; the verbal nouns and participles that Arabic verb tables list are not forms but words of their own, and are left out. A form that is also a word of its own (`saw`) gets its own translations and its lemma's, in the order of their scores.
+  - **Arabic** is written without short vowels, headwords and translations alike. Dialect translations (Egyptian, Gulf, Levantine, Hijazi, ...) are left out; Maghrebi ones (Moroccan, Algerian, Tunisian) are kept at half weight, so they come after
+    the Modern Standard Arabic ones. (English Wiktionary holds only 98 translations marked as Algerian Arabic, `arq`; they are not used as such.)
+  - **Rude words:** a sense tagged vulgar, offensive, derogatory, slur, ethnic slur, pejorative or obscene is left out, and so is a translation tagged like that or belonging to such a sense of the English word. A headword that is left with
+    no ordinary sense is dropped (an English word is dropped when at least two thirds of its senses are of that kind: `fuck`, `slut`); a word that is also an ordinary word (`dog`, `cock`) keeps its ordinary senses. Obsolete,
+    archaic, historical, rare, misspelled and dialectal senses are left out; slang and informal ones count half.
+  - **Size.** The file is cut to 14 MiB by default (`-MaxMB`): all headwords first (the commonest first), then the inflected forms that are words of the frequency lists, then the other forms of the commonest lemmas. Without the cut it has 944 000 lines and 37.7 MiB.
+- **Looked at and not used:** the [FreeDict](https://freedict.org) dictionaries (checked on 2026-11-17 in the TEI header of each source file): `eng-fra` (8 799 headwords) and `fra-eng` (8 505) are small and `eng-ara` (87 424) and
+  `ara-eng` (52 996) come from the Arabeyes word list; all four are under the **GNU General Public License, version 2 or later**, which would put the file (and anything combined with it) under the GPL: not used. Apertium's language data
+  is also GPL-licensed (not examined further, for the same reason).
+- **Known limits:** the data is what Wiktionary editors wrote. The translation tables of the commonest English words are often moved to a subpage that the extract does not contain (`house` has no `maison` in its table; it comes from the French entry's gloss),
+  so the order of the first candidates is the weakest point for very common words with several meanings. Arabic entries are fewer (about 19 500 headwords with glosses), and Arabic forms with attached particles (`وبالكتاب`, `سيارتك`) are mostly missing: the engine would have to strip
+  the article, prepositions and pronoun endings before the lookup.
+
 ## Personal dictionary files (written by the app, not downloaded)
 
 `personal.txt` (one word per line, editable; a line starting with `-` is a word never to learn automatically) and `learned.txt`

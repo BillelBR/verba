@@ -36,6 +36,16 @@ See [docs/DATA.md](docs/DATA.md).
 The tables hold counts only, no sentence. They are not part of the source repository. A copy of a table must keep the attribution above.
 See [docs/DATA.md](docs/DATA.md).
 
+## Word-translation dictionary (data, built from a download)
+
+| What | License |
+|---|---|
+| Bilingual dictionary English-French, English-Arabic and French-Arabic (`data/words/dict.txt`), built by `scripts/fetch-dict.ps1` from [Wiktionary](https://en.wiktionary.org) as extracted by wiktextract and published by [kaikki.org](https://kaikki.org) (Tatu Ylonen, "Wiktextract: Wiktionary as Machine-Readable Structured Data", LREC 2022), (c) Wiktionary contributors | **CC BY-SA 4.0** and **GFDL** (dual license) |
+
+Word translations from Wiktionary (https://en.wiktionary.org), (c) Wiktionary contributors, CC BY-SA 4.0 and GFDL, extracted by wiktextract (https://kaikki.org, Tatu Ylonen); changed: reduced to short word translations, ranked, inflected forms added.
+The file is **not part of the source repository** (`scripts/fetch-dict.ps1` downloads the data and builds it). It is a derivative of Wiktionary and keeps CC BY-SA 4.0 (ShareAlike): it stays a separate file, so the license does not reach Verba's code.
+The Windows installer ships it as a separate file in `data\words\` with the notice in `WORD-LISTS-LICENSE.txt`. License text checked on 2026-11-17, with the wording quoted, in [docs/DATA.md](docs/DATA.md#word-translation-datawordsdicttxt).
+
 ## Tools used to build the installer (not shipped)
 
 Inno Setup (its own license; the installer it makes is not covered by it).

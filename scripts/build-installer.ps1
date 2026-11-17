@@ -2,7 +2,7 @@
 #
 #   powershell -ExecutionPolicy Bypass -File scripts\build-installer.ps1
 #
-# Needs: Rust (cargo), Inno Setup 6 (ISCC.exe), and the word lists (downloaded here if missing).
+# Needs: Rust (cargo), Inno Setup 6 (ISCC.exe), and the word lists, the next-word tables and the translation dictionary (built here if missing).
 # Inno Setup is looked for in: the ISCC environment variable, PATH, then the usual install folders.
 
 $ErrorActionPreference = "Stop"
@@ -51,6 +51,12 @@ if (-not ((Test-Path (Join-Path $words "en.bigrams.txt")) -and (Test-Path (Join-
     Write-Host "building the next-word tables ..."
     & (Join-Path $PSScriptRoot "fetch-bigrams.ps1") -Clean
     if (-not (Test-Path (Join-Path $words "ar.bigrams.txt"))) { Fail "the next-word tables could not be built (data\words\*.bigrams.txt)" }
+}
+# the bilingual dictionary for word translation (built from Wiktionary data; downloads about 650 MB, streams it and deletes it; about 1 to 5 minutes)
+if (-not (Test-Path (Join-Path $words "dict.txt"))) {
+    Write-Host "building the word-translation dictionary ..."
+    & (Join-Path $PSScriptRoot "fetch-dict.ps1")
+    if (-not (Test-Path (Join-Path $words "dict.txt"))) { Fail "the word-translation dictionary could not be built (data\words\dict.txt)" }
 }
 
 # 4. Inno Setup

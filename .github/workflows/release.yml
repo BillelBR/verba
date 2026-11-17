@@ -45,6 +45,16 @@ jobs:
         shell: pwsh
         run: ./scripts/fetch-bigrams.ps1 -Clean
 
+      # The word-translation dictionary: three gzip files of Wiktionary data from kaikki.org (about 660 MB in all) are downloaded (with resume),
+      # unpacked as a stream into a small tool (the 3.4 GB of English JSON is never stored) and deleted again. Measured here: 70 seconds with a
+      # 35 MB/s download, 20 s of it extracting; the limit below is 25 minutes.
+      # If kaikki.org cannot be reached or its files changed, the script stops with an error and so does the release: a release must not be
+      # published without the dictionary by accident.
+      - name: Build the word-translation dictionary
+        shell: pwsh
+        timeout-minutes: 25
+        run: ./scripts/fetch-dict.ps1
+
       # Inno Setup 6 is on the windows-latest image; install it only if it is missing
       - name: Make sure Inno Setup is installed
         shell: pwsh

@@ -862,3 +862,495 @@ Arabic word in the worst case, and only when a word has just been finished.
   is thinner for everyday speech than for those.
 - **The correction protects a Darija word only if Dz knows it**; an unlisted word is still checked like any Arabic word. Politically charged and vulgar vocabulary is left out of the seed on purpose.
 - **Popup direction:** Darija suggestions are tagged `Lang::Ar` so the popup draws them right to left; code that wants to tell them from Arabic-list suggestions has to look them up in `DzList::seed_ar()`.
+
+## Word translation
+
+`LocalEngine::translate_word` looks a word up in `data/words/dict.txt` (English, French, Arabic, every direction; `translate.rs` has the engine side). This section measures the DATA: what is in the file, how fast it
+loads, how many of the commonest words it knows, and whether the first translation is a good one. Measured on 2026-11-17 on the file built that day from the kaikki.org data of 2026-10-30 (source, license and the rules of the build:
+[DATA.md](DATA.md#word-translation-datawordsdicttxt)); `cargo test -p verba-local --test dictionary` checks the well-known cases again on the real file (it skips when the file is missing).
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\fetch-dict.ps1        # download + extract + build (add -Keep to keep the downloads and extracts, -MaxMB 24 for a larger file)
+cargo run --release -p verba-local --example dict_probe -- --bench --coverage 5000
+cargo run --release -p verba-local --example dict_probe -- hello chien كتاب      # what the dictionary says about words
+```
+
+### What is in the file
+
+| Direction | Lines written | Of them, lemma headwords | Source of the translations |
+|---|---|---|---|
+| en>fr | 104 613 | 90 109 | translation tables of the English entries; French glosses read backwards |
+| fr>en | 128 846 | 106 487 | English glosses of the French entries (strict); translation tables read backwards |
+| en>ar | 46 005 | 32 802 | translation tables; Arabic glosses read backwards |
+| ar>en | 63 601 | 32 783 | English glosses of the Arabic entries (strict); translation tables read backwards |
+| fr>ar | 11 858 | 11 858 | worked out from fr>en and en>ar, the 30 000 commonest French words |
+| ar>fr | 5 986 | 5 986 | worked out from ar>en and en>fr, the 30 000 commonest Arabic words |
+| **total** | **360 909** | | |
+
+- The other lines are inflected forms (the plural `dogs`, the conjugated `parlons`, the Arabic `الكتاب` with its article): 14 504 (en>fr), 22 359 (fr>en), 13 203 (en>ar) and 30 818 (ar>en).
+- **Size on disk: 14 680 699 bytes (14.0 MiB).** Without the cut the same data would be 943 720 lines and 37.7 MiB (headwords 10.2 MiB, forms that are words of the frequency lists 2.3 MiB, all other forms 25.2 MiB). The cut keeps every headword
+  and every form that is a word of the lists (the commonest forms first); what is lost is rare inflections (the Arabic dual, the French literary tenses of rare verbs).
+- The English file has 1 499 161 entries, 139 931 of them give a translation into French (104 199 pairs) or Arabic (35 732 pairs). English Wiktionary is much richer in French than in Arabic, and the Arabic glosses are shorter in number (19 571 headwords with a gloss).
+- **Gloss-based directions are strict**: a gloss is kept only when it is one to three plain words ("to write" gives `write`, "greetings; hello (general salutation)" gives `greetings`, `hello`; "the act of ...", "a person who ..." give nothing).
+  French: of 84 389 headwords that have glosses, 76 979 have at least one short gloss, so **7 410 (8.8%) are left without** (375, or 1.9%, among the 20 000 commonest French words). Arabic: 19 571 headwords, 18 401 with a short gloss, **1 170 (6.0%) without**
+  (86, or 0.4%, among the 20 000 commonest). Some of them still get a line through the translation tables read backwards.
+
+### Cost
+
+| | |
+|---|---|
+| `dict.txt` on disk | 14.0 MiB |
+| `Dictionary::parse` of the text (release, text already in memory) | median 298 ms (best 287, worst 302, 5 runs) |
+| `LocalEngine::load_dir` with the dictionary, reading all the files (word lists, next-word tables, dictionary) | median 581 ms (3 runs) |
+| the same without `dict.txt` | median 293 ms (3 runs) |
+| memory of the parsed dictionary (a counting allocator around the parse) | 79 MB (the 14 MB of text is freed after loading) |
+| one lookup | a hash lookup per direction (not timed on its own) |
+
+The engine reads the file at start-up on a background thread, so the cost is a delay of about 0.3 s and 80 MB of memory (more with the allocator's overhead). The memory grows with the file at about 5.6 MB per MB of text: on earlier builds of the same data, a 12 MB file
+took 67 MB and 254 ms to parse, 18 MB took 103 MB and 369 ms, 24 MB took 143 MB and 514 ms. The in-memory form is not compact (a `String` per headword and per translation); it could be made about 3 times smaller if memory matters.
+
+**Build time** (this PC, Windows 10, release build, 35 MB/s download): 67 to 72 s with a fresh download (21 s download of the three files, 33 s unpacking and extracting, 12 to 14 s joining and writing, the rest compiling the tool), 48 s when the downloads are already on disk.
+The 3.4 GB English text is unpacked as a stream into the extractor and never stored; the largest file on disk is the 534 MB English `.gz`, deleted after use. On the GitHub runner the download is the part that may be slower; the release step has a limit of 25 minutes.
+Peak memory of the tool (peak working set, polled every 50 ms): the extractor 8 MB for the 3.4 GB English text (it holds one line at a time); the joining step 1.7 GB (it holds every candidate of every direction before cutting; a PC or runner with 4 GB is enough).
+
+### Coverage: the commonest words that have a translation
+
+For the 5 000 commonest words of each frequency list (`data/words/{en,fr,ar}.txt`), the share that has a translation into each of the other two languages, looked up as the engine does (`from` = the list's own language). "Plain" leaves out tokens with a digit,
+apostrophe or hyphen and one-letter tokens (the subtitle lists have many: `'s`, `n't`, `ll`).
+
+| From | To | all 5 000 | plain words | looked up directly |
+|---|---|---|---|---|
+| English | French | 93.7% | 94.7% | 4 684 of 4 684 |
+| English | Arabic | 90.1% | 91.1% | 4 505 of 4 505 |
+| French | English | 91.2% | 94.1% | 4 562 of 4 562 |
+| French | Arabic | 89.9% | 92.8% | 3 238 of 4 496 (the rest through English) |
+| Arabic | English | 83.7% | 83.8% | 4 185 of 4 185 |
+| Arabic | French | 83.3% | 83.4% | 2 184 of 4 165 (the rest through English) |
+
+The words without a translation are mostly names (`kelly`, `marie`), interjections (`ooh`), contractions and, in Arabic, forms with attached particles and pronoun endings (`مازالت`, `رأيتك`, `سيارتك`), which Wiktionary has no entry for.
+Arabic is the weak one: the Arabic subtitle list is full of such forms.
+
+### Is the first translation a good one? A sample judged by hand
+
+**Method.** For each direction, 60 words drawn at random (Python's `random.sample` with seed 11 over the words of 3 or more plain letters among the 3 000 commonest of the list; the words are in the tables below); for the two French-Arabic directions 30 words. The words were looked up as a user would (`dict_probe --from <language> --to <language>`)
+and judged by the author of this section, who knows English, French and Arabic but is **not an Algerian or a professional translator**. A first candidate counts when a speaker would accept it as a translation of the word in some common sense (and in the form of the lemma:
+`dogs` -> `chien` counts, the plural is the reader's business); "top 3" when one of the first three does. Words that are names missing from the dictionary, interjections and other tokens of the list that are not words of that language are not counted
+("not counted"). The draw was made after the rules of the build were fixed; the rules had been tuned on about 40 other words (`house`, `water`, `light`, `bank`, `book`, ...) and on two earlier draws, so the numbers are not blind.
+Judging is lenient on purpose where a word has several translations (`fine` -> `fin` counts), and strict where the first candidate is another sense than the common one (`minutes` -> `procès-verbal`, `plus` -> `plus`).
+
+| Direction | words | not counted | judged | first candidate good | one of the first 3 good | of the words that have an entry: first / top 3 |
+|---|---|---|---|---|---|---|
+| English -> French | 60 | 1 | 59 | **57 (96.6%)** | **59 (100%)** | 96.6% / 100% |
+| French -> English | 60 | 4 | 56 | **49 (87.5%)** | **54 (96.4%)** | 87.5% / 96.4% |
+| English -> Arabic | 60 | 3 | 57 | **49 (86.0%)** | **54 (94.7%)** | 87.5% / 96.4% |
+| Arabic -> English | 60 | 4 | 56 | **45 (80.4%)** | **47 (83.9%)** | 88.2% / 92.2% |
+| French -> Arabic | 30 | 2 | 28 | **24 (85.7%)** | **26 (92.9%)** | 85.7% / 92.9% |
+| Arabic -> French | 30 | 2 | 28 | **21 (75.0%)** | **22 (78.6%)** | 80.8% / 84.6% |
+
+An earlier draw of 60 English words (seed 7, a slightly earlier build, 57 judged) gave 5 misses of the first candidate and 1 of the first three (91.2% / 98.2%), so the English -> French figure above is on the lucky side of "about 90% first, 98% in the first three".
+Words outside the 3 000 commonest are worse: the lists are shorter and the first sense is more often a rare one.
+
+**What goes wrong**
+
+- **Words with several meanings** (the honest limit of a word-by-word dictionary with no context). `bank` gives `banque; banc; rive; grève; bancaire`: the building first, the river bank third, but
+  `light` gives `clair; allumer; light; léger; lumière`: four true meanings, and which one is wanted depends on the sentence. `marché` gives `مسيرة; سوق` (walk, market): the French word is both the noun and the participle of `marcher`. `minutes` gives the minutes of a meeting first.
+  `love` gives `aimer` before `amour`. The order comes from the senses' order in Wiktionary, the number of sources, and the frequency of the translated word, never from the sentence: show several candidates, as the popup does.
+- **Homographs and forms.** A form is looked up without its context: `voyais` (I saw) gives `please; sight; behold`, `aura` gives the noun, `montré` gives `watch` (from `montre`), `pis` gives the udder. Arabic without short vowels merges words: `كرة` is `ball` and `hate`, `اسم` is `name` and `poison`.
+- **Arabic verbs and roots.** An Arabic verb headword is the past `he did`, so `كتب` gives `write` (good) but the same letters are also `books` (plural of `كتاب`) and `he made write`; the forms of a verb (`أكتب`, `يكتب`) come from the tables of the entries and are there for the commonest verbs only.
+  Derived forms (the second to tenth forms of a verb) are separate entries with their own glosses and are mostly short. Nothing in the data links a word to its root, so root-based lookups do not exist.
+- **Gloss-derived directions (fr>en, ar>en) are noisier after the first candidate**: the second and third are often other senses or a neighbour word (`ترتدي` gives `wear; move back quickly; put on`). First candidates are good about 88% of the time when there is an entry.
+- **Gaps in the English tables**: the translation tables of very common English words are often on a subpage that the data does not hold. `meant` gives `moyen; méchant` (the adjective `mean`) because the verb's table is missing; `anywhere` has no Arabic translation at all.
+  The reverse glosses (French and Arabic entries that say `house`) fill many of these gaps, but with less certain ordering.
+- **Rude words are left out by rule** (`fuck`, `slut`, `bitch` have no entry; see [DATA.md](DATA.md#word-translation-datawordsdicttxt)): a user who looks one up gets nothing, not a wrong word.
+- **A name that exists as an ordinary word** is read as the word (`كيلي` is `measure`, not Kelly; `ماكس` is `collect taxes`).
+
+### Everyday words an Algerian speaker may look up
+
+Thirty words and phrases, French and English into Arabic, as the engine gives them (the first three candidates shown; the verdict is the author's, **not an Algerian reviewer's**; the dictionary is Modern Standard Arabic with a few Maghrebi words, it knows no Darija
+spelling such as `واش`, `شحال` or `برك`).
+
+| Looked up | Gives | Good? |
+|---|---|---|
+| bonjour | مرحبا; أهلا; آلو | yes (an Algerian would also say صباح الخير / السلام عليكم, which is 4th) |
+| merci | شكرا; شكر; شكرا لك | yes |
+| s'il vous plaît | أرجوك; رجاء; أعجب | yes, but the 3rd is noise (goes through English: `please` also means "to please") |
+| au revoir | وداعا; إلى اللقاء; مع السلامة | yes |
+| bienvenue | مرحبا; أهلا وسهلا; أهلا | yes |
+| école | مدرسة; كلية; جامعة | yes |
+| médecin | دكتور; طبيب; حكيم | yes |
+| pharmacie | صيدلية; صيدلة | yes |
+| voiture | سيارة; عربة | yes |
+| marché | مسيرة; سوق; سار | **no, first is "march"** (market is 2nd) |
+| ordonnance | وصفة; أمر; وصفة طبية | yes (the medical prescription, then the order) |
+| demain | غدا; غد; الغد | yes |
+| maintenant | الآن; حالا; هنا | yes |
+| mairie | بلدية | yes (Algerian: البلدية) |
+| baccalauréat | (no entry) | **no** |
+| carte d'identité | بطاقة تحقيق الشخصية; بطاقة تعريف; بطاقة شخصي | partly: the 2nd is the usual one (بطاقة التعريف) |
+| hello | مرحبا; أهلا; آلو | yes |
+| thank you | شكرا; شكرا لك; الله يبارك فيك | yes (the 3rd is a Maghrebi-flavoured phrase) |
+| please | أرجوك; رجاء; أعجب | yes (3rd is noise) |
+| good morning | صباح الخير; صباح النور | yes |
+| goodbye | وداعا; إلى اللقاء; مع السلامة | yes |
+| welcome | مرحبا; أهلا وسهلا; أهلا | yes |
+| bread | خبز; قرص | yes |
+| market | سوق | yes |
+| prescription | وصفة; وصفة طبية; سن | yes |
+| tomorrow | غدا; غد; الغد | yes |
+| a lot | كثير; كثيرا | yes |
+| money | مال; نقود; أموال | yes (colloquial `دراهم`/`فلوس` not there) |
+| how much | كم; بكم | yes |
+| good night | تصبح على خير; ليلة سعيدة | yes |
+
+27 of 30 are good first (28 with `carte d'identité`); the failures are a word with two meanings (`marché`) and a word the data does not have (`baccalauréat`). Other Algerian terms tried and not found: `wilaya`, `chorba`, `kamis`. `casse-croûte` gives
+`وجبة خفيفة; لمجة; تصبيرة` (the last two are Maghrebi words from Wiktionary), `semoule` gives `سميذ; سميد`.
+
+### Known weaknesses of the dictionary
+
+- No context: a word is translated alone, in the order of the commonest senses, and the user picks. Show at least 3 candidates.
+- Arabic with attached particles and pronoun endings (`وبالكتاب`, `سيارتك`, `رأيتك`) is mostly not found; about one Arabic word in six of the 5 000 commonest is in that class. The engine could strip the article, a one-letter preposition or conjunction and a pronoun ending before the lookup.
+- The Arabic side is Modern Standard Arabic with a little Maghrebi: no Darija spelling, no Latin-letter (Arabizi) input. English Wiktionary has 98 translations marked as Algerian Arabic.
+- Multi-word headwords (up to 3 words) exist, but a selection of a whole phrase finds them only if the phrase is in Wiktionary as an entry.
+- Proper nouns are few (names are mostly absent); abbreviations are treated like other words.
+- Judging is by one person and the samples are small (60 words per direction): the percentages have a margin of about plus or minus 8 points.
+
+### Where this goes next
+
+- A frequency of senses in real text (a parallel corpus such as Tatoeba, CC BY 2.0 FR) would put the commonest sense of a polysemous word first better than Wiktionary's order.
+- The French edition of Wiktionary (`kaikki.org/dictionary/` has a "French Wiktionary edition" extract) has French definitions and translations of its own and might fill the Arabic side.
+- Arabic clitic stripping in the engine, as said above.
+
+<details>
+<summary>The six samples, word by word (how the numbers above were counted)</summary>
+
+**en>fr**
+
+| word | the dictionary gives (first 3) | 1st | top 3 | a good translation |
+|---|---|---|---|---|
+| ruin | ruine; ruiner; gâcher | yes | yes | ruine |
+| hung | pendu; pendre; monté | yes | yes | pendu |
+| kelly | Kelly | yes | yes | Kelly |
+| genius | génie; bel esprit; aigle | yes | yes | génie |
+| advantage | avantage; favoriser; atout | yes | yes | avantage |
+| lily | lys; lis | yes | yes | lys |
+| anywhere | n'importe où | yes | yes | n'importe où |
+| thinks | penser; trouver; pensée | yes | yes | pense |
+| vacation | vacances; aller en vacances; vacance | yes | yes | vacances |
+| eventually | finalement; à terme; finir par | yes | yes | finalement |
+| settled | régler; réglé; arrêté | yes | yes | réglé, installé |
+| education | éducation; enseignement; formation | yes | yes | éducation |
+| across | à travers; en travers; outre | yes | yes | à travers |
+| chance | chance; hasard; risque | yes | yes | chance |
+| murderer | meurtrier; assassin; meurtrière | yes | yes | meurtrier |
+| sarah | Sarah; Sara | yes | yes | Sarah |
+| street | rue | yes | yes | rue |
+| minutes | procès-verbal; minute; minuscule | **no** | yes | minutes (also: procès-verbal) |
+| remains | restes; dépouille; cendres | yes | yes | restes |
+| blast | rafale; explosion; souffle | yes | yes | explosion, rafale |
+| tiger | tigre; tigresse | yes | yes | tigre |
+| fine | fin; bien; amende | yes | yes | bien, fin |
+| sucks | sucer; super; téter | yes | yes | suce |
+| distance | distance; froid; éloigner | yes | yes | distance |
+| memories | mémoire; souvenir; stockage | yes | yes | souvenirs |
+| billion | milliard; millions; mille milliards | yes | yes | milliard |
+| tank | tank; réservoir; cuve | yes | yes | réservoir, char |
+| marie | -- | - | - | (name, no entry) |
+| clean | propre; net; nettoyer | yes | yes | propre |
+| sand | sable; plage; chevalier | yes | yes | sable |
+| had | avoir; tenir; prendre | yes | yes | avait, eu |
+| louis | Louis; Ludovic | yes | yes | Louis |
+| door | porte; portière; huis | yes | yes | porte |
+| miss | manquer; rater; raté | yes | yes | manquer |
+| years | année; an; millésime | yes | yes | années, ans |
+| bill | bill; note; bec | **no** | yes | facture |
+| sleeping | dormir; sommeil; couchage | yes | yes | dormant |
+| writer | écrivain; auteur; écrivaine | yes | yes | écrivain |
+| wait | attente; attendre; patienter | yes | yes | attendre |
+| avoid | éviter; fuir; soustraire | yes | yes | éviter |
+| rose | rose; rosier; rosé | yes | yes | rose |
+| growing | grandir; grandissant; croître | yes | yes | grandissant |
+| learning | apprentissage; apprendre; étudier | yes | yes | apprentissage |
+| join | joindre; rejoindre; appareiller | yes | yes | joindre, rejoindre |
+| hearts | cœur; cardiaque; âme | yes | yes | cœurs |
+| carry | porter; entraîner; charrier | yes | yes | porter |
+| maid | bonne; demoiselle; domestique | yes | yes | bonne, femme de chambre |
+| hiding | cacher; dissimuler; peau | yes | yes | cachant |
+| terms | terme; limite; condition | yes | yes | termes, conditions |
+| just | juste; que; équitable | yes | yes | juste |
+| article | article; chef; papier | yes | yes | article |
+| crazy | fou; insensé; taré | yes | yes | fou |
+| victims | victime | yes | yes | victimes |
+| agents | agent; agente; procureur | yes | yes | agents |
+| gay | gay; homo; gai | yes | yes | gay |
+| split | fendre; diviser; couper | yes | yes | fendre, diviser |
+| tear | déchirer; déchirure; larme | yes | yes | déchirer, larme |
+| kids | gamin; gosse; môme | yes | yes | enfants, gamins |
+| bus | bus; autobus; car | yes | yes | bus |
+| local | local; du coin; section | yes | yes | local |
+
+**fr>en**
+
+| word | the dictionary gives (first 3) | 1st | top 3 | a good translation |
+|---|---|---|---|---|
+| mariés | married; marry; wed | yes | yes | married |
+| scientifique | scientific; scientist | yes | yes | scientific, scientist |
+| célèbre | famous; celebrate; celebrated | yes | yes | famous |
+| queue | tail; queue; line | yes | yes | tail, queue |
+| arthur | Arthur | yes | yes | Arthur |
+| pis | udder; and; trouble | **no** | **no** | worse (also: udder) |
+| plusieurs | several; many; lot | yes | yes | several |
+| porter | porter; carry; wear | **no** | yes | carry, wear |
+| minuit | midnight | yes | yes | midnight |
+| enlevé | remove; take off; kidnap | yes | yes | removed, kidnapped |
+| vengeance | revenge; vengeance | yes | yes | revenge |
+| voyais | please; sight; behold | **no** | **no** | saw, was seeing |
+| balle | ball; bullet; chaff | yes | yes | ball, bullet |
+| affaires | business; belongings; busy | yes | yes | business, things |
+| style | style; elegant; stylish | yes | yes | style |
+| retrouvé | find; remember; rediscover | yes | yes | found (again) |
+| suppose | suppose; alleged; think | yes | yes | suppose |
+| vérité | truth; fact; reality | yes | yes | truth |
+| différente | different; dissimilar; assorted | yes | yes | different |
+| king | -- | - | - | (English word in the French list) |
+| problème | problem; trouble; conundrum | yes | yes | problem |
+| lucy | -- | - | - | (name, no entry) |
+| également | equally; too; also | yes | yes | also |
+| dira | say; tell; saying | yes | yes | will say |
+| étoile | star; starry; starred | yes | yes | star |
+| sauve | save; safe; except | yes | yes | saves |
+| objets | object; thing; aim | yes | yes | objects |
+| secret | secret; secrecy; undercover | yes | yes | secret |
+| écran | screen; monitor; display | yes | yes | screen |
+| vraiment | really; truly; very | yes | yes | really |
+| posé | pose; installation; extension | yes | yes | placed, put down |
+| dernière | last; latter; latest | yes | yes | last |
+| sang | blood | yes | yes | blood |
+| jour | day; daylight; light | yes | yes | day |
+| ferait | make; do; go | yes | yes | would do, would make |
+| prise | hold; socket; take | yes | yes | taken, socket, grip |
+| stan | -- | - | - | (name, no entry) |
+| mort | death; dead; die | yes | yes | death, dead |
+| feras | make; do; go | yes | yes | will do |
+| remarqué | remark; notice; observe | **no** | yes | noticed |
+| cousin | cousin; mosquito; cranefly | yes | yes | cousin |
+| reviendrai | return; come back; grow back | yes | yes | will come back |
+| espèce | species; type; sort | yes | yes | species, kind |
+| tir | shooting; shot; pitch | yes | yes | shot, shooting |
+| appartement | apartment; flat; tenement | yes | yes | apartment |
+| retournez | turn over; return; flip | yes | yes | return, turn over |
+| prouver | prove; evidence | yes | yes | prove |
+| premiers | first; premier; prime | yes | yes | first |
+| plus | plus; more; most | **no** | yes | more |
+| créature | creature; being | yes | yes | creature |
+| aura | aura; have; vibe | **no** | yes | will have |
+| casse | broken; case; break | yes | yes | breaks |
+| ooh | -- | - | - | (interjection, no entry) |
+| comprenez | understand; include; comprehend | yes | yes | understand |
+| montré | watch; wristwatch; show | **no** | yes | shown |
+| rentrez | go back; go home; tuck | yes | yes | go back, go home |
+| espère | hope; wait; trust | yes | yes | hope |
+| vol | flight; theft; stealing | yes | yes | flight, theft |
+| arranger | arrange; suit; fix | yes | yes | arrange |
+| aille | go; attend; be | yes | yes | go |
+
+**en>ar**
+
+| word | the dictionary gives (first 3) | 1st | top 3 | a good translation |
+|---|---|---|---|---|
+| ruin | خراب; دمر; طلل | yes | yes | خراب، دمار |
+| hung | علق; شنق; تعلق | yes | yes | علّق |
+| kelly | -- | - | - | (name, no entry) |
+| genius | عبقري; عبقرية | yes | yes | عبقري |
+| advantage | فائدة; أفضلية; ميزة | **no** | yes | ميزة |
+| lily | زنبق; سوسن | yes | yes | زنبق |
+| anywhere | -- | **no** | **no** | في أي مكان |
+| thinks | فكر; تفكر; ظن | yes | yes | يفكّر |
+| vacation | عطلة; إجازة | yes | yes | عطلة |
+| eventually | أخيرا; في الآخر | yes | yes | أخيرا |
+| settled | تحضر; حاضر; سوى | **no** | **no** | مستقر |
+| education | تربية; تعليم; ثقافة | yes | yes | تعليم |
+| across | عبر | yes | yes | عبر |
+| chance | فرصة; صدفة; باب | yes | yes | فرصة |
+| murderer | قاتل; قاتلة; سفاح | yes | yes | قاتل |
+| sarah | سارة | yes | yes | سارة |
+| street | شارع; طريق; حارة | yes | yes | شارع |
+| minutes | دقيقة; دقيق; تافه | yes | yes | دقائق |
+| remains | تبقى; باقي; بقي | yes | yes | يبقى، بقايا |
+| blast | لفح; عصف | **no** | yes | انفجار، عصف |
+| tiger | نمر; ببر | yes | yes | نمر |
+| fine | حسنا; غرامة; بخير | yes | yes | حسنا، جيد |
+| sucks | مص; رشف; مصة | yes | yes | يمصّ |
+| distance | بعد; مسافة; بين | yes | yes | مسافة |
+| memories | ذاكرة; ذكرى; حافظة | yes | yes | ذكريات |
+| billion | مليار | yes | yes | مليار |
+| tank | دبابة; خزان; فنطاس | yes | yes | دبابة، خزان |
+| marie | متزوج; متزوجة; تزوج | - | - | (name; the engine found it in French) |
+| clean | نظيف; نظف; نقي | yes | yes | نظيف |
+| sand | رمل; دريجة | yes | yes | رمل |
+| had | ل; عند; ملك | **no** | **no** | كان لديه |
+| louis | -- | - | - | (name, no entry) |
+| door | باب; أبواب; مدخل | yes | yes | باب |
+| miss | أخطأ; آنسة; افتقد | yes | yes | أخطأ، اشتاق |
+| years | عام; سنة; سنوات | yes | yes | سنوات |
+| bill | فاتورة; لائحة; بيل | yes | yes | فاتورة |
+| sleeping | نام; نوم; سنة | yes | yes | نائم |
+| writer | كاتب; مؤلف; كاتبة | yes | yes | كاتب |
+| wait | انتظر | yes | yes | انتظر |
+| avoid | تجنب; تفادى; ابتعد | yes | yes | تجنّب |
+| rose | وردة; شخص; نهض | yes | yes | وردة |
+| growing | كبر; زائد; أمر | yes | yes | نامٍ |
+| learning | تعلم; درس; أستاذ | yes | yes | تعلّم |
+| join | وصل; اتصل; أوصل | yes | yes | انضمّ |
+| hearts | قلب; عند; جوهر | yes | yes | قلوب |
+| carry | حمل; قل; احتمل | yes | yes | حمل |
+| maid | فتاة; جارية; خادمة | **no** | yes | خادمة |
+| hiding | أخفى; خبأ; جلد | yes | yes | اختباء |
+| terms | شرط; مصطلح; مهلة | yes | yes | شروط |
+| just | فقط; عادل; عدل | yes | yes | فقط، عادل |
+| article | مقالة; مقال; مادة | yes | yes | مقال |
+| crazy | أحمق; مجنون; مسعور | **no** | yes | مجنون |
+| victims | ضحية; أضحى | yes | yes | ضحايا |
+| agents | فاعل; وكيل; عميل | **no** | yes | وكلاء، عملاء |
+| gay | مثلي; مثلية | yes | yes | مثلي |
+| split | قسم; شعب; فرق | yes | yes | قسّم، انقسم |
+| tear | شق; مزق; خرق | yes | yes | مزّق، دمعة |
+| kids | طفل; جدي | yes | yes | أطفال |
+| bus | حافلة; باص; ناقل | yes | yes | حافلة |
+| local | محلي; أهلي | yes | yes | محلي |
+
+**ar>en**
+
+| word | the dictionary gives (first 3) | 1st | top 3 | a good translation |
+|---|---|---|---|---|
+| ببساطة | basically | yes | yes | simply |
+| أنهُ | that; to; if | yes | yes | that he |
+| آخذ | take; get; blame | yes | yes | taking |
+| تلعب | play; game; trick | yes | yes | play |
+| مارتن | Martin | yes | yes | Martin |
+| ولدي | child; bear; produce | yes | yes | my son |
+| الجيد | good; neck; beautiful | yes | yes | the good |
+| حفلة | party; gathering; meeting | yes | yes | party |
+| ترتدي | wear; move back quickly; put on | yes | yes | wear |
+| تحديد | definition; sharpen; confine | yes | yes | determination |
+| القوات | power; might; force | yes | yes | the forces |
+| كيلي | measure; mete | - | - | (name Kelly, read as a verb) |
+| كهذا | like this | yes | yes | like this |
+| القيام | rebellion; vertical; right | **no** | **no** | performing |
+| النجدة | help; crisis; trouble | yes | yes | help, rescue |
+| القيادة | leadership; driving; control | yes | yes | leadership, driving |
+| غداً | tomorrow; leave; come | yes | yes | tomorrow |
+| نفسي | myself; self; breath | yes | yes | myself |
+| إياه | him; it; he | yes | yes | him, it |
+| الأمير | prince; commander; Amir | yes | yes | the prince |
+| كثيرًا | lot; often; many | yes | yes | a lot |
+| فعلت | do; make; activate | yes | yes | I did |
+| جلبت | bring; fetch; get | yes | yes | I brought |
+| بسيط | simple; wide; easy | yes | yes | simple |
+| نوعا | type; kind; diversify | yes | yes | kind (of) |
+| فيكتور | -- | - | - | (name, no entry) |
+| إليهم | to; automatic; promise | yes | yes | to them |
+| مبكراً | early | yes | yes | early |
+| كثيرا | lot; often; many | yes | yes | a lot |
+| مازالت | -- | **no** | **no** | still |
+| أحد | one; someone; somebody | yes | yes | one, someone |
+| رأيتك | -- | **no** | **no** | I saw you |
+| قتل | kill; murder; slay | yes | yes | kill |
+| الأشياء | thing; something; little | yes | yes | the things |
+| لهذا | therefore | yes | yes | therefore |
+| بأني | part; separate; builder | **no** | **no** | that I |
+| ماكس | collect taxes; customs; tax | - | - | (name Max, read as a noun) |
+| سقط | fall; down; defective | yes | yes | fell |
+| بذلك | whereby | **no** | **no** | thereby |
+| قيمة | value; worth; amount | yes | yes | value |
+| قطع | cut; stop; break | yes | yes | cut |
+| سعيداً | happy; Said; lucky | yes | yes | happy |
+| مسبقاً | -- | **no** | **no** | in advance |
+| تأخذ | take; get; blame | yes | yes | take |
+| فلم | film; movie; motion picture | yes | yes | film |
+| لويس | -- | - | - | (name, no entry) |
+| البيانات | statement; piano; facts | yes | yes | data, statements |
+| منزلي | house; domestic; homemade | yes | yes | my house, domestic |
+| أنحاء | side; like; towards | **no** | **no** | parts, regions |
+| الآن | now; that; to | yes | yes | now |
+| الحي | insist; alive; experience | **no** | yes | the neighbourhood |
+| لحظة | moment; instant; jiffy | yes | yes | moment |
+| للقيام | -- | **no** | **no** | to do |
+| الذهب | go; gold; leave | **no** | yes | gold |
+| مهمة | job; mission; task | yes | yes | task, mission |
+| فكر | think; thought; thinking | yes | yes | think, thought |
+| سيارتك | -- | **no** | **no** | your car |
+| دعنا | let's | yes | yes | let us |
+| أنتظر | wait; await; wait for | yes | yes | wait |
+| تموت | die; death; kill | yes | yes | die |
+
+**fr>ar**
+
+| word | the dictionary gives (first 3) | 1st | top 3 | a good translation |
+|---|---|---|---|---|
+| mariés | متزوج; متزوجة; تزوج | yes | yes | متزوجون |
+| scientifique | عالم; علمي; عالمة | yes | yes | علمي، عالم |
+| célèbre | مشهور; شهير; مجيد | yes | yes | مشهور |
+| queue | ذنب; ذيل; وقف في الصف | yes | yes | ذيل |
+| arthur | آرثر | yes | yes | آرثر |
+| pis | و; إذا; ضرع | **no** | **no** | أسوأ |
+| plusieurs | كثير; عدة; بعض | **no** | yes | عدة |
+| porter | حمل; قل; احتمل | yes | yes | حمل، ارتدى |
+| minuit | منتصف الليل; منتصف ليل | yes | yes | منتصف الليل |
+| enlevé | أخرج; نقل; أزال | yes | yes | أُزيل، خُطف |
+| vengeance | انتقام; ثأر; انتقم | yes | yes | انتقام |
+| voyais | أرجوك; رجاء; أعجب | **no** | **no** | كنت أرى |
+| balle | كرة; رصاصة; رصاص | yes | yes | كرة، رصاصة |
+| affaires | عمل; شركة; مشروع | yes | yes | أعمال |
+| style | أسلوب; نمط; موضة | yes | yes | أسلوب |
+| retrouvé | وجد; لقي; عثر على | yes | yes | وجد |
+| suppose | افترض; حسب; ظن | yes | yes | افترض |
+| vérité | حقيقة; حق | yes | yes | حقيقة |
+| différente | مختلف; آخر; مشكل | yes | yes | مختلفة |
+| king | ملك; سلطان; شاه | - | - | (English word) |
+| problème | مشكلة; مسألة; معضلة | yes | yes | مشكلة |
+| lucy | -- | - | - | (name, no entry) |
+| également | كذلك; أيضا; بالتساوي | yes | yes | أيضا |
+| dira | قال; ترى; يقول | yes | yes | سيقول |
+| étoile | نجم; كوكب; نجمة | yes | yes | نجمة |
+| sauve | أنقذ; نجى; أنجى | yes | yes | ينقذ |
+| objets | شيء; عرضة; هدف | yes | yes | أشياء، أغراض |
+| secret | خفية; سر; سري | **no** | yes | سرّ |
+| écran | شاشة; ستارة; حاجز | yes | yes | شاشة |
+| vraiment | حقا; والله; حقيقة | yes | yes | حقا |
+
+**ar>fr**
+
+| word | the dictionary gives (first 3) | 1st | top 3 | a good translation |
+|---|---|---|---|---|
+| ببساطة | foncièrement; à la base; basiquement | **no** | **no** | simplement |
+| أنهُ | que; cela; ce | yes | yes | que |
+| آخذ | prendre; prise; emporter | yes | yes | prendre |
+| تلعب | jouer; jeu; lire | yes | yes | jouer |
+| مارتن | martinet; Martin | **no** | yes | Martin |
+| ولدي | enfant; drôle; petit | yes | yes | mon fils |
+| الجيد | bon; bien; sage | yes | yes | le bon |
+| حفلة | partie; rassemblement; party | **no** | **no** | fête |
+| ترتدي | porter; user; usure | yes | yes | porter |
+| تحديد | définition; signification | yes | yes | définition |
+| القوات | pouvoir; puissance; alimenter | **no** | **no** | les forces |
+| كيلي | mesurer; mesure; pige | - | - | (name Kelly) |
+| كهذا | -- | **no** | **no** | comme ça |
+| القيام | rébellion; révolte; vertical | **no** | **no** | le fait de faire |
+| النجدة | aide; aider; secours | yes | yes | aide, secours |
+| القيادة | leadership; autorité; charisme | yes | yes | direction, conduite |
+| غداً | demain | yes | yes | demain |
+| نفسي | moi-même; je; moi | yes | yes | moi-même |
+| إياه | lui; le; il | yes | yes | lui |
+| الأمير | prince; garde; commandant | yes | yes | prince |
+| كثيرًا | souvent; lot; ensemble | yes | yes | beaucoup |
+| فعلت | faire; do; aller | yes | yes | faire |
+| جلبت | apporter; amener; traîner | yes | yes | apporter |
+| بسيط | simple; large; facile | yes | yes | simple |
+| نوعا | type; taper; espèce | yes | yes | type |
+| فيكتور | -- | - | - | (name, no entry) |
+| إليهم | à; pour; chez | yes | yes | à |
+| مبكراً | tôt; en avance; de bonne heure | yes | yes | tôt |
+| كثيرا | souvent; lot; ensemble | yes | yes | beaucoup |
+| مازالت | -- | **no** | **no** | toujours |
+
+</details>

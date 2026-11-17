@@ -20,6 +20,16 @@ The next-word tables (en.bigrams.txt, fr.bigrams.txt, ar.bigrams.txt) count whic
 from sentences of Tatoeba (https://tatoeba.org), (c) Tatoeba contributors, license Creative Commons Attribution 2.0 France
 (CC BY 2.0 FR, https://creativecommons.org/licenses/by/2.0/fr/). The tables hold counts of word pairs only, no sentence.
 
+The word-translation dictionary (dict.txt) lists translations between English, French and Arabic. It was built from Wiktionary
+(https://en.wiktionary.org), (c) Wiktionary contributors, as extracted by wiktextract (https://kaikki.org, Tatu Ylonen).
+
+    License of dict.txt: Creative Commons Attribution-ShareAlike 4.0 (CC BY-SA 4.0), and GNU Free Documentation License (GFDL)
+    https://creativecommons.org/licenses/by-sa/4.0/
+
+Changed: the entries were reduced to short word translations, ranked, and inflected forms were added. dict.txt is a separate file and keeps
+that license (you must keep the attribution and give a copy the same license); Verba's own program is not covered by it. Wiktionary's own
+statement of its license: https://en.wiktionary.org/wiki/Wiktionary:Copyrights
+
 Privacy: Verba reads only the few letters before the caret in the text box you are typing in, never in password
 boxes, keeps nothing, and sends nothing over the network.
 

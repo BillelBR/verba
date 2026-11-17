@@ -31,3 +31,351 @@ ar>fr	أريد	vouloir; je veux
 ar>fr	نريد	vouloir; nous voulons
 ar>en	الجزائر	Algeria; Algiers
 ar>fr	الجزائر	Algérie; Alger
+
+# second round: the commonest words of the Arabic list (mostly small words and words with a pronoun attached)
+ar>en	أنا	I
+ar>fr	أنا	je
+ar>en	يا	O; hey
+ar>fr	يا	ô
+ar>en	أنت	you
+ar>fr	أنت	tu; vous
+ar>en	هو	he
+ar>fr	هو	il
+ar>en	فقط	only; just
+ar>fr	فقط	seulement
+ar>en	لك	to you; yours
+ar>fr	لك	à toi; pour toi
+ar>en	يجب	must; should
+ar>fr	يجب	devoir; falloir
+ar>en	لي	to me; mine
+ar>fr	لي	à moi; pour moi
+ar>en	إنه	indeed he; it is
+ar>fr	إنه	il est; c'est
+ar>en	إنها	indeed she; it is
+ar>fr	إنها	elle est; c'est
+ar>en	سوف	will
+ar>fr	سوف	sera; va
+ar>en	كانت	was; be
+ar>fr	كانت	était; être
+ar>en	أي	any; which
+ar>fr	أي	n'importe quel; quel
+ar>en	أو	or
+ar>fr	أو	ou
+ar>en	هيا	come on; let's go
+ar>fr	هيا	allez; allons
+ar>en	مثل	like; as
+ar>fr	مثل	comme
+ar>en	صحيح	true; correct; right
+ar>fr	صحيح	vrai; correct; exact
+ar>en	به	with it; with him
+ar>fr	به	avec lui
+ar>en	أعلم	I know; know
+ar>fr	أعلم	je sais; savoir
+ar>en	شخص	person; individual
+ar>fr	شخص	personne
+ar>en	كما	as; like
+ar>fr	كما	comme
+ar>en	يبدو	seem; appear
+ar>fr	يبدو	sembler; paraître
+ar>en	تكون	be
+ar>fr	تكون	être
+ar>en	أليس	isn't it; isn't he
+ar>fr	أليس	n'est-ce pas
+ar>en	لدي	I have; has; at
+ar>fr	لدي	j'ai; chez
+ar>en	عليه	on him
+ar>fr	عليه	sur lui
+ar>en	لست	I am not
+ar>fr	لست	je ne suis pas
+ar>en	غير	other than; except; not
+ar>fr	غير	autre que; sauf; non
+ar>en	لديك	you have
+ar>fr	لديك	tu as
+ar>en	تريد	want; you want
+ar>fr	تريد	vouloir; tu veux
+ar>en	تعرف	know; you know
+ar>fr	تعرف	connaître; savoir; tu sais
+ar>en	لدينا	we have
+ar>fr	لدينا	nous avons
+ar>en	يمكنني	I can; can I
+ar>fr	يمكنني	je peux
+ar>en	بأن	that; by
+ar>fr	بأن	que
+ar>en	الناس	people
+ar>fr	الناس	gens; les gens
+ar>en	بها	with it; with her
+ar>fr	بها	avec elle
+ar>en	الكثير	much; many; a lot
+ar>fr	الكثير	beaucoup
+ar>en	سيدي	sir; my lord; my master
+ar>fr	سيدي	monsieur
+ar>en	شئ	thing
+ar>fr	شئ	chose
+ar>en	وأنا	and I
+ar>fr	وأنا	et moi; et je
+ar>en	بي	with me; in me
+ar>fr	بي	avec moi
+ar>en	أخرى	another; other
+ar>fr	أخرى	autre
+ar>en	بك	with you; in you
+ar>fr	بك	avec toi
+ar>en	بذلك	with that; by doing so
+ar>fr	بذلك	ainsi; de cette façon
+ar>en	كم	how many; how much
+ar>fr	كم	combien
+ar>en	يوجد	there is; exist
+ar>fr	يوجد	il y a; exister
+ar>en	واحدة	one; a single
+ar>fr	واحدة	une
+ar>en	بالطبع	of course
+ar>fr	بالطبع	bien sûr; évidemment
+ar>en	معي	with me
+ar>fr	معي	avec moi
+ar>en	إذن	then; so; therefore
+ar>fr	إذن	alors; donc
+ar>en	تم	was done; completed
+ar>fr	تم	fait; terminé
+ar>en	إلهي	my God
+ar>fr	إلهي	mon Dieu
+ar>en	هكذا	like this; thus
+ar>fr	هكذا	ainsi; comme ça
+ar>en	أمي	my mother; mom
+ar>fr	أمي	ma mère; maman
+ar>en	ألا	isn't it; indeed
+ar>fr	ألا	n'est-ce pas; certes
+ar>en	حول	around; about
+ar>fr	حول	autour; environ
+ar>en	بما	with what; as; since
+ar>fr	بما	avec ce que; puisque
+ar>en	الجميع	everyone; all
+ar>fr	الجميع	tout le monde; tous
+ar>en	يمكننا	we can
+ar>fr	يمكننا	nous pouvons
+ar>en	لديه	he has
+ar>fr	لديه	il a
+ar>en	لنا	for us; ours
+ar>fr	لنا	à nous; pour nous
+ar>en	بشكل	in a way; form
+ar>fr	بشكل	de façon; forme
+ar>en	فحسب	only; just
+ar>fr	فحسب	seulement; simplement
+ar>en	حال	state; condition; case
+ar>fr	حال	état; condition; situation
+ar>en	أعني	I mean; mean
+ar>fr	أعني	je veux dire; signifier
+ar>en	فعلت	did; do
+ar>fr	فعلت	faire; j'ai fait
+ar>en	عنه	about him; from him
+ar>fr	عنه	de lui; à son sujet
+ar>en	بشأن	about; regarding
+ar>fr	بشأن	au sujet de; concernant
+ar>en	فيه	in it; in him
+ar>fr	فيه	dedans; en lui
+ar>en	منك	from you
+ar>fr	منك	de toi
+ar>en	يعني	I mean; it means; meaning
+ar>fr	يعني	c'est-à-dire; ça veut dire
+ar>en	مجرد	mere; just; only
+ar>fr	مجرد	simple; seulement
+ar>en	مني	from me
+ar>fr	مني	de moi
+ar>en	بالنسبة	regarding; as for
+ar>fr	بالنسبة	quant à; pour
+ar>en	الأمور	things; matters
+ar>fr	الأمور	les choses; affaires
+ar>en	فكرة	idea; thought
+ar>fr	فكرة	idée; pensée
+ar>en	المال	money; wealth
+ar>fr	المال	argent
+ar>en	كنا	we were; be
+ar>fr	كنا	nous étions; être
+ar>en	ستكون	will be
+ar>fr	ستكون	sera; être
+ar>en	هؤلاء	these; those
+ar>fr	هؤلاء	ceux-ci; ces
+ar>en	انظر	look
+ar>fr	انظر	regarder; regarde
+ar>en	منه	from him; of it
+ar>fr	منه	de lui
+ar>en	أشعر	I feel; feel
+ar>fr	أشعر	je sens; sentir
+ar>en	الحياة	life
+ar>fr	الحياة	vie
+ar>en	أني	that I; how
+ar>fr	أني	que je
+ar>en	نفس	self; soul; breath
+ar>fr	نفس	âme; soi-même; même
+ar>en	بأس	harm; power; courage
+ar>fr	بأس	mal; courage
+ar>en	اي	any; which
+ar>fr	اي	n'importe quel
+ar>en	لكم	to you; for you
+ar>fr	لكم	à vous; pour vous
+ar>en	تبدو	seem; look
+ar>fr	تبدو	sembler; paraître
+ar>en	أرى	I see; see
+ar>fr	أرى	je vois; voir
+ar>en	عند	at; have; with
+ar>fr	عند	chez; à
+ar>en	وأنت	and you
+ar>fr	وأنت	et toi
+ar>en	فضلك	your favor; please
+ar>fr	فضلك	ta faveur; s'il te plaît
+ar>en	نفسك	yourself
+ar>fr	نفسك	toi-même
+ar>en	لكي	so that; in order to
+ar>fr	لكي	afin de; pour que
+ar>en	وهو	and he
+ar>fr	وهو	et lui
+ar>en	أرجوك	please
+ar>fr	أرجوك	s'il te plaît
+ar>en	رأيت	I saw; see
+ar>fr	رأيت	j'ai vu; voir
+ar>en	عزيزتي	my dear
+ar>fr	عزيزتي	ma chérie; chère
+ar>en	الشرطة	police
+ar>fr	الشرطة	police
+ar>en	شرطة	police
+ar>fr	شرطة	police
+ar>en	بنا	with us; in us
+ar>fr	بنا	avec nous
+ar>en	أردت	I wanted; want
+ar>fr	أردت	j'ai voulu; vouloir
+ar>en	مالذي	what
+ar>fr	مالذي	qu'est-ce que
+ar>en	بأنه	that he; that it
+ar>fr	بأنه	que
+ar>en	والآن	and now
+ar>fr	والآن	et maintenant
+ar>en	الرجال	men
+ar>fr	الرجال	hommes
+ar>en	رجال	men
+ar>fr	رجال	hommes
+ar>en	سنوات	years
+ar>fr	سنوات	années
+ar>en	دون	without; below
+ar>fr	دون	sans
+ar>en	حياتي	my life
+ar>fr	حياتي	ma vie
+ar>en	تريدين	you want
+ar>fr	تريدين	vouloir; tu veux
+ar>en	الحصول	getting; obtaining
+ar>fr	الحصول	obtenir
+ar>en	أحتاج	I need; need
+ar>fr	أحتاج	j'ai besoin de; avoir besoin de
+ar>en	للتو	just now; right now
+ar>fr	للتو	à l'instant; tout juste
+ar>en	بأنك	that you
+ar>fr	بأنك	que tu
+ar>en	جون	John; bay
+ar>fr	جون	Jean; baie
+ar>en	أنظر	look
+ar>fr	أنظر	regarder; regarde
+ar>en	المدينة	the city; Medina
+ar>fr	المدينة	ville; médina
+ar>en	الخاص	private; special
+ar>fr	الخاص	privé; particulier; spécial
+ar>en	الطريقة	the method; the way
+ar>fr	الطريقة	la méthode; la manière
+ar>en	رائعة	wonderful; great
+ar>fr	رائعة	magnifique; super; géniale
+ar>en	سعيد	happy
+ar>fr	سعيد	heureux
+ar>en	إليه	to him
+ar>fr	إليه	à lui; vers lui
+ar>en	دعني	let me
+ar>fr	دعني	laisse-moi
+ar>en	بينما	while; whereas
+ar>fr	بينما	pendant que; alors que
+ar>en	إليك	to you; here you are
+ar>fr	إليك	à toi; voilà
+ar>en	قام	stand up; do
+ar>fr	قام	se lever; faire
+ar>en	لديها	she has
+ar>fr	لديها	elle a
+ar>en	اعلم	I know; know
+ar>fr	اعلم	je sais; savoir
+ar>en	رفاق	friends; comrades
+ar>fr	رفاق	amis; camarades
+ar>en	لهم	to them; for them
+ar>fr	لهم	à eux; pour eux
+ar>en	القيام	doing; carrying out
+ar>fr	القيام	faire; effectuer
+ar>en	الله	God; Allah
+ar>fr	الله	Dieu; Allah
+ar>en	المرة	the time; once
+ar>fr	المرة	la fois
+ar>en	ترى	you see; see
+ar>fr	ترى	voir; tu vois
+ar>en	شيئ	thing
+ar>fr	شيئ	chose
+ar>en	منهم	from them; of them
+ar>fr	منهم	d'eux
+ar>en	عنك	about you; from you
+ar>fr	عنك	de toi
+ar>en	يتم	is done; takes place
+ar>fr	يتم	se fait; s'accomplit
+ar>en	وجدت	I found; find
+ar>fr	وجدت	j'ai trouvé; trouver
+ar>en	وقد	and already; indeed
+ar>fr	وقد	et déjà
+ar>en	أقصد	I mean; intend
+ar>fr	أقصد	je veux dire; viser
+ar>en	الرئيس	the president; chief
+ar>fr	الرئيس	président; chef
+ar>en	يرام	okay; desired
+ar>fr	يرام	bien; comme il faut
+ar>en	يكفي	is enough; suffices
+ar>fr	يكفي	suffit; c'est assez
+ar>en	صغيرة	small; little
+ar>fr	صغيرة	petite; petit
+ar>en	لنذهب	let's go
+ar>fr	لنذهب	allons-y; allons
+ar>en	المدرسة	school
+ar>fr	المدرسة	école
+ar>en	تأتي	come
+ar>fr	تأتي	venir
+ar>en	أخبرني	tell me
+ar>fr	أخبرني	dis-moi
+ar>en	تقوم	stand up; do
+ar>fr	تقوم	se lever; faire
+ar>en	الأطفال	children
+ar>fr	الأطفال	enfants
+ar>en	أود	I would like; wish
+ar>fr	أود	je voudrais; aimer
+ar>en	أقوم	I do; I stand up
+ar>fr	أقوم	je fais; me lever
+ar>en	حب	love
+ar>fr	حب	amour
+ar>en	الحب	love
+ar>fr	الحب	amour
+ar>en	أى	any; which
+ar>fr	أى	n'importe quel
+ar>en	لديهم	they have
+ar>fr	لديهم	ils ont
+ar>en	بدأت	begin; started
+ar>fr	بدأت	commencer; j'ai commencé
+ar>en	دقائق	minutes
+ar>fr	دقائق	minutes
+ar>en	عني	about me; from me
+ar>fr	عني	de moi
+ar>en	حالك	your condition; how you are
+ar>fr	حالك	ton état; comment vas-tu
+ar>en	الجنس	sex; gender; kind
+ar>fr	الجنس	sexe; genre
+ar>en	ينبغي	should; ought to
+ar>fr	ينبغي	devoir; falloir
+ar>en	كي	to; in order to; iron
+ar>fr	كي	afin de; repasser
+ar>en	اسمع	listen; hear
+ar>fr	اسمع	écoute; entendre
+ar>en	اليس	isn't it
+ar>fr	اليس	n'est-ce pas
+ar>en	عنها	about her; from her
+ar>fr	عنها	d'elle
+ar>en	عليك	on you
+ar>fr	عليك	sur toi
+ar>en	عليها	on her
+ar>fr	عليها	sur elle
+ar>en	علينا	on us
+ar>fr	علينا	sur nous

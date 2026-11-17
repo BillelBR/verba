@@ -1354,3 +1354,7 @@ spelling such as `واش`, `شحال` or `برك`).
 | مازالت | -- | **no** | **no** | toujours |
 
 </details>
+
+### Arabic correction lists (word translation)
+
+`crates/verba-local/seed/dict-fixes.txt` holds hand-written first candidates for the Arabic words that the Wiktionary data gets wrong. Two rounds, both judged by the maintainer's AI assistant (not an Algerian reviewer): about 140 everyday words, then the 560 commonest words of the Arabic frequency list (mostly small words and words with a pronoun attached, such as `لدي`, `معي`, `عليك`). Before the second round about one in five of those small words had a wrong first candidate in English or French (`يجب` gave "respond", `إذن` "ear", `تم` "swan", `كم` "your"). The fixes put the right word first; the dictionary's own candidates follow. Words further down the list (the 600th word and later) have not been checked one by one. Letters that look alike once folded (`على`/`علي`, `لدى`/`لدي`) share one entry, so a fix for one is a fix for both.

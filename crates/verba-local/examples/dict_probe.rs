@@ -56,7 +56,7 @@ fn bench(dir: &Path) {
     });
     // the memory of the parsed dictionary: bytes alive after parsing minus before (the text itself is counted out)
     let before = LIVE.load(Ordering::Relaxed);
-    let d = Dictionary::parse(&text);
+    let d = Dictionary::parse_with_fixes(&text);
     let after = LIVE.load(Ordering::Relaxed);
     println!("memory of the parsed dictionary: {:.1} MB (the {:.1} MB of text is released after loading)", (after - before) as f64 / 1048576.0, text.len() as f64 / 1048576.0);
     for (a, b) in [("en", "fr"), ("fr", "en"), ("en", "ar"), ("ar", "en")] {
@@ -66,7 +66,7 @@ fn bench(dir: &Path) {
     let mut times = Vec::new();
     for _ in 0..5 {
         let t = Instant::now();
-        let d = Dictionary::parse(&text);
+        let d = Dictionary::parse_with_fixes(&text);
         times.push(t.elapsed().as_secs_f64() * 1000.0);
         std::hint::black_box(&d);
     }
@@ -105,7 +105,7 @@ fn bench(dir: &Path) {
 /// "plain" leaves out what is not a word of the list's own language: tokens with a digit, an apostrophe or a hyphen, and one-letter tokens.
 fn coverage_report(dir: &Path, n: usize) {
     let text = std::fs::read_to_string(dir.join("dict.txt")).expect("dict.txt");
-    let d = Dictionary::parse(&text);
+    let d = Dictionary::parse_with_fixes(&text);
     for from in [Lang::En, Lang::Fr, Lang::Ar] {
         let list = std::fs::read_to_string(dir.join(format!("{}.txt", from.code()))).expect("word list");
         let words: Vec<&str> = list.lines().filter_map(|l| l.split_whitespace().next()).take(n).collect();
@@ -164,7 +164,7 @@ fn main() {
         eprintln!("cannot read {}: {e} (run scripts/fetch-dict.ps1)", dir.join("dict.txt").display());
         std::process::exit(1);
     });
-    let d = Dictionary::parse(&text);
+    let d = Dictionary::parse_with_fixes(&text);
     if targets.is_empty() {
         targets = vec![Lang::En, Lang::Fr, Lang::Ar];
     }

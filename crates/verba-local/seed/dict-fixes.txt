@@ -1,0 +1,33 @@
+# Hand-written corrections to the Wiktionary dictionary, for very common Arabic words whose first candidate was wrong
+# (checked by looking at the results; an Algerian reviewer should look at this file too).
+# Same format as dict.txt. The words here are put in FRONT of what the dictionary already has for the same headword.
+ar>en	رأى	see; saw
+ar>fr	رأى	voir
+ar>en	سيء	bad; poor
+ar>fr	سيء	mauvais; mal
+ar>fr	أحب	aimer; adorer
+ar>fr	صغير	petit; jeune
+ar>en	قرية	village
+ar>fr	قرية	village
+ar>en	شرطة	police
+ar>fr	طريق	route; chemin; voie
+ar>fr	مال	argent; fortune
+ar>en	الكتب	books
+ar>fr	الكتب	livres
+ar>en	وزارة	ministry
+ar>fr	وزارة	ministère
+ar>en	قانون	law
+ar>fr	قانون	loi
+ar>en	خبر	news
+ar>fr	خبر	nouvelle; information
+ar>fr	هل	est-ce que
+ar>en	لأن	because
+ar>fr	لأن	parce que; car
+ar>fr	ذلك	cela; ça
+ar>en	عن	about; from
+ar>fr	عن	de; sur; au sujet de
+ar>fr	يريد	vouloir; veut
+ar>fr	أريد	vouloir; je veux
+ar>fr	نريد	vouloir; nous voulons
+ar>en	الجزائر	Algeria; Algiers
+ar>fr	الجزائر	Algérie; Alger

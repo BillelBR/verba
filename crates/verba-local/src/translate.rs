@@ -93,6 +93,31 @@ impl Dictionary {
         self.pairs.is_empty()
     }
 
+    /// `parse`, then the hand-written corrections that ship with the program (`seed/dict-fixes.txt`). This is what the engine loads.
+    pub fn parse_with_fixes(text: &str) -> Self {
+        let mut dict = Self::parse(text);
+        dict.apply_fixes(include_str!("../seed/dict-fixes.txt"));
+        dict
+    }
+
+    /// Puts hand-written translations in front of the ones a headword already has (same file format as `parse`).
+    pub fn apply_fixes(&mut self, text: &str) {
+        for line in text.lines() {
+            if line.is_empty() || line.starts_with('#') {
+                continue;
+            }
+            let mut fields = line.split('\t');
+            let (Some(dir), Some(head), Some(tr)) = (fields.next(), fields.next(), fields.next()) else { continue };
+            let Some((a, b)) = dir.split_once('>') else { continue };
+            let (Some(from), Some(to)) = (lang_of(a), lang_of(b)) else { continue };
+            let key = fold(clean(head));
+            let mut list: Vec<String> = tr.split(';').map(|t| t.trim().to_string()).filter(|t| !t.is_empty()).collect();
+            let old = self.pairs.entry((from, to)).or_default().entry(key).or_default();
+            list.extend(old.drain(..).filter(|t| !tr.split(';').any(|f| f.trim() == t)));
+            *old = list;
+        }
+    }
+
     /// How many headwords the direction has.
     pub fn len(&self, from: Lang, to: Lang) -> usize {
         self.pairs.get(&(from, to)).map_or(0, |m| m.len())
@@ -208,7 +233,7 @@ impl Dictionary {
 impl LocalEngine {
     /// Gives the engine the text of a dictionary file (`dict.txt`).
     pub fn load_dictionary(&mut self, text: &str) {
-        self.dict = Dictionary::parse(text);
+        self.dict = Dictionary::parse_with_fixes(text);
     }
 
     /// Whether a dictionary was loaded.
@@ -316,6 +341,19 @@ mod tests {
         // a word that is itself in the dictionary is taken as it is
         assert_eq!(d.translate("قهوة", &[Lang::En], None).unwrap().candidates[0].text, "coffee");
         assert!(d.translate("ببب", &[Lang::En], None).is_none());
+    }
+
+    #[test]
+    fn hand_written_fixes_go_in_front() {
+        let mut d = Dictionary::parse("ar>en\tخبر\ttry; news\n");
+        d.apply_fixes("# c\nar>en\tخبر\tnews\nar>fr\tخبر\tnouvelle\n");
+        let en: Vec<String> = d.translate("خبر", &[Lang::En], None).unwrap().candidates.into_iter().map(|c| c.text).collect();
+        assert_eq!(en, ["news", "try"]);
+        assert_eq!(d.translate("خبر", &[Lang::Fr], None).unwrap().candidates[0].text, "nouvelle");
+        // the shipped fixes are well formed: every line is read
+        let mut shipped = Dictionary::default();
+        shipped.apply_fixes(include_str!("../seed/dict-fixes.txt"));
+        assert!(shipped.len(Lang::Ar, Lang::En) >= 10 && shipped.len(Lang::Ar, Lang::Fr) >= 10);
     }
 
     #[test]

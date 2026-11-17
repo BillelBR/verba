@@ -42,7 +42,7 @@ use windows::Win32::UI::Shell::{
 use windows::Win32::UI::WindowsAndMessaging::{
     AppendMenuW, CallNextHookEx, CreateIconIndirect, CreatePopupMenu, CreateWindowExW, DefWindowProcW,
     DestroyMenu, DispatchMessageW, GetCursorPos, GetMessageW, HHOOK, HICON, ICONINFO, KBDLLHOOKSTRUCT,
-    IsDialogMessageW, MB_ICONINFORMATION, MB_OK, MessageBoxW, MF_GRAYED, MF_SEPARATOR, MF_STRING, MSG, PostMessageW, PostQuitMessage, RegisterClassW, RegisterWindowMessageW,
+    MB_ICONINFORMATION, MB_OK, MessageBoxW, MF_GRAYED, MF_SEPARATOR, MF_STRING, MSG, PostMessageW, PostQuitMessage, RegisterClassW, RegisterWindowMessageW,
     SetForegroundWindow, SetWindowsHookExW, TPM_BOTTOMALIGN, TPM_RIGHTBUTTON, TrackPopupMenu, TranslateMessage,
     UnhookWindowsHookEx, WH_KEYBOARD_LL, WM_APP, WM_COMMAND, WM_DESTROY, WM_HOTKEY, WM_KEYDOWN, WM_KEYUP, WM_LBUTTONUP,
     WM_NULL, WM_RBUTTONUP, WM_SYSKEYDOWN, WNDCLASSW, WS_EX_TOOLWINDOW, WS_POPUP,
@@ -124,7 +124,13 @@ thread_local! {
 fn main() {
     unsafe {
         // one copy at a time
-        let _mutex = CreateMutexW(None, true, w!("Local\\VerbaSingleInstance"));
+        // (a development build can run next to the real one: a test names its own instance)
+        let mut instance = String::from("Local\\VerbaSingleInstance");
+        if cfg!(debug_assertions) {
+            instance.push_str(&std::env::var("VERBA_TEST_INSTANCE").unwrap_or_default());
+        }
+        let instance: Vec<u16> = instance.encode_utf16().chain(std::iter::once(0)).collect();
+        let _mutex = CreateMutexW(None, true, PCWSTR(instance.as_ptr()));
         if GetLastError() == ERROR_ALREADY_EXISTS {
             return;
         }
@@ -183,11 +189,6 @@ fn main() {
 
         let mut msg = MSG::default();
         while GetMessageW(&mut msg, None, 0, 0).as_bool() {
-            // Tab, arrows and Enter work inside the settings window
-            let settings_window = HWND(settings_window::WINDOW.load(Ordering::SeqCst) as *mut _);
-            if !settings_window.is_invalid() && IsDialogMessageW(settings_window, &msg).as_bool() {
-                continue;
-            }
             let _ = TranslateMessage(&msg);
             DispatchMessageW(&msg);
         }
@@ -615,6 +616,8 @@ pub(crate) fn update_settings(change: impl FnOnce(&mut Settings)) {
         let controller = HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _);
         modify_tray(controller, app);
     });
+    // the settings window, when it is open, shows the new values
+    settings_window::refresh();
 }
 
 fn share_rules(settings: &Settings) {
@@ -637,7 +640,7 @@ fn toggle_app(app_name: Option<String>) {
 
 /// "Why does Verba not work in this field?": after 3 seconds (time to click in the field) reports which steps of reading it worked.
 /// The report holds program and class names and step results, never the text.
-fn field_check() {
+pub(crate) fn field_check() {
     std::thread::spawn(|| {
         std::thread::sleep(Duration::from_secs(3));
         let front = describe_foreground();

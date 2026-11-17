@@ -1,268 +1,311 @@
-//! The settings window: a plain Windows window with the usual controls. Every change applies at once (no Apply button).
+//! The settings window: five pages in a sidebar (Writing help, Languages, Apps, Appearance, General), drawn by `verba_win::ui`.
 //!
-//! It holds no state of its own: it shows the program's settings and sends each change back through `crate::update_settings`.
+//! This file only says what is on each page and what a click does. It holds no state of its own: it reads the program's settings
+//! every frame and, when something changed, sends the whole new settings back through `crate::update_settings`. Every change applies
+//! at once (there is no Apply button).
 
 use std::cell::Cell;
-use std::ffi::c_void;
 use std::sync::atomic::{AtomicIsize, Ordering};
 
-use verba_core::Lang;
 use verba_win::running_apps;
-use windows::Win32::Foundation::{COLORREF, HINSTANCE, HWND, LPARAM, LRESULT, POINT, RECT, WPARAM};
-use windows::Win32::Graphics::Gdi::{COLOR_WINDOW, CreateFontIndirectW, DeleteObject, GetSysColor, GetSysColorBrush, HBRUSH, HDC, HFONT, SetBkColor};
-use windows::Win32::System::LibraryLoader::GetModuleHandleW;
-use windows::Win32::UI::HiDpi::{GetDpiForSystem, SystemParametersInfoForDpi};
+use verba_win::ui::{self, ButtonStyle, Config, Ui};
+use verba_win::{Look, Theme};
+use windows::Win32::Foundation::{HWND, POINT};
+use windows::Win32::UI::Shell::ShellExecuteW;
 use windows::Win32::UI::WindowsAndMessaging::{
-    AppendMenuW, CreatePopupMenu, CreateWindowExW, DefWindowProcW, DestroyMenu, DestroyWindow, GetSystemMetrics, GetWindowRect,
-    HICON, HMENU, IsWindow, MF_GRAYED, MF_STRING, NONCLIENTMETRICSW, RegisterClassW, SM_CXSCREEN, SM_CYSCREEN, SPI_GETNONCLIENTMETRICS,
-    IDYES, MB_ICONQUESTION, MB_YESNO, MessageBoxW, SW_SHOW, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, SWP_SHOWWINDOW, SendMessageW, SetForegroundWindow, SetWindowPos, ShowWindow, TPM_LEFTALIGN, TPM_RETURNCMD, TPM_TOPALIGN, TrackPopupMenu, WINDOW_EX_STYLE,
-    WINDOW_STYLE, WM_CLOSE, WM_COMMAND, WM_DESTROY, WM_SETFONT, WNDCLASSW, WS_CAPTION, WS_CHILD, WS_MINIMIZEBOX, WS_OVERLAPPED,
-    WS_SYSMENU, WS_VISIBLE, WM_CTLCOLORBTN, WM_CTLCOLORSTATIC,
+    AppendMenuW, CreatePopupMenu, DestroyMenu, GetCursorPos, HICON, IDYES, MB_ICONQUESTION, MB_YESNO, MF_GRAYED, MF_STRING, MessageBoxW, SW_SHOW,
+    TPM_LEFTALIGN, TPM_RETURNCMD, TPM_TOPALIGN, TrackPopupMenu,
 };
 use windows::core::{PCWSTR, w};
 
 use crate::settings::{ALWAYS_OFF, AppMode, Settings, ThemeMode};
 
-/// The window being shown (0 when there is none): the message loop needs it for Tab and arrow keys.
-pub static WINDOW: AtomicIsize = AtomicIsize::new(0);
-
-// control numbers
-const ID_ON: i32 = 2001;
-const ID_FIX: i32 = 2002;
-const ID_NEXT: i32 = 2003;
-const ID_LEARN: i32 = 2004;
-const ID_MYWORDS: i32 = 2005;
-const ID_FORGET: i32 = 2006;
-const ID_FOLLOW: i32 = 2010;
-const ID_EN: i32 = 2011;
-const ID_FR: i32 = 2012;
-const ID_AR: i32 = 2013;
-const ID_DZ: i32 = 2014;
-const ID_THEME_AUTO: i32 = 2021;
-const ID_THEME_LIGHT: i32 = 2022;
-const ID_THEME_DARK: i32 = 2023;
-const ID_AUTOSTART: i32 = 2031;
-const ID_MODE: i32 = 2040;
-const ID_LIST: i32 = 2041;
-const ID_ADD: i32 = 2042;
-const ID_REMOVE: i32 = 2043;
-const ID_CLOSE: i32 = 2099;
+/// The window being shown (0 when there is none): the menu of running programs needs it as its owner.
+static WINDOW: AtomicIsize = AtomicIsize::new(0);
 const MENU_APP_BASE: usize = 3000;
 
-// message and style numbers (plain values: they never change)
-const BM_GETCHECK: u32 = 0x00F0;
-const BM_SETCHECK: u32 = 0x00F1;
-const CB_ADDSTRING: u32 = 0x0143;
-const CB_GETCURSEL: u32 = 0x0147;
-const CB_SETCURSEL: u32 = 0x014E;
-const LB_ADDSTRING: u32 = 0x0180;
-const LB_RESETCONTENT: u32 = 0x0184;
-const LB_GETCURSEL: u32 = 0x0188;
-const CBN_SELCHANGE: usize = 1;
-const BS_PUSHBUTTON: u32 = 0x0;
-const BS_DEFPUSHBUTTON: u32 = 0x1;
-const BS_AUTOCHECKBOX: u32 = 0x3;
-const BS_GROUPBOX: u32 = 0x7;
-const BS_AUTORADIOBUTTON: u32 = 0x9;
-const CBS_DROPDOWNLIST: u32 = 0x3;
-const LBS_NOTIFY: u32 = 0x1;
-const WS_TABSTOP_: u32 = 0x0001_0000;
-const WS_GROUP_: u32 = 0x0002_0000;
-const WS_VSCROLL_: u32 = 0x0020_0000;
-const WS_EX_CLIENTEDGE_: u32 = 0x0000_0200;
-
 thread_local! {
-    static FONT: Cell<isize> = const { Cell::new(0) };
-    static SCALE: Cell<f32> = const { Cell::new(1.0) };
+    /// Whether "Start with Windows" is on: asked of the registry once, not at every frame.
+    static AUTOSTART: Cell<Option<bool>> = const { Cell::new(None) };
 }
 
 fn wide(text: &str) -> Vec<u16> {
     text.encode_utf16().chain(std::iter::once(0)).collect()
 }
 
-fn px(v: i32) -> i32 {
-    (v as f32 * SCALE.with(|s| s.get())).round() as i32
+/// The colours of the window: the theme the user chose in the settings (Windows' own when "Follow Windows").
+fn look() -> Look {
+    match crate::current_settings().theme {
+        ThemeMode::Auto => Look::system(),
+        ThemeMode::Light => Look::with_theme(Theme::Light),
+        ThemeMode::Dark => Look::with_theme(Theme::Dark),
+    }
 }
 
 /// Shows the window (or brings it to the front when it is already open).
 pub fn open(icon: HICON) {
-    unsafe {
-        let existing = HWND(WINDOW.load(Ordering::SeqCst) as *mut c_void);
-        if !existing.is_invalid() && IsWindow(Some(existing)).as_bool() {
-            let _ = ShowWindow(existing, SW_SHOW);
-            let _ = SetForegroundWindow(existing);
-            return;
-        }
-        let Ok(module) = GetModuleHandleW(None) else { return };
-        let hinst: HINSTANCE = module.into();
-        let class = w!("VerbaSettings");
-        let wc = WNDCLASSW {
-            lpfnWndProc: Some(proc),
-            hInstance: hinst,
-            lpszClassName: class,
-            hIcon: icon,
-            hbrBackground: HBRUSH((COLOR_WINDOW.0 + 1) as usize as *mut c_void),
-            ..Default::default()
-        };
-        RegisterClassW(&wc);
-
-        let dpi = GetDpiForSystem().max(96);
-        SCALE.with(|s| s.set(dpi as f32 / 96.0));
-        let (client_w, client_h) = (px(480), px(698));
-        let style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
-        // the window is bigger than its inside by the title bar and the borders
-        let mut frame = RECT { left: 0, top: 0, right: client_w, bottom: client_h };
-        let _ = windows::Win32::UI::HiDpi::AdjustWindowRectExForDpi(&mut frame, style, false, WINDOW_EX_STYLE(0), dpi);
-        let (win_w, win_h) = (frame.right - frame.left, frame.bottom - frame.top);
-        let (x, y) = ((GetSystemMetrics(SM_CXSCREEN) - win_w) / 2, (GetSystemMetrics(SM_CYSCREEN) - win_h) / 3);
-        let Ok(hwnd) = CreateWindowExW(WINDOW_EX_STYLE(0), class, w!("Verba settings"), style, x, y, win_w, win_h, None, None, Some(hinst), None) else {
-            return;
-        };
+    AUTOSTART.with(|a| a.set(None));
+    let cfg = Config { title: "Verba settings", class: w!("VerbaSettings"), width: 900, height: 640, icon, look };
+    if let Some(hwnd) = ui::open(cfg, Box::new(draw)) {
         WINDOW.store(hwnd.0 as isize, Ordering::SeqCst);
-        make_font(dpi);
-        build_controls(hwnd, hinst);
-        refresh(hwnd);
-        let _ = ShowWindow(hwnd, SW_SHOW);
-        // the very first ShowWindow of a program is overridden by how the program was started (hidden, minimised...);
-        // this one is not, so the window always appears
-        let _ = SetWindowPos(hwnd, None, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
-        let _ = SetForegroundWindow(hwnd);
     }
 }
 
-/// The font the system uses for its own windows (Segoe UI), at this screen's scale.
-fn make_font(dpi: u32) {
-    unsafe {
-        let mut metrics = NONCLIENTMETRICSW { cbSize: std::mem::size_of::<NONCLIENTMETRICSW>() as u32, ..Default::default() };
-        if SystemParametersInfoForDpi(SPI_GETNONCLIENTMETRICS.0, metrics.cbSize, Some(&mut metrics as *mut _ as *mut c_void), 0, dpi).is_ok() {
-            let font = CreateFontIndirectW(&metrics.lfMessageFont);
-            FONT.with(|f| f.set(font.0 as isize));
+/// The settings changed somewhere else (the tray menu): draw again.
+pub fn refresh() {
+    ui::refresh();
+}
+
+fn owner() -> Option<HWND> {
+    let h = WINDOW.load(Ordering::SeqCst);
+    (h != 0).then_some(HWND(h as *mut _))
+}
+
+// ───────────── one frame ─────────────
+
+fn draw(ui: &mut Ui) {
+    let before = crate::current_settings();
+    let mut s = before.clone();
+
+    ui.sidebar_begin("Verba", concat!("Version ", env!("CARGO_PKG_VERSION")));
+    ui.nav_item("nav:writing", '\u{E70F}', "Writing help", 0);
+    ui.nav_item("nav:languages", '\u{E774}', "Languages", 1);
+    ui.nav_item("nav:apps", '\u{E71D}', "Apps", 2);
+    ui.nav_item("nav:look", '\u{E790}', "Appearance", 3);
+    ui.nav_item("nav:general", '\u{E713}', "General", 4);
+    let mut on = !s.paused;
+    if ui.sidebar_switch("master", "Suggestions", if on { "On" } else { "Paused" }, &mut on) {
+        s.paused = !on;
+    }
+
+    match ui.page() {
+        0 => writing(ui, &mut s),
+        1 => languages(ui, &mut s),
+        2 => apps(ui, &mut s),
+        3 => appearance(ui, &mut s),
+        _ => general(ui),
+    }
+
+    if s != before {
+        ui.defer(move || crate::update_settings(|current| *current = s));
+    }
+}
+
+fn writing(ui: &mut Ui, s: &mut Settings) {
+    ui.page_begin("Writing help", "Choose what Verba does while you type. Everything here stays on your PC.");
+    ui.section("While you type");
+    ui.card_begin();
+    ui.toggle_row(
+        "fix",
+        "Fix spelling when I finish a word",
+        Some("A small “Fix” popup offers the right spelling. Press Tab to apply it, or Esc to keep your word."),
+        &mut s.correction,
+        true,
+    );
+    ui.toggle_row(
+        "next",
+        "Suggest the next word",
+        Some("After a word and a space, the likely next word appears. Press Tab to accept it."),
+        &mut s.predict_next,
+        true,
+    );
+    ui.card_end();
+
+    ui.section("My words");
+    ui.card_begin();
+    ui.toggle_row(
+        "learn",
+        "Learn the words I use",
+        Some("Verba remembers how often you write each word, on this PC only, and offers your own words first. Password boxes and apps you excluded are never read."),
+        &mut s.learn,
+        true,
+    );
+    if ui.button_row(
+        "mywords",
+        "My words",
+        Some("Words Verba should never flag as typos and should always offer. They are kept in a plain text file you can edit."),
+        "Open my words…",
+        ButtonStyle::Secondary,
+        true,
+    ) {
+        ui.defer(crate::open_my_words);
+    }
+    if ui.button_row(
+        "forget",
+        "Forget what it learned",
+        Some("Removes every learned word and word pair. The words you added yourself stay."),
+        "Forget…",
+        ButtonStyle::Danger,
+        true,
+    ) {
+        ui.defer(confirm_forget);
+    }
+    ui.card_end();
+}
+
+fn languages(ui: &mut Ui, s: &mut Settings) {
+    ui.page_begin("Languages", "Verba suggests words in the language you are typing.");
+    ui.card_begin();
+    ui.toggle_row(
+        "follow",
+        "Follow the keyboard language",
+        Some("Suggest in the language of the keyboard layout you are typing with. Turn this off to guess the language from the letters instead."),
+        &mut s.follow_keyboard,
+        true,
+    );
+    ui.card_end();
+
+    ui.section("Suggest in");
+    ui.card_begin();
+    ui.toggle_row("en", "English", None, &mut s.english, true);
+    ui.toggle_row("fr", "Français", None, &mut s.french, true);
+    ui.toggle_row("ar", "العربية", Some("Modern Standard Arabic"), &mut s.arabic, true);
+    ui.toggle_row(
+        "dz",
+        "Algerian Darija",
+        Some("In Latin letters (wach, kifach, 3lach…) and in Arabic letters (واش، كيفاش، علاش…)"),
+        &mut s.darija,
+        true,
+    );
+    ui.card_end();
+}
+
+fn apps(ui: &mut Ui, s: &mut Settings) {
+    ui.page_begin("Apps", "Choose the programs where Verba works.");
+    ui.section("Where Verba works");
+    ui.card_begin();
+    let mut mode = if s.app_mode == AppMode::OnlyThese { 1 } else { 0 };
+    if ui.segmented_row(
+        "mode",
+        "Verba works",
+        Some("The list below holds the apps this rule applies to. Switching starts a new list."),
+        &["Everywhere except the listed apps", "Only in the listed apps"],
+        &mut mode,
+    ) {
+        // switching the meaning of the list starts a new list: the old one meant the opposite
+        s.app_mode = if mode == 1 { AppMode::OnlyThese } else { AppMode::AllExcept };
+        s.apps.clear();
+    }
+    ui.card_end();
+
+    ui.section(if s.app_mode == AppMode::OnlyThese { "Apps where Verba works" } else { "Apps where Verba is off" });
+    ui.card_begin();
+    let items = s.apps.clone();
+    if let Some(i) = ui.removable_list("apps", &items, "No app in the list yet.") {
+        let app = items[i].clone();
+        // "all except": the app leaves the list of the ones that are off; "only these": it leaves the ones that are on
+        s.set_app(&app, s.app_mode == AppMode::AllExcept);
+    }
+    if ui.button_row("add", "Add an app", Some("Choose one of the programs that are open now."), "Add a running app…", ButtonStyle::Primary, true) {
+        ui.defer(add_app);
+    }
+    ui.card_end();
+
+    ui.card_begin();
+    ui.note('\u{E72E}', "Password managers and Verba itself are always off, whatever you choose.");
+    ui.card_end();
+}
+
+fn appearance(ui: &mut Ui, s: &mut Settings) {
+    ui.page_begin("Appearance", "The look of Verba's popup and of this window.");
+    ui.section("Theme");
+    ui.card_begin();
+    let mut theme = match s.theme {
+        ThemeMode::Auto => 0,
+        ThemeMode::Light => 1,
+        ThemeMode::Dark => 2,
+    };
+    if ui.theme_tiles("theme", ["Follow Windows", "Light", "Dark"], &mut theme) {
+        s.theme = match theme {
+            1 => ThemeMode::Light,
+            2 => ThemeMode::Dark,
+            _ => ThemeMode::Auto,
+        };
+    }
+    ui.note('\u{E946}', "Follow Windows uses your Windows light or dark mode and your accent colour.");
+    ui.card_end();
+}
+
+fn general(ui: &mut Ui) {
+    ui.page_begin("General", "Starting Verba, checking a text field, and about this program.");
+    ui.section("Start");
+    ui.card_begin();
+    let mut auto = AUTOSTART.with(|a| match a.get() {
+        Some(v) => v,
+        None => {
+            let v = crate::autostart_enabled();
+            a.set(Some(v));
+            v
+        }
+    });
+    // starting with Windows points at this program's file: only the real (release) build offers it
+    if ui.toggle_row(
+        "autostart",
+        "Start Verba when Windows starts",
+        Some("Verba then starts quietly in the tray, without the opening animation."),
+        &mut auto,
+        !cfg!(debug_assertions),
+    ) {
+        AUTOSTART.with(|a| a.set(Some(auto)));
+        ui.defer(move || crate::set_autostart(auto));
+    }
+    if ui.button_row(
+        "check",
+        "Check a text field",
+        Some("Press “Run check”, then click in a text field of any app. After 3 seconds a report says whether Verba can read it."),
+        "Run check",
+        ButtonStyle::Secondary,
+        true,
+    ) {
+        ui.defer(crate::field_check);
+    }
+    ui.card_end();
+
+    ui.section("About");
+    ui.card_begin();
+    ui.about_block("Verba", concat!("Version ", env!("CARGO_PKG_VERSION")), "");
+    ui.info_row("Free for personal and other noncommercial use.", Some("Using Verba for work needs a commercial license."));
+    if ui.button_row("license", "License", Some("The terms Verba is released under (PolyForm Noncommercial 1.0.0)."), "Open", ButtonStyle::Secondary, true) {
+        ui.defer(|| open_doc("LICENSE"));
+    }
+    if ui.button_row("commercial", "Commercial use", Some("How a company or a freelancer gets a license."), "Open", ButtonStyle::Secondary, true) {
+        ui.defer(|| open_doc("COMMERCIAL.md"));
+    }
+    ui.card_end();
+}
+
+// ───────────── what the buttons do ─────────────
+
+fn confirm_forget() {
+    let ask = wide("Forget every word Verba learned from what you typed? The words you added yourself stay.");
+    let title = wide("Verba");
+    let answer = unsafe { MessageBoxW(owner(), PCWSTR(ask.as_ptr()), PCWSTR(title.as_ptr()), MB_YESNO | MB_ICONQUESTION) };
+    if answer == IDYES {
+        crate::forget_learned();
+    }
+}
+
+/// Opens one of the documents installed next to the program (or, in a development build, in the project folder).
+fn open_doc(name: &str) {
+    let Ok(exe) = std::env::current_exe() else { return };
+    for dir in exe.ancestors().skip(1).take(4) {
+        let path = dir.join(name);
+        if path.exists() {
+            let file = wide(&path.display().to_string());
+            unsafe {
+                ShellExecuteW(None, w!("open"), PCWSTR(file.as_ptr()), None, None, SW_SHOW);
+            }
+            return;
         }
     }
 }
 
-fn child(parent: HWND, class: PCWSTR, text: &str, style: u32, ex: u32, (x, y, w, h): (i32, i32, i32, i32), id: i32) -> HWND {
-    unsafe {
-        let text = wide(text);
-        let hinst: HINSTANCE = GetModuleHandleW(None).map(Into::into).unwrap_or_default();
-        let hwnd = CreateWindowExW(
-            WINDOW_EX_STYLE(ex),
-            class,
-            PCWSTR(text.as_ptr()),
-            WINDOW_STYLE(WS_CHILD.0 | WS_VISIBLE.0 | style),
-            px(x),
-            px(y),
-            px(w),
-            px(h),
-            Some(parent),
-            Some(HMENU(id as usize as *mut c_void)),
-            Some(hinst),
-            None,
-        )
-        .unwrap_or_default();
-        let font = FONT.with(|f| f.get());
-        if font != 0 {
-            SendMessageW(hwnd, WM_SETFONT, Some(WPARAM(font as usize)), Some(LPARAM(1)));
-        }
-        hwnd
-    }
-}
-
-fn build_controls(win: HWND, _hinst: HINSTANCE) {
-    let button = w!("BUTTON");
-    let label = w!("STATIC");
-    let tab = WS_TABSTOP_;
-    // Suggestions on
-    child(win, button, "Suggestions on", BS_AUTOCHECKBOX | tab, 0, (20, 14, 440, 24), ID_ON);
-    child(win, button, "Fix spelling when I finish a word (Tab to apply)", BS_AUTOCHECKBOX | tab, 0, (20, 40, 440, 24), ID_FIX);
-    child(win, button, "Suggest the next word after a space (Tab to accept)", BS_AUTOCHECKBOX | tab, 0, (20, 66, 440, 24), ID_NEXT);
-    child(win, button, "Learn the words I use (kept on this PC only)", BS_AUTOCHECKBOX | tab, 0, (20, 92, 440, 24), ID_LEARN);
-    child(win, button, "My words…", BS_PUSHBUTTON | tab, 0, (36, 122, 150, 28), ID_MYWORDS);
-    child(win, button, "Forget what it learned", BS_PUSHBUTTON | tab, 0, (196, 122, 180, 28), ID_FORGET);
-
-    // Language
-    child(win, button, "Language", BS_GROUPBOX, 0, (20, 158, 440, 136), 0);
-    child(win, button, "Follow the keyboard language", BS_AUTOCHECKBOX | tab, 0, (36, 180, 408, 22), ID_FOLLOW);
-    child(win, button, "English", BS_AUTOCHECKBOX | tab, 0, (36, 206, 124, 22), ID_EN);
-    child(win, button, "Français", BS_AUTOCHECKBOX | tab, 0, (166, 206, 124, 22), ID_FR);
-    child(win, button, "العربية", BS_AUTOCHECKBOX | tab, 0, (296, 206, 148, 22), ID_AR);
-    child(win, button, "Algerian Darija (Latin or Arabic letters)", BS_AUTOCHECKBOX | tab, 0, (36, 232, 408, 22), ID_DZ);
-    child(win, label, "Verba suggests in the language of the keyboard you are typing with. Turn this off to guess it from the letters instead.", 0, 0, (36, 256, 408, 34), 0);
-
-    // Look
-    child(win, button, "Look", BS_GROUPBOX, 0, (20, 304, 440, 58), 0);
-    child(win, button, "Follow Windows", BS_AUTORADIOBUTTON | WS_GROUP_ | tab, 0, (36, 328, 140, 22), ID_THEME_AUTO);
-    child(win, button, "Light", BS_AUTORADIOBUTTON, 0, (190, 328, 100, 22), ID_THEME_LIGHT);
-    child(win, button, "Dark", BS_AUTORADIOBUTTON, 0, (300, 328, 100, 22), ID_THEME_DARK);
-
-    child(win, button, "Start Verba when Windows starts", BS_AUTOCHECKBOX | tab, 0, (20, 374, 440, 24), ID_AUTOSTART);
-
-    // Apps
-    child(win, button, "Apps", BS_GROUPBOX, 0, (20, 410, 440, 238), 0);
-    let combo = child(win, w!("COMBOBOX"), "", CBS_DROPDOWNLIST | tab | WS_VSCROLL_, 0, (36, 434, 408, 120), ID_MODE);
-    unsafe {
-        for item in ["Work in every app except the ones listed", "Work only in the apps listed"] {
-            let text = wide(item);
-            SendMessageW(combo, CB_ADDSTRING, Some(WPARAM(0)), Some(LPARAM(text.as_ptr() as isize)));
-        }
-    }
-    child(win, w!("LISTBOX"), "", LBS_NOTIFY | WS_VSCROLL_ | tab, WS_EX_CLIENTEDGE_, (36, 468, 262, 128), ID_LIST);
-    child(win, button, "Add a running app…", BS_PUSHBUTTON | tab, 0, (308, 468, 136, 30), ID_ADD);
-    child(win, button, "Remove", BS_PUSHBUTTON | tab, 0, (308, 506, 136, 30), ID_REMOVE);
-    child(win, label, "Password managers and Verba itself are always off, whatever you choose.", 0, 0, (36, 604, 408, 36), 0);
-
-    child(win, button, "Close", BS_DEFPUSHBUTTON | tab, 0, (360, 660, 100, 28), ID_CLOSE);
-}
-
-fn control(win: HWND, id: i32) -> HWND {
-    unsafe { windows::Win32::UI::WindowsAndMessaging::GetDlgItem(Some(win), id).unwrap_or_default() }
-}
-
-fn set_check(win: HWND, id: i32, on: bool) {
-    unsafe {
-        SendMessageW(control(win, id), BM_SETCHECK, Some(WPARAM(on as usize)), Some(LPARAM(0)));
-    }
-}
-
-fn is_checked(win: HWND, id: i32) -> bool {
-    unsafe { SendMessageW(control(win, id), BM_GETCHECK, Some(WPARAM(0)), Some(LPARAM(0))).0 == 1 }
-}
-
-/// Shows the program's current settings in the controls.
-fn refresh(win: HWND) {
-    let s = crate::current_settings();
-    set_check(win, ID_ON, !s.paused);
-    set_check(win, ID_FIX, s.correction);
-    set_check(win, ID_NEXT, s.predict_next);
-    set_check(win, ID_LEARN, s.learn);
-    set_check(win, ID_FOLLOW, s.follow_keyboard);
-    set_check(win, ID_EN, s.english);
-    set_check(win, ID_FR, s.french);
-    set_check(win, ID_AR, s.arabic);
-    set_check(win, ID_DZ, s.darija);
-    set_check(win, ID_THEME_AUTO, s.theme == ThemeMode::Auto);
-    set_check(win, ID_THEME_LIGHT, s.theme == ThemeMode::Light);
-    set_check(win, ID_THEME_DARK, s.theme == ThemeMode::Dark);
-    set_check(win, ID_AUTOSTART, crate::autostart_enabled());
-    unsafe {
-        // starting with Windows points at this program's file: only the real (release) build offers it
-        let _ = windows::Win32::UI::Input::KeyboardAndMouse::EnableWindow(control(win, ID_AUTOSTART), !cfg!(debug_assertions));
-        let mode = if s.app_mode == AppMode::OnlyThese { 1 } else { 0 };
-        SendMessageW(control(win, ID_MODE), CB_SETCURSEL, Some(WPARAM(mode)), Some(LPARAM(0)));
-        let list = control(win, ID_LIST);
-        SendMessageW(list, LB_RESETCONTENT, Some(WPARAM(0)), Some(LPARAM(0)));
-        for app in &s.apps {
-            let text = wide(app);
-            SendMessageW(list, LB_ADDSTRING, Some(WPARAM(0)), Some(LPARAM(text.as_ptr() as isize)));
-        }
-    }
-}
-
-/// The running programs in a pop-up list under the button; returns the one chosen.
-fn choose_running_app(win: HWND, settings: &Settings) -> Option<String> {
-    unsafe {
+/// The running programs in a pop-up list at the pointer; the one chosen goes on the list.
+fn add_app() {
+    let settings = crate::current_settings();
+    let picked = unsafe {
         let apps = running_apps();
-        let menu = CreatePopupMenu().ok()?;
+        let Ok(menu) = CreatePopupMenu() else { return };
         for (i, app) in apps.iter().enumerate() {
             let listed = settings.apps.contains(app);
             let always_off = ALWAYS_OFF.contains(&app.as_str());
@@ -273,104 +316,14 @@ fn choose_running_app(win: HWND, settings: &Settings) -> Option<String> {
         if apps.is_empty() {
             let _ = AppendMenuW(menu, MF_STRING | MF_GRAYED, MENU_APP_BASE, w!("(no app with a window)"));
         }
-        let mut r = RECT::default();
-        let _ = GetWindowRect(control(win, ID_ADD), &mut r);
-        let pt = POINT { x: r.left, y: r.bottom };
-        let picked = TrackPopupMenu(menu, TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RETURNCMD, pt.x, pt.y, None, win, None);
+        let mut at = POINT::default();
+        let _ = GetCursorPos(&mut at);
+        let chosen = TrackPopupMenu(menu, TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RETURNCMD, at.x, at.y, None, owner().unwrap_or_default(), None);
         let _ = DestroyMenu(menu);
-        let index = (picked.0 as usize).checked_sub(MENU_APP_BASE)?;
-        apps.get(index).cloned()
-    }
-}
-
-unsafe extern "system" fn proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: LPARAM) -> LRESULT {
-    match msg {
-        WM_COMMAND => {
-            let id = (wp.0 & 0xFFFF) as i32;
-            let note = (wp.0 >> 16) & 0xFFFF;
-            match id {
-                ID_ON => crate::update_settings(|s| s.paused = !is_checked(hwnd, ID_ON)),
-                ID_FIX => crate::update_settings(|s| s.correction = is_checked(hwnd, ID_FIX)),
-                ID_NEXT => crate::update_settings(|s| s.predict_next = is_checked(hwnd, ID_NEXT)),
-                ID_LEARN => crate::update_settings(|s| s.learn = is_checked(hwnd, ID_LEARN)),
-                ID_MYWORDS => crate::open_my_words(),
-                ID_FORGET => {
-                    let ask = wide("Forget every word Verba learned from what you typed? The words you added yourself stay.");
-                    let title = wide("Verba");
-                    let answer = unsafe { MessageBoxW(Some(hwnd), PCWSTR(ask.as_ptr()), PCWSTR(title.as_ptr()), MB_YESNO | MB_ICONQUESTION) };
-                    if answer == IDYES {
-                        crate::forget_learned();
-                    }
-                }
-                ID_FOLLOW => crate::update_settings(|s| s.follow_keyboard = is_checked(hwnd, ID_FOLLOW)),
-                ID_EN => crate::update_settings(|s| s.set_lang(Lang::En, is_checked(hwnd, ID_EN))),
-                ID_FR => crate::update_settings(|s| s.set_lang(Lang::Fr, is_checked(hwnd, ID_FR))),
-                ID_AR => crate::update_settings(|s| s.set_lang(Lang::Ar, is_checked(hwnd, ID_AR))),
-                ID_DZ => crate::update_settings(|s| s.set_lang(Lang::Dz, is_checked(hwnd, ID_DZ))),
-                ID_THEME_AUTO => crate::update_settings(|s| s.theme = ThemeMode::Auto),
-                ID_THEME_LIGHT => crate::update_settings(|s| s.theme = ThemeMode::Light),
-                ID_THEME_DARK => crate::update_settings(|s| s.theme = ThemeMode::Dark),
-                ID_AUTOSTART => crate::set_autostart(is_checked(hwnd, ID_AUTOSTART)),
-                ID_MODE if note == CBN_SELCHANGE => {
-                    let chosen = unsafe { SendMessageW(control(hwnd, ID_MODE), CB_GETCURSEL, Some(WPARAM(0)), Some(LPARAM(0))).0 };
-                    // switching the meaning of the list starts a new list: the old one meant the opposite
-                    crate::update_settings(|s| {
-                        let mode = if chosen == 1 { AppMode::OnlyThese } else { AppMode::AllExcept };
-                        if s.app_mode != mode {
-                            s.app_mode = mode;
-                            s.apps.clear();
-                        }
-                    });
-                    refresh(hwnd);
-                }
-                ID_ADD => {
-                    let settings = crate::current_settings();
-                    if let Some(app) = choose_running_app(hwnd, &settings) {
-                        // "all except": the app goes on the list of the ones that are off; "only these": on the list of the ones that are on
-                        crate::update_settings(|s| s.set_app(&app, s.app_mode == AppMode::OnlyThese));
-                        refresh(hwnd);
-                    }
-                }
-                ID_REMOVE => {
-                    let at = unsafe { SendMessageW(control(hwnd, ID_LIST), LB_GETCURSEL, Some(WPARAM(0)), Some(LPARAM(0))).0 };
-                    let settings = crate::current_settings();
-                    if let Some(app) = usize::try_from(at).ok().and_then(|i| settings.apps.get(i)) {
-                        let app = app.clone();
-                        crate::update_settings(|s| s.set_app(&app, s.app_mode == AppMode::AllExcept));
-                        refresh(hwnd);
-                    }
-                }
-                ID_CLOSE => unsafe {
-                    let _ = DestroyWindow(hwnd);
-                },
-                _ => {}
-            }
-            LRESULT(0)
-        }
-        // labels and check boxes paint their own background: make it the window's, not the grey of a dialog
-        WM_CTLCOLORSTATIC | WM_CTLCOLORBTN => unsafe {
-            let hdc = HDC(wp.0 as *mut c_void);
-            SetBkColor(hdc, COLORREF(GetSysColor(COLOR_WINDOW)));
-            LRESULT(GetSysColorBrush(COLOR_WINDOW).0 as isize)
-        },
-        WM_CLOSE => {
-            unsafe {
-                let _ = DestroyWindow(hwnd);
-            }
-            LRESULT(0)
-        }
-        WM_DESTROY => {
-            WINDOW.store(0, Ordering::SeqCst);
-            FONT.with(|f| {
-                let font = f.replace(0);
-                if font != 0 {
-                    unsafe {
-                        let _ = DeleteObject(HFONT(font as *mut c_void).into());
-                    }
-                }
-            });
-            LRESULT(0)
-        }
-        _ => unsafe { DefWindowProcW(hwnd, msg, wp, lp) },
+        (chosen.0 as usize).checked_sub(MENU_APP_BASE).and_then(|i| apps.get(i).cloned())
+    };
+    if let Some(app) = picked {
+        // "all except": the app goes on the list of the ones that are off; "only these": on the list of the ones that are on
+        crate::update_settings(|s| s.set_app(&app, s.app_mode == AppMode::OnlyThese));
     }
 }

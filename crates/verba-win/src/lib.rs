@@ -5,6 +5,7 @@ pub mod focus;
 pub mod look;
 pub mod overlay;
 pub mod splash;
+pub mod ui;
 
 pub use apps::{describe_foreground, exe_of_window, foreground_app, keyboard_lang, running_apps};
 pub use focus::{Anchor, AnchorKind, Locator, Snapshot};

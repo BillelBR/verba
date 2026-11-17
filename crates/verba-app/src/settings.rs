@@ -88,6 +88,7 @@ impl Settings {
         }
     }
 
+    #[cfg(test)]
     pub fn set_lang(&mut self, lang: Lang, on: bool) {
         match lang {
             Lang::En => self.english = on,

@@ -379,3 +379,555 @@ ar>en	عليها	on her
 ar>fr	عليها	sur elle
 ar>en	علينا	on us
 ar>fr	علينا	sur nous
+
+# third round: words 560 to 1000 of the Arabic list
+ar>en	رأيك	your opinion
+ar>fr	رأيك	ton avis
+ar>en	العودة	return; coming back
+ar>fr	العودة	retour; retourner
+ar>en	لطيف	nice; kind; pleasant
+ar>fr	لطيف	gentil; sympa; agréable
+ar>en	يقوم	stand up; do; carry out
+ar>fr	يقوم	se lever; faire
+ar>en	نقوم	we stand up; we do
+ar>fr	نقوم	nous levons; nous faisons
+ar>en	الليل	night
+ar>fr	الليل	nuit
+ar>en	ليل	night
+ar>fr	ليل	nuit
+ar>en	السيدة	lady; madam; Mrs
+ar>fr	السيدة	madame; dame
+ar>en	وهي	and she; and it is
+ar>fr	وهي	et elle; et c'est
+ar>en	عبر	through; via; across
+ar>fr	عبر	à travers; via
+ar>en	مهلا	slow down; wait; easy
+ar>fr	مهلا	doucement; attends
+ar>en	نحتاج	we need
+ar>fr	نحتاج	nous avons besoin de
+ar>en	تحتاج	you need
+ar>fr	تحتاج	tu as besoin de
+ar>en	يحتاج	he needs
+ar>fr	يحتاج	il a besoin de
+ar>en	أيام	days
+ar>fr	أيام	jours
+ar>en	أحبك	I love you
+ar>fr	أحبك	je t'aime
+ar>en	الطعام	food; meal
+ar>fr	الطعام	nourriture; repas
+ar>en	العام	the year; general
+ar>fr	العام	année; général
+ar>en	أية	any; which; verse
+ar>fr	أية	n'importe quel; verset
+ar>en	سيئة	bad
+ar>fr	سيئة	mauvaise
+ar>en	حياتك	your life
+ar>fr	حياتك	ta vie
+ar>en	وكان	and was
+ar>fr	وكان	et était
+ar>en	خطأ	mistake; error; wrong
+ar>fr	خطأ	erreur; faute
+ar>en	سام	toxic; poisonous; Sam
+ar>fr	سام	toxique; Sam
+ar>en	ونحن	and we
+ar>fr	ونحن	et nous
+ar>en	تشعر	feel; you feel
+ar>fr	تشعر	sentir; tu sens
+ar>en	عليهم	on them
+ar>fr	عليهم	sur eux
+ar>en	المفترض	supposed; assumed
+ar>fr	المفترض	censé; supposé
+ar>en	يأتي	come; comes
+ar>fr	يأتي	venir
+ar>en	منا	from us
+ar>fr	منا	de nous
+ar>en	أشياء	things
+ar>fr	أشياء	choses
+ar>en	الآخر	the other
+ar>fr	الآخر	l'autre; autre
+ar>en	أخبرك	I tell you; I inform you
+ar>fr	أخبرك	je te dis; informer
+ar>en	الحال	the situation; condition
+ar>fr	الحال	situation; état
+ar>en	بأي	by any; with any
+ar>fr	بأي	par n'importe quel
+ar>en	نظرة	look; glance
+ar>fr	نظرة	regard
+ar>en	المرأة	woman
+ar>fr	المرأة	femme
+ar>en	انظري	look (to a woman)
+ar>fr	انظري	regarde
+ar>en	وجود	existence; presence
+ar>fr	وجود	existence; présence
+ar>en	هلا	hello; welcome
+ar>fr	هلا	salut; bienvenue
+ar>en	أدري	I know
+ar>fr	أدري	je sais
+ar>en	كله	all of it; whole
+ar>fr	كله	tout
+ar>en	تعالي	come (to a woman)
+ar>fr	تعالي	viens
+ar>en	دعونا	let us; let's
+ar>fr	دعونا	laissons; allons
+ar>en	وشك	about to
+ar>fr	وشك	sur le point de
+ar>en	وسوف	and will
+ar>fr	وسوف	et sera
+ar>en	أخبرتك	I told you
+ar>fr	أخبرتك	je t'ai dit
+ar>en	كثيرا	a lot; much; often
+ar>fr	كثيرا	beaucoup; souvent
+ar>en	فأنا	so I; and I
+ar>fr	فأنا	alors moi; donc je
+ar>en	وحسب	and only; that's all
+ar>fr	وحسب	seulement
+ar>en	المساعدة	help; assistance
+ar>fr	المساعدة	aide
+ar>en	أعطني	give me
+ar>fr	أعطني	donne-moi
+ar>en	الفتيات	girls
+ar>fr	الفتيات	filles
+ar>en	النساء	women
+ar>fr	النساء	femmes
+ar>en	يهم	matters; is important
+ar>fr	يهم	importer; compter
+ar>en	بهم	with them
+ar>fr	بهم	avec eux
+ar>en	وفي	and in
+ar>fr	وفي	et dans
+ar>en	الفتى	the boy; the youth
+ar>fr	الفتى	garçon
+ar>en	بطريقة	in a way; by means of
+ar>fr	بطريقة	d'une manière; de façon
+ar>en	ساعات	hours
+ar>fr	ساعات	heures
+ar>en	الأشخاص	people; persons
+ar>fr	الأشخاص	personnes
+ar>en	أراك	I see you
+ar>fr	أراك	je te vois
+ar>en	اسم	name
+ar>fr	اسم	nom
+ar>en	اسمه	his name
+ar>fr	اسمه	son nom
+ar>en	توجد	there is; exist
+ar>fr	توجد	il y a
+ar>en	أهذا	is this
+ar>fr	أهذا	est-ce ceci
+ar>en	أتعرف	do you know
+ar>fr	أتعرف	tu connais
+ar>en	مثلك	like you
+ar>fr	مثلك	comme toi
+ar>en	الحق	right; the truth
+ar>fr	الحق	droit; vérité
+ar>en	فرانك	Frank
+ar>fr	فرانك	Frank
+ar>en	طلب	request; order
+ar>fr	طلب	demande; demander
+ar>en	أمام	in front of; before
+ar>fr	أمام	devant
+ar>en	الحديث	talk; speech; modern
+ar>fr	الحديث	conversation; moderne
+ar>en	اللقاء	the meeting
+ar>fr	اللقاء	la rencontre
+ar>en	مدى	extent; range
+ar>fr	مدى	étendue; portée
+ar>en	صورة	picture; image
+ar>fr	صورة	image; photo
+ar>en	سوى	except; other than
+ar>fr	سوى	sauf; hormis
+ar>en	الملك	the king
+ar>fr	الملك	roi
+ar>en	الوضع	situation; status
+ar>fr	الوضع	situation
+ar>en	لسنا	we are not
+ar>fr	لسنا	nous ne sommes pas
+ar>en	نحو	toward; about
+ar>fr	نحو	vers; environ
+ar>en	لكل	for each; for every
+ar>fr	لكل	pour chaque
+ar>en	أصدقاء	friends
+ar>fr	أصدقاء	amis
+ar>en	إليها	to her
+ar>fr	إليها	à elle
+ar>en	بأني	that I
+ar>fr	بأني	que je
+ar>en	بعضنا	each other; some of us
+ar>fr	بعضنا	l'un l'autre
+ar>en	القضية	the case; the issue
+ar>fr	القضية	affaire; cause
+ar>en	وكل	and every; and all
+ar>fr	وكل	et chaque; et tout
+ar>en	دعيني	let me
+ar>fr	دعيني	laisse-moi
+ar>en	تفضل	please; go ahead; prefer
+ar>fr	تفضل	je t'en prie; s'il vous plaît; préférer
+ar>en	توم	Tom
+ar>fr	توم	Tom
+ar>en	موعد	appointment; date
+ar>fr	موعد	rendez-vous
+ar>en	عندي	I have
+ar>fr	عندي	j'ai
+ar>en	تخبرني	you tell me
+ar>fr	تخبرني	tu me dis
+ar>en	حبيبتي	my love; my darling
+ar>fr	حبيبتي	ma chérie
+ar>en	أمك	your mother
+ar>fr	أمك	ta mère
+ar>en	قل	say; tell
+ar>fr	قل	dis
+ar>en	طلبت	I asked; I requested
+ar>fr	طلبت	j'ai demandé
+ar>en	حسن	good; fine
+ar>fr	حسن	bon; beau
+ar>en	الأخرى	the other
+ar>fr	الأخرى	l'autre
+ar>en	أتريد	do you want
+ar>fr	أتريد	tu veux
+ar>en	عدة	several; a number of
+ar>fr	عدة	plusieurs
+ar>en	منكم	from you
+ar>fr	منكم	de vous
+ar>en	أسرع	faster; hurry up
+ar>fr	أسرع	plus vite; dépêche-toi
+ar>en	كن	be
+ar>fr	كن	sois
+ar>en	آنسة	miss
+ar>fr	آنسة	mademoiselle
+ar>en	لأي	for any; to any
+ar>fr	لأي	pour n'importe quel
+ar>en	يريدون	they want
+ar>fr	يريدون	vouloir; ils veulent
+ar>en	أتعلمين	do you know
+ar>fr	أتعلمين	sais-tu
+ar>en	الآخرين	the others
+ar>fr	الآخرين	les autres
+ar>en	تقصد	you mean
+ar>fr	تقصد	tu veux dire
+ar>en	تبدين	you look; you seem
+ar>fr	تبدين	tu as l'air
+ar>en	قط	ever; never
+ar>fr	قط	jamais
+ar>en	فكرت	I thought; think
+ar>fr	فكرت	j'ai pensé; penser
+ar>en	أحصل	I get; I obtain
+ar>fr	أحصل	j'obtiens; obtenir
+ar>en	المعلومات	information
+ar>fr	المعلومات	informations
+ar>en	أطفال	children
+ar>fr	أطفال	enfants
+ar>en	يارجل	hey man
+ar>fr	يارجل	mec
+ar>en	الأيام	the days
+ar>fr	الأيام	jours
+ar>en	أسوأ	worse; worst
+ar>fr	أسوأ	pire
+ar>en	مشاكل	problems
+ar>fr	مشاكل	problèmes
+
+# Algerian Darija in Arabic letters. Written from general knowledge, NOT checked by an Algerian reviewer: the reviewer should read this part.
+ar>en	واش	what; is it
+ar>fr	واش	quoi; est-ce que
+ar>en	راني	I am
+ar>fr	راني	je suis
+ar>en	راك	you are
+ar>fr	راك	tu es
+ar>en	راكي	you are (f.)
+ar>fr	راكي	tu es
+ar>en	راه	he is
+ar>fr	راه	il est
+ar>en	راها	she is
+ar>fr	راها	elle est
+ar>en	رانا	we are
+ar>fr	رانا	nous sommes
+ar>en	راكم	you are (pl.)
+ar>fr	راكم	vous êtes
+ar>en	راهم	they are
+ar>fr	راهم	ils sont
+ar>en	كاين	there is; exists
+ar>fr	كاين	il y a
+ar>en	كاينة	there is
+ar>fr	كاينة	il y a
+ar>en	ماكاينش	there is not
+ar>fr	ماكاينش	il n'y a pas
+ar>en	ماكانش	there was not
+ar>fr	ماكانش	il n'y avait pas
+ar>en	ماكاش	there is not
+ar>fr	ماكاش	il n'y a pas
+ar>en	بزاف	a lot; very
+ar>fr	بزاف	beaucoup; très
+ar>en	بالزاف	a lot; very
+ar>fr	بالزاف	beaucoup; très
+ar>en	بصح	but; however
+ar>fr	بصح	mais; pourtant
+ar>en	ديما	always
+ar>fr	ديما	toujours
+ar>en	غير	other than; only; just
+ar>fr	غير	autre que; seulement; juste
+ar>en	مازال	still; not yet
+ar>fr	مازال	encore; toujours
+ar>en	مزال	still; not yet
+ar>fr	مزال	encore; toujours
+ar>en	تاع	of; belonging to
+ar>fr	تاع	de; à
+ar>en	برك	only; that is all
+ar>fr	برك	seulement; c'est tout
+ar>en	خلاص	enough; done
+ar>fr	خلاص	ça suffit; fini
+ar>en	ياخي	bro; man
+ar>fr	ياخي	mec; frère
+ar>en	ماشي	not; no
+ar>fr	ماشي	pas; non
+ar>en	هادا	this
+ar>fr	هادا	ce; ceci
+ar>en	هادي	this (f.)
+ar>fr	هادي	cette; ceci
+ar>en	هاد	this
+ar>fr	هاد	ce; cette
+ar>en	هادوك	those
+ar>fr	هادوك	ceux-là
+ar>en	هاديك	that (f.)
+ar>fr	هاديك	celle-là
+ar>en	هاداك	that
+ar>fr	هاداك	celui-là
+ar>en	دروك	now
+ar>fr	دروك	maintenant
+ar>en	كيما	like; as
+ar>fr	كيما	comme
+ar>en	كيفاش	how
+ar>fr	كيفاش	comment
+ar>en	علاش	why
+ar>fr	علاش	pourquoi
+ar>en	لاش	why; for what
+ar>fr	لاش	pourquoi
+ar>en	فين	where
+ar>fr	فين	où
+ar>en	وين	where
+ar>fr	وين	où
+ar>en	منين	where from; when
+ar>fr	منين	d'où; quand
+ar>en	شكون	who
+ar>fr	شكون	qui
+ar>en	شحال	how much; how many
+ar>fr	شحال	combien
+ar>en	قداش	how much; how many
+ar>fr	قداش	combien
+ar>en	ڨداش	how much; how many
+ar>fr	ڨداش	combien
+ar>en	وقتاش	when
+ar>fr	وقتاش	quand
+ar>en	وڨتاش	when
+ar>fr	وڨتاش	quand
+ar>en	نتا	you
+ar>fr	نتا	tu
+ar>en	نتي	you (f.)
+ar>fr	نتي	tu
+ar>en	نتوما	you (pl.)
+ar>fr	نتوما	vous
+ar>en	هوما	they
+ar>fr	هوما	ils; elles
+ar>en	احنا	we
+ar>fr	احنا	nous
+ar>en	نحنا	we
+ar>fr	نحنا	nous
+ar>en	هاكدا	like this
+ar>fr	هاكدا	comme ça; ainsi
+ar>en	هاكا	like this
+ar>fr	هاكا	comme ça
+ar>en	هاك	take it
+ar>fr	هاك	tiens; prends
+ar>en	هاني	here I am
+ar>fr	هاني	me voilà
+ar>en	هاهو	here he is
+ar>fr	هاهو	le voici
+ar>en	مليح	good; fine
+ar>fr	مليح	bon; bien
+ar>en	باهي	good; fine; okay
+ar>fr	باهي	bien; d'accord
+ar>en	زوين	beautiful; nice
+ar>fr	زوين	beau; joli
+ar>en	خايب	bad
+ar>fr	خايب	mauvais
+ar>en	شوية	a little
+ar>fr	شوية	un peu
+ar>en	خدمة	work; job
+ar>fr	خدمة	travail; boulot
+ar>en	خدم	work
+ar>fr	خدم	travailler
+ar>en	ماكلة	food
+ar>fr	ماكلة	nourriture; bouffe
+ar>en	كاش	some; any
+ar>fr	كاش	quelque; quelques
+ar>en	كاشما	something
+ar>fr	كاشما	quelque chose
+ar>en	حاجة	thing; something; need
+ar>fr	حاجة	chose; truc; besoin
+ar>en	وليدي	my son; my boy
+ar>fr	وليدي	mon fils; mon petit
+ar>en	وليد	boy; kid
+ar>fr	وليد	garçon; gamin
+ar>en	ولاد	sons; kids; boys
+ar>fr	ولاد	fils; enfants; garçons
+ar>en	دراري	kids; boys
+ar>fr	دراري	gamins; enfants
+ar>en	بنتي	my daughter
+ar>fr	بنتي	ma fille
+ar>en	خويا	my brother
+ar>fr	خويا	mon frère
+ar>en	ختي	my sister
+ar>fr	ختي	ma sœur
+ar>en	مرا	woman; wife
+ar>fr	مرا	femme
+ar>en	راجل	man; husband
+ar>fr	راجل	homme; mari
+ar>en	نوض	get up; wake up
+ar>fr	نوض	se lever; se réveiller
+ar>en	رقد	sleep; lie down
+ar>fr	رقد	dormir; se coucher
+ar>en	رڨد	sleep; lie down
+ar>fr	رڨد	dormir; se coucher
+ar>en	دخل	enter; go in
+ar>fr	دخل	entrer
+ar>en	خرج	go out
+ar>fr	خرج	sortir
+ar>en	جا	came; has come
+ar>fr	جا	est venu
+ar>en	مشى	went; go
+ar>fr	مشى	aller; partir
+ar>en	روح	go; go home
+ar>fr	روح	va; rentre
+ar>en	هبط	go down
+ar>fr	هبط	descendre
+ar>en	طلع	go up
+ar>fr	طلع	monter
+ar>en	شوف	look; see
+ar>fr	شوف	regarde; voir
+ar>en	هدر	talk; speak
+ar>fr	هدر	parler
+ar>en	سالا	finish; end
+ar>fr	سالا	finir; terminer
+ar>en	كمل	finish; continue
+ar>fr	كمل	finir; continuer
+ar>en	دير	do; make; put
+ar>fr	دير	faire; mettre
+ar>en	ندير	I do; we do
+ar>fr	ندير	je fais; nous faisons
+ar>en	نبغي	I want; I love
+ar>fr	نبغي	je veux; j'aime
+ar>en	تبغي	you want
+ar>fr	تبغي	tu veux
+ar>en	يبغي	he wants
+ar>fr	يبغي	il veut
+ar>en	بغيت	I wanted; I want
+ar>fr	بغيت	je voulais; je veux
+ar>en	نقدر	I can; we can
+ar>fr	نقدر	je peux; nous pouvons
+ar>en	نڨدر	I can; we can
+ar>fr	نڨدر	je peux; nous pouvons
+ar>en	تقدر	you can
+ar>fr	تقدر	tu peux
+ar>en	تڨدر	you can
+ar>fr	تڨدر	tu peux
+ar>en	بكري	early
+ar>fr	بكري	tôt
+ar>en	غدوة	tomorrow
+ar>fr	غدوة	demain
+ar>en	البارح	yesterday
+ar>fr	البارح	hier
+ar>en	نهار	day
+ar>fr	نهار	jour
+ar>en	عشية	evening
+ar>fr	عشية	soir
+ar>en	توا	now
+ar>fr	توا	maintenant
+ar>en	صح	true; right; okay
+ar>fr	صح	vrai; d'accord
+ar>en	واه	yes
+ar>fr	واه	oui
+ar>en	ايه	yes
+ar>fr	ايه	oui
+ar>en	كي	like; as; when
+ar>fr	كي	comme; quand
+ar>en	علابالي	I know
+ar>fr	علابالي	je sais
+ar>en	ماعلابالي	I do not know
+ar>fr	ماعلابالي	je ne sais pas
+ar>en	ماعرفتش	I do not know
+ar>fr	ماعرفتش	je ne sais pas
+ar>en	قاع	all; at all
+ar>fr	قاع	tout; du tout
+ar>en	ڨاع	all; at all
+ar>fr	ڨاع	tout; du tout
+ar>en	كامل	all; everyone
+ar>fr	كامل	tout; tous
+ar>en	بلاك	maybe; careful
+ar>fr	بلاك	peut-être; attention
+ar>en	لباس	fine; all is well
+ar>fr	لباس	ça va; bien
+ar>en	بسلامة	goodbye
+ar>fr	بسلامة	au revoir
+ar>en	صحيت	thank you; bravo
+ar>fr	صحيت	merci; bravo
+ar>en	تسلم	thank you
+ar>fr	تسلم	merci
+ar>en	عيط	call; shout
+ar>fr	عيط	appeler; crier
+ar>en	قريب	near; soon
+ar>fr	قريب	proche; bientôt
+ar>en	ڨريب	near; soon
+ar>fr	ڨريب	proche; bientôt
+ar>en	قدام	in front of; before
+ar>fr	قدام	devant
+ar>en	ڨدام	in front of; before
+ar>fr	ڨدام	devant
+ar>en	ورا	behind; after
+ar>fr	ورا	derrière
+ar>en	حشمة	shame
+ar>fr	حشمة	honte
+ar>en	عيب	shame
+ar>fr	عيب	honte
+ar>en	مشكل	problem
+ar>fr	مشكل	problème
+ar>en	طوموبيل	car
+ar>fr	طوموبيل	voiture
+ar>en	كرهبة	car
+ar>fr	كرهبة	voiture
+ar>en	بيرو	office
+ar>fr	بيرو	bureau
+ar>en	سبيطار	hospital
+ar>fr	سبيطار	hôpital
+ar>en	حانوت	shop
+ar>fr	حانوت	magasin
+ar>en	دراهم	money
+ar>fr	دراهم	argent
+ar>en	غالي	expensive
+ar>fr	غالي	cher
+ar>en	رخيص	cheap
+ar>fr	رخيص	pas cher
+ar>en	زعما	supposedly; as if
+ar>fr	زعما	soi-disant; genre
+ar>en	والو	nothing
+ar>fr	والو	rien
+ar>en	جيعان	hungry
+ar>fr	جيعان	affamé; j'ai faim
+ar>en	عطشان	thirsty
+ar>fr	عطشان	assoiffé
+ar>en	تعبان	tired
+ar>fr	تعبان	fatigué
+ar>en	خاطر	because
+ar>fr	خاطر	parce que
+ar>en	علخاطر	because
+ar>fr	علخاطر	parce que
+ar>en	شوربة	soup; chorba
+ar>fr	شوربة	soupe; chorba
+ar>en	كسرة	bread
+ar>fr	كسرة	pain
+ar>en	كسكسي	couscous
+ar>fr	كسكسي	couscous
+ar>en	ولاية	wilaya; province
+ar>fr	ولاية	wilaya; province
+ar>en	جامع	mosque
+ar>fr	جامع	mosquée
+ar>en	دار	house; home
+ar>fr	دار	maison
+ar>en	الدار	the house; home
+ar>fr	الدار	maison

@@ -1381,6 +1381,16 @@ Measured in a one-day spike (2026-11-17) on 20 Arabic sentences (14 Modern Stand
 - Seen in the test run of the finished program: English → Arabic dropped the final full stop of one sentence and put a tanween on `شكراً`. Small, but the text is not copied as it is: read it.
 - Idioms, business phrases and names are the weak points of this size of model in both directions. Check a translation before you send it.
 
+### Chat abbreviations in a sentence
+
+English chat abbreviations are written out before the translation (`seed/chat-slang.txt`, see [DATA.md](DATA.md#game-and-chat-abbreviations-cratesverba-localseedchat-slangtxt)). One check on the finished program, English into Arabic, with and without it (not a measurement, six sentences, read by the author of the change):
+
+| Sentence | Without | With |
+|---|---|---|
+| `gg guys, gn, see u tomorrow` | `يا رفاق، أراك غداً` ("gg" and "gn" are lost) | `مباراة جيدة، ليلة سعيدة، أراكم غداً` |
+| `brb, my mom is calling me` | `(برب)، أمي تتصل بي` ("brb" copied as sounds) | `سأعود حالاً، أمي تتصل بي` |
+| `thx for the carry, that was ez` | `هذا كان من أجل الحمل` | `شكراً على الحمل، كان ذلك سهلاً` ("carry" becomes الحمل, "the load": a game word with an ordinary meaning is not fixed) |
+
 ### Speed and memory
 
 The finished program, measured on a Ryzen 7 PRO 4750G (8 cores, AVX2), Windows 10, 4 threads, beam 4, median of 10 runs, model already loaded:

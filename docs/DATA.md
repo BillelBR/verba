@@ -116,6 +116,10 @@ file is **not stored in this repository**: `scripts/fetch-dict.ps1` downloads th
 - **What is not checked.** The cards say Apache-2.0 for the network. They train on OPUS parallel text, whose corpora have their own licenses, and the `en-ar` card names Tatoeba data among them. Whether those licenses allow selling a program that ships the trained weights was **not** checked by a lawyer. Verba is free for non-commercial use under PolyForm Noncommercial, so this does not matter today; **have it checked before any commercial license is sold with the models inside**, or leave them out of that edition.
 - **Not used:** NLLB-200 and similar models with a non-commercial license (see the license section of the README).
 
+## Game and chat abbreviations (`crates/verba-local/seed/chat-slang.txt`)
+
+About 140 spellings with their meaning in English, French and Arabic: `gg`, `gn`, `brb`, `afk`, `see u`, `wp`, `ez`, `noob`, `wwcd`, `hot drop` ... It is part of the source repository and Verba's own work (PolyForm Noncommercial like the code): written from general knowledge of online chat and game vocabulary, with **no outside data and no review by a player** (the header of the file says so). The format and the two flags (`!` the abbreviation wins over the dictionary, `*` it is also written out inside sentences) are explained in the file. Add a line to add an abbreviation; `cargo test -p verba-local` checks that every line is understood and complete.
+
 ## Personal dictionary files (written by the app, not downloaded)
 
 `personal.txt` (one word per line, editable; a line starting with `-` is a word never to learn automatically) and `learned.txt`

@@ -120,7 +120,11 @@ impl Translator {
     /// Translates a whole selection: sentence by sentence, with its spaces and line breaks kept. Blocks until the answer is there
     /// (a second for a sentence; the first time also loads the model), so it runs on a thread of its own.
     pub fn translate(&self, from: Lang, to: Lang, text: &str) -> Result<String, String> {
-        translate_with(text, |chunks| self.ask(&Request { pair: pair_name(from, to), beam: BEAM, chunks: chunks.to_vec() }))
+        translate_with(text, |chunks| {
+            // the network has never seen `gg` or `gn`: English chat abbreviations are written out first (`gn guys` -> `Good night guys`)
+            let chunks: Vec<String> = if from == Lang::En { chunks.iter().map(|c| verba_local::slang::shipped().expand(c)).collect() } else { chunks.to_vec() };
+            self.ask(&Request { pair: pair_name(from, to), beam: BEAM, chunks })
+        })
     }
 }
 

@@ -1,0 +1,113 @@
+# Game and chat abbreviations: what they mean in English, French and Arabic.
+#
+# One line per meaning:   [flags]spellings | english | french | arabic
+#   - spellings: separated by commas. Case does not matter; "see u" is two words. Punctuation around the word is ignored.
+#   - each language is a list separated by ";" (the first is the main one) or "-" when there is none.
+#   - flags at the very start of the line:
+#       !  the abbreviation wins over the dictionary (the dictionary knows "gg" or "op" too, with other meanings)
+#       *  the abbreviation is also written out inside a sentence that is translated ("gn guys" -> "good night guys"):
+#          only for abbreviations whose English line reads as a normal part of a sentence
+#   without "!" the line is only used when the dictionary has no entry for the word
+#
+# NOT REVIEWED by an Algerian or Arab player: written from general knowledge of English and French online chat and of game
+# vocabulary (PUBG, Steam, MOBAs, shooters). The Arabic and French lines should be read by someone who plays; correct them here.
+
+# ---- greetings and goodbyes ----
+!*gg, ggs | good game | bien joué; bonne partie | أحسنت; لعبة جيدة
+!*ggwp | good game, well played | bien joué à tous | لعبة جيدة، أحسنتم اللعب
+!*ggez | good game, easy | bien joué, c'était facile | لعبة جيدة، كانت سهلة
+!*wp | well played | bien joué | أحسنت اللعب; لعب جيد
+!*gj | good job | bon boulot; bien joué | عمل جيد; أحسنت
+!*gl | good luck | bonne chance | حظا موفقا; بالتوفيق
+!*hf | have fun | amuse-toi bien; bon amusement | استمتع; أتمنى لك وقتا ممتعا
+!*glhf | good luck, have fun | bonne chance et amuse-toi bien | حظا موفقا واستمتع
+!*gn | good night | bonne nuit | تصبح على خير; ليلة سعيدة
+!*gm | good morning | bonjour | صباح الخير
+!*brb | be right back | je reviens tout de suite; je reviens | سأعود حالا; لحظة وأعود
+!*afk | away from keyboard | absent du clavier; AFK | بعيد عن الجهاز; غير متواجد
+!*bbl | be back later | je reviens plus tard | سأعود لاحقا
+!*g2g, gtg | got to go | je dois y aller | يجب أن أذهب; علي الذهاب الآن
+!*ttyl | talk to you later | à plus tard; on se parle plus tard | أحدثك لاحقا; نتحدث لاحقا
+*cya, cu, see u, see ya, c ya | see you | à plus; à bientôt | أراك لاحقا; إلى اللقاء
+*cul8r, cya l8r, see u l8r | see you later | à plus tard | أراك لاحقا
+*l8r | later | plus tard | لاحقا
+*gr8 | great | super; génial | رائع; ممتاز
+*b4 | before | avant | قبل
+*2day | today | aujourd'hui | اليوم
+*2morrow, 2mrw, tmrw, tmr | tomorrow | demain | غدا
+*2nite, tonite | tonight | ce soir | الليلة
+*ofc | of course | bien sûr | بالطبع; طبعا
+
+# ---- thanks, sorry, short answers ----
+*thx, thnx, tnx | thanks | merci | شكرا
+!*ty, tyvm | thank you | merci | شكرا لك
+*yw | you're welcome | de rien | عفوا; لا شكر على واجب
+!*np | no problem | pas de souci; pas de problème | لا مشكلة
+*pls, plz | please | s'il te plaît; s'il vous plaît | من فضلك; رجاء
+*sry, srry | sorry | désolé | آسف; عذرا
+*nvm | never mind | laisse tomber; oublie | لا يهم; انس الأمر
+*idk | I don't know | je ne sais pas | لا أعرف
+*idc | I don't care | je m'en fiche | لا يهمني
+*imo, imho | in my opinion | à mon avis | في رأيي
+*tbh, ngl | to be honest | pour être honnête; franchement | لأكون صريحا; بصراحة
+*btw | by the way | au fait | بالمناسبة
+*fyi | for your information | pour info | للعلم
+*asap | as soon as possible | dès que possible | في أقرب وقت ممكن
+*irl | in real life | dans la vraie vie | في الحياة الواقعية
+*omg | oh my God | oh mon dieu | يا إلهي
+*wtf | what the hell | c'est quoi ce bordel; mais qu'est-ce que c'est | ما هذا بحق الجحيم
+*lol, lmao, rofl, xd | haha | mdr; haha | ههههه; هاها
+*jk | just kidding | je plaisante | أمزح
+*ik | I know | je sais | أعرف
+*ikr | I know, right | je sais, non ?; trop vrai | أعرف، صحيح!
+*ily | I love you | je t'aime | أحبك
+*hbu, wbu | how about you | et toi ? | وأنت؟
+*wyd | what are you doing | tu fais quoi ? | ماذا تفعل؟
+*sup, wsp, wassup | what's up | quoi de neuf ?; ça va ? | ما الأخبار؟; كيف الحال؟
+*hru | how are you | comment vas-tu ? | كيف حالك؟
+*rn | right now | en ce moment; maintenant | الآن
+*ppl | people | les gens | الناس
+*abt | about | à propos de; environ | حول; عن
+*cuz, cos, bcz | because | parce que | لأن
+*tho | though | pourtant; quand même | مع ذلك; لكن
+*msg | message | message | رسالة
+*wat, wut | what | quoi | ماذا
+*ur | your | ton; ta; tes; votre | الخاص بك
+*u | you | tu; toi; vous | أنت
+*r | are | es; êtes; sont | -
+*k, kk | okay | d'accord; ok | حسنا; موافق
+*m8 | mate | pote; mec | صديقي; يا صاح
+
+# ---- words of the games ----
+!*ez | easy | facile; fastoche | سهل
+*ezpz | easy peasy | trop facile | سهل جدا
+*noob, n00b, newb | newbie | débutant; noob | مبتدئ; عديم الخبرة
+*ult | ultimate | ultime; capacité ultime | القدرة القصوى
+*sus | suspicious | suspect; louche | مشبوه
+!op | overpowered | trop fort; abusé | قوي بشكل مبالغ فيه
+nerf | weakened by an update | affaibli par une mise à jour; nerf | إضعاف بتحديث جديد
+buff | made stronger by an update | renforcé par une mise à jour; buff | تقوية بتحديث جديد
+gank | a surprise attack by several players | une embuscade à plusieurs joueurs; gank | كمين: هجوم مفاجئ من عدة لاعبين
+smurf | an experienced player on a new account | un joueur expérimenté sur un faux compte; smurf | لاعب متمرس بحساب جديد
+tilt, tilted | playing badly because of anger | jouer mal à cause de la colère; tilt | اللعب بشكل سيئ بسبب الغضب
+inting, int | losing on purpose | faire perdre l'équipe volontairement | التسبب بالخسارة عمدا
+!dc | disconnected | déconnecté | انقطع الاتصال
+rq, ragequit | to quit the game in anger | quitter la partie par colère | الانسحاب من اللعبة بغضب
+vc | voice chat | chat vocal | محادثة صوتية
+fps | frames per second | images par seconde | إطارات في الثانية
+hp | health points | points de vie | نقاط الصحة
+kd, k/d | kill/death ratio | ratio kills/morts | نسبة القتل إلى الموت
+hs | headshot | tir à la tête; headshot | طلقة في الرأس
+headshot | a shot in the head | un tir à la tête; headshot | طلقة في الرأس
+clutch | to win a tense situation alone | gagner seul une situation difficile; clutch | حسم الموقف بمفردك
+hax, hacks, hacker | cheating software, or a cheater | logiciel de triche, ou tricheur | برنامج غش، أو غشاش
+cheater | a player who cheats | un tricheur | لاعب يغش
+aimbot | a cheat that aims for you | une triche qui vise à ta place | برنامج غش يصوّب تلقائيا
+wallhack, wh | a cheat that shows players through walls | une triche qui montre les joueurs à travers les murs | غش يُظهر اللاعبين عبر الجدران
+wwcd, chicken dinner, winner winner chicken dinner | a win in PUBG | une victoire dans PUBG | الفوز بالمباراة في ببجي
+hot drop, hotdrop | landing in a crowded place at the start | atterrir dans une zone très fréquentée au début | الهبوط في منطقة مزدحمة في البداية
+blue zone, bluezone | the shrinking circle that damages players | la zone bleue qui se rétrécit et inflige des dégâts | الدائرة الزرقاء المتقلصة التي تؤذي اللاعبين
+red zone, redzone | an area being bombed | une zone bombardée | منطقة تتعرض للقصف
+pog, poggers | great, amazing | génial; incroyable | رائع; مذهل
+bruh | bro (said in disbelief) | mec (dit avec incrédulité) | يا أخي (للتعبير عن عدم التصديق)
+!rip | rest in peace (said when a player dies) | repose en paix (quand un joueur meurt) | انتهى أمره (عندما يُقتل لاعب)

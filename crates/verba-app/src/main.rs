@@ -621,7 +621,8 @@ fn show_translation(app: &mut App, picked: Option<Picked>) {
     let targets = [app.settings.translate_to, Lang::En, Lang::Fr, Lang::Ar];
     match app.engine.translate_word(&picked.text, &targets, picked.layout) {
         Some(t) => {
-            let label = format!("{} \u{2192} {}", t.from.code().to_uppercase(), t.to.code().to_uppercase());
+            // a game or chat abbreviation written out in its own language (gg -> good game) is not a translation: "Slang"
+            let label = if t.from == t.to { "Slang".to_string() } else { format!("{} \u{2192} {}", t.from.code().to_uppercase(), t.to.code().to_uppercase()) };
             app.fix = None;
             app.typed_len = 0;
             present(app, picked.anchor, t.candidates, Some(label));

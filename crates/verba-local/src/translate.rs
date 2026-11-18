@@ -22,6 +22,7 @@ use verba_core::{Lang, Suggestion, is_arabic_word, match_case};
 
 use crate::LocalEngine;
 use crate::fold::fold;
+use crate::slang::SlangEntry;
 
 /// How many translations one lookup gives at most.
 const MAX_TRANSLATIONS: usize = 5;
@@ -151,6 +152,40 @@ fn lang_of(code: &str) -> Option<Lang> {
         "ar" => Some(Lang::Ar),
         _ => None,
     }
+}
+
+/// An abbreviation of the chat glossary in the first target language it has a meaning in. The English meaning (`gg` -> `good game`)
+/// has `from == to`: the popup calls that "Slang". The meaning keeps a capital letter the abbreviation had (`Brb` -> `Be right back`),
+/// but `GG` does not turn it into capitals.
+fn slang_translation(entry: &SlangEntry, asked: &str, targets: &[Lang]) -> Option<Translation> {
+    for &to in targets {
+        let list = match to {
+            Lang::En => &entry.en,
+            Lang::Fr => &entry.fr,
+            Lang::Ar => &entry.ar,
+            _ => continue,
+        };
+        if list.is_empty() {
+            continue;
+        }
+        let mut letters = asked.chars();
+        let capital = letters.next().is_some_and(char::is_uppercase) && !letters.any(char::is_uppercase);
+        let candidates = list
+            .iter()
+            .take(MAX_TRANSLATIONS)
+            .map(|t| {
+                let text = if to != Lang::Ar && capital {
+                    let mut c = t.chars();
+                    c.next().map(|f| f.to_uppercase().collect::<String>() + c.as_str()).unwrap_or_default()
+                } else {
+                    t.clone()
+                };
+                Suggestion { text, lang: to }
+            })
+            .collect();
+        return Some(Translation { from: Lang::En, to, word: asked.to_string(), candidates, via_english: false });
+    }
+    None
 }
 
 /// The word without the punctuation around it (a selection often carries a comma or a full stop).
@@ -311,6 +346,11 @@ impl Dictionary {
                 _ => vec![Lang::En, Lang::Fr],
             }
         };
+        // game and chat abbreviations (`gg`, `gn`, `see u`): some win over the dictionary, the others only fill its gaps
+        let slang_hit = if is_arabic_word(asked) { None } else { crate::slang::shipped().find(asked) };
+        if let Some(t) = slang_hit.filter(|e| e.priority).and_then(|e| slang_translation(e, asked, targets)) {
+            return Some(t);
+        }
         if self.latin.priority.contains(&latin_key(asked)) && !is_arabic_word(asked) {
             if let Some(t) = self.darija(asked, targets) {
                 return Some(t);
@@ -327,6 +367,9 @@ impl Dictionary {
                     return Some(Translation { from, to, word: asked.to_string(), candidates, via_english });
                 }
             }
+        }
+        if let Some(t) = slang_hit.and_then(|e| slang_translation(e, asked, targets)) {
+            return Some(t);
         }
         // a Latin word that neither English nor French knows may be Algerian Darija in Latin letters
         self.darija(asked, targets)
@@ -525,5 +568,33 @@ mod tests {
         e.load_dictionary(FIXTURE);
         assert!(e.has_dictionary());
         assert_eq!(e.translate_word("hello", &[Lang::Ar], None).unwrap().candidates[0].text, "مرحبا");
+    }
+
+    #[test]
+    fn game_and_chat_abbreviations_are_explained_in_the_language_asked() {
+        // even without any dictionary entry: the glossary that ships with the program
+        let d = Dictionary::parse(FIXTURE);
+        let into = |word: &str, to: Lang| d.translate(word, &[to], None).map(|t| (t.from, t.to, t.candidates.into_iter().map(|c| c.text).collect::<Vec<_>>()));
+        // English meaning: written out (the popup calls it "Slang": from == to)
+        assert_eq!(into("GG", Lang::En), Some((Lang::En, Lang::En, vec!["good game".to_string()])));
+        assert_eq!(into("gn!", Lang::En).unwrap().2, vec!["good night"]);
+        // a capital on the abbreviation gives a capital, shouting does not
+        assert_eq!(into("Brb", Lang::En).unwrap().2, vec!["Be right back"]);
+        assert_eq!(into("BRB", Lang::En).unwrap().2, vec!["be right back"]);
+        // into French and Arabic, and two words ("see u")
+        assert_eq!(into("gg", Lang::Fr).unwrap().2[0], "bien joué");
+        assert_eq!(into("gg", Lang::Ar).unwrap().2[0], "أحسنت");
+        assert_eq!(into("See U", Lang::Fr).unwrap().2[0], "à plus");
+        // `r` has no Arabic: the next language asked for is used
+        assert_eq!(d.translate("r", &[Lang::Ar, Lang::Fr], None).unwrap().to, Lang::Fr);
+        // a word of the dictionary that is also a game word keeps the dictionary's meaning (not marked with `!`)
+        assert_eq!(d.translate("film", &[Lang::Fr], Some(Lang::En)).unwrap().candidates[0].text, "film");
+        // an abbreviation marked with `!` wins over the dictionary
+        let mut with_op = Dictionary::parse(FIXTURE);
+        with_op.apply_fixes("en>fr	op	opération
+");
+        assert_eq!(with_op.translate("op", &[Lang::Fr], None).unwrap().candidates[0].text, "trop fort");
+        // and ordinary words are not touched
+        assert!(d.translate("hello", &[Lang::Fr], None).unwrap().candidates[0].text == "bonjour");
     }
 }

@@ -18,6 +18,7 @@ mod fold;
 mod nextword;
 mod personal;
 pub mod sentence;
+pub mod slang;
 mod spell;
 mod translate;
 

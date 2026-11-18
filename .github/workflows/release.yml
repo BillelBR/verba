@@ -70,10 +70,31 @@ jobs:
         timeout-minutes: 45
         run: ./scripts/build-translate.ps1
 
+      # The models come from the release "models-v1" when it exists (run the Models workflow once to make it): the converted files, checked
+      # against their checksums, so that this release does not depend on Hugging Face (and on the pull request that holds the corrected
+      # Arabic -> English checkpoint) being reachable. Without that release they are downloaded and converted, as before.
       - name: Prepare the translation models
         shell: pwsh
-        timeout-minutes: 30
-        run: ./scripts/fetch-models.ps1
+        timeout-minutes: 45
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = "Continue"
+          $done = $false
+          New-Item -ItemType Directory -Force models-dl | Out-Null
+          gh release download models-v1 --dir models-dl --clobber
+          if ($LASTEXITCODE -eq 0) {
+            ./scripts/unpack-models.ps1 -From models-dl
+            if ($LASTEXITCODE -eq 0) { $done = $true }
+          }
+          if ($done) {
+            Write-Host "translation models: taken from the release models-v1"
+          } else {
+            Write-Host "translation models: no usable release models-v1, converting from Hugging Face"
+            Remove-Item -Recurse -Force models -ErrorAction SilentlyContinue
+            ./scripts/fetch-models.ps1
+            if ($LASTEXITCODE -ne 0) { throw "the translation models could not be prepared" }
+          }
 
       # Inno Setup 6 is on the windows-latest image; install it only if it is missing
       - name: Make sure Inno Setup is installed

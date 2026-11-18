@@ -105,6 +105,7 @@ Other pieces: `scripts/make_icon.py` regenerates `crates/verba-app/assets/verba.
 
 ### Publish a release
 
+0. Once, and again whenever the table of models in `scripts/fetch-models.ps1` changes: on GitHub, Actions > **Models** > Run workflow. It converts the translation models and keeps them as the files of the release `models-v1` (about 280 MB); the release workflow takes them from there (and converts them from Hugging Face if that release does not exist). It was written and its scripts tested on a PC, but the workflow itself has not run on GitHub yet.
 1. Change `version` in `[workspace.package]` of the root `Cargo.toml`, commit and push.
 2. Tag and push the tag. The tag must be `v` plus that exact version:
 

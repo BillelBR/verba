@@ -1,0 +1,54 @@
+name: Models
+
+# Converts the sentence-translation models and publishes them as the files of a release (default: "models-v1"), so that a Verba release
+# takes them from there instead of converting them from Hugging Face every time. The Arabic -> English model has its corrected checkpoint
+# in a pull request of its Hugging Face repository that is not merged: with this release, a Verba build does not depend on it.
+#
+# Run it by hand (Actions > Models > Run workflow), once, and again when the table of models in scripts/fetch-models.ps1 changes.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Name of the release that holds the models"
+        default: "models-v1"
+
+permissions:
+  contents: write
+
+jobs:
+  models:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Convert the models
+        shell: pwsh
+        timeout-minutes: 45
+        run: ./scripts/fetch-models.ps1
+
+      - name: Pack them
+        shell: pwsh
+        run: ./scripts/pack-models.ps1
+
+      - name: Publish them
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag }}
+          name: Translation models (${{ inputs.tag }})
+          prerelease: true
+          fail_on_unmatched_files: true
+          files: |
+            dist-models/*.zip
+            dist-models/SHA256SUMS.txt
+          body: |
+            The sentence-translation models of Verba, converted to int8 for CTranslate2 by `scripts/fetch-models.ps1` (see `SOURCE.txt` inside each zip for the repository and revision):
+
+            - `ar-en.zip`: Helsinki-NLP/opus-mt-tc-big-ar-en, CC-BY-4.0, (c) the OPUS-MT authors, University of Helsinki. Changed: converted to int8; the corrected checkpoint of pull request 7 is used.
+            - `en-ar.zip`: Helsinki-NLP/opus-mt-en-ar, Apache-2.0.
+
+            Not a Verba download: the Setup of a Verba release contains these files.

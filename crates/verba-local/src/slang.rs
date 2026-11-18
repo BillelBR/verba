@@ -5,12 +5,16 @@
 //! * a selected abbreviation is translated from it (word translation), before the dictionary when the line is marked `!` and after it
 //!   otherwise;
 //! * in a sentence that is translated from English, the abbreviations marked `*` are written out first (`gn guys` becomes
-//!   `Good night guys`), because the network has never seen `gn` and translates it as noise.
+//!   `Good night guys`), because the network has never seen `gn` and translates it as noise. In a sentence translated from Arabic
+//!   they are written out in Arabic (`gg يا شباب` becomes `لعبة جيدة يا شباب`), and so are their spellings in Arabic letters
+//!   (`جي جي`).
 //!
 //! Format and flags: see the header of the file.
 
 use std::collections::HashMap;
 use std::sync::OnceLock;
+
+use verba_core::Lang;
 
 /// One meaning of one or more spellings.
 #[derive(Debug, Default, Clone)]
@@ -95,6 +99,12 @@ impl Slang {
     /// The first word of the text and a word written with a capital (`Brb`) get a capital in front of the written-out form;
     /// `GG` in the middle of a sentence does not shout.
     pub fn expand(&self, text: &str) -> String {
+        self.expand_into(text, Lang::En)
+    }
+
+    /// The same, written out in `into`: English (the default) or Arabic (an abbreviation with no Arabic meaning stays as it is).
+    pub fn expand_into(&self, text: &str, into: Lang) -> String {
+        let arabic = into == Lang::Ar;
         let mut words: Vec<(usize, usize)> = Vec::new();
         let mut start: Option<usize> = None;
         for (i, c) in text.char_indices() {
@@ -132,12 +142,12 @@ impl Slang {
                 let (from, to) = (words[i].0, words[i + len - 1].1);
                 let token = &text[from..to];
                 let Some(entry) = self.find(token).filter(|e| e.in_sentences) else { continue };
-                let Some(written) = entry.en.first() else { continue };
+                let Some(written) = (if arabic { entry.ar.first() } else { entry.en.first() }) else { continue };
                 if len == 1 && token.chars().count() == 1 && token.chars().any(char::is_uppercase) {
                     continue;
                 }
                 let at_start = text[..from].chars().all(|c| !c.is_alphanumeric());
-                let capital = at_start || (token.chars().next().is_some_and(char::is_uppercase) && token.chars().any(char::is_lowercase));
+                let capital = !arabic && (at_start || (token.chars().next().is_some_and(char::is_uppercase) && token.chars().any(char::is_lowercase)));
                 out.push_str(&text[copied..from]);
                 if capital {
                     let mut chars = written.chars();
@@ -216,6 +226,19 @@ mod tests {
         assert_eq!(s.expand("thx 4 the carry, gn!"), "Thanks 4 the carry, good night!");
         // GG in the middle does not shout
         assert_eq!(s.expand("well, GG everyone"), "well, good game everyone");
+    }
+
+    #[test]
+    fn abbreviations_are_written_out_in_arabic_for_a_sentence_that_goes_to_english() {
+        let s = shipped();
+        assert_eq!(s.expand_into("gg يا شباب", Lang::Ar), "لعبة جيدة يا شباب");
+        assert_eq!(s.expand_into("لحظة brb", Lang::Ar), "لحظة سأعود حالا");
+        assert_eq!(s.expand_into("انا afk الآن", Lang::Ar), "انا بعيد عن لوحة المفاتيح الآن");
+        // the spellings in Arabic letters
+        assert_eq!(s.expand_into("شكرا يا صديقي، جي جي", Lang::Ar), "شكرا يا صديقي، لعبة جيدة");
+        // no capital letters in Arabic, and an abbreviation with no Arabic meaning stays ("r" has none)
+        assert_eq!(s.expand_into("Gg", Lang::Ar), "لعبة جيدة");
+        assert_eq!(s.expand_into("r", Lang::Ar), "r");
     }
 
     #[test]

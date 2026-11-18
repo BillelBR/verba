@@ -583,7 +583,7 @@ mod tests {
         assert_eq!(into("BRB", Lang::En).unwrap().2, vec!["be right back"]);
         // into French and Arabic, and two words ("see u")
         assert_eq!(into("gg", Lang::Fr).unwrap().2[0], "bien joué");
-        assert_eq!(into("gg", Lang::Ar).unwrap().2[0], "أحسنت");
+        assert_eq!(into("gg", Lang::Ar).unwrap().2, vec!["لعبة جيدة", "أحسنت"]);
         assert_eq!(into("See U", Lang::Fr).unwrap().2[0], "à plus");
         // `r` has no Arabic: the next language asked for is used
         assert_eq!(d.translate("r", &[Lang::Ar, Lang::Fr], None).unwrap().to, Lang::Fr);

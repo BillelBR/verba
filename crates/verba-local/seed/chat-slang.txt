@@ -13,18 +13,18 @@
 # vocabulary (PUBG, Steam, MOBAs, shooters). The Arabic and French lines should be read by someone who plays; correct them here.
 
 # ---- greetings and goodbyes ----
-!*gg, ggs | good game | bien joué; bonne partie | أحسنت; لعبة جيدة
+!*gg, ggs, جي جي | good game | bien joué; bonne partie | لعبة جيدة; أحسنت
 !*ggwp | good game, well played | bien joué à tous | لعبة جيدة، أحسنتم اللعب
 !*ggez | good game, easy | bien joué, c'était facile | لعبة جيدة، كانت سهلة
-!*wp | well played | bien joué | أحسنت اللعب; لعب جيد
+!*wp | well played | bien joué | لعب جيد; أحسنت اللعب
 !*gj | good job | bon boulot; bien joué | عمل جيد; أحسنت
 !*gl | good luck | bonne chance | حظا موفقا; بالتوفيق
 !*hf | have fun | amuse-toi bien; bon amusement | استمتع; أتمنى لك وقتا ممتعا
 !*glhf | good luck, have fun | bonne chance et amuse-toi bien | حظا موفقا واستمتع
-!*gn | good night | bonne nuit | تصبح على خير; ليلة سعيدة
+!*gn, جي ان | good night | bonne nuit | تصبح على خير; ليلة سعيدة
 !*gm | good morning | bonjour | صباح الخير
-!*brb | be right back | je reviens tout de suite; je reviens | سأعود حالا; لحظة وأعود
-!*afk | away from keyboard | absent du clavier; AFK | بعيد عن الجهاز; غير متواجد
+!*brb, بي ار بي, بي آر بي | be right back | je reviens tout de suite; je reviens | سأعود حالا; لحظة وأعود
+!*afk, اي اف كي, أي إف كي | away from keyboard | absent du clavier; AFK | بعيد عن لوحة المفاتيح; غير متواجد
 !*bbl | be back later | je reviens plus tard | سأعود لاحقا
 !*g2g, gtg | got to go | je dois y aller | يجب أن أذهب; علي الذهاب الآن
 !*ttyl | talk to you later | à plus tard; on se parle plus tard | أحدثك لاحقا; نتحدث لاحقا
@@ -111,3 +111,26 @@ red zone, redzone | an area being bombed | une zone bombardée | منطقة تت
 pog, poggers | great, amazing | génial; incroyable | رائع; مذهل
 bruh | bro (said in disbelief) | mec (dit avec incrédulité) | يا أخي (للتعبير عن عدم التصديق)
 !rip | rest in peace (said when a player dies) | repose en paix (quand un joueur meurt) | انتهى أمره (عندما يُقتل لاعب)
+
+# ---- more chat and gaming talk ----
+*nt | nice try | bien essayé | محاولة جيدة
+*ns | nice shot | beau tir | تصويبة رائعة
+*nj | nice job | beau travail | عمل رائع
+*mb | my bad | ma faute | خطئي
+*lmk | let me know | fais-moi savoir; tiens-moi au courant | أخبرني
+*rdy | ready | prêt | جاهز
+*wb | welcome back | content de te revoir; bon retour | مرحبا بعودتك
+*atm | at the moment | en ce moment | في الوقت الحالي
+*hmu | contact me | contacte-moi | تواصل معي
+*bday | birthday | anniversaire | عيد ميلاد
+*pic, pics | picture | photo | صورة
+*vid | video | vidéo | فيديو
+*convo | conversation | conversation | محادثة
+*def | definitely | sans aucun doute; bien sûr | بالتأكيد
+*prob, probs | probably | probablement | على الأرجح
+*ig | I guess | je suppose | أظن
+*stfu | shut up | tais-toi | اسكت
+*gtfo | get out | dégage | اخرج من هنا
+lfg | looking for a group (or: let's go) | je cherche une équipe (ou : on y va) | أبحث عن فريق (أو: هيا بنا)
+rekt, pwned | beaten badly | écrasé; battu à plate couture | تم هزيمته بشدة
+oof | (a sound of pain or disappointment) | aïe; (un cri de douleur ou de déception) | آخ (تعبير عن الألم أو خيبة الأمل)

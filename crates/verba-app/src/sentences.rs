@@ -121,8 +121,15 @@ impl Translator {
     /// (a second for a sentence; the first time also loads the model), so it runs on a thread of its own.
     pub fn translate(&self, from: Lang, to: Lang, text: &str) -> Result<String, String> {
         translate_with(text, |chunks| {
-            // the network has never seen `gg` or `gn`: English chat abbreviations are written out first (`gn guys` -> `Good night guys`)
-            let chunks: Vec<String> = if from == Lang::En { chunks.iter().map(|c| verba_local::slang::shipped().expand(c)).collect() } else { chunks.to_vec() };
+            // The network has never seen `gg` or `gn`: chat abbreviations are written out first (`gn guys` -> `Good night guys`; in
+            // Arabic text `gg يا شباب` -> `لعبة جيدة يا شباب`). It was trained on written Modern Standard Arabic: spoken words (Darija,
+            // and the commonest Levantine, Gulf and Egyptian ones) are replaced by their standard form first.
+            let slang = verba_local::slang::shipped();
+            let chunks: Vec<String> = match from {
+                Lang::En => chunks.iter().map(|c| slang.expand(c)).collect(),
+                Lang::Ar => chunks.iter().map(|c| verba_local::colloquial::shipped().expand(&slang.expand_into(c, Lang::Ar))).collect(),
+                _ => chunks.to_vec(),
+            };
             self.ask(&Request { pair: pair_name(from, to), beam: BEAM, chunks })
         })
     }

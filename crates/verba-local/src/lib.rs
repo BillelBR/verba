@@ -13,6 +13,7 @@
 //!   loaded by `load_dir` (use `add_dz_seed` or `load_dz`).
 
 mod clean;
+pub mod colloquial;
 mod dz;
 mod fold;
 mod nextword;

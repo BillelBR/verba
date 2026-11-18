@@ -1391,6 +1391,17 @@ English chat abbreviations are written out before the translation (`seed/chat-sl
 | `brb, my mom is calling me` | `(برب)، أمي تتصل بي` ("brb" copied as sounds) | `سأعود حالاً، أمي تتصل بي` |
 | `thx for the carry, that was ez` | `هذا كان من أجل الحمل` | `شكراً على الحمل، كان ذلك سهلاً` ("carry" becomes الحمل, "the load": a game word with an ordinary meaning is not fixed) |
 
+### Spoken Arabic in a sentence (Arabic into English)
+
+`seed/ar-colloquial.txt` replaces spoken words by their standard form before the sentence goes to the network (see [DATA.md](DATA.md#spoken-arabic-made-standard-cratesverba-localseedar-colloquialtxt)). Measured on the finished program, before and after, scored 0/1/2 by the author of the change reading each English output (**the same person wrote the list and the sentences, and is not a native speaker: the numbers are optimistic and are one reader's judgement**):
+
+| Set | Sentences | Average before | Average after |
+|---|---|---|---|
+| 17 sentences the list was written looking at (Algerian Darija, Levantine, Egyptian) | 17 | 0.59 | 1.65 |
+| 15 sentences written afterwards, scored **before** adding the words they showed missing | 15 | 0.47 | 1.40 |
+
+Examples (before, after): `نتا فين راك دروك؟` "Nata Vin Rack Drake?" then "Hey, where are you now?"; `راني تعبان بزاف اليوم` "Rani's tired of faking it today." then "I'm so tired today."; `هاد الطوموبيل غالية بزاف` "Fad al-Tomobil is precious to Zav." then "This car is too expensive."; `يا زلمة شو بدك؟` "Hey, Zhou Buddy?" then "Man, what do you want?"; `شحال عمرك؟` "You're a little old?" then "How old are you?". Still wrong after: `ما نبغيش نروح للسبيطار` "I don't want to go to spitar." (since added to the list), `شو هالحكي؟ ما بفهم شي` "What's wrong with you?" (the meaning is "what is this talk? I don't understand anything"), `غدوة نمشي للخدمة بكري` "Tomorrow I go to service early." (since added: "work"). A word the list does not have is still left to the network, and a sentence with several such words is still translated badly: this is a list of the commonest words, not Darija translation. The person is not recognised either: `ما جيتش` is "I did not come" or "you did not come", and the list takes the first.
+
 ### Speed and memory
 
 The finished program, measured on a Ryzen 7 PRO 4750G (8 cores, AVX2), Windows 10, 4 threads, beam 4, median of 10 runs, model already loaded:

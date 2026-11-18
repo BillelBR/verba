@@ -118,7 +118,11 @@ file is **not stored in this repository**: `scripts/fetch-dict.ps1` downloads th
 
 ## Game and chat abbreviations (`crates/verba-local/seed/chat-slang.txt`)
 
-About 140 spellings with their meaning in English, French and Arabic: `gg`, `gn`, `brb`, `afk`, `see u`, `wp`, `ez`, `noob`, `wwcd`, `hot drop` ... It is part of the source repository and Verba's own work (PolyForm Noncommercial like the code): written from general knowledge of online chat and game vocabulary, with **no outside data and no review by a player** (the header of the file says so). The format and the two flags (`!` the abbreviation wins over the dictionary, `*` it is also written out inside sentences) are explained in the file. Add a line to add an abbreviation; `cargo test -p verba-local` checks that every line is understood and complete.
+About 170 spellings (also in Arabic letters: `جي جي`, `بي ار بي`) with their meaning in English, French and Arabic: `gg`, `gn`, `brb`, `afk`, `see u`, `wp`, `ez`, `noob`, `wwcd`, `hot drop` ... It is part of the source repository and Verba's own work (PolyForm Noncommercial like the code): written from general knowledge of online chat and game vocabulary, with **no outside data and no review by a player** (the header of the file says so). The format and the two flags (`!` the abbreviation wins over the dictionary, `*` it is also written out inside sentences) are explained in the file. Add a line to add an abbreviation; `cargo test -p verba-local` checks that every line is understood and complete.
+
+## Spoken Arabic made standard (`crates/verba-local/seed/ar-colloquial.txt`)
+
+About 190 spellings: Algerian Darija words in Arabic letters (`دروك`, `بزاف`, `نبغي`, `كيفاش`, `واش راك`...) and the commonest Levantine, Gulf and Egyptian chat words (`شو`, `بدك`, `ليش`, `كتير`, `شلونك`, `ازيك`...), each with its Modern Standard Arabic form. Verba's own work, written from general knowledge, **not reviewed by a native speaker**, with no outside data. It is used only to prepare a sentence that goes from Arabic to English (`verba_local::colloquial`): the match is on whole words (the article `ال` and `لل` stay in front: `الطوموبيل` becomes `السيارة`), ignores short vowels, hamza and alef forms, and counts `ڨ` as `ق`. Words that mean something else in Modern Standard Arabic or are names (`دراهم`, `وليد`, `صحة`) are left out on purpose. Format in the header of the file; `cargo test -p verba-local` checks it.
 
 ## Personal dictionary files (written by the app, not downloaded)
 

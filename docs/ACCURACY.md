@@ -1381,6 +1381,24 @@ Measured in a one-day spike (2026-11-17) on 20 Arabic sentences (14 Modern Stand
 - Seen in the test run of the finished program: English → Arabic dropped the final full stop of one sentence and put a tanween on `شكراً`. Small, but the text is not copied as it is: read it.
 - Idioms, business phrases and names are the weak points of this size of model in both directions. Check a translation before you send it.
 
+### Base or big model (measured 2026-11-18)
+
+The first spike used the base models (78 MB). The Hub also has bigger ones (`opus-mt-tc-big-*`, 245 MB converted). A second comparison converted both for both directions and ran the same sentences through Verba's own program (beam 4, `>>ara<<` for English into Arabic), 50 Modern Standard Arabic sentences into English (the 14 of the first spike and 36 new ones, 10 of them chat style) and 65 English sentences into Arabic (the 50 of the first spike and 15 gaming and chat sentences, written out the way Verba writes them). Every output was read and scored 0/1/2 by the AI agent that ran it, **not blind, not by a native speaker, with no BLEU**: a difference of 0.1 means "probably a small gain".
+
+| Direction | Model | Size | Average of 2 | Scored 2 / 1 / 0 | 6 / 16 / 28 words |
+|---|---|---|---|---|---|
+| Arabic → English | base | 78 MB | 1.84 | 42 / 8 / 0 | 72 / 273 / 385 ms |
+| Arabic → English | **big (used)** | 245 MB | **1.94** | 47 / 3 / 0 | 152 / 441 / 697 ms |
+| English → Arabic | base **(used)** | 78 MB | 1.55 | 39 / 23 / 3 | 87 / 171 / 315 ms |
+| English → Arabic | big | 245 MB | 1.65 | 45 / 17 / 3 | 158 / 312 / 772 ms |
+
+(The speeds are the agent's, a busy PC, up to 2x between runs; the figures of the finished program are in the table below.)
+
+- **Arabic → English: the big model.** It was better on 6 sentences, worse on 1, equal on 43. It removes visible flaws of the base model: `&apos;` inside the text (`New Year &apos; s plan`), "I've had a very headache", "credit card" for a bank card ("Do you accept bank card payments?" now), "succeeded in class" for "passed the class". The cost is 245 MB instead of 78 MB, about twice the time, and about 160 MB more memory while loaded.
+- **English → Arabic: the base model stays.** The big one averaged 1.70 against 1.58 on the 50 sentences of the first spike, 1.65 against 1.55 on all 65, better on 9 sentences, worse on 5. On the 15 gaming and chat sentences the two tie exactly (1.47). The big one fixes two bad word errors of the base ("peanuts" as "pistachio", "bad play" as "theatre play") and adds two of its own ("lagging" as `متخلفة`, "backward", also an insult; "my mom is calling me" as "will call me"). Three times the size for a small and uneven gain was not taken; the big English → Arabic model is converted and tested (`opus-mt-tc-big-en-ar`, CC-BY-4.0), and switching is one more entry in the `$models` table of `scripts/fetch-models.ps1`.
+- **The checkpoint of `opus-mt-tc-big-ar-en` on the Hub's main branch is broken** (garbage in, garbage out); the corrected one is in an unmerged pull request and is pinned (see [DATA.md](DATA.md#sentence-translation-models-modelspair)).
+- **Gaming words** are wrong in both models ("carry" as الحمل, "squad" as فرقة "band", "nice shot" as رمية "a throw"): that is the glossary's job, not a bigger model's. **Darija** does not work in either (the preparation step below helps a little).
+
 ### Chat abbreviations in a sentence
 
 English chat abbreviations are written out before the translation (`seed/chat-slang.txt`, see [DATA.md](DATA.md#game-and-chat-abbreviations-cratesverba-localseedchat-slangtxt)). One check on the finished program, English into Arabic, with and without it (not a measurement, six sentences, read by the author of the change):
@@ -1408,15 +1426,15 @@ The finished program, measured on a Ryzen 7 PRO 4750G (8 cores, AVX2), Windows 1
 
 | Direction | Words | Time |
 |---|---|---|
-| Arabic → English | 6 | 73 ms |
-| Arabic → English | 16 | 259 ms |
-| Arabic → English | 28 | 325 ms |
+| Arabic → English (big model) | 6 | 145 ms |
+| Arabic → English (big model) | 16 | 460 ms |
+| Arabic → English (big model) | 28 | 572 ms |
 | English → Arabic | 8 | 88 ms |
 | English → Arabic | 22 | 222 ms |
 | English → Arabic | 29 | 282 ms |
 
-- **First sentence:** starting the program and loading a model took 0.84 to 0.98 s (files in the disk cache). A model is loaded when a direction is used first; at most two stay in memory; the program ends itself after ten minutes without work.
-- **Threads and beam:** 8 threads gave no gain over 4 (251 ms against 259 ms for 16 words); beam 2 instead of 4 took 221 ms for the same sentence. Verba uses 4 and beam 4, the setting the quality was read at.
+- **First sentence:** starting the program and loading a model took 0.84 to 0.98 s for the base English → Arabic model and 1.16 s for the big Arabic → English model (files in the disk cache). A model is loaded when a direction is used first; at most two stay in memory; the program ends itself after ten minutes without work.
+- **Threads and beam** (measured with the base Arabic → English model, before the big one replaced it): 8 threads gave no gain over 4 (251 ms against 259 ms for 16 words); beam 2 instead of 4 took 221 ms for the same sentence. Verba uses 4 and beam 4, the setting the quality was read at.
 - **The OpenMP runtime matters:** the first Rust build, without it, took 295 ms for 16 words and 595 ms for 29 on English → French; with `openmp-runtime-comp` the 28-word sentence takes 325 ms. The Python build of CTranslate2 is still about 1.5 to 2 times faster (135 ms for the 16-word Arabic sentence); the cause is not found.
 - **Longer text** is cut into sentences first (and a sentence of more than 60 words at a comma), and the sentences go to the model as one batch.
-- **Not measured:** other CPUs (a laptop with half the speed would take twice these times), the memory of the Rust program (the Python process peaked at 140 to 149 MB with one model, interpreter included, so expect about 100 MB per loaded direction), loading from a cold disk, and the popup on screens other than the author's.
+- **Not measured:** other CPUs (a laptop with half the speed would take twice these times), the memory of the Rust program (the Python process peaked at 140 to 149 MB with one model, interpreter included, so expect about 90 MB for a base model; the big model took 252 MB in the same measurement), loading from a cold disk, and the popup on screens other than the author's.

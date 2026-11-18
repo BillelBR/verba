@@ -58,7 +58,7 @@ The Windows installer ships it as a separate file in `data\words\` with the noti
 | Rust libraries it pulls in: `anyhow`, `cxx` family, `prost`, `bytes`, `itertools`, `indexmap`, `hashbrown`, `foldhash` (Zlib), `unicode-ident` and others | MIT, Apache-2.0, or both; none is copyleft |
 | `vcomp140.dll`, the Visual C++ OpenMP runtime, shipped next to the program | a redistributable file of Microsoft (Visual Studio "Redist" files) |
 
-The translation models (`models\ar-en`, `models\en-ar`) are OPUS-MT networks by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), converted to int8: **Apache-2.0** per their model cards. See [docs/DATA.md](docs/DATA.md#sentence-translation-models-modelspair) for where they come from and what was not checked (the licenses of the training data).
+The translation models are OPUS-MT networks by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), converted to int8 for CTranslate2: `models\en-ar` (`Helsinki-NLP/opus-mt-en-ar`) is **Apache-2.0**, and `models\ar-en` (`Helsinki-NLP/opus-mt-tc-big-ar-en`) is **CC-BY-4.0** per their model cards; the weights were changed (converted to int8) and the corrected checkpoint of the Hub's pull request 7 is used. See [docs/DATA.md](docs/DATA.md#sentence-translation-models-modelspair) for where they come from and what was not checked (the licenses of the training data).
 
 ## Tools used to build the installer (not shipped)
 

@@ -239,7 +239,7 @@ fn translate(ui: &mut Ui, s: &mut Settings) {
     ui.card_begin();
     let pairs = crate::sentence_pairs();
     if pairs.is_empty() {
-        ui.info_row("Sentence translation is not installed.", Some("Run the Verba setup again and tick \"Sentence translation\". It needs about 170 MB."));
+        ui.info_row("Sentence translation is not installed.", Some("Run the Verba setup again and tick \"Sentence translation\". It needs about 330 MB."));
     } else {
         let names: Vec<String> = pairs.iter().map(|(f, t)| format!("{} \u{2192} {}", f.code().to_uppercase(), t.code().to_uppercase())).collect();
         ui.info_row(&format!("Installed: {}", names.join(", ")), Some("Select a sentence or a short text (up to 1200 characters), then press the shortcut. Modern Standard Arabic works well; Algerian Darija does not."));

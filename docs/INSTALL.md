@@ -29,7 +29,7 @@ The network that translates sentences was trained on written Modern Standard Ara
 
 ### Translating a sentence
 
-Select a sentence (or a few lines, up to 1200 characters) in any app and press the same shortcut, **Ctrl+Alt+T**. Verba says "Translating..." and shows the translation above the selection a moment later (about a second the first time, while the model loads; a fraction of a second after that). **Tab** types it over the selection, **Esc** closes. Spaces and line breaks stay where they were. Arabic goes to English, and text in Latin letters goes to Arabic. It needs the "Sentence translation" option of the setup (about 170 MB on disk) and works offline.
+Select a sentence (or a few lines, up to 1200 characters) in any app and press the same shortcut, **Ctrl+Alt+T**. Verba says "Translating..." and shows the translation above the selection a moment later (about a second the first time, while the model loads; a fraction of a second after that). **Tab** types it over the selection, **Esc** closes. Spaces and line breaks stay where they were. Arabic goes to English, and text in Latin letters goes to Arabic. It needs the "Sentence translation" option of the setup (about 330 MB on disk) and works offline.
 
 It is Modern Standard Arabic, the Arabic of news and writing. **Algerian Darija is not understood**: the model writes words that do not exist. Check a translation before you send it; a translation program makes mistakes, especially with idioms and names.
 

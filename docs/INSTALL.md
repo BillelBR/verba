@@ -38,9 +38,11 @@ It is Modern Standard Arabic, the Arabic of news and writing. **Algerian Darija 
 You wrote a long paragraph in Arabic and the keyboard was English (or French)? Select the text and press **Ctrl+Alt+K** (changeable in Settings > Translate). Verba works out which keyboard the keys were pressed on and shows the text as it should have been, above the selection: the arrows choose when there are two readings, **Tab** types the chosen one over the selection, **Esc** closes.
 
 - It uses the keyboards installed in Windows (Settings > Time & language > Language): at least two languages among English, French and Arabic. QWERTY, AZERTY, Arabic 101 or 102: each is read as Windows defines it.
-- It looks for the reading that is made of real words (the same word lists as the suggestions, plus the Darija words written in Arabic letters). If the text is right already, or no keyboard turns it into words, it says so and changes nothing.
+- It looks for the reading that is made of real words (the same word lists as the suggestions, plus the Darija words written in Arabic letters). The keyboard that was active when you pressed the shortcut is taken as the one you typed with, when the words cannot tell.
+- When no reading is made of real words (a name, a word the lists lack) and the text is not made of real words as it is, Verba still turns it into **Arabic**, from the keyboard it is easiest to have typed it on. Esc closes it if that was not what you wanted.
+- If the text is right already (it is made of real words), or it has no letters, it says so and changes nothing.
 - Select the text first: with nothing selected it does nothing (it never selects a whole document by itself). Up to 6000 characters at a time.
-- Limits: a text that is half right and half wrong is not split; a letter made with a dead key (the French `^` then a vowel) is not traced back; the text is typed over the selection key by key, so a very long one takes a moment in some apps.
+- Limits: a text with only letters (no symbol, no accent) and no word of the lists cannot tell the English keyboard from the French one: a few letters (a/q, z/w, m) differ, so the active keyboard decides, and when it is the Arabic one the first keyboard of the list is taken (measured below: 85 to 91 % right in that case); a text that is half right and half wrong is not split; a letter made with a dead key (the French `^` then a vowel) is not traced back; the text is typed over the selection key by key, so a very long one takes a moment in some apps.
 
 ### "Windows protected your PC" (SmartScreen)
 

@@ -757,7 +757,7 @@ fn show_fixkeys(app: &mut App, picked: Option<Picked>) {
         notice(app, anchor, &text);
         return;
     }
-    match fixkeys::offer(&picked.text, &verba_win::layouts::installed(), &app.engine) {
+    match fixkeys::offer(&picked.text, &verba_win::layouts::installed(), &app.engine, picked.layout) {
         fixkeys::Outcome::NeedTwoLanguages => {
             notice(app, anchor, "Add the other keyboards in Windows (Settings, Time & language, Language), then try again.");
         }

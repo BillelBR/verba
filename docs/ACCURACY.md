@@ -1438,3 +1438,39 @@ The finished program, measured on a Ryzen 7 PRO 4750G (8 cores, AVX2), Windows 1
 - **The OpenMP runtime matters:** the first Rust build, without it, took 295 ms for 16 words and 595 ms for 29 on English → French; with `openmp-runtime-comp` the 28-word sentence takes 325 ms. The Python build of CTranslate2 is still about 1.5 to 2 times faster (135 ms for the 16-word Arabic sentence); the cause is not found.
 - **Longer text** is cut into sentences first (and a sentence of more than 60 words at a comma), and the sentences go to the model as one batch.
 - **Not measured:** other CPUs (a laptop with half the speed would take twice these times), the memory of the Rust program (the Python process peaked at 140 to 149 MB with one model, interpreter included, so expect about 90 MB for a base model; the big model took 252 MB in the same measurement), loading from a cold disk, and the popup on screens other than the author's.
+
+## Wrong keyboard (Ctrl+Alt+K)
+
+What it was measured on: this PC's own keyboards (English US, French AZERTY, Arabic 102 AZERTY, read from Windows) and the real word lists. Arabic sentences are made of words of the Arabic list, "typed" with the keys of the Arabic layout on each of the two other keyboards (as the text would have come out), and given to the same function the shortcut uses. No key is sent and no window is touched.
+
+```
+cargo test -p verba-app fixkeys -- --ignored --nocapture
+```
+
+| Text | Cases | Offered first | Offered among the readings |
+|---|---|---|---|
+| Words of the list, 1 to 20 words (7 lengths, 300 sentences each, both keyboards) | 4200 | 100 % | 100 % |
+| 18 hand-written sentences (Arabic, French, English) on every wrong keyboard | 18 | 100 % | 100 % |
+| 3 sentences in Algerian Darija with Arabic letters, on both keyboards | 6 | 100 % | 100 % |
+| One word that the lists lack (random Arabic letters), the keyboard it was typed on still active | 600 | 98.7 % | 98.7 % |
+| Two such words | 600 | 98.8 % | 98.8 % |
+| One such word among two or five real words (typed keyboard active) | 600 + 600 | 99.3 % and 100 % | 100 % |
+| Two such words among four real ones (typed keyboard active) | 600 | 99.7 % | 100 % |
+| The same cases, but the Arabic keyboard is the active one | 600 each | 85 % (one word), 91 % (two), 98 to 100 % (with real words) | 85 % to 100 % |
+| Text that is **right** (English and French sentences from the lists, 1 to 12 words) | 2400 | 0.5 % of the one-word texts (words of three letters) are offered a change; nothing else | |
+
+How it decides, and what it learned from the failures:
+
+- It traces each character back to its key and writes what the same key gives on the other layout; every pair of layouts is tried.
+- A reading needs **evidence of its own**: letters in real words, at least three for Arabic and four for English and French (words of two letters never count there: the lists hold strings like `og`, `lf` and `ho` that wrong letters make by chance). Letters in a word that has something stuck inside it that its language does not have (`]`, `$`, a digit or a Latin letter in the middle of an Arabic word) are not evidence, and that symbol counts as one more character that is not a word.
+- A text is taken as right only with the same evidence, so `tor vq\e]q` (a real English word `tor` by chance) is not "right".
+- Of two readings that are equal, the layout the text is easiest to have typed on comes first (an English text has `[`, `]`, `;` that the French layout gives only with AltGr or not at all; a French text has `ù`, `é` that the English layout lacks), then the keyboard that was active, then the order of Windows. A reading from another layout than the active one needs two more letters of evidence.
+- When nothing is made of real words and the text is not either (a name), the Arabic reading is given anyway, from the layout that explains the text with the fewest odd keys.
+
+Known weaknesses, measured:
+
+- **Letters only, no word of the lists:** English and French share most keys, so a text of unknown words with no symbol and no accent can be read from the wrong one of the two when the Arabic keyboard is the active one (85 % to 91 % right, above). With the typed keyboard active it is 98 to 99 %.
+- **A rare word of the lists that wrong letters spell by chance** (`shia`, `imf`, `heya`) makes a short text look right: nothing is offered for it (about 1 case in 100 of the texts of one or two unknown words above).
+- **A text that is only symbols** (an Arabic word typed entirely on punctuation keys) has no letter: nothing is offered.
+- **Words of three letters typed right** (`cat`) have too little evidence to count as right, so a one-word selection of this kind is offered an Arabic reading (0.5 % of the one-word texts above).
+- Not measured: other keyboards than these three, the dead keys of the French layout, Arabic text with diacritics, text of several scripts mixed, the long texts in real apps (the typing over the selection).

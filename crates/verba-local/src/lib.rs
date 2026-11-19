@@ -22,6 +22,7 @@ pub mod sentence;
 pub mod slang;
 mod spell;
 mod translate;
+pub mod wrongkeys;
 
 pub use dz::{DZ_AR_SEED, DZ_SEED, DzList};
 #[doc(hidden)]
@@ -341,6 +342,15 @@ impl LocalEngine {
     #[doc(hidden)]
     pub fn list(&self, lang: Lang) -> Option<&WordList> {
         self.lists.get(&lang)
+    }
+
+    /// Whether the list of a language holds the word (an accent or a hamza left out still counts). For Arabic the Darija words written in
+    /// Arabic letters count too. Used to tell text typed on the wrong keyboard layout from text that is fine (see `wrongkeys`).
+    pub fn is_word_of(&self, lang: Lang, word: &str) -> bool {
+        if self.lists.get(&lang).is_some_and(|l| l.contains_word(word)) {
+            return true;
+        }
+        lang == Lang::Ar && self.dz_ar.as_ref().is_some_and(|d| d.contains(word))
     }
 
     /// How many words the list of a language holds after cleaning (0 when it is not loaded).

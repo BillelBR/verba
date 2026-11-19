@@ -471,6 +471,8 @@ fn spawn_reader() {
         let Ok(locator) = Locator::new() else { return };
         let mut last: Option<(i32, i32, i32, i32, String, Option<Lang>)> = None;
         let mut was_paused = false;
+        // (a development build can be told to read no text field of the user's, VERBA_TEST_QUIET=1: only the requests above are served)
+        let quiet = cfg!(debug_assertions) && std::env::var("VERBA_TEST_QUIET").is_ok();
         while !QUITTING.load(Ordering::SeqCst) {
             std::thread::sleep(std::time::Duration::from_millis(POLL_MS));
             // the translate shortcut was pressed: read the selected word (or the one before the caret) now
@@ -504,7 +506,27 @@ fn spawn_reader() {
             if FIXKEYS_REQUEST.swap(false, Ordering::SeqCst) {
                 let front = foreground_app();
                 let allowed = RULES.lock().ok().and_then(|r| r.as_ref().map(|st| st.allows_app(front.as_deref().unwrap_or("")))).unwrap_or(true);
-                let picked = if allowed { locator.pick_selection(fixkeys::READ_CAP) } else { None };
+                #[allow(unused_mut)]
+                let mut picked = if allowed { locator.pick_selection(fixkeys::READ_CAP) } else { None };
+                // (a development build can be given the selected text and the keyboard that is active, to look at the popup without
+                // a focused field and without a key being pressed: VERBA_TEST_FIXKEYS=<text> VERBA_TEST_ACTIVE=en|fr|ar)
+                if cfg!(debug_assertions) {
+                    if let Ok(text) = std::env::var("VERBA_TEST_FIXKEYS") {
+                        let layout = match std::env::var("VERBA_TEST_ACTIVE").unwrap_or_default().as_str() {
+                            "en" => Some(Lang::En),
+                            "fr" => Some(Lang::Fr),
+                            "ar" => Some(Lang::Ar),
+                            _ => None,
+                        };
+                        picked = Some(Picked {
+                            text,
+                            anchor: Anchor { rect: windows::Win32::Foundation::RECT { left: 640, top: 520, right: 643, bottom: 540 }, kind: AnchorKind::Caret },
+                            layout,
+                            app: String::new(),
+                            selected: true,
+                        });
+                    }
+                }
                 if let Ok(mut slot) = FIXKEYS_PICKED.lock() {
                     *slot = Some(picked);
                 }
@@ -527,7 +549,7 @@ fn spawn_reader() {
                 }
             }
             let allowed = RULES.lock().ok().and_then(|r| r.as_ref().map(|s| s.allows_app(app_name.as_deref().unwrap_or("")))).unwrap_or(true);
-            let snap = if paused || !allowed { None } else { locator.snapshot(48) };
+            let snap = if paused || !allowed || quiet { None } else { locator.snapshot(48) };
             // wake the main thread only when something changed
             let key = snap.as_ref().map(|s| (s.anchor.rect.left, s.anchor.rect.top, s.anchor.rect.right, s.anchor.rect.bottom, s.before_caret.clone(), s.layout));
             if key == last && paused == was_paused {

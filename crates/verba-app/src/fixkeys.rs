@@ -422,6 +422,25 @@ mod tests {
         }
     }
 
+    /// Prints what the keys of a few Arabic texts give on the English and on the French keyboard of this PC: the text to give to a
+    /// development build to look at the popup (`VERBA_TEST_FIXKEYS`, see main.rs). Only reads layouts.
+    ///   cargo test -p verba-app fixkeys::tests::print_typed -- --ignored --nocapture
+    #[test]
+    #[ignore = "prints; needs the three keyboards installed"]
+    fn print_typed_samples_for_the_background_check() {
+        let layouts = layouts_from(&verba_win::layouts::installed());
+        let arabic = layouts.iter().find(|l| l.lang == Lang::Ar).expect("Arabic layout");
+        for (label, text) in [
+            ("darija", "واش راك خويا كيفاش حالك اليوم"),
+            ("names", "بلال براهيمي ونسيم"),
+            ("long", "أريد أن أرسل لك الملف قبل الساعة الخامسة مساء، وشكرا جزيلا على مساعدتك."),
+        ] {
+            for wrong in layouts.iter().filter(|l| l.lang != Lang::Ar) {
+                eprintln!("TYPED|{label}|{}|{}", wrong.lang.code(), wrongkeys::convert(text, &arabic.map, &wrong.map));
+            }
+        }
+    }
+
     #[test]
     fn the_modifier_numbers_of_windows_and_of_the_engine_are_the_same() {
         assert_eq!(verba_win::layouts::SHIFT, wrongkeys::SHIFT);

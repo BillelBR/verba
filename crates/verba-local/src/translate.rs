@@ -224,10 +224,12 @@ impl Dictionary {
         self.pairs.is_empty()
     }
 
-    /// `parse`, then the hand-written corrections that ship with the program (`seed/dict-fixes.txt`). This is what the engine loads.
+    /// `parse`, then the hand-written corrections that ship with the program (`seed/dict-fixes.txt`) and the common words written for Verba
+    /// (`seed/ar-common.txt`). This is what the engine loads.
     pub fn parse_with_fixes(text: &str) -> Self {
         let mut dict = Self::parse(text);
         dict.apply_fixes(include_str!("../seed/dict-fixes.txt"));
+        dict.apply_extras(include_str!("../seed/ar-common.txt"));
         dict.latin = LatinGlossary::parse(include_str!("../seed/dz-latin-glossary.txt"));
         dict
     }
@@ -247,6 +249,45 @@ impl Dictionary {
             let old = self.pairs.entry((from, to)).or_default().entry(key).or_default();
             list.extend(old.drain(..).filter(|t| !tr.split(';').any(|f| f.trim() == t)));
             *old = list;
+        }
+    }
+
+    /// Adds the words of a seed file written for Verba (`seed/ar-common.txt`: an Arabic word, a TAB, its English translations) without
+    /// reordering anything: a headword the dictionary lacks gets them, one that has translations gets the missing ones at the END. Each
+    /// translation that is one English word also gets the Arabic word as a translation, at the end, in the direction `en>ar` (a phrase, or a
+    /// note in brackets, is not turned round).
+    pub fn apply_extras(&mut self, text: &str) {
+        for line in text.lines() {
+            if line.is_empty() || line.starts_with('#') {
+                continue;
+            }
+            let mut fields = line.split('\t');
+            let (Some(head), Some(tr)) = (fields.next(), fields.next()) else { continue };
+            let head = head.trim();
+            let key = fold(clean(head));
+            if key.is_empty() {
+                continue;
+            }
+            let glosses: Vec<&str> = tr.split(';').map(str::trim).filter(|t| !t.is_empty()).collect();
+            let list = self.pairs.entry((Lang::Ar, Lang::En)).or_default().entry(key).or_default();
+            for g in &glosses {
+                if !list.iter().any(|x| x == g) {
+                    list.push((*g).to_string());
+                }
+            }
+            for g in glosses {
+                if g.chars().any(|c| c.is_whitespace() || c == '(' || c == ')') {
+                    continue;
+                }
+                let key = fold(clean(g));
+                if key.is_empty() {
+                    continue;
+                }
+                let list = self.pairs.entry((Lang::En, Lang::Ar)).or_default().entry(key).or_default();
+                if !list.iter().any(|x| x == head) {
+                    list.push(head.to_string());
+                }
+            }
         }
     }
 
@@ -512,6 +553,34 @@ mod tests {
         // a word that is itself in the dictionary is taken as it is
         assert_eq!(d.translate("قهوة", &[Lang::En], None).unwrap().candidates[0].text, "coffee");
         assert!(d.translate("ببب", &[Lang::En], None).is_none());
+    }
+
+    #[test]
+    fn written_words_are_added_without_reordering_and_the_english_side_gets_the_arabic_word() {
+        let mut d = Dictionary::parse("ar>en\tخبر\ttry; news\nen>ar\tprogram\tبرنامج\nen>ar\tstate\tحالة; دولة\n");
+        d.apply_extras("# c\nحاسوب\tcomputer\nخبر\tnews; message\nبرامج\tprograms; software\nدولة\tstate; country\nكلمة المرور\tpassword\nطبيبة\tdoctor (f.)\n");
+        let en = |w: &str| d.translate(w, &[Lang::En], Some(Lang::Ar)).map(|t| t.candidates.into_iter().map(|c| c.text).collect::<Vec<_>>());
+        // a missing headword is added; one that has translations keeps its order and gets the missing ones last
+        assert_eq!(en("حاسوب"), Some(vec!["computer".to_string()]));
+        assert_eq!(en("خبر"), Some(vec!["try".to_string(), "news".to_string(), "message".to_string()]));
+        // a phrase is a headword too
+        assert_eq!(en("كلمة المرور"), Some(vec!["password".to_string()]));
+        // the English side: the Arabic word is added at the end, never in front; a one-word translation only
+        let ar = |w: &str| d.translate(w, &[Lang::Ar], Some(Lang::En)).map(|t| t.candidates.into_iter().map(|c| c.text).collect::<Vec<_>>());
+        assert_eq!(ar("computer"), Some(vec!["حاسوب".to_string()]));
+        assert_eq!(ar("state"), Some(vec!["حالة".to_string(), "دولة".to_string()]), "already there: not repeated, not moved");
+        assert_eq!(ar("password"), Some(vec!["كلمة المرور".to_string()]), "a phrase on the Arabic side is fine");
+        assert!(ar("doctor").is_none(), "a translation with a note in brackets is not turned round");
+        // the shipped file is well formed: every line has an Arabic headword and translations
+        let shipped = include_str!("../seed/ar-common.txt");
+        let lines: Vec<&str> = shipped.lines().filter(|l| !l.is_empty() && !l.starts_with('#')).collect();
+        assert!(lines.len() > 500, "{} lines", lines.len());
+        for line in &lines {
+            let mut f = line.split('\t');
+            let (head, tr) = (f.next().unwrap(), f.next().unwrap_or_else(|| panic!("no translation: {line}")));
+            assert!(head.chars().any(verba_core::is_arabic) && !tr.trim().is_empty(), "{line}");
+            assert!(f.next().is_none(), "more than two fields: {line}");
+        }
     }
 
     #[test]

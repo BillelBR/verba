@@ -931,3 +931,83 @@ ar>en	دار	house; home
 ar>fr	دار	maison
 ar>en	الدار	the house; home
 ar>fr	الدار	maison
+
+# Found by comparing a list of common Modern Standard Arabic words written for Verba (seed/ar-common.txt) with this dictionary (examples/seed_coverage.rs):
+# words whose first translation was a rare sense of the word or the wrong word (`قروض` die, `كوارث` heir, `لولا` Lula, `بنى` brown).
+ar>en	حذف	delete; deletion
+ar>en	مستخدم	user
+ar>en	صور	pictures; images
+ar>en	علوم	sciences
+ar>en	نفسية	psychological
+ar>en	أعراض	symptoms
+ar>en	كليات	colleges
+ar>en	حلول	solutions
+ar>en	مغلق	closed
+ar>en	مشابه	similar
+ar>en	تحويل	transfer; conversion
+ar>en	خدمات	services
+ar>en	خدمة	service
+ar>en	أسنان	teeth
+ar>en	سن	tooth; age
+ar>en	مظاهرات	demonstrations
+ar>en	حريات	freedoms
+ar>en	كوارث	disasters
+ar>en	أحداث	events
+ar>en	إسلام	Islam
+ar>en	قرآن	Quran
+ar>en	قطر	Qatar; drip
+ar>en	الإمارات	the Emirates; UAE
+ar>en	لولا	if it were not for
+ar>en	كي	in order to
+ar>en	برأيي	in my opinion
+ar>en	تحياتي	my regards
+ar>en	أود	I would like
+ar>en	كم	how many; how much
+ar>en	يرجى	please
+ar>en	لدينا	we have
+ar>en	لديك	you have
+ar>en	لديه	he has
+ar>en	لدي	I have
+ar>en	حسب	according to
+ar>en	وفق	according to
+ar>en	ضمن	within; among
+ar>en	بنى	build; built
+ar>en	سلطة	authority; power; salad
+ar>en	سلطات	authorities
+ar>en	قرض	loan
+ar>en	قروض	loans
+ar>en	دول	countries; states
+ar>en	شركات	companies
+ar>en	عمال	workers
+ar>en	عقد	contract; decade; knot
+ar>en	عقود	contracts; decades
+ar>en	تجار	merchants; traders
+ar>en	حوالة	transfer; remittance
+ar>en	ديون	debts
+ar>en	مدين	debtor; indebted
+ar>en	طاقة	energy; power
+ar>en	مرضى	patients
+ar>en	بحوث	research; studies
+ar>en	علماء	scientists; scholars
+ar>en	معادلة	equation
+ar>en	مقال	article
+ar>en	دروس	lessons
+ar>en	أقسام	departments; sections
+ar>en	أفكار	ideas; thoughts
+ar>en	آراء	opinions
+ar>en	مفاهيم	concepts
+ar>en	قاضي	judge
+ar>en	مسؤولون	officials
+ar>en	قانونية	legal
+ar>en	شقق	apartments; flats
+ar>en	تذاكر	tickets
+ar>en	أرز	rice
+ar>en	جار	neighbor; current
+ar>en	جيران	neighbors
+ar>en	بنات	girls; daughters
+ar>en	جد	grandfather; serious
+ar>en	خال	maternal uncle; empty
+ar>en	شخص	person
+ar>en	أشخاص	persons; people
+ar>en	محافظة	governorate; province
+ar>en	تكاليف	costs

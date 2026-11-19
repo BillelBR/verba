@@ -83,6 +83,50 @@ pub const fn list_cap(lang: Lang) -> usize {
     }
 }
 
+/// The one-word headwords of the common Modern Standard Arabic words written for Verba (`seed/ar-common.txt`; the same file feeds the dictionary).
+fn arabic_common_words() -> impl Iterator<Item = &'static str> {
+    include_str!("../seed/ar-common.txt")
+        .lines()
+        .filter(|l| !l.is_empty() && !l.starts_with('#'))
+        .filter_map(|l| l.split('\t').next())
+        .map(str::trim)
+        .filter(|w| !w.is_empty() && !w.contains(' '))
+}
+
+/// The line of a frequency list at which the words added from a seed get their frequency: those of the commonest 30 000 are not rare words.
+const SEED_RANK: usize = 30_000;
+
+/// `text` (a frequency list, most frequent first) with the words of `seed` that it lacks added at the end, each as frequent as the line
+/// `SEED_RANK` of the list. A word the list has (with or without short vowels) is left as it is. The frequency is above where the spelling
+/// stops (`WordList::spell_min_count`), so a word added here is a known word for the spelling.
+fn with_seed(text: &str, seed: impl Iterator<Item = &'static str>) -> String {
+    let mut have: HashSet<String> = HashSet::new();
+    let (mut lines, mut at_rank, mut last) = (0usize, 0u64, 1u64);
+    for line in text.lines() {
+        let mut parts = line.split_whitespace();
+        let (Some(word), Some(count)) = (parts.next(), parts.next()) else { continue };
+        let Ok(count) = count.parse::<u64>() else { continue };
+        lines += 1;
+        if lines == SEED_RANK {
+            at_rank = count;
+        }
+        last = count;
+        have.insert(strip_arabic_marks(&word.to_lowercase()));
+    }
+    let count = if at_rank > 0 { at_rank } else { last.max(1) };
+    let mut out = String::with_capacity(text.len() + 4096);
+    out.push_str(text);
+    if !out.ends_with('\n') {
+        out.push('\n');
+    }
+    for word in seed {
+        if have.insert(strip_arabic_marks(word)) {
+            out.push_str(&format!("{word} {count}\n"));
+        }
+    }
+    out
+}
+
 /// Words of one language, sorted by comparison key so that all the words starting the same way sit together.
 pub struct WordList {
     entries: Vec<Entry>,
@@ -317,10 +361,18 @@ impl LocalEngine {
     /// belong to the other language taken out: no next-word table, no dictionary. For measuring what the size of a list does
     /// (`examples/realtext_accuracy.rs`); the program itself uses `load_dir`.
     pub fn load_lists(dir: &Path, max_words: usize) -> io::Result<Self> {
+        Self::load_lists_seeded(dir, max_words, false)
+    }
+
+    /// `load_lists`, and with `seeded` the Arabic list also gets the common words written for Verba that it lacks, as `load_dir` does.
+    pub fn load_lists_seeded(dir: &Path, max_words: usize, seeded: bool) -> io::Result<Self> {
         let mut engine = Self::new();
         for lang in [Lang::En, Lang::Fr, Lang::Ar] {
             match std::fs::read_to_string(dir.join(format!("{}.txt", lang.code()))) {
-                Ok(text) => engine.add(lang, WordList::parse_for(lang, &text, max_words)),
+                Ok(text) => {
+                    let text = if seeded && lang == Lang::Ar { with_seed(&text, arabic_common_words()) } else { text };
+                    engine.add(lang, WordList::parse_for(lang, &text, max_words))
+                }
                 Err(e) if e.kind() == io::ErrorKind::NotFound => {}
                 Err(e) => return Err(e),
             }
@@ -334,7 +386,11 @@ impl LocalEngine {
         for lang in [Lang::En, Lang::Fr, Lang::Ar] {
             let path = dir.join(format!("{}.txt", lang.code()));
             match std::fs::read_to_string(&path) {
-                Ok(text) => engine.add(lang, WordList::parse_for(lang, &text, list_cap(lang))),
+                Ok(text) => {
+                    // the Arabic list also gets the common words written for Verba that it lacks
+                    let text = if lang == Lang::Ar { with_seed(&text, arabic_common_words()) } else { text };
+                    engine.add(lang, WordList::parse_for(lang, &text, list_cap(lang)))
+                }
                 Err(e) if e.kind() == io::ErrorKind::NotFound => {}
                 Err(e) => return Err(e),
             }
@@ -613,6 +669,27 @@ mod tests {
 
     fn texts(v: Vec<Suggestion>) -> Vec<String> {
         v.into_iter().map(|s| s.text).collect()
+    }
+
+    #[test]
+    fn seed_words_that_the_list_lacks_are_added_at_the_end_with_one_frequency() {
+        let text = "الكتاب 900
+كتاب 500
+بيت 300
+";
+        // one the list has with short vowels, one it lacks (twice in the seed), one it has
+        let out = with_seed(text, ["كِتاب", "حاسوب", "حاسوب", "بيت"].into_iter());
+        assert_eq!(out.lines().count(), 4, "{out}");
+        assert!(out.ends_with("حاسوب 300
+"), "as frequent as the last line when the list is short: {out}");
+        let list = WordList::parse(&out, 100);
+        assert!(list.contains_word("حاسوب") && list.contains_word("كتاب"));
+        // a list that does not end with a line break
+        assert_eq!(with_seed("بيت 3", ["حاسوب"].into_iter()), "بيت 3
+حاسوب 3
+");
+        // the shipped seed has words to add
+        assert!(arabic_common_words().count() > 400);
     }
 
     #[test]

@@ -1,0 +1,1412 @@
+# Common Modern Standard Arabic words and their English translations, written for Verba (not taken from a corpus or a dictionary), for the words
+# that the word lists or the Wiktionary dictionary were found to lack (the build of this file's useful part is measured in docs/ACCURACY.md).
+# One line: the Arabic word (or short phrase), a TAB, the English translations separated by `;` (most common first). Arabic without short vowels.
+# What the program does with it (crates/verba-local/src/lib.rs, translate.rs):
+#  - the dictionary: `ar>en` gets the line when the headword is missing, or its missing translations at the END (nothing is reordered);
+#    `en>ar` gets the Arabic word at the END of each one-word English translation (a phrase is not reversed);
+#  - the suggestions: a one-word Arabic headword that the Arabic list lacks is added to it, as a word of ordinary frequency.
+# Written from general knowledge; an Arabic speaker should read it (a wrong line here is a wrong translation shown to people).
+
+# ── technology and the internet
+حاسوب	computer
+حواسيب	computers
+برنامج	program; software
+برامج	programs
+برمجية	software
+برمجيات	software
+تطبيق	application; app
+تطبيقات	applications; apps
+شبكة	network; web
+شبكات	networks
+إنترنت	internet
+الإنترنت	the internet
+موقع	website; site; location
+مواقع	websites; sites; locations
+صفحة	page
+صفحات	pages
+رابط	link
+روابط	links
+ملف	file; folder
+ملفات	files
+مجلد	folder
+بيانات	data
+خادم	server
+سحابة	cloud
+حساب	account; calculation
+حسابات	accounts
+كلمة المرور	password
+كلمة السر	password
+تسجيل الدخول	login; sign in
+تسجيل الخروج	logout; sign out
+رسالة	message; letter
+رسائل	messages; letters
+بريد إلكتروني	email
+البريد الإلكتروني	email
+هاتف	phone; telephone
+هواتف	phones
+هاتف ذكي	smartphone
+شاشة	screen
+شاشات	screens
+فأرة	mouse
+طابعة	printer
+كاميرا	camera
+صورة	picture; image; photo
+صور	pictures; images; photos
+فيديو	video
+مقطع	clip; segment
+تنزيل	download
+تحميل	download; loading
+رفع	upload; raising
+تحديث	update
+تحديثات	updates
+إعدادات	settings
+خيار	option; choice
+خيارات	options; choices
+أمان	security; safety
+أمن	security; safety
+خصوصية	privacy
+حماية	protection
+فيروس	virus
+اختراق	hacking; breach; penetration
+تشفير	encryption
+رقمي	digital
+إلكتروني	electronic
+ذكاء اصطناعي	artificial intelligence
+الذكاء الاصطناعي	artificial intelligence
+خوارزمية	algorithm
+تقنية	technology; technique
+تكنولوجيا	technology
+مبرمج	programmer
+برمجة	programming
+شفرة	code; cipher
+بحث	search; research
+منصة	platform
+منصات	platforms
+تواصل	communication; contact
+اشتراك	subscription
+إشعار	notification; notice
+إشعارات	notifications
+متصفح	browser
+تصفح	browsing
+نسخة	copy; version
+نسخ	copy; copying
+لصق	paste; pasting
+حذف	delete; deletion
+حفظ	save; saving
+إرسال	sending; send
+استقبال	receiving; reception
+اتصال	connection; call
+انترنت	internet
+واي فاي	wifi
+بطارية	battery
+شاحن	charger
+سماعة	headphone; earpiece
+مكبر الصوت	speaker
+ذاكرة	memory
+قرص	disk; disc; tablet
+وحدة	unit; module
+معالج	processor
+نظام	system; order
+أنظمة	systems
+نظام التشغيل	operating system
+مستخدم	user
+مستخدمون	users
+مستخدمين	users
+مطور	developer
+مطورون	developers
+تصميم	design
+مصمم	designer
+واجهة	interface; front
+قائمة	list; menu
+زر	button
+أيقونة	icon
+نافذة	window
+مؤشر	cursor; indicator
+نص	text
+نصوص	texts
+خط	font; line
+لغة	language
+لغات	languages
+ترجمة	translation
+مترجم	translator; translated
+قاموس	dictionary
+# ── government, politics and the state
+حكومة	government
+حكومات	governments
+رئيس	president; head; chairman
+رئيس الوزراء	prime minister
+وزير	minister
+وزراء	ministers
+وزارة	ministry
+برلمان	parliament
+مجلس	council; board; assembly
+مجلس النواب	house of representatives
+انتخابات	elections
+انتخاب	election; electing
+ناخب	voter
+ناخبون	voters
+مرشح	candidate
+مرشحون	candidates
+حزب	party
+أحزاب	parties
+دستور	constitution
+قرار	decision; resolution
+قرارات	decisions; resolutions
+اتفاقية	agreement; convention
+معاهدة	treaty
+سفارة	embassy
+سفير	ambassador
+قنصلية	consulate
+دولة	state; country
+دول	states; countries
+سلطة	authority; power
+سلطات	authorities
+مواطن	citizen
+مواطنون	citizens
+مواطنين	citizens
+جنسية	nationality; citizenship
+هوية	identity
+جواز سفر	passport
+تأشيرة	visa
+حدود	borders; limits
+حدود الدولة	borders of the state
+علاقات	relations
+دبلوماسي	diplomat; diplomatic
+سياسة	politics; policy
+سياسي	political; politician
+سياسيون	politicians
+حرب	war
+حروب	wars
+سلام	peace
+أمن قومي	national security
+جيش	army
+جنود	soldiers
+جندي	soldier
+شرطة	police
+شرطي	policeman
+مظاهرة	demonstration
+مظاهرات	demonstrations
+احتجاج	protest
+احتجاجات	protests
+إصلاح	reform; repair
+إصلاحات	reforms
+حريات	freedoms
+حرية	freedom
+عدالة	justice
+مساواة	equality
+ديمقراطية	democracy
+ديمقراطي	democratic
+نائب	deputy; member of parliament; vice
+محافظ	governor; conservative
+محافظة	governorate; province
+بلدية	municipality
+عاصمة	capital
+مدينة	city
+مدن	cities
+قرية	village
+ريف	countryside
+# ── economy, business and money
+اقتصاد	economy
+اقتصادي	economic; economist
+اقتصادية	economic
+تضخم	inflation
+ميزانية	budget
+استثمار	investment
+مستثمر	investor
+مستثمرون	investors
+شركة	company; firm
+شركات	companies
+مؤسسة	institution; foundation; establishment
+مؤسسات	institutions
+موظف	employee; official
+موظفون	employees
+موظفين	employees
+عامل	worker; factor
+عمال	workers
+راتب	salary
+رواتب	salaries
+أجر	wage; pay; reward
+عقد	contract; decade; knot
+عقود	contracts; decades
+فاتورة	invoice; bill
+فواتير	invoices; bills
+ضريبة	tax
+ضرائب	taxes
+قرض	loan
+قروض	loans
+فائدة	interest; benefit
+فوائد	interests; benefits
+بنك	bank
+بنوك	banks
+مصرف	bank
+مصارف	banks
+سوق	market
+أسواق	markets
+سعر	price; rate
+أسعار	prices; rates
+تكلفة	cost
+تكاليف	costs
+ربح	profit; gain
+أرباح	profits
+خسارة	loss
+خسائر	losses
+صادرات	exports
+واردات	imports
+تصدير	export; exporting
+استيراد	import; importing
+تجارة	trade; commerce
+تجاري	commercial
+تاجر	merchant; trader
+تجار	merchants; traders
+عملة	currency; coin
+عملات	currencies
+دولار	dollar
+يورو	euro
+دينار	dinar
+ريال	riyal
+جنيه	pound
+درهم	dirham
+مال	money; wealth
+أموال	money; funds
+نقد	cash; criticism
+دفع	payment; pay; pushing
+دفعة	payment; batch
+مدفوعات	payments
+قبض	receipt; collecting; seizure
+حوالة	transfer; remittance
+تحويل	transfer; conversion
+رصيد	balance; credit
+حساب بنكي	bank account
+بطاقة	card
+بطاقة ائتمان	credit card
+ائتمان	credit
+دين	debt; religion
+ديون	debts
+مدين	debtor; indebted
+دائن	creditor
+إفلاس	bankruptcy
+ميزان	scale; balance
+عجز	deficit; inability
+فائض	surplus
+دخل	income
+نمو	growth
+نمو اقتصادي	economic growth
+إنتاج	production
+إنتاجية	productivity
+منتج	product; producer
+منتجات	products
+مصنع	factory
+مصانع	factories
+صناعة	industry; manufacturing
+صناعي	industrial
+زراعة	agriculture
+زراعي	agricultural
+مزارع	farmer; farms
+طاقة	energy
+نفط	oil; petroleum
+غاز	gas
+كهرباء	electricity
+ماء	water
+مياه	water; waters
+عرض	offer; supply; show
+طلب	demand; request; application
+عملاء	customers; clients
+عميل	customer; client
+زبون	customer
+زبائن	customers
+خدمة	service
+خدمات	services
+خدمة العملاء	customer service
+جودة	quality
+ضمان	guarantee; warranty
+عقد عمل	employment contract
+وظيفة	job; position; function
+وظائف	jobs; functions
+مهنة	profession
+مهن	professions
+مدير	manager; director
+مديرة	manager; director (f.)
+مدراء	managers
+إدارة	management; administration
+إداري	administrative; administrator
+اجتماع	meeting
+اجتماعات	meetings
+مشروع	project
+مشاريع	projects
+خطة	plan
+خطط	plans
+هدف	goal; target
+أهداف	goals; targets
+استراتيجية	strategy
+تقرير	report
+تقارير	reports
+دراسة	study
+دراسات	studies
+نتيجة	result; consequence
+نتائج	results
+تحليل	analysis
+إحصائيات	statistics
+إحصاء	statistics; census
+نسبة	percentage; ratio
+نسبة مئوية	percentage
+معدل	rate; average
+متوسط	average; medium
+مجموع	total; sum
+إجمالي	total; gross
+زيادة	increase
+ارتفاع	rise; increase
+انخفاض	decrease; drop
+تراجع	decline; retreat
+تحسن	improvement
+تطور	development; evolution
+تنمية	development
+مستدامة	sustainable
+# ── health and medicine
+مستشفى	hospital
+مستشفيات	hospitals
+طبيب	doctor; physician
+أطباء	doctors
+طبيبة	doctor (f.)
+ممرض	nurse
+ممرضة	nurse (f.)
+صيدلية	pharmacy
+صيدلي	pharmacist
+دواء	medicine; drug
+أدوية	medicines; drugs
+علاج	treatment; therapy; cure
+علاجات	treatments
+مرض	disease; illness
+أمراض	diseases
+مريض	patient; sick
+مرضى	patients
+عدوى	infection
+لقاح	vaccine
+لقاحات	vaccines
+فحص	examination; test; checkup
+تحليل طبي	medical test
+عملية جراحية	surgery; operation
+جراحة	surgery
+جراح	surgeon; wounds
+إسعاف	ambulance; first aid
+طوارئ	emergency
+صحة	health
+صحي	healthy; sanitary
+صحية	healthy; health
+ألم	pain
+أوجاع	pains
+صداع	headache
+حمى	fever
+سعال	cough
+زكام	cold; flu
+إنفلونزا	flu; influenza
+سكري	diabetes; diabetic
+ضغط الدم	blood pressure
+قلب	heart; turning
+قلبي	cardiac; my heart
+دم	blood
+عظم	bone
+عظام	bones
+جلد	skin; leather
+عين	eye; spring
+عيون	eyes; springs
+أذن	ear
+أسنان	teeth
+سن	tooth; age
+أسنان طبيب	dentist
+حامل	pregnant; carrier
+ولادة	birth; delivery
+طفل	child; baby
+أطفال	children
+رضيع	infant
+شيخوخة	old age
+عمر	age; life; Omar
+تغذية	nutrition
+غذاء	food
+غذائي	food; nutritional
+حمية	diet
+رياضة	sport; exercise
+نوم	sleep
+راحة	rest; comfort
+تعب	tiredness; fatigue
+إرهاق	exhaustion
+توتر	stress; tension
+قلق	anxiety; worry
+اكتئاب	depression
+نفسي	psychological
+نفسية	psychological; mental
+تأمين صحي	health insurance
+تأمين	insurance
+وصفة طبية	prescription
+جرعة	dose
+أعراض	symptoms
+عرض	symptom; show
+تشخيص	diagnosis
+وباء	epidemic
+جائحة	pandemic
+# ── education and science
+جامعة	university
+جامعات	universities
+كلية	college; faculty
+كليات	colleges
+مدرسة	school
+مدارس	schools
+معهد	institute
+طالب	student; applicant
+طلاب	students
+طالبة	student (f.)
+طلبة	students
+أستاذ	professor; teacher
+أساتذة	professors
+معلم	teacher; landmark
+معلمون	teachers
+معلمة	teacher (f.)
+مدرس	teacher; instructor
+مدرسون	teachers
+امتحان	exam; test
+امتحانات	exams
+اختبار	test; exam
+اختبارات	tests
+شهادة	certificate; degree; testimony
+شهادات	certificates; degrees
+دبلوم	diploma
+ماجستير	master's degree
+دكتوراه	doctorate; PhD
+بحث علمي	scientific research
+بحوث	research; studies
+باحث	researcher
+باحثون	researchers
+علم	science; knowledge; flag
+علوم	sciences
+علمي	scientific
+عالم	scientist; world; scholar
+علماء	scientists; scholars
+مختبر	laboratory
+مختبرات	laboratories
+تجربة	experiment; experience
+تجارب	experiments; experiences
+نظرية	theory
+نظريات	theories
+فرضية	hypothesis
+معادلة	equation
+رياضيات	mathematics
+فيزياء	physics
+كيمياء	chemistry
+أحياء	biology; neighborhoods; living
+جغرافيا	geography
+تاريخ	history; date
+أدب	literature; manners
+فلسفة	philosophy
+فن	art
+فنون	arts
+موسيقى	music
+مكتبة	library; bookstore
+كتاب	book
+كتب	books; wrote
+مجلة	magazine; journal
+جريدة	newspaper
+صحيفة	newspaper; sheet
+مقال	article
+مقالات	articles
+فصل	chapter; class; season; separation
+فصول	chapters; classes; seasons
+درس	lesson; studied
+دروس	lessons
+محاضرة	lecture
+محاضرات	lectures
+واجب	homework; duty; necessary
+واجبات	homework; duties
+منهج	curriculum; method
+مناهج	curricula; methods
+تعليم	education; teaching
+تعليمي	educational
+تدريب	training
+مدرب	trainer; coach
+دورة	course; cycle
+دورات	courses
+منحة	scholarship; grant
+منح	scholarships; grants
+تخصص	specialization; major
+تخرج	graduation
+خريج	graduate
+خريجون	graduates
+قسم	department; section; oath
+أقسام	departments; sections
+عميد	dean
+رئيس الجامعة	university president
+معرفة	knowledge
+ثقافة	culture
+ثقافي	cultural
+حضارة	civilization
+فكر	thought
+فكرة	idea
+أفكار	ideas
+رأي	opinion
+آراء	opinions
+مفهوم	concept; understood
+مفاهيم	concepts
+مصطلح	term
+مصطلحات	terms
+معنى	meaning
+معاني	meanings
+سؤال	question
+أسئلة	questions
+جواب	answer
+أجوبة	answers
+إجابة	answer
+إجابات	answers
+حل	solution; solve
+حلول	solutions
+مشكلة	problem
+مشاكل	problems
+مشكلات	problems
+# ── law and justice
+محكمة	court
+محاكم	courts
+قاضي	judge
+قضاة	judges
+قضية	case; issue
+قضايا	cases; issues
+محام	lawyer
+محامي	lawyer
+محامون	lawyers
+دعوى	lawsuit; claim
+حكم	ruling; verdict; rule
+أحكام	rulings; provisions
+جريمة	crime
+جرائم	crimes
+مجرم	criminal
+عقوبة	punishment; penalty
+عقوبات	punishments; sanctions
+سجن	prison
+سجين	prisoner
+غرامة	fine
+شاهد	witness; saw
+شهود	witnesses
+متهم	accused; defendant
+اتهام	accusation
+تهمة	charge; accusation
+تحقيق	investigation
+محقق	investigator
+بريء	innocent
+مذنب	guilty
+جناية	felony
+جنحة	misdemeanor
+ملكية	ownership; property
+حقوق	rights; law
+حق	right; truth
+حقوق الإنسان	human rights
+التزام	obligation; commitment
+التزامات	obligations
+مسؤولية	responsibility
+مسؤول	responsible; official
+مسؤولون	officials
+شرط	condition
+شروط	conditions; terms
+بند	clause; item
+بنود	clauses; items
+مادة	article; material; subject
+مواد	articles; materials
+لائحة	regulation; list
+لوائح	regulations
+تشريع	legislation
+تشريعات	legislation
+قانوني	legal; lawyer
+قانونية	legal
+غير قانوني	illegal
+مخالفة	violation; offense
+مخالفات	violations
+ترخيص	license; permit
+رخصة	license; permit
+رخصة قيادة	driving license
+توقيع	signature
+توثيق	documentation; notarization
+وثيقة	document
+وثائق	documents
+مستند	document
+مستندات	documents
+شكوى	complaint
+شكاوى	complaints
+طعن	appeal; challenge
+استئناف	appeal
+إثبات	proof
+دليل	evidence; guide; proof
+أدلة	evidence; guides
+# ── daily life, home and travel
+بيت	house; home; verse
+بيوت	houses
+منزل	house; home
+منازل	houses
+شقة	apartment; flat
+شقق	apartments
+غرفة	room
+غرف	rooms
+مطبخ	kitchen
+حمام	bathroom; pigeon
+سرير	bed
+طاولة	table
+كرسي	chair
+باب	door; chapter
+أبواب	doors
+شباك	window
+نافذة	window
+سقف	ceiling; roof
+أرض	earth; land; floor
+حديقة	garden; park
+سيارة	car
+سيارات	cars
+حافلة	bus
+قطار	train
+طائرة	airplane; plane
+مطار	airport
+مطارات	airports
+محطة	station
+محطات	stations
+ميناء	port; harbor
+تذكرة	ticket
+تذاكر	tickets
+حجز	reservation; booking
+فندق	hotel
+فنادق	hotels
+مطعم	restaurant
+مطاعم	restaurants
+مقهى	cafe; coffee shop
+قهوة	coffee
+شاي	tea
+حليب	milk
+خبز	bread
+لحم	meat
+دجاج	chicken
+سمك	fish
+أرز	rice
+خضار	vegetables
+خضروات	vegetables
+فواكه	fruits
+فاكهة	fruit
+طعام	food; meal
+وجبة	meal
+فطور	breakfast
+غداء	lunch
+عشاء	dinner
+ملابس	clothes
+قميص	shirt
+حذاء	shoe
+أحذية	shoes
+متجر	store; shop
+متاجر	stores; shops
+دكان	shop
+تسوق	shopping
+سوق شعبي	popular market
+هدية	gift
+هدايا	gifts
+عيد	holiday; feast; festival
+أعياد	holidays; feasts
+عطلة	holiday; vacation
+عطلات	holidays; vacations
+رحلة	trip; journey; flight
+رحلات	trips; flights
+سفر	travel
+سياحة	tourism
+سائح	tourist
+سياح	tourists
+خريطة	map
+خرائط	maps
+شارع	street
+شوارع	streets
+طريق سريع	highway
+ساحة	square; yard
+جسر	bridge
+مبنى	building
+مباني	buildings
+عمارة	building; architecture
+مكتب	office; desk
+مكاتب	offices
+عنوان	address; title
+عناوين	addresses; titles
+رقم	number
+أرقام	numbers
+رقم الهاتف	phone number
+جار	neighbor
+جيران	neighbors
+صديق	friend
+أصدقاء	friends
+صديقة	friend (f.)
+عائلة	family
+أسرة	family; household
+أب	father
+أم	mother
+أخ	brother
+إخوة	brothers
+أخت	sister
+أخوات	sisters
+ابن	son
+أبناء	sons; children
+بنت	girl; daughter
+بنات	girls; daughters
+زوج	husband; spouse; pair
+زوجة	wife
+زواج	marriage
+طلاق	divorce
+جد	grandfather
+جدة	grandmother
+عم	uncle (paternal)
+خال	uncle (maternal)
+عمة	aunt (paternal)
+خالة	aunt (maternal)
+قريب	relative; close; near
+أقارب	relatives
+ضيف	guest
+ضيوف	guests
+مناسبة	occasion
+حفلة	party
+حفل	ceremony; party
+وقت	time
+أوقات	times
+ساعة	hour; clock; watch
+دقيقة	minute
+ثانية	second
+يوم	day
+أيام	days
+أسبوع	week
+أسابيع	weeks
+شهر	month
+شهور	months
+أشهر	months
+سنة	year
+سنوات	years
+عام	year; general; public
+أعوام	years
+قرن	century
+صباح	morning
+مساء	evening
+ليل	night
+ليلة	night
+نهار	daytime
+ظهر	noon; back; appeared
+غد	tomorrow
+غدا	tomorrow
+أمس	yesterday
+اليوم	today
+الآن	now
+قريبا	soon
+مؤخرا	recently
+دائما	always
+أحيانا	sometimes
+غالبا	often; mostly
+نادرا	rarely
+أبدا	never; ever
+مرة	once; time
+مرات	times
+بعد	after; later
+قبل	before
+خلال	during
+منذ	since
+حتى	until; even
+# ── people, qualities and common adjectives
+شخص	person
+أشخاص	people; persons
+ناس	people
+إنسان	human; person
+رجل	man
+رجال	men
+امرأة	woman
+نساء	women
+شاب	young man; young
+شباب	youth; young men
+فتاة	girl; young woman
+فتيات	girls
+كبير	big; large; old
+صغير	small; little; young
+جديد	new
+قديم	old; ancient
+جميل	beautiful; nice
+جميلة	beautiful (f.)
+سيء	bad
+جيد	good
+ممتاز	excellent
+رائع	wonderful; great
+سهل	easy
+صعب	difficult; hard
+مهم	important
+هام	important
+ضروري	necessary
+مفيد	useful
+ممكن	possible
+مستحيل	impossible
+صحيح	correct; true; healthy
+خطأ	mistake; wrong
+خاطئ	wrong; incorrect
+حقيقي	real; true
+كامل	complete; full
+جزء	part
+أجزاء	parts
+كثير	many; much; a lot
+قليل	few; little
+أكثر	more; most
+أقل	less; fewer
+كل	all; every; each
+بعض	some
+جميع	all
+عدد	number
+أعداد	numbers
+كبير جدا	very big
+سريع	fast; quick
+بطيء	slow
+قوي	strong
+ضعيف	weak
+غني	rich
+فقير	poor
+سعيد	happy
+حزين	sad
+غاضب	angry
+متعب	tired
+جائع	hungry
+عطشان	thirsty
+مشغول	busy
+فارغ	empty; free
+مفتوح	open
+مغلق	closed
+قريب جدا	very close
+بعيد	far; distant
+طويل	long; tall
+قصير	short
+عريض	wide
+ضيق	narrow; tight
+ثقيل	heavy
+خفيف	light
+ساخن	hot
+بارد	cold
+دافئ	warm
+نظيف	clean
+وسخ	dirty
+مختلف	different
+مشابه	similar
+نفس	same; self; soul
+آخر	other; last; another
+أول	first
+ثاني	second
+ثالث	third
+أخير	last; final
+حالي	current
+سابق	previous; former
+قادم	coming; next
+مستقبل	future
+ماض	past
+حاضر	present
+# ── common verbs (past and present)
+فعل	did; verb; act
+يفعل	does; do
+قال	said
+يقول	says; say
+ذهب	went
+يذهب	goes; go
+جاء	came
+يجيء	comes
+أتى	came
+يأتي	comes
+عاد	returned
+يعود	returns
+وصل	arrived; connected
+يصل	arrives; connects
+خرج	went out; left
+يخرج	goes out; leaves
+دخل	entered
+يدخل	enters
+فتح	opened
+يفتح	opens
+أغلق	closed
+يغلق	closes
+بدأ	started
+يبدأ	starts
+انتهى	ended; finished
+ينتهي	ends; finishes
+أنهى	finished; ended
+يستمر	continues
+استمر	continued
+توقف	stopped
+يتوقف	stops
+أخذ	took
+يأخذ	takes
+أعطى	gave
+يعطي	gives
+وضع	put; placed
+يضع	puts; places
+وجد	found
+يجد	finds
+بحث	searched
+يبحث	searches
+عمل	worked; did
+يعمل	works; does
+كتب	wrote
+يكتب	writes
+قرأ	read
+يقرأ	reads
+سمع	heard
+يسمع	hears
+رأى	saw
+يرى	sees
+شاهد	watched; saw
+يشاهد	watches
+نظر	looked
+ينظر	looks
+فكر	thought
+يفكر	thinks
+عرف	knew
+يعرف	knows
+علم	knew; learned
+يعلم	knows
+تعلم	learned
+يتعلم	learns
+علّم	taught
+يعلّم	teaches
+فهم	understood
+يفهم	understands
+نسي	forgot
+ينسى	forgets
+تذكر	remembered
+يتذكر	remembers
+أحب	loved; liked
+يحب	loves; likes
+كره	hated
+يكره	hates
+أراد	wanted
+يريد	wants
+احتاج	needed
+يحتاج	needs
+استطاع	was able to
+يستطيع	can; is able to
+حاول	tried
+يحاول	tries
+نجح	succeeded
+ينجح	succeeds
+فشل	failed
+يفشل	fails
+ربح	won; gained
+يربح	wins; gains
+خسر	lost
+يخسر	loses
+اشترى	bought
+يشتري	buys
+باع	sold
+يبيع	sells
+دفع	paid; pushed
+يدفع	pays; pushes
+طلب	asked for; requested; ordered
+يطلب	asks for; requests; orders
+سأل	asked
+يسأل	asks
+أجاب	answered
+يجيب	answers
+شرح	explained
+يشرح	explains
+قدم	presented; offered
+يقدم	presents; offers
+استخدم	used
+يستخدم	uses
+ساعد	helped
+يساعد	helps
+شكر	thanked
+يشكر	thanks
+اتصل	called; contacted
+يتصل	calls; contacts
+أرسل	sent
+يرسل	sends
+استلم	received
+يستلم	receives
+تلقى	received
+يتلقى	receives
+حصل	obtained; happened; got
+يحصل	obtains; happens; gets
+بقي	remained
+يبقى	remains
+انتظر	waited
+ينتظر	waits
+سافر	traveled
+يسافر	travels
+عاش	lived
+يعيش	lives
+مات	died
+يموت	dies
+ولد	was born
+يولد	is born
+تزوج	married
+يتزوج	marries
+سكن	lived; resided
+يسكن	lives; resides
+أكل	ate
+يأكل	eats
+شرب	drank
+يشرب	drinks
+نام	slept
+ينام	sleeps
+استيقظ	woke up
+يستيقظ	wakes up
+جلس	sat
+يجلس	sits
+وقف	stood
+يقف	stands
+مشى	walked
+يمشي	walks
+ركض	ran
+يركض	runs
+لعب	played
+يلعب	plays
+ضحك	laughed
+يضحك	laughs
+بكى	cried
+يبكي	cries
+غضب	got angry
+يغضب	gets angry
+شعر	felt
+يشعر	feels
+قرر	decided
+يقرر	decides
+اختار	chose
+يختار	chooses
+اقترح	suggested
+يقترح	suggests
+وافق	agreed
+يوافق	agrees
+رفض	refused
+يرفض	refuses
+قبل	accepted
+يقبل	accepts
+منع	prevented; forbade
+يمنع	prevents; forbids
+سمح	allowed
+يسمح	allows
+حدث	happened
+يحدث	happens
+تغير	changed
+يتغير	changes
+غير	changed
+يغير	changes
+زاد	increased
+يزيد	increases
+نقص	decreased
+ينقص	decreases
+ارتفع	rose
+يرتفع	rises
+انخفض	dropped
+ينخفض	drops
+نما	grew
+ينمو	grows
+بنى	built
+يبني	builds
+صنع	made
+يصنع	makes
+أنتج	produced
+ينتج	produces
+أنشأ	established; created
+ينشئ	establishes; creates
+فتح حساب	opened an account
+سجل	registered; recorded
+يسجل	registers; records
+حفظ	saved; memorized
+يحفظ	saves; memorizes
+حذف	deleted
+يحذف	deletes
+نسخ	copied
+ينسخ	copies
+نقل	moved; transferred
+ينقل	moves; transfers
+حمل	carried; downloaded
+يحمل	carries; downloads
+نزل	went down; downloaded
+ينزل	goes down; downloads
+رفع	raised; uploaded
+يرفع	raises; uploads
+شغل	operated; turned on
+يشغل	operates; turns on
+أطفأ	turned off
+يطفئ	turns off
+اتبع	followed
+يتبع	follows
+تابع	followed; continued
+يتابع	follows; continues
+شارك	participated; shared
+يشارك	participates; shares
+انضم	joined
+ينضم	joins
+غادر	left
+يغادر	leaves
+زار	visited
+يزور	visits
+التقى	met
+يلتقي	meets
+تحدث	spoke; talked
+يتحدث	speaks; talks
+ناقش	discussed
+يناقش	discusses
+اتفق	agreed
+يتفق	agrees
+اعتقد	believed; thought
+يعتقد	believes; thinks
+ظن	thought; assumed
+يظن	thinks; assumes
+قصد	meant; intended
+يقصد	means; intends
+يعني	means
+يمكن	can; may; is possible
+ينبغي	should; ought to
+يجب	must; should
+لازم	necessary; must
+# ── common nouns for writing and news
+خبر	news; piece of news
+أخبار	news
+حدث	event
+أحداث	events
+حادث	accident; incident
+حوادث	accidents
+مناسبات	occasions
+تصريح	statement; permit
+تصريحات	statements
+بيان	statement; communique
+بيانات صحفية	press releases
+مؤتمر	conference
+مؤتمر صحفي	press conference
+ندوة	seminar
+مقابلة	interview; meeting
+لقاء	meeting; encounter
+زيارة	visit
+رحيل	departure
+وفاة	death
+ولادة جديدة	rebirth
+كارثة	disaster
+كوارث	disasters
+زلزال	earthquake
+فيضان	flood
+حريق	fire
+حرائق	fires
+طقس	weather
+مناخ	climate
+حرارة	temperature; heat
+درجة حرارة	temperature
+مطر	rain
+أمطار	rains
+ثلج	snow
+رياح	winds
+بحر	sea
+بحار	seas
+نهر	river
+أنهار	rivers
+جبل	mountain
+جبال	mountains
+صحراء	desert
+غابة	forest
+شمس	sun
+قمر	moon
+نجوم	stars
+نجمة	star
+سماء	sky; heaven
+بيئة	environment
+تلوث	pollution
+نباتات	plants
+نبات	plant
+حيوان	animal
+حيوانات	animals
+طيور	birds
+طائر	bird
+شجرة	tree
+أشجار	trees
+زهرة	flower
+زهور	flowers
+مجتمع	society; community
+مجتمعات	societies
+شعب	people; nation
+شعوب	peoples
+أمة	nation
+وطن	homeland
+وطني	national
+دولي	international
+عالمي	global; worldwide
+محلي	local
+عربي	Arab; Arabic
+عرب	Arabs
+إسلامي	Islamic
+إسلام	Islam
+مسلم	Muslim
+مسلمون	Muslims
+مسجد	mosque
+مساجد	mosques
+كنيسة	church
+قرآن	Quran
+دين إسلامي	Islam
+صلاة	prayer
+صيام	fasting
+رمضان	Ramadan
+حج	pilgrimage; Hajj
+زكاة	alms; zakat
+قيم	values
+قيمة	value
+عادات	customs
+تقاليد	traditions
+تراث	heritage
+فلسطين	Palestine
+الجزائر	Algeria
+مصر	Egypt
+المغرب	Morocco; the Maghreb
+تونس	Tunisia
+ليبيا	Libya
+السعودية	Saudi Arabia
+العراق	Iraq
+سوريا	Syria
+لبنان	Lebanon
+الأردن	Jordan
+اليمن	Yemen
+السودان	Sudan
+الكويت	Kuwait
+قطر	Qatar
+عمان	Oman
+الإمارات	the Emirates; UAE
+أوروبا	Europe
+أفريقيا	Africa
+آسيا	Asia
+أمريكا	America
+فرنسا	France
+ألمانيا	Germany
+إيطاليا	Italy
+إسبانيا	Spain
+بريطانيا	Britain
+روسيا	Russia
+الصين	China
+اليابان	Japan
+تركيا	Turkey
+الهند	India
+# ── connectors and expressions often needed in writing
+لذلك	therefore; so
+لهذا	for this reason
+بالتالي	therefore; consequently
+مع ذلك	nevertheless; however
+ومع ذلك	nevertheless; and yet
+لكن	but
+غير أن	however; but
+إلا أن	however; except that
+بينما	while; whereas
+حيث	where; since; as
+إذ	since; as; when
+إذا	if; when
+لو	if
+لولا	if it were not for
+كي	in order to
+لكي	in order to
+حتى	until; so that
+كما	as; also
+مثل	like; such as
+مثلا	for example
+على سبيل المثال	for example
+أي	that is; any; which
+أيضا	also; too
+كذلك	also; likewise
+فقط	only
+تماما	completely; exactly
+جدا	very
+نسبيا	relatively
+تقريبا	approximately
+حاليا	currently
+سابقا	previously
+لاحقا	later
+أولا	first; firstly
+ثانيا	second; secondly
+ثالثا	third; thirdly
+أخيرا	finally; lastly
+في النهاية	in the end
+في البداية	at first; in the beginning
+بالإضافة إلى	in addition to
+بالإضافة إلى ذلك	in addition
+إضافة إلى	in addition to
+بسبب	because of; due to
+نتيجة ل	as a result of
+من أجل	for; in order to
+بهدف	with the aim of
+عبر	through; across; via
+ضمن	within; among
+بين	between; among
+عند	at; when; with
+لدى	at; with; to
+لدينا	we have
+لديك	you have
+لديه	he has
+لدي	I have
+عندي	I have
+عندنا	we have
+معي	with me
+معنا	with us
+بدون	without
+بلا	without
+دون	without; below
+رغم	despite
+رغم ذلك	despite that
+برأيي	in my opinion
+حسب	according to
+وفق	according to
+وفقا ل	according to
+طبقا ل	according to
+بحسب	according to
+نحو	towards; about
+تجاه	towards
+حول	around; about
+أمام	in front of; before
+خلف	behind
+وراء	behind
+فوق	above; over
+تحت	under; below
+داخل	inside
+خارج	outside
+جانب	side
+بجانب	beside; next to
+قرب	near
+بعيدا عن	far from
+مع الأسف	unfortunately
+للأسف	unfortunately
+شكرا	thank you; thanks
+شكرا جزيلا	thank you very much
+عفوا	you are welcome; excuse me; pardon
+من فضلك	please
+لو سمحت	please; excuse me
+مرحبا	hello; welcome
+أهلا	hello; welcome
+أهلا وسهلا	welcome
+صباح الخير	good morning
+مساء الخير	good evening
+تصبح على خير	good night
+مع السلامة	goodbye
+إلى اللقاء	goodbye; see you
+أعتذر	I apologize
+آسف	sorry
+معذرة	sorry; excuse me
+تحياتي	my regards
+تحية طيبة	greetings; kind regards
+مع التحية	with regards
+أرجو	I hope; I request
+أرجو منك	I ask you
+يرجى	please
+نأمل	we hope
+أود	I would like
+أحتاج	I need
+أريد أن	I want to
+هل يمكنك	can you
+هل يمكن	is it possible
+هل لديك	do you have
+كم	how many; how much
+كيف	how
+لماذا	why
+متى	when
+أين	where
+من	who; from
+ماذا	what
+ما	what; not
+ما هو	what is
+ما هي	what is (f.)
+أي شيء	anything
+شيء	thing; something
+أشياء	things
+لا شيء	nothing
+كل شيء	everything
+أحد	someone; one
+لا أحد	nobody; no one
+الجميع	everyone
+بعضهم	some of them
+نفسه	himself; itself
+نفسها	herself; itself
+بنفسي	myself
+بنفسك	yourself

@@ -106,6 +106,16 @@ file is **not stored in this repository**: `scripts/fetch-dict.ps1` downloads th
   so the order of the first candidates is the weakest point for very common words with several meanings. Arabic entries are fewer (about 19 500 headwords with glosses), and Arabic forms with attached particles (`وبالكتاب`, `سيارتك`) are mostly missing: the engine would have to strip
   the article, prepositions and pronoun endings before the lookup.
 
+## Common Modern Standard Arabic words written for Verba (`crates/verba-local/seed/ar-common.txt`)
+
+About 1 400 lines, an Arabic word (or a short phrase), a TAB and its English translations, **written by the Verba authors from general knowledge** (technology, government, economy, health, education, law, daily life, common verbs, connectors and greetings). They are not taken from a corpus or from a dictionary, so they carry the license of the code (PolyForm Noncommercial 1.0.0), like the other seeds. The file is embedded in the program and read at startup:
+
+- **dictionary:** `ar>en` gets a headword the dictionary lacks, or the missing translations at the END of an existing one (nothing is reordered); each translation that is one English word also gets the Arabic word at the end of its `en>ar` list (`Dictionary::apply_extras`).
+- **suggestions:** a one-word headword that the Arabic list lacks is added to it, as frequent as the 30 000th word of the list (`with_seed`), which is above where the spelling stops, so the spelling knows it too.
+- **hand-written corrections** (`seed/dict-fixes.txt`, which put a translation in FRONT) were added for about 80 words whose first translation in Wiktionary's data was a rare sense or the wrong word (`قروض` die, `كوارث` heir, `لولا` Lula, `بنى` brown), found by comparing the file above with the dictionary (`examples/seed_coverage.rs`).
+
+An Arabic speaker should read these files: a wrong line is a wrong translation shown to people.
+
 ## Sentence translation models (`models/<pair>/`)
 
 | What | Source | License |

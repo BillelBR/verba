@@ -161,7 +161,7 @@ fn main() {
     // the engine (lists only), with its cost
     let before = LIVE.load(Ordering::Relaxed);
     let t = Instant::now();
-    let engine = LocalEngine::load_lists(&dir, max_words).expect("the lists");
+    let engine = LocalEngine::load_lists_seeded(&dir, max_words, args.iter().any(|a| a == "--seed")).expect("the lists");
     let load = t.elapsed();
     let memory = LIVE.load(Ordering::Relaxed).saturating_sub(before);
     let list_len = engine.word_count(lang);

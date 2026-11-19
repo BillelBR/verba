@@ -60,6 +60,9 @@ pub struct Settings {
     pub translate_to: Lang,
     /// Suggest in the language of the keyboard layout (instead of guessing from the letters typed).
     pub follow_keyboard: bool,
+    /// A line break in a text Verba types (a translation, a text put right) is the Enter key, or Shift+Enter, which is a new line in chat
+    /// apps where Enter sends the message.
+    pub line_break_shift: bool,
     pub app_mode: AppMode,
     /// Program file names, lower case (`chrome.exe`).
     pub apps: Vec<String>,
@@ -80,6 +83,7 @@ impl Default for Settings {
             keys: Keys::default(),
             translate_to: Lang::En,
             follow_keyboard: true,
+            line_break_shift: false,
             app_mode: AppMode::AllExcept,
             apps: Vec::new(),
         }
@@ -191,6 +195,7 @@ impl Settings {
                 }
                 "key_close" => s.keys.close = Binding::parse(value).unwrap_or(Keys::default().close),
                 "follow_keyboard" => s.follow_keyboard = on,
+                "line_break" => s.line_break_shift = value == "shift",
                 "app_mode" => s.app_mode = if value == "only" { AppMode::OnlyThese } else { AppMode::AllExcept },
                 "apps" => {
                     s.apps = value.split(';').map(|a| a.trim().to_lowercase()).filter(|a| !a.is_empty()).collect();
@@ -212,7 +217,7 @@ impl Settings {
         let flag = |b: bool| if b { "1" } else { "0" };
         let mode = if self.app_mode == AppMode::OnlyThese { "only" } else { "except" };
         format!(
-            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\nkey_fixkeys={}\ntranslate_to={}\nfollow_keyboard={}\napp_mode={mode}\napps={}\n",
+            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\nkey_fixkeys={}\ntranslate_to={}\nfollow_keyboard={}\nline_break={}\napp_mode={mode}\napps={}\n",
             flag(self.english),
             flag(self.french),
             flag(self.arabic),
@@ -229,6 +234,7 @@ impl Settings {
             self.keys.fixkeys.render(),
             self.translate_to.code(),
             flag(self.follow_keyboard),
+            if self.line_break_shift { "shift" } else { "enter" },
             self.apps.join(";")
         )
     }
@@ -353,5 +359,10 @@ mod tests {
     fn a_damaged_file_falls_back_to_the_defaults() {
         assert_eq!(Settings::parse("nonsense\n=\ntheme\napps"), Settings::default());
         assert!(Settings::parse("follow_keyboard=0").follow_keyboard == false);
+        // the key of a line break: Enter unless the file says shift, and it survives a save
+        assert!(!Settings::default().line_break_shift);
+        assert!(!Settings::parse("line_break=whatever").line_break_shift);
+        let shifted = Settings { line_break_shift: true, ..Settings::default() };
+        assert!(Settings::parse(&shifted.render()).line_break_shift);
     }
 }

@@ -270,6 +270,20 @@ fn translate(ui: &mut Ui, s: &mut Settings) {
         ui.card_end();
     }
 
+    ui.section("Line breaks");
+    ui.card_begin();
+    let mut shifted = usize::from(s.line_break_shift);
+    if ui.segmented_row(
+        "line-break",
+        "A line break in a text Verba types",
+        Some("Enter is a new line in most apps. In chat apps (WhatsApp Web, Slack, Teams, Discord) Enter sends the message and Shift+Enter is the new line: choose Shift+Enter there."),
+        &["Enter", "Shift+Enter"],
+        &mut shifted,
+    ) {
+        s.line_break_shift = shifted == 1;
+    }
+    ui.card_end();
+
     ui.section("Sentences");
     ui.card_begin();
     let pairs = crate::sentence_pairs();

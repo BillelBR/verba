@@ -42,7 +42,7 @@ You wrote a long paragraph in Arabic and the keyboard was English (or French)? S
 - When no reading is made of real words (a name, a word the lists lack) and the text is not made of real words as it is, Verba still turns it into **Arabic**, from the keyboard it is easiest to have typed it on. Esc closes it if that was not what you wanted.
 - If the text is right already (it is made of real words), or it has no letters, it says so and changes nothing.
 - Select the text first: with nothing selected it does nothing (it never selects a whole document by itself). Up to 6000 characters at a time.
-- A paragraph with several lines works: the line breaks stay where they were, and the popup grows with the lines (a very long text is cut after about half of the screen height with "…" for the preview only: **Tab** types all of it). In an app where Enter sends the message (a chat), each line break is an Enter key too, as it is for a translation: use it in a field where Enter makes a new line, or select one line at a time.
+- A paragraph with several lines works: the line breaks stay where they were, and the popup grows with the lines (a very long text is cut after about half of the screen height with "…" for the preview only: **Tab** types all of it). Each line break is typed as the Enter key, as it is for a translation; in a chat app where Enter sends the message, choose **Shift+Enter** in Settings > Translate > Line breaks (it is Enter unless you change it).
 - Limits: a text with only letters (no symbol, no accent) and no word of the lists cannot tell the English keyboard from the French one: a few letters (a/q, z/w, m) differ, so the active keyboard decides, and when it is the Arabic one the first keyboard of the list is taken (measured below: 85 to 91 % right in that case); a text that is half right and half wrong is not split; a letter made with a dead key (the French `^` then a vowel) is not traced back; the text is typed over the selection key by key, so a very long one takes a moment in some apps.
 
 ### "Windows protected your PC" (SmartScreen)
@@ -117,7 +117,7 @@ Other pieces: `scripts/make_icon.py` regenerates `crates/verba-app/assets/verba.
 
 ### Publish a release
 
-0. Once, and again whenever the table of models in `scripts/fetch-models.ps1` changes: on GitHub, Actions > **Models** > Run workflow. It converts the translation models and keeps them as the files of the release `models-v1` (about 280 MB); the release workflow takes them from there (and converts them from Hugging Face if that release does not exist). It was written and its scripts tested on a PC, but the workflow itself has not run on GitHub yet.
+0. Once, and again whenever the table of models in `scripts/fetch-models.ps1` changes: on GitHub, Actions > **Models** > Run workflow. It converts the translation models and keeps them as the files of the release `models-v1` (about 280 MB); the release workflow takes them from there (and converts them from Hugging Face if that release does not exist). Its scripts were tested on a PC, and the workflow ran once on GitHub (the tag `models-v1` exists); a new release checks the files against their checksums before it uses them.
 1. Change `version` in `[workspace.package]` of the root `Cargo.toml`, commit and push.
 2. Tag and push the tag. The tag must be `v` plus that exact version:
 

@@ -38,7 +38,7 @@ use windows::Win32::System::Threading::CreateMutexW;
 use windows::Win32::UI::Input::KeyboardAndMouse::{
     GetKeyState, INPUT, INPUT_0, INPUT_KEYBOARD, KEYBD_EVENT_FLAGS, KEYBDINPUT, KEYEVENTF_KEYUP, KEYEVENTF_UNICODE, MOD_ALT,
     MOD_CONTROL, MOD_NOREPEAT, MOD_SHIFT, RegisterHotKey, SendInput, UnregisterHotKey, VIRTUAL_KEY, VK_BACK, VK_CONTROL,
-    VK_MENU, VK_RETURN, VK_SHIFT,
+    VK_MENU, VK_SHIFT,
 };
 use windows::Win32::UI::Shell::{
     NIF_ICON, NIF_MESSAGE, NIF_TIP, NIM_ADD, NIM_DELETE, NIM_MODIFY, NOTIFYICONDATAW, Shell_NotifyIconW,
@@ -915,6 +915,7 @@ fn accept(app: &mut App, index: usize) {
         (None, None) => (app.typed_len, format!("{} ", chosen.text)),
     };
     hide(app);
+    let shift_enter = app.settings.line_break_shift;
     unsafe {
         let mut inputs: Vec<INPUT> = Vec::new();
         for typed in replace_keys(erase, &text) {
@@ -924,8 +925,9 @@ fn accept(app: &mut App, index: usize) {
                     inputs.push(key(VK_BACK, 0, KEYEVENTF_KEYUP));
                 }
                 Typed::Enter => {
-                    inputs.push(key(VK_RETURN, 0, KEYBD_EVENT_FLAGS(0)));
-                    inputs.push(key(VK_RETURN, 0, KEYEVENTF_KEYUP));
+                    for (vk, up) in line_break_keys(shift_enter) {
+                        inputs.push(key(VIRTUAL_KEY(vk), 0, if up { KEYEVENTF_KEYUP } else { KEYBD_EVENT_FLAGS(0) }));
+                    }
                 }
                 Typed::Unit(unit) => {
                     inputs.push(key(VIRTUAL_KEY(0), unit, KEYEVENTF_UNICODE));
@@ -1261,6 +1263,13 @@ enum Typed {
     Unit(u16),
 }
 
+/// The keys of one line break as (virtual key, is a release): Enter, or Shift+Enter for the chat apps where Enter sends the message.
+fn line_break_keys(shift: bool) -> Vec<(u16, bool)> {
+    const SHIFT: u16 = 0x10;
+    const ENTER: u16 = 0x0D;
+    if shift { vec![(SHIFT, false), (ENTER, false), (ENTER, true), (SHIFT, true)] } else { vec![(ENTER, false), (ENTER, true)] }
+}
+
 /// `erase` backspaces, then `text` (as UTF-16 units, which is what Windows types).
 fn replace_keys(erase: usize, text: &str) -> Vec<Typed> {
     let mut keys: Vec<Typed> = (0..erase).map(|_| Typed::Backspace).collect();
@@ -1375,6 +1384,19 @@ mod tests {
         assert_eq!(&keys[..3], [Typed::Backspace, Typed::Backspace, Typed::Backspace]);
         let units: Vec<u16> = keys[3..].iter().map(|k| match k { Typed::Unit(u) => *u, Typed::Backspace | Typed::Enter => panic!("late backspace") }).collect();
         assert_eq!(String::from_utf16(&units).unwrap(), "like ");
+    }
+
+    #[test]
+    fn a_line_break_is_enter_or_shift_enter_and_shift_is_always_let_go() {
+        assert_eq!(line_break_keys(false), [(0x0D, false), (0x0D, true)]);
+        assert_eq!(line_break_keys(true), [(0x10, false), (0x0D, false), (0x0D, true), (0x10, true)]);
+        // whatever the setting, every key that goes down comes up again
+        for shift in [false, true] {
+            let keys = line_break_keys(shift);
+            for vk in [0x10u16, 0x0D] {
+                assert_eq!(keys.iter().filter(|k| k.0 == vk && !k.1).count(), keys.iter().filter(|k| k.0 == vk && k.1).count());
+            }
+        }
     }
 
     #[test]

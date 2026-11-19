@@ -653,7 +653,7 @@ en	poss	possible:en|possibly:en|possibility:en
 en	so	some:en|something:en|sorry:en
 -	I would so	some:en|something:en|sorry:en
 en	sou	sounds:en|sound:en|soul:en
--	I would sou	sounds:en|sound:en|soul:en
+-	I would sou	sounds:en|sound:en|sous:fr
 en	soun	sounds:en|sound:en|sounded:en
 -	I would soun	sounds:en|sound:en|sounded:en
 en	la	last:en|later:en|late:en
@@ -2170,7 +2170,7 @@ fr	al	alors:fr|allez:fr|aller:fr
 fr	all	allez:fr|aller:fr|allons:fr
 fr	alla	allait:fr|allais:fr|allaient:fr
 fr	ml	mlle:fr
--	I would ml	mlle:fr|mla:en
+-	I would ml	mlle:fr|mla:en|mlas:en
 fr	mll	mlle:fr
 -	I would mll	mlle:fr
 fr	ha	haut:fr|habitude:fr|harry:fr
@@ -2251,7 +2251,7 @@ fr	gr	grand:fr|gros:fr|grande:fr
 fr	gra	grand:fr|grande:fr|grave:fr
 -	I would gra	grand:fr|grab:en|grace:en
 fr	grav	grave:fr|graves:fr|gravité:fr
--	I would grav	grave:en|gravity:en|graves:en
+-	I would grav	grave:fr|gravity:en|graves:en
 fr	ho	homme:fr|hommes:fr|honneur:fr
 fr	hon	honneur:fr|honte:fr|honnête:fr
 fr	honn	honneur:fr|honnête:fr|honnêtement:fr
@@ -2987,16 +2987,12 @@ ar	ان	أنا:ar|أنت:ar|انا:ar
 -	I would ان	أنا:ar|أنت:ar|انا:ar
 ar	جد	جدا:ar|جديد:ar|جديدة:ar
 -	I would جد	جدا:ar|جديد:ar|جديدة:ar
-ar	لم	لماذا:ar|لما:ar|لمدة:ar
-ar	لما	لماذا:ar|لماذ:ar|لمادا:ar
-ar	لماذ	لماذا:ar|لماذلك:ar
+ar	حت	حتى:ar|حتما:ar|حتفهم:ar
 ar	بع	بعد:ar|بعض:ar|بعيدا:ar
-ar	مر	مرحبا:ar|مرة:ar|مرات:ar
--	I would مر	مرحبا:ar|مرة:ar|مرات:ar
-ar	مرح	مرحبا:ar|مرحلة:ar|مرحى:ar
--	I would مرح	مرحبا:ar|مرحلة:ar|مرحى:ar
-ar	مرحب	مرحبا:ar
--	I would مرحب	مرحبا:ar
+ar	إن	إنه:ar|إنها:ar|إنهم:ar
+-	I would إن	إنه:ar|إنها:ar|إنهم:ar
+ar	إنه	إنها:ar|إنهم:ar|إنهما:ar
+-	I would إنه	إنها:ar|إنهم:ar|إنهما:ar
 ar	ول	ولكن:ar|ولا:ar|ولم:ar
 -	I would ول	ولكن:ar|ولا:ar|ولم:ar
 ar	ولك	ولكن:ar|ولكني:ar|ولكنه:ar
@@ -3009,18 +3005,13 @@ ar	أري	أريد:ar|أريدك:ar|أرى:ar
 -	I would أري	أريد:ar|أريدك:ar|أرى:ar
 ar	ان	أنا:ar|أنت:ar|انا:ar
 ar	لد	لدي:ar|لديك:ar|لدينا:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
--	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الو	الوقت:ar|الوحيد:ar|الواقع:ar
--	I would الو	الوقت:ar|الوحيد:ar|الواقع:ar
-ar	الوق	الوقت:ar|الوقوف:ar|الوقود:ar
--	I would الوق	الوقت:ar|الوقوف:ar|الوقود:ar
-ar	يم	يمكن:ar|يمكنك:ar|يمكنني:ar
-ar	يمك	يمكن:ar|يمكنك:ar|يمكنني:ar
-ar	يمكن	يمكنك:ar|يمكنني:ar|يمكننا:ar
+ar	لس	لست:ar|لسنا:ar|لسبب:ar
+-	I would لس	لست:ar|لسنا:ar|لسبب:ar
+ar	شخ	شخص:ar|شخصا:ar|شخصية:ar
 ar	جي	جيد:ar|جيدة:ar|جيدا:ar
 -	I would جي	جيد:ar|جيدة:ar|جيدا:ar
-ar	لذ	لذا:ar|لذلك:ar|لذيذ:ar
+ar	شي	شيء:ar|شيئا:ar|شيئ:ar
+ar	شيئ	شيئا:ar|شيئان:ar|شيئين:ar
 ar	كم	كما:ar|كمية:ar|كمبيوتر:ar
 -	I would كم	كما:ar|كمية:ar|كمبيوتر:ar
 ar	لد	لدي:ar|لديك:ar|لدينا:ar
@@ -3030,10 +3021,8 @@ ar	أل	أليس:ar|ألا:ar|ألم:ar
 ar	ألي	أليس:ar|أليكس:ar|أليست:ar
 -	I would ألي	أليس:ar|أليكس:ar|أليست:ar
 ar	مر	مرحبا:ar|مرة:ar|مرات:ar
-ar	تع	تعرف:ar|تعلم:ar|تعال:ar
--	I would تع	تعرف:ar|تعلم:ar|تعال:ar
-ar	تعر	تعرف:ar|تعرفين:ar|تعرفي:ar
--	I would تعر	تعرف:ar|تعرفين:ar|تعرفي:ar
+ar	آخ	آخر:ar|آخذ:ar|آخرى:ar
+-	I would آخ	آخر:ar|آخذ:ar|آخرى:ar
 ar	أن	أنا:ar|أنت:ar|أنه:ar
 ar	أنه	أنها:ar|أنهم:ar|أنهما:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
@@ -3044,10 +3033,10 @@ ar	الرج	الرجل:ar|الرجال:ar|الرجاء:ar
 -	I would الرج	الرجل:ar|الرجال:ar|الرجاء:ar
 ar	أن	أنا:ar|أنت:ar|أنه:ar
 ar	أنن	أنني:ar|أننا:ar|أننى:ar
-ar	وا	واحد:ar|واحدة:ar|والآن:ar
--	I would وا	واحد:ar|واحدة:ar|والآن:ar
-ar	واح	واحد:ar|واحدة:ar|واحدا:ar
--	I would واح	واحد:ar|واحدة:ar|واحدا:ar
+ar	سي	سيدي:ar|سيكون:ar|سيد:ar
+-	I would سي	سيدي:ar|سيكون:ar|سيد:ar
+ar	سيد	سيدي:ar|سيدة:ar|سيدتي:ar
+-	I would سيد	سيدي:ar|سيدة:ar|سيدتي:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 ar	الن	الناس:ar|النار:ar|النوم:ar
 ar	النا	الناس:ar|النار:ar|النافذة:ar
@@ -3059,11 +3048,13 @@ ar	قل	قلت:ar|قليلا:ar|قليل:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 ar	الك	الكثير:ar|الكبير:ar|الكلام:ar
 ar	الكث	الكثير:ar|الكثيرين:ar|الكثيرون:ar
-ar	به	بها:ar|بهذا:ar|بهذه:ar
-ar	بهذ	بهذا:ar|بهذه:ar|بهذان:ar
-ar	مع	معك:ar|معي:ar|معه:ar
--	I would مع	معك:ar|معي:ar|معه:ar
-ar	بذ	بذلك:ar|بذاك:ar|بذلت:ar
+ar	وأ	وأنا:ar|وأنت:ar|وأن:ar
+ar	وأن	وأنا:ar|وأنت:ar|وأنه:ar
+ar	أخ	أخرى:ar|أخبرني:ar|أخبرك:ar
+-	I would أخ	أخرى:ar|أخبرني:ar|أخبرك:ar
+ar	أخر	أخرى:ar|أخرج:ar|أخرجي:ar
+-	I would أخر	أخرى:ar|أخرج:ar|أخرجي:ar
+ar	بذ	بذلك:ar|بذلت:ar|بذاك:ar
 ar	بذل	بذلك:ar|بذلت:ar|بذلة:ar
 ar	يو	يوجد:ar|يوم:ar|يوما:ar
 -	I would يو	يوجد:ar|يوم:ar|يوما:ar
@@ -3083,13 +3074,14 @@ ar	تعل	تعلم:ar|تعلمين:ar|تعلمون:ar
 ar	أل	أليس:ar|ألا:ar|ألم:ar
 ar	إذ	إذا:ar|إذن:ar|إذهب:ar
 -	I would إذ	إذا:ar|إذن:ar|إذهب:ar
-ar	فع	فعل:ar|فعلت:ar|فعله:ar
-ar	قل	قلت:ar|قليلا:ar|قليل:ar
--	I would قل	قلت:ar|قليلا:ar|قليل:ar
-ar	قلي	قليلا:ar|قليل:ar|قليلة:ar
--	I would قلي	قليلا:ar|قليل:ar|قليلة:ar
-ar	قليل	قليلا:ar|قليلة:ar|قليله:ar
--	I would قليل	قليلا:ar|قليلة:ar|قليله:ar
+ar	له	لها:ar|لهذا:ar|لهم:ar
+ar	لهذ	لهذا:ar|لهذه:ar|لهذين:ar
+ar	يم	يمكن:ar|يمكنك:ar|يمكنني:ar
+-	I would يم	يمكن:ar|يمكنك:ar|يمكنني:ar
+ar	يمك	يمكن:ar|يمكنك:ar|يمكنني:ar
+-	I would يمك	يمكن:ar|يمكنك:ar|يمكنني:ar
+ar	يمكن	يمكنك:ar|يمكنني:ar|يمكننا:ar
+-	I would يمكن	يمكنك:ar|يمكنني:ar|يمكننا:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 ar	الا	الآن:ar|الأمر:ar|الان:ar
 ar	فع	فعل:ar|فعلت:ar|فعله:ar
@@ -3099,15 +3091,13 @@ ar	فعل	فعلت:ar|فعله:ar|فعلا:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 ar	الج	الجميع:ar|الجحيم:ar|الجنس:ar
 ar	الجم	الجميع:ar|الجميلة:ar|الجميل:ar
-ar	لد	لدي:ar|لديك:ar|لدينا:ar
--	I would لد	لدي:ar|لديك:ar|لدينا:ar
-ar	لدي	لديك:ar|لدينا:ar|لديه:ar
--	I would لدي	لديك:ar|لدينا:ar|لديه:ar
+ar	أن	أنا:ar|أنت:ar|أنه:ar
+-	I would أن	أنا:ar|أنت:ar|أنه:ar
 ar	من	منذ:ar|منك:ar|مني:ar
-ar	مج	مجرد:ar|مجددا:ar|مجنون:ar
--	I would مج	مجرد:ar|مجددا:ar|مجنون:ar
-ar	مجر	مجرد:ar|مجرم:ar|مجرى:ar
--	I would مجر	مجرد:ar|مجرم:ar|مجرى:ar
+ar	خل	خلال:ar|خلف:ar|خلفك:ar
+-	I would خل	خلال:ar|خلف:ar|خلفك:ar
+ar	خلا	خلال:ar|خلاف:ar|خلاله:ar
+-	I would خلا	خلال:ar|خلاف:ar|خلاله:ar
 ar	كث	كثيرا:ar|كثير:ar|كثيرة:ar
 ar	كثي	كثيرا:ar|كثير:ar|كثيرة:ar
 ar	كثير	كثيرا:ar|كثيرة:ar|كثيره:ar
@@ -3115,27 +3105,21 @@ ar	حا	حال:ar|حالك:ar|حالة:ar
 -	I would حا	حال:ar|حالك:ar|حالة:ar
 ar	فح	فحسب:ar|فحص:ar|فحصت:ar
 ar	فحس	فحسنا:ar|فحسب:ar|فحسن:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
--	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الس	السيد:ar|السيارة:ar|السبب:ar
--	I would الس	السيد:ar|السيارة:ar|السبب:ar
-ar	السي	السيد:ar|السيارة:ar|السيدة:ar
--	I would السي	السيد:ar|السيارة:ar|السيدة:ar
 ar	عن	عندما:ar|عنه:ar|عند:ar
-ar	بش	بشكل:ar|بشأن:ar|بشيء:ar
--	I would بش	بشكل:ar|بشأن:ar|بشيء:ar
-ar	بشأ	بشأن:ar|بشأنه:ar|بشأنك:ar
--	I would بشأ	بشأن:ar|بشأنه:ar|بشأنك:ar
+ar	ان	أنا:ar|أنت:ar|انا:ar
+-	I would ان	أنا:ar|أنت:ar|انا:ar
 ar	بأ	بأن:ar|بأنك:ar|بأنه:ar
--	I would بأ	بأن:ar|بأنك:ar|بأنه:ar
 ar	بأن	بأنك:ar|بأنه:ar|بأنني:ar
--	I would بأن	بأنك:ar|بأنه:ar|بأنني:ar
+ar	أف	أفضل:ar|أفعل:ar|أفكر:ar
+-	I would أف	أفضل:ar|أفعل:ar|أفكر:ar
+ar	أفع	أفعل:ar|أفعله:ar|أفعلها:ar
+-	I would أفع	أفعل:ar|أفعله:ar|أفعلها:ar
+ar	لل	للغاية:ar|للتو:ar|للمنزل:ar
+ar	للغ	للغاية:ar|للغداء:ar|للغرفة:ar
+ar	للغا	للغاية:ar|للغابة:ar|للغاز:ar
 ar	في	فيه:ar|فيها:ar|فيما:ar
-ar	تو	توقف:ar|توجد:ar|توم:ar
--	I would تو	توقف:ar|توجد:ar|توم:ar
-ar	توق	توقف:ar|توقفي:ar|توقفوا:ar
--	I would توق	توقف:ar|توقفي:ar|توقفوا:ar
-ar	إل	إلى:ar|إلهي:ar|إليك:ar
+-	I would في	فيه:ar|فيها:ar|فيما:ar
+ar	أم	أمي:ar|أمر:ar|أمك:ar
 ar	حص	حصلت:ar|حصل:ar|حصلنا:ar
 -	I would حص	حصلت:ar|حصل:ar|حصلنا:ar
 ar	حصل	حصلت:ar|حصلنا:ar|حصلوا:ar
@@ -3154,50 +3138,55 @@ ar	تق	تقول:ar|تقوم:ar|تقريبا:ar
 ar	تقو	تقول:ar|تقوم:ar|تقولين:ar
 -	I would تقو	تقول:ar|تقوم:ar|تقولين:ar
 ar	لم	لماذا:ar|لما:ar|لمدة:ar
-ar	أر	أريد:ar|أرجوك:ar|أردت:ar
--	I would أر	أريد:ar|أرجوك:ar|أردت:ar
-ar	أرد	أردت:ar|أردنا:ar|أردته:ar
--	I would أرد	أردت:ar|أردنا:ar|أردته:ar
-ar	هؤ	هؤلاء:ar|هؤلا:ar
-ar	هؤل	هؤلاء:ar|هؤلا:ar
-ar	هؤلا	هؤلاء:ar
+ar	بأ	بأن:ar|بأنك:ar|بأنه:ar
+-	I would بأ	بأن:ar|بأنك:ar|بأنه:ar
+ar	بأن	بأنك:ar|بأنه:ar|بأنني:ar
+-	I would بأن	بأنك:ar|بأنه:ar|بأنني:ar
 ar	بح	بحاجة:ar|بحق:ar|بحقك:ar
--	I would بح	بحاجة:ar|بحق:ar|بحقك:ar
 ar	بحا	بحاجة:ar|بحالة:ar|بحال:ar
--	I would بحا	بحاجة:ar|بحالة:ar|بحال:ar
 ar	بحاج	بحاجة:ar|بحاجتك:ar|بحاجته:ar
--	I would بحاج	بحاجة:ar|بحاجتك:ar|بحاجته:ar
+ar	ان	أنا:ar|أنت:ar|انا:ar
+-	I would ان	أنا:ar|أنت:ar|انا:ar
+ar	انظ	انظر:ar|انظري:ar|انظروا:ar
+-	I would انظ	انظر:ar|انظري:ar|انظروا:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 ar	الح	الحقيقة:ar|الحياة:ar|الحصول:ar
 ar	الحي	الحياة:ar|الحيوانات:ar|الحين:ar
-ar	بح	بحاجة:ar|بحق:ar|بحقك:ar
--	I would بح	بحاجة:ar|بحق:ar|بحقك:ar
 ar	نف	نفسك:ar|نفس:ar|نفسي:ar
+-	I would نف	نفسك:ar|نفس:ar|نفسي:ar
+ar	نفس	نفسك:ar|نفسي:ar|نفسه:ar
+-	I would نفس	نفسك:ar|نفسي:ar|نفسه:ar
+ar	بس	بسبب:ar|بسرعة:ar|بسيط:ar
+ar	بسب	بسبب:ar|بسببك:ar|بسببي:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
 ar	الذ	الذي:ar|الذهاب:ar|الذين:ar
 -	I would الذ	الذي:ar|الذهاب:ar|الذين:ar
 ar	الذي	الذين:ar|الذئب:ar|الذيل:ar
 -	I would الذي	الذين:ar|الذئب:ar|الذيل:ar
-ar	بأ	بأن:ar|بأنك:ar|بأنه:ar
+ar	سم	سمعت:ar|سماع:ar|سمحت:ar
+ar	سمع	سمعت:ar|سمعته:ar|سمعنا:ar
 ar	حي	حيث:ar|حياتي:ar|حين:ar
 -	I would حي	حيث:ar|حياتي:ar|حين:ar
-ar	آس	آسف:ar|آسفة:ar|آسفه:ar
-ar	آسف	آسفة:ar|آسفه:ar|آسفون:ar
-ar	لك	لكن:ar|لكم:ar|لكي:ar
--	I would لك	لكن:ar|لكم:ar|لكي:ar
-ar	اع	أعرف:ar|أعتقد:ar|أعلم:ar
-ar	اعت	أعتقد:ar|اعتقد:ar|اعتقدت:ar
-ar	اعتق	أعتقد:ar|اعتقد:ar|اعتقدت:ar
-ar	مش	مشكلة:ar|مشاكل:ar|مشاهدة:ar
--	I would مش	مشكلة:ar|مشاكل:ar|مشاهدة:ar
-ar	مشك	مشكلة:ar|مشكلتك:ar|مشكلتي:ar
--	I would مشك	مشكلة:ar|مشكلتك:ar|مشكلتي:ar
-ar	مشكل	مشكلة:ar|مشكلتك:ar|مشكلتي:ar
--	I would مشكل	مشكلة:ar|مشكلتك:ar|مشكلتي:ar
+ar	فض	فضلك:ar|فضلكم:ar|فضائية:ar
+ar	فضل	فضلك:ar|فضلكم:ar|فضلا:ar
+ar	تع	تعرف:ar|تعلم:ar|تعال:ar
+-	I would تع	تعرف:ar|تعلم:ar|تعال:ar
+ar	تعا	تعال:ar|تعالي:ar|تعالى:ar
+-	I would تعا	تعال:ar|تعالي:ar|تعالى:ar
+ar	عن	عندما:ar|عنه:ar|عند:ar
+ar	ير	يريد:ar|يرام:ar|يريدون:ar
+-	I would ير	يريد:ar|يرام:ar|يريدون:ar
+ar	يري	يريد:ar|يريدون:ar|يريده:ar
+-	I would يري	يريد:ar|يريدون:ar|يريده:ar
+ar	ثا	ثانية:ar|ثانيا:ar|ثاني:ar
+ar	ثان	ثانية:ar|ثانيا:ar|ثاني:ar
+ar	ثاني	ثانية:ar|ثانيا:ar|ثانيتين:ar
+ar	لي	ليس:ar|ليست:ar|ليلة:ar
+-	I would لي	ليس:ar|ليست:ar|ليلة:ar
+ar	ليل	ليلة:ar|ليلي:ar|ليلتك:ar
+-	I would ليل	ليلة:ar|ليلي:ar|ليلتك:ar
 ar	قم	قمت:ar|قمنا:ar|قمة:ar
--	I would قم	قمت:ar|قمنا:ar|قمة:ar
-ar	تب	تبدو:ar|تبا:ar|تبقى:ar
 ar	لأ	لأن:ar|لأنه:ar|لأنك:ar
 -	I would لأ	لأن:ar|لأنه:ar|لأنك:ar
 ar	لأن	لأنه:ar|لأنك:ar|لأنني:ar
@@ -3210,106 +3199,101 @@ ar	به	بها:ar|بهذا:ar|بهذه:ar
 ar	بهذ	بهذا:ar|بهذه:ar|بهذان:ar
 -	I would بهذ	بهذا:ar|بهذه:ar|بهذان:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الأ	الأمر:ar|الأمور:ar|الأشياء:ar
+ar	الس	السيد:ar|السيارة:ar|السبب:ar
+ar	السي	السيد:ar|السيارة:ar|السيدة:ar
 ar	بن	بنا:ar|بنفسك:ar|بنفسي:ar
 -	I would بن	بنا:ar|بنفسك:ar|بنفسي:ar
+ar	نذ	نذهب:ar|نذل:ar|نذير:ar
+ar	نذه	نذهب:ar
 ar	فت	فتاة:ar|فتى:ar|فترة:ar
+-	I would فت	فتاة:ar|فتى:ar|فترة:ar
 ar	فتا	فتاة:ar|فتاتي:ar|فتاتك:ar
-ar	ما	ماذا:ar|مالذي:ar|مات:ar
--	I would ما	ماذا:ar|مالذي:ar|مات:ar
-ar	مال	مالذي:ar|مالك:ar|مالا:ar
--	I would مال	مالذي:ar|مالك:ar|مالا:ar
-ar	مالذ	مالذي:ar
--	I would مالذ	مالذي:ar
-ar	اج	أجل:ar|اجل:ar|اجلس:ar
+-	I would فتا	فتاة:ar|فتاتي:ar|فتاتك:ar
 ar	أن	أنا:ar|أنت:ar|أنه:ar
--	I would أن	أنا:ar|أنت:ar|أنه:ar
 ar	أنه	أنها:ar|أنهم:ar|أنهما:ar
--	I would أنه	أنها:ar|أنهم:ar|أنهما:ar
+ar	تذ	تذهب:ar|تذكر:ar|تذهبي:ar
+-	I would تذ	تذهب:ar|تذكر:ar|تذهبي:ar
+ar	تذه	تذهب:ar|تذهبي:ar|تذهبين:ar
+-	I would تذه	تذهب:ar|تذهبي:ar|تذهبين:ar
 ar	مم	مما:ar|ممكن:ar|ممتاز:ar
-ar	وا	واحد:ar|واحدة:ar|والآن:ar
--	I would وا	واحد:ar|واحدة:ar|والآن:ar
-ar	وال	والآن:ar|والدك:ar|والدي:ar
--	I would وال	والآن:ar|والدك:ar|والدي:ar
-ar	والآ	والآن:ar|والآخر:ar|والآخرين:ar
--	I would والآ	والآن:ar|والآخر:ar|والآخرين:ar
-ar	في	فيه:ar|فيها:ar|فيما:ar
-ar	فيه	فيها:ar|فيهم:ar|فيهما:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الس	السيد:ar|السيارة:ar|السبب:ar
--	I would الس	السيد:ar|السيارة:ar|السبب:ar
-ar	السب	السبب:ar|السبت:ar|السباحة:ar
--	I would السب	السبب:ar|السبت:ar|السباحة:ar
-ar	بك	بكل:ar|بكثير:ar|بكم:ar
+ar	الب	الباب:ar|البيت:ar|البعض:ar
+-	I would الب	الباب:ar|البيت:ar|البعض:ar
+ar	البا	الباب:ar|البارحة:ar|الباقي:ar
+-	I would البا	الباب:ar|البارحة:ar|الباقي:ar
+ar	ار	أريد:ar|اريد:ar|أرجوك:ar
+ar	اري	أريد:ar|اريد:ar|أرى:ar
+ar	أح	أحد:ar|أحب:ar|أحتاج:ar
+-	I would أح	أحد:ar|أحب:ar|أحتاج:ar
+ar	أحت	أحتاج:ar|أحتاجك:ar|أحتاجه:ar
+-	I would أحت	أحتاج:ar|أحتاجك:ar|أحتاجه:ar
+ar	أحتا	أحتاج:ar|أحتاجك:ar|أحتاجه:ar
+-	I would أحتا	أحتاج:ar|أحتاجك:ar|أحتاجه:ar
+ar	دو	دون:ar|دولار:ar|دوما:ar
+-	I would دو	دون:ar|دولار:ar|دوما:ar
 ar	لل	للغاية:ar|للتو:ar|للمنزل:ar
--	I would لل	للغاية:ar|للتو:ar|للمنزل:ar
 ar	للت	للتو:ar|للتحدث:ar|للتفكير:ar
--	I would للت	للتو:ar|للتحدث:ar|للتفكير:ar
-ar	فع	فعل:ar|فعلت:ar|فعله:ar
-ar	فعل	فعلت:ar|فعله:ar|فعلا:ar
-ar	اذ	إذا:ar|اذا:ar|اذهب:ar
--	I would اذ	إذا:ar|اذا:ar|اذهب:ar
-ar	اذه	اذهب:ar|أذهب:ar|اذهبي:ar
--	I would اذه	اذهب:ar|أذهب:ar|اذهبي:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الو	الوقت:ar|الوحيد:ar|الواقع:ar
-ar	الوا	الواقع:ar|الواضح:ar|الواحد:ar
-ar	اع	أعرف:ar|أعتقد:ar|أعلم:ar
--	I would اع	أعرف:ar|أعتقد:ar|أعلم:ar
-ar	اعر	أعرف:ar|اعرف:ar|أعرفه:ar
--	I would اعر	أعرف:ar|اعرف:ar|أعرفه:ar
+ar	سب	سبب:ar|سبق:ar|سبعة:ar
+-	I would سب	سبب:ar|سبق:ar|سبعة:ar
 ar	هن	هنا:ar|هناك:ar|هنالك:ar
 ar	هنا	هناك:ar|هنالك:ar
 ar	هنال	هنالك:ar
-ar	أو	أوه:ar|أولا:ar|أود:ar
--	I would أو	أوه:ar|أولا:ar|أود:ar
-ar	أول	أولا:ar|أولئك:ar|أولاد:ar
--	I would أول	أولا:ar|أولئك:ar|أولاد:ar
+ar	رج	رجل:ar|رجاء:ar|رجال:ar
+-	I would رج	رجل:ar|رجاء:ar|رجال:ar
+ar	رجا	رجاء:ar|رجال:ar|رجاءا:ar
+-	I would رجا	رجاء:ar|رجال:ar|رجاءا:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الت	التي:ar|التحدث:ar|التى:ar
+ar	التح	التحدث:ar|التحكم:ar|التحقيق:ar
+ar	مت	متى:ar|متأكد:ar|متأكدة:ar
+-	I would مت	متى:ar|متأكد:ar|متأكدة:ar
+ar	متأ	متأكد:ar|متأكدة:ar|متأخر:ar
+-	I would متأ	متأكد:ar|متأكدة:ar|متأخر:ar
+ar	متأك	متأكد:ar|متأكدة:ar|متأكدا:ar
+-	I would متأك	متأكد:ar|متأكدة:ar|متأكدا:ar
 ar	ول	ولكن:ar|ولا:ar|ولم:ar
-ar	بع	بعد:ar|بعض:ar|بعيدا:ar
--	I would بع	بعد:ar|بعض:ar|بعيدا:ar
-ar	بعي	بعيدا:ar|بعيد:ar|بعيدة:ar
--	I would بعي	بعيدا:ar|بعيد:ar|بعيدة:ar
-ar	بعيد	بعيدا:ar|بعيدة:ar|بعيدين:ar
--	I would بعيد	بعيدا:ar|بعيدة:ar|بعيدين:ar
-ar	جم	جميعا:ar|جميع:ar|جميلة:ar
-ar	جمي	جميعا:ar|جميع:ar|جميلة:ar
-ar	جميل	جميلة:ar|جميلا:ar|جميلات:ar
+ar	تع	تعرف:ar|تعلم:ar|تعال:ar
+-	I would تع	تعرف:ar|تعلم:ar|تعال:ar
+ar	تعر	تعرف:ar|تعرفين:ar|تعرفي:ar
+-	I would تعر	تعرف:ar|تعرفين:ar|تعرفي:ar
+ar	تعرف	تعرفين:ar|تعرفي:ar|تعرفه:ar
+-	I would تعرف	تعرفين:ar|تعرفي:ar|تعرفه:ar
 ar	أن	أنا:ar|أنت:ar|أنه:ar
--	I would أن	أنا:ar|أنت:ar|أنه:ar
 ar	أنظ	أنظر:ar|أنظري:ar|أنظروا:ar
--	I would أنظ	أنظر:ar|أنظري:ar|أنظروا:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الخ	الخاص:ar|الخير:ar|الخاصة:ar
-ar	الخا	الخاص:ar|الخاصة:ar|الخارج:ar
+ar	تع	تعرف:ar|تعلم:ar|تعال:ar
+-	I would تع	تعرف:ar|تعلم:ar|تعال:ar
+ar	تعم	تعمل:ar|تعملين:ar|تعملي:ar
+-	I would تعم	تعمل:ar|تعملين:ar|تعملي:ar
 ar	يع	يعني:ar|يعرف:ar|يعمل:ar
--	I would يع	يعني:ar|يعرف:ar|يعمل:ar
 ar	يعم	يعمل:ar|يعملون:ar|يعملان:ar
--	I would يعم	يعمل:ar|يعملون:ar|يعملان:ar
+ar	تت	تتحدث:ar|تتذكر:ar|تتحرك:ar
+-	I would تت	تتحدث:ar|تتذكر:ar|تتحرك:ar
+ar	تتح	تتحدث:ar|تتحرك:ar|تتحدثين:ar
+-	I would تتح	تتحدث:ar|تتحرك:ar|تتحدثين:ar
+ar	تتحد	تتحدث:ar|تتحدثين:ar|تتحدثي:ar
+-	I would تتحد	تتحدث:ar|تتحدثين:ar|تتحدثي:ar
+ar	اي	أين:ar|أيضا:ar|أيها:ar
+ar	ايض	أيضا:ar|ايضا:ar
 ar	جم	جميعا:ar|جميع:ar|جميلة:ar
+-	I would جم	جميعا:ar|جميع:ar|جميلة:ar
 ar	جمي	جميعا:ar|جميع:ar|جميلة:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
--	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الا	الآن:ar|الأمر:ar|الان:ar
--	I would الا	الآن:ar|الأمر:ar|الان:ar
-ar	الام	الأمر:ar|الامر:ar|الأمور:ar
--	I would الام	الأمر:ar|الامر:ar|الأمور:ar
+-	I would جمي	جميعا:ar|جميع:ar|جميلة:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 ar	الم	المكان:ar|المنزل:ar|المال:ar
 ar	المد	المدينة:ar|المدرسة:ar|المدير:ar
 ar	إل	إلى:ar|إلهي:ar|إليك:ar
 -	I would إل	إلى:ar|إلهي:ar|إليك:ar
-ar	دع	دعنا:ar|دعني:ar|دعونا:ar
-ar	دعن	دعنا:ar|دعني:ar|دعنى:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الأ	الأمر:ar|الأمور:ar|الأشياء:ar
+ar	الأر	الأرض:ar|الأرجح:ar|الأرواح:ar
+ar	وج	وجدت:ar|وجود:ar|وجه:ar
+-	I would وج	وجدت:ar|وجود:ar|وجه:ar
+ar	وجد	وجدت:ar|وجدنا:ar|وجدته:ar
+-	I would وجد	وجدت:ar|وجدنا:ar|وجدته:ar
 ar	تع	تعرف:ar|تعلم:ar|تعال:ar
--	I would تع	تعرف:ar|تعلم:ar|تعال:ar
 ar	تعل	تعلم:ar|تعلمين:ar|تعلمون:ar
--	I would تعل	تعلم:ar|تعلمين:ar|تعلمون:ar
 ar	تعلم	تعلمين:ar|تعلمون:ar|تعلمت:ar
--	I would تعلم	تعلمين:ar|تعلمون:ar|تعلمت:ar
-ar	إل	إلى:ar|إلهي:ar|إليك:ar
-ar	إلي	إليك:ar|إليه:ar|إليها:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
 ar	الط	الطريق:ar|الطريقة:ar|الطفل:ar
@@ -3318,100 +3302,115 @@ ar	الطر	الطريق:ar|الطريقة:ar|الطرق:ar
 -	I would الطر	الطريق:ar|الطريقة:ar|الطرق:ar
 ar	عظ	عظيم:ar|عظيمة:ar|عظيما:ar
 ar	عظي	عظيم:ar|عظيمة:ar|عظيما:ar
-ar	أن	أنا:ar|أنت:ar|أنه:ar
--	I would أن	أنا:ar|أنت:ar|أنه:ar
-ar	أنت	أنتم:ar|أنتي:ar|أنتظر:ar
--	I would أنت	أنتم:ar|أنتي:ar|أنتظر:ar
-ar	ذه	ذهبت:ar|ذهب:ar|ذهبنا:ar
-ar	ذهب	ذهبت:ar|ذهبنا:ar|ذهبوا:ar
-ar	تر	تريد:ar|تريدين:ar|ترى:ar
--	I would تر	تريد:ar|تريدين:ar|ترى:ar
+ar	سأ	سأكون:ar|سأذهب:ar|سأفعل:ar
+-	I would سأ	سأكون:ar|سأذهب:ar|سأفعل:ar
+ar	سأك	سأكون:ar|سأكتب:ar|سأكتشف:ar
+-	I would سأك	سأكون:ar|سأكتب:ar|سأكتشف:ar
+ar	سأكو	سأكون:ar
+-	I would سأكو	سأكون:ar
+ar	أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
+ar	أتم	أتمنى:ar|أتمكن:ar|أتمانع:ar
+ar	أتمن	أتمنى:ar|أتمناه:ar
 ar	عا	عام:ar|عائلة:ar|عاما:ar
-ar	او	أوه:ar|اوه:ar|أولا:ar
--	I would او	أوه:ar|اوه:ar|أولا:ar
+-	I would عا	عام:ar|عائلة:ar|عاما:ar
+ar	نف	نفسك:ar|نفس:ar|نفسي:ar
+ar	نفس	نفسك:ar|نفسي:ar|نفسه:ar
+ar	بي	بين:ar|بينما:ar|بيت:ar
+-	I would بي	بين:ar|بينما:ar|بيت:ar
+ar	بين	بينما:ar|بيننا:ar|بيني:ar
+-	I would بين	بينما:ar|بيننا:ar|بيني:ar
+ar	بينم	بينما:ar|بينمو:ar|بينمون:ar
+-	I would بينم	بينما:ar|بينمو:ar|بينمون:ar
 ar	لد	لدي:ar|لديك:ar|لدينا:ar
 ar	لدي	لديك:ar|لدينا:ar|لديه:ar
 ar	لديه	لديها:ar|لديهم:ar|لديهما:ar
-ar	له	لها:ar|لهذا:ar|لهم:ar
--	I would له	لها:ar|لهذا:ar|لهم:ar
+ar	اع	أعرف:ar|أعتقد:ar|أعلم:ar
+-	I would اع	أعرف:ar|أعتقد:ar|أعلم:ar
+ar	اعل	أعلم:ar|اعلم:ar|أعلى:ar
+-	I would اعل	أعلم:ar|اعلم:ar|أعلى:ar
 ar	لك	لكن:ar|لكم:ar|لكي:ar
-ar	لكن	لكنه:ar|لكني:ar|لكنني:ar
-ar	شي	شيء:ar|شيئا:ar|شيئ:ar
--	I would شي	شيء:ar|شيئا:ar|شيئ:ar
-ar	عن	عندما:ar|عنه:ar|عند:ar
-ar	يت	يتم:ar|يتحدث:ar|يتعلق:ar
--	I would يت	يتم:ar|يتحدث:ar|يتعلق:ar
-ar	أه	أهلا:ar|أهذا:ar|أهتم:ar
-ar	أهل	أهلا:ar|أهلي:ar|أهلك:ar
-ar	ما	ماذا:ar|مالذي:ar|مات:ar
--	I would ما	ماذا:ar|مالذي:ar|مات:ar
-ar	من	منذ:ar|منك:ar|مني:ar
-ar	منه	منها:ar|منهم:ar|منهما:ar
+ar	لكن	لكني:ar|لكنه:ar|لكنني:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الق	القيام:ar|القادمة:ar|القضية:ar
+-	I would الق	القيام:ar|القادمة:ar|القضية:ar
+ar	القي	القيام:ar|القيادة:ar|القيمة:ar
+-	I would القي	القيام:ar|القيادة:ar|القيمة:ar
+ar	لد	لدي:ar|لديك:ar|لدينا:ar
+ar	أر	أريد:ar|أرجوك:ar|أردت:ar
+-	I would أر	أريد:ar|أرجوك:ar|أردت:ar
+ar	أري	أريد:ar|أريدك:ar|أرى:ar
+-	I would أري	أريد:ar|أريدك:ar|أرى:ar
+ar	أريد	أريدك:ar|أريده:ar|أريدها:ar
+-	I would أريد	أريدك:ar|أريده:ar|أريدها:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الم	المكان:ar|المنزل:ar|المال:ar
+ar	المو	الموت:ar|الموضوع:ar|الموسيقى:ar
+ar	رق	رقم:ar|رقصة:ar|رقص:ar
+-	I would رق	رقم:ar|رقصة:ar|رقص:ar
 ar	فق	فقط:ar|فقد:ar|فقدت:ar
--	I would فق	فقط:ar|فقد:ar|فقدت:ar
-ar	مع	معك:ar|معي:ar|معه:ar
-ar	معه	معها:ar|معهم:ar|معهد:ar
+ar	طر	طريقة:ar|طريق:ar|طريقي:ar
+-	I would طر	طريقة:ar|طريق:ar|طريقي:ar
+ar	طري	طريقة:ar|طريق:ar|طريقي:ar
+-	I would طري	طريقة:ar|طريق:ar|طريقي:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الح	الحقيقة:ar|الحياة:ar|الحصول:ar
 ar	سع	سعيد:ar|سعيدة:ar|سعيدا:ar
 -	I would سع	سعيد:ar|سعيدة:ar|سعيدا:ar
 ar	سعي	سعيد:ar|سعيدة:ar|سعيدا:ar
 -	I would سعي	سعيد:ar|سعيدة:ar|سعيدا:ar
 ar	سعيد	سعيدة:ar|سعيدا:ar|سعيدين:ar
 -	I would سعيد	سعيدة:ar|سعيدا:ar|سعيدين:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الر	الرجل:ar|الرجال:ar|الرئيس:ar
-ar	الرئ	الرئيس:ar|الرئيسي:ar|الرئيسية:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
--	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الأ	الأمر:ar|الأمور:ar|الأشياء:ar
--	I would الأ	الأمر:ar|الأمور:ar|الأشياء:ar
-ar	الأق	الأقل:ar|الأقدام:ar|الأقراص:ar
--	I would الأق	الأقل:ar|الأقدام:ar|الأقراص:ar
 ar	أق	أقول:ar|أقصد:ar|أقوم:ar
 ar	أقص	أقصد:ar|أقصى:ar|أقصده:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الأ	الأمر:ar|الأمور:ar|الأشياء:ar
--	I would الأ	الأمر:ar|الأمور:ar|الأشياء:ar
-ar	الأو	الأولى:ar|الأول:ar|الأولاد:ar
--	I would الأو	الأولى:ar|الأول:ar|الأولاد:ar
-ar	اح	أحد:ar|احد:ar|أحب:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
--	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الم	المكان:ar|المنزل:ar|المال:ar
--	I would الم	المكان:ar|المنزل:ar|المال:ar
-ar	المد	المدينة:ar|المدرسة:ar|المدير:ar
--	I would المد	المدينة:ar|المدرسة:ar|المدير:ar
+ar	الص	الصباح:ar|الصغير:ar|الصغيرة:ar
+-	I would الص	الصباح:ar|الصغير:ar|الصغيرة:ar
+ar	الصب	الصباح:ar|الصبي:ar|الصبر:ar
+-	I would الصب	الصباح:ar|الصبي:ar|الصبر:ar
+ar	وق	وقت:ar|وقد:ar|وقتا:ar
+ar	سن	سنوات:ar|سنة:ar|سنذهب:ar
+-	I would سن	سنوات:ar|سنة:ar|سنذهب:ar
+ar	غر	غرفة:ar|غريب:ar|غريبة:ar
+ar	غري	غريب:ar|غريبة:ar|غريبا:ar
+ar	ظن	ظننت:ar|ظننتك:ar|ظننته:ar
+-	I would ظن	ظننت:ar|ظننتك:ar|ظننته:ar
+ar	ظنن	ظننت:ar|ظننتك:ar|ظننته:ar
+-	I would ظنن	ظننت:ar|ظننتك:ar|ظننته:ar
+ar	يس	يستطيع:ar|يستحق:ar|يسمح:ar
+ar	يست	يستطيع:ar|يستحق:ar|يستخدم:ar
+ar	يستط	يستطيع:ar|يستطيعون:ar|يستطع:ar
 ar	حي	حيث:ar|حياتي:ar|حين:ar
-ar	لن	لنا:ar|لنذهب:ar|لنفسك:ar
--	I would لن	لنا:ar|لنذهب:ar|لنفسك:ar
-ar	لنذ	لنذهب:ar|لنذل:ar|لنذير:ar
--	I would لنذ	لنذهب:ar|لنذل:ar|لنذير:ar
-ar	لنذه	لنذهب:ar
--	I would لنذه	لنذهب:ar
-ar	هل	هلا:ar|هلم:ar|هلوسة:ar
-ar	إن	إنه:ar|إنها:ar|إنهم:ar
--	I would إن	إنه:ar|إنها:ar|إنهم:ar
-ar	إنن	إنني:ar|إننا:ar|إننى:ar
--	I would إنن	إنني:ar|إننا:ar|إننى:ar
+-	I would حي	حيث:ar|حياتي:ar|حين:ar
+ar	صد	صديقي:ar|صديق:ar|صديقك:ar
+ar	صدي	صديقي:ar|صديق:ar|صديقك:ar
+ar	صديق	صديقي:ar|صديقك:ar|صديقة:ar
+ar	وا	واحد:ar|واحدة:ar|والآن:ar
+-	I would وا	واحد:ar|واحدة:ar|والآن:ar
+ar	وال	والآن:ar|والدك:ar|والدي:ar
+-	I would وال	والآن:ar|والدك:ar|والدي:ar
+ar	والد	والدك:ar|والدي:ar|والدتك:ar
+-	I would والد	والدك:ar|والدي:ar|والدتك:ar
 ar	بد	بدون:ar|بدأت:ar|بدأ:ar
 ar	بدأ	بدأت:ar|بدأنا:ar|بدأوا:ar
 ar	تق	تقول:ar|تقوم:ar|تقريبا:ar
 -	I would تق	تقول:ar|تقوم:ar|تقريبا:ar
 ar	تقو	تقول:ar|تقوم:ar|تقولين:ar
 -	I would تقو	تقول:ar|تقوم:ar|تقولين:ar
+ar	أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
+ar	أتع	أتعلم:ar|أتعرف:ar|أتعلمين:ar
+ar	أتعل	أتعلم:ar|أتعلمين:ar|أتعلمون:ar
+ar	يج	يجب:ar|يجري:ar|يجعل:ar
+-	I would يج	يجب:ar|يجري:ar|يجعل:ar
+ar	يجر	يجري:ar|يجرؤ:ar|يجرون:ar
+-	I would يجر	يجري:ar|يجرؤ:ar|يجرون:ar
 ar	أق	أقول:ar|أقصد:ar|أقوم:ar
+-	I would أق	أقول:ar|أقصد:ar|أقوم:ar
 ar	أقو	أقول:ar|أقوم:ar|أقوله:ar
+-	I would أقو	أقول:ar|أقوم:ar|أقوله:ar
 ar	رأ	رأيت:ar|رأيك:ar|رأيته:ar
--	I would رأ	رأيت:ar|رأيك:ar|رأيته:ar
 ar	رأي	رأيت:ar|رأيك:ar|رأيته:ar
--	I would رأي	رأيت:ar|رأيك:ar|رأيته:ar
-ar	شى	شىء:ar
-ar	دق	دقيقة:ar|دقائق:ar|دقيقتين:ar
--	I would دق	دقيقة:ar|دقائق:ar|دقيقتين:ar
-ar	دقا	دقائق:ar|دقات:ar
--	I would دقا	دقائق:ar|دقات:ar
-ar	دقائ	دقائق:ar
--	I would دقائ	دقائق:ar
 ar	يع	يعني:ar|يعرف:ar|يعمل:ar
 ar	يعل	يعلم:ar|يعلمون:ar|يعلموا:ar
 ar	تق	تقول:ar|تقوم:ar|تقريبا:ar
@@ -3420,685 +3419,697 @@ ar	تقر	تقريبا:ar|تقرير:ar|تقرأ:ar
 -	I would تقر	تقريبا:ar|تقرير:ar|تقرأ:ar
 ar	تقري	تقريبا:ar|تقرير:ar|تقريرا:ar
 -	I would تقري	تقريبا:ar|تقرير:ar|تقريرا:ar
-ar	رج	رجل:ar|رجاء:ar|رجال:ar
-ar	رجا	رجاء:ar|رجال:ar|رجاءا:ar
-ar	شخ	شخص:ar|شخصا:ar|شخصية:ar
--	I would شخ	شخص:ar|شخصا:ar|شخصية:ar
-ar	شخص	شخصا:ar|شخصية:ar|شخصيا:ar
--	I would شخص	شخصا:ar|شخصية:ar|شخصيا:ar
-ar	تح	تحت:ar|تحتاج:ar|تحاول:ar
-ar	تحت	تحتاج:ar|تحتاجين:ar|تحتاجه:ar
-ar	تحتا	تحتاج:ar|تحتاجين:ar|تحتاجه:ar
-ar	رؤ	رؤية:ar|رؤيتك:ar|رؤيته:ar
--	I would رؤ	رؤية:ar|رؤيتك:ar|رؤيته:ar
-ar	رؤي	رؤية:ar|رؤيتك:ar|رؤيته:ar
--	I would رؤي	رؤية:ar|رؤيتك:ar|رؤيته:ar
-ar	مع	معك:ar|معي:ar|معه:ar
-ar	معن	معنا:ar|معنى:ar|معني:ar
+ar	نع	نعم:ar|نعرف:ar|نعلم:ar
+ar	نعر	نعرف:ar|نعرفه:ar|نعرفها:ar
+ar	فه	فهمت:ar|فهو:ar|فهذا:ar
+-	I would فه	فهمت:ar|فهو:ar|فهذا:ar
+ar	فهم	فهمت:ar|فهمتك:ar|فهمنا:ar
+-	I would فهم	فهمت:ar|فهمتك:ar|فهمنا:ar
+ar	حي	حيث:ar|حياتي:ar|حين:ar
+ar	حيا	حياتي:ar|حياة:ar|حياتك:ar
+ar	أخ	أخرى:ar|أخبرني:ar|أخبرك:ar
+-	I would أخ	أخرى:ar|أخبرني:ar|أخبرك:ar
+ar	أخب	أخبرني:ar|أخبرك:ar|أخبرتك:ar
+-	I would أخب	أخبرني:ar|أخبرك:ar|أخبرتك:ar
+ar	أخبر	أخبرني:ar|أخبرك:ar|أخبرتك:ar
+-	I would أخبر	أخبرني:ar|أخبرك:ar|أخبرتك:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الط	الطريق:ar|الطريقة:ar|الطفل:ar
+ar	الطف	الطفل:ar|الطفلة:ar|الطفولة:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الج	الجميع:ar|الجحيم:ar|الجنس:ar
--	I would الج	الجميع:ar|الجحيم:ar|الجنس:ar
-ar	الجن	الجنس:ar|الجنود:ar|الجنون:ar
--	I would الجن	الجنس:ar|الجنود:ar|الجنون:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
 ar	الس	السيد:ar|السيارة:ar|السبب:ar
+-	I would الس	السيد:ar|السيارة:ar|السبب:ar
 ar	السا	الساعة:ar|السابقة:ar|السابق:ar
-ar	ول	ولكن:ar|ولا:ar|ولم:ar
--	I would ول	ولكن:ar|ولا:ar|ولم:ar
-ar	ولي	وليس:ar|وليست:ar|وليام:ar
--	I would ولي	وليس:ar|وليست:ar|وليام:ar
+-	I would السا	الساعة:ar|السابقة:ar|السابق:ar
+ar	ين	ينبغي:ar|ينتهي:ar|ينظر:ar
+-	I would ين	ينبغي:ar|ينتهي:ar|ينظر:ar
+ar	ينب	ينبغي:ar|ينبض:ar|ينبح:ar
+-	I would ينب	ينبغي:ar|ينبض:ar|ينبح:ar
+ar	ينبغ	ينبغي:ar
+-	I would ينبغ	ينبغي:ar
+ar	تف	تفعل:ar|تفعله:ar|تفعلين:ar
+-	I would تف	تفعل:ar|تفعله:ar|تفعلين:ar
+ar	تفع	تفعل:ar|تفعله:ar|تفعلين:ar
+-	I would تفع	تفعل:ar|تفعله:ar|تفعلين:ar
+ar	تفعل	تفعله:ar|تفعلين:ar|تفعلي:ar
+-	I would تفعل	تفعله:ar|تفعلين:ar|تفعلي:ar
+ar	اس	أستطيع:ar|آسف:ar|استطيع:ar
+ar	اسم	اسمع:ar|اسمه:ar|اسمي:ar
+ar	أخ	أخرى:ar|أخبرني:ar|أخبرك:ar
+-	I would أخ	أخرى:ar|أخبرني:ar|أخبرك:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الص	الصباح:ar|الصغير:ar|الصغيرة:ar
-ar	الصغ	الصغير:ar|الصغيرة:ar|الصغار:ar
-ar	أي	أين:ar|أيضا:ar|أيها:ar
-ar	أيا	أيام:ar|أياه:ar|أيامي:ar
+ar	الب	الباب:ar|البيت:ar|البعض:ar
+ar	البع	البعض:ar|البعد:ar|البعيد:ar
 ar	عن	عندما:ar|عنه:ar|عند:ar
 -	I would عن	عندما:ar|عنه:ar|عند:ar
 ar	عنه	عنها:ar|عنهم:ar|عنهما:ar
 -	I would عنه	عنها:ar|عنهم:ar|عنهما:ar
-ar	نح	نحن:ar|نحتاج:ar|نحو:ar
-ar	نحت	نحتاج:ar|نحتاجه:ar|نحتفل:ar
-ar	نحتا	نحتاج:ar|نحتاجه:ar|نحتاجك:ar
-ar	حي	حيث:ar|حياتي:ar|حين:ar
--	I would حي	حيث:ar|حياتي:ar|حين:ar
-ar	حيا	حياتي:ar|حياة:ar|حياتك:ar
--	I would حيا	حياتي:ar|حياة:ar|حياتك:ar
-ar	حيات	حياتي:ar|حياتك:ar|حياته:ar
--	I would حيات	حياتي:ar|حياتك:ar|حياته:ar
 ar	وم	ومن:ar|وماذا:ar|وما:ar
-ar	وما	وماذا:ar|ومالذي:ar|ومات:ar
+ar	وما	وماذا:ar|ومالذي:ar|ومازلت:ar
 ar	وماذ	وماذا:ar|وماذلك:ar
-ar	تك	تكون:ar|تكن:ar|تكوني:ar
--	I would تك	تكون:ar|تكن:ar|تكوني:ar
-ar	تكو	تكون:ar|تكوني:ar|تكونين:ar
--	I would تكو	تكون:ar|تكوني:ar|تكونين:ar
-ar	تكون	تكوني:ar|تكونين:ar|تكونوا:ar
--	I would تكون	تكوني:ar|تكونين:ar|تكونوا:ar
+ar	عر	عرفت:ar|عرض:ar|عرف:ar
+-	I would عر	عرفت:ar|عرض:ar|عرف:ar
+ar	عرف	عرفت:ar|عرفته:ar|عرفنا:ar
+-	I would عرف	عرفت:ar|عرفته:ar|عرفنا:ar
+ar	لك	لكن:ar|لكم:ar|لكي:ar
+ar	لكن	لكني:ar|لكنه:ar|لكنني:ar
+ar	لكنه	لكنها:ar|لكنهم:ar|لكنهما:ar
 ar	يق	يقول:ar|يقوم:ar|يقولون:ar
+-	I would يق	يقول:ar|يقوم:ar|يقولون:ar
 ar	يقو	يقول:ar|يقوم:ar|يقولون:ar
-ar	يو	يوجد:ar|يوم:ar|يوما:ar
--	I would يو	يوجد:ar|يوم:ar|يوما:ar
-ar	يوم	يوما:ar|يومين:ar|يومك:ar
--	I would يوم	يوما:ar|يومين:ar|يومك:ar
-ar	خط	خطأ:ar|خطر:ar|خطة:ar
+-	I would يقو	يقول:ar|يقوم:ar|يقولون:ar
 ar	وه	وهذا:ar|وهو:ar|وهي:ar
--	I would وه	وهذا:ar|وهو:ar|وهي:ar
-ar	أر	أريد:ar|أرجوك:ar|أردت:ar
-ar	أرا	أراك:ar|أراد:ar|أراهن:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الب	الباب:ar|البيت:ar|البعض:ar
--	I would الب	الباب:ar|البيت:ar|البعض:ar
-ar	البق	البقاء:ar|البقية:ar|البقر:ar
--	I would البق	البقاء:ar|البقية:ar|البقر:ar
-ar	اك	أكثر:ar|أكون:ar|اكثر:ar
-ar	اكث	أكثر:ar|اكثر:ar|أكثرهم:ar
+ar	اله	إلهي:ar|الهاتف:ar|الهي:ar
+-	I would اله	إلهي:ar|الهاتف:ar|الهي:ar
+ar	الها	الهاتف:ar|الهاتفية:ar|الهام:ar
+-	I would الها	الهاتف:ar|الهاتفية:ar|الهام:ar
+ar	ود	وداعا:ar|وددت:ar|ودائما:ar
+ar	ودا	وداعا:ar|ودائما:ar|وداع:ar
+ar	وداع	وداعا:ar|وداعي:ar|وداعى:ar
+ar	أح	أحد:ar|أحب:ar|أحتاج:ar
+-	I would أح	أحد:ar|أحب:ar|أحتاج:ar
+ar	أحد	أحدهم:ar|أحدا:ar|أحدكم:ar
+-	I would أحد	أحدهم:ar|أحدا:ar|أحدكم:ar
+ar	أحده	أحدهم:ar|أحدهما:ar|أحدها:ar
+-	I would أحده	أحدهم:ar|أحدهما:ar|أحدها:ar
+ar	وم	ومن:ar|وماذا:ar|وما:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الم	المكان:ar|المنزل:ar|المال:ar
--	I would الم	المكان:ar|المنزل:ar|المال:ar
-ar	الما	المال:ar|الماضي:ar|الماء:ar
--	I would الما	المال:ar|الماضي:ar|الماء:ar
+ar	الط	الطريق:ar|الطريقة:ar|الطفل:ar
+-	I would الط	الطريق:ar|الطريقة:ar|الطفل:ar
+ar	الطع	الطعام:ar|الطعم:ar|الطعن:ar
+-	I would الطع	الطعام:ar|الطعم:ar|الطعن:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 ar	الع	العمل:ar|العالم:ar|العودة:ar
 ar	العا	العالم:ar|العام:ar|العائلة:ar
-ar	جز	جزء:ar|جزيلا:ar|جزءا:ar
--	I would جز	جزء:ar|جزيلا:ar|جزءا:ar
-ar	يم	يمكن:ar|يمكنك:ar|يمكنني:ar
-ar	يمك	يمكن:ar|يمكنك:ar|يمكنني:ar
-ar	يمكن	يمكنك:ar|يمكنني:ar|يمكننا:ar
-ar	أخ	أخرى:ar|أخبرني:ar|أخبرك:ar
--	I would أخ	أخرى:ar|أخبرني:ar|أخبرك:ar
-ar	أص	أصبح:ar|أصبحت:ar|أصدق:ar
-ar	أصب	أصبح:ar|أصبحت:ar|أصبت:ar
-ar	أصبح	أصبحت:ar|أصبحنا:ar|أصبحوا:ar
-ar	حا	حال:ar|حالك:ar|حالة:ar
--	I would حا	حال:ar|حالك:ar|حالة:ar
-ar	حاو	حاولت:ar|حاول:ar|حاولي:ar
--	I would حاو	حاولت:ar|حاول:ar|حاولي:ar
-ar	حاول	حاولت:ar|حاولي:ar|حاولوا:ar
--	I would حاول	حاولت:ar|حاولي:ar|حاولوا:ar
+ar	طف	طفل:ar|طفلا:ar|طفلة:ar
+-	I would طف	طفل:ar|طفلا:ar|طفلة:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الم	المكان:ar|المنزل:ar|المال:ar
-ar	الما	المال:ar|الماضي:ar|الماء:ar
+ar	الج	الجميع:ar|الجحيم:ar|الجنس:ar
+ar	الجد	الجديد:ar|الجديدة:ar|الجدار:ar
+ar	نو	نوع:ar|نوعا:ar|نود:ar
+-	I would نو	نوع:ar|نوعا:ar|نود:ar
+ar	نوع	نوعا:ar|نوعية:ar|نوعها:ar
+-	I would نوع	نوعا:ar|نوعية:ar|نوعها:ar
+ar	حا	حال:ar|حالك:ar|حالة:ar
+ar	حاو	حاولت:ar|حاول:ar|حاولي:ar
+ar	حاول	حاولت:ar|حاولي:ar|حاولوا:ar
+ar	ذا	ذات:ar|ذاهب:ar|ذاك:ar
+-	I would ذا	ذات:ar|ذاهب:ar|ذاك:ar
 ar	تظ	تظن:ar|تظهر:ar|تظنين:ar
--	I would تظ	تظن:ar|تظهر:ar|تظنين:ar
-ar	وك	وكان:ar|وكل:ar|وكيف:ar
-ar	وكا	وكان:ar|وكانت:ar|وكالة:ar
+ar	لأ	لأن:ar|لأنه:ar|لأنك:ar
+-	I would لأ	لأن:ar|لأنه:ar|لأنك:ar
+ar	لأن	لأنه:ar|لأنك:ar|لأنني:ar
+-	I would لأن	لأنه:ar|لأنك:ar|لأنني:ar
 ar	تح	تحت:ar|تحتاج:ar|تحاول:ar
--	I would تح	تحت:ar|تحتاج:ar|تحاول:ar
 ar	تحا	تحاول:ar|تحاولين:ar|تحاولي:ar
--	I would تحا	تحاول:ar|تحاولين:ar|تحاولي:ar
 ar	تحاو	تحاول:ar|تحاولين:ar|تحاولي:ar
--	I would تحاو	تحاول:ar|تحاولين:ar|تحاولي:ar
-ar	عل	على:ar|عليك:ar|علي:ar
-ar	علي	عليك:ar|عليه:ar|علينا:ar
-ar	عليه	عليها:ar|عليهم:ar|عليهما:ar
+ar	فو	فوق:ar|فورا:ar|فوضى:ar
+-	I would فو	فوق:ar|فورا:ar|فوضى:ar
+ar	فر	فرصة:ar|فريق:ar|فرانك:ar
+ar	فري	فريق:ar|فريد:ar|فريدي:ar
 ar	سأ	سأكون:ar|سأذهب:ar|سأفعل:ar
 -	I would سأ	سأكون:ar|سأذهب:ar|سأفعل:ar
 ar	سأف	سأفعل:ar|سأفعله:ar|سأفعلها:ar
 -	I would سأف	سأفعل:ar|سأفعله:ar|سأفعلها:ar
 ar	سأفع	سأفعل:ar|سأفعله:ar|سأفعلها:ar
 -	I would سأفع	سأفعل:ar|سأفعله:ar|سأفعلها:ar
-ar	صغ	صغيرة:ar|صغير:ar|صغيرا:ar
-ar	صغي	صغيرة:ar|صغير:ar|صغيرا:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الم	المكان:ar|المنزل:ar|المال:ar
-ar	المش	المشكلة:ar|المشاكل:ar|المشتبه:ar
-ar	بخ	بخير:ar|بخصوص:ar|بخلاف:ar
--	I would بخ	بخير:ar|بخصوص:ar|بخلاف:ar
-ar	بخص	بخصوص:ar|بخصوصه:ar|بخصوصك:ar
--	I would بخص	بخصوص:ar|بخصوصه:ar|بخصوصك:ar
-ar	بخصو	بخصوص:ar|بخصوصه:ar|بخصوصك:ar
--	I would بخصو	بخصوص:ar|بخصوصه:ar|بخصوصك:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الخ	الخاص:ar|الخير:ar|الخاصة:ar
-ar	الخر	الخروج:ar|الخريطة:ar|الخريف:ar
-ar	يذ	يذهب:ar|يذهبون:ar|يذكر:ar
--	I would يذ	يذهب:ar|يذهبون:ar|يذكر:ar
-ar	يذه	يذهب:ar|يذهبون:ar|يذهبوا:ar
--	I would يذه	يذهب:ar|يذهبون:ar|يذهبوا:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الل	الليلة:ar|اللعنة:ar|الله:ar
-ar	اللع	اللعنة:ar|اللعين:ar|اللعبة:ar
-ar	ان	أنا:ar|أنت:ar|انا:ar
--	I would ان	أنا:ar|أنت:ar|انا:ar
-ar	انظ	انظر:ar|انظري:ar|انظروا:ar
--	I would انظ	انظر:ar|انظري:ar|انظروا:ar
-ar	انظر	انظري:ar|انظروا:ar|انظرى:ar
--	I would انظر	انظري:ar|انظروا:ar|انظرى:ar
-ar	بل	بلا:ar|بلى:ar|بلدي:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
--	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	قص	قصة:ar|قصيرة:ar|قصير:ar
-ar	أع	أعرف:ar|أعتقد:ar|أعلم:ar
--	I would أع	أعرف:ar|أعتقد:ar|أعلم:ar
-ar	أعط	أعطني:ar|أعطيك:ar|أعطيني:ar
--	I would أعط	أعطني:ar|أعطيك:ar|أعطيني:ar
-ar	أعطن	أعطني:ar|أعطنا:ar
--	I would أعطن	أعطني:ar|أعطنا:ar
-ar	اخ	آخر:ar|أخرى:ar|اخرى:ar
-ar	اخر	أخرى:ar|اخرى:ar|اخرج:ar
-ar	أص	أصبح:ar|أصبحت:ar|أصدق:ar
--	I would أص	أصبح:ar|أصبحت:ar|أصدق:ar
-ar	أصد	أصدق:ar|أصدقاء:ar|أصدقائي:ar
--	I would أصد	أصدق:ar|أصدقاء:ar|أصدقائي:ar
-ar	دع	دعنا:ar|دعني:ar|دعونا:ar
-ar	دعو	دعونا:ar|دعوني:ar|دعوة:ar
-ar	دعون	دعونا:ar|دعوني:ar|دعونى:ar
-ar	عل	على:ar|عليك:ar|علي:ar
--	I would عل	على:ar|عليك:ar|علي:ar
-ar	عا	عام:ar|عائلة:ar|عاما:ar
-ar	عائ	عائلة:ar|عائلتي:ar|عائلتك:ar
-ar	عائل	عائلة:ar|عائلتي:ar|عائلتك:ar
-ar	حق	حقا:ar|حقيقي:ar|حقيقة:ar
--	I would حق	حقا:ar|حقيقي:ar|حقيقة:ar
-ar	حقي	حقيقي:ar|حقيقة:ar|حقيقية:ar
--	I would حقي	حقيقي:ar|حقيقة:ar|حقيقية:ar
-ar	حقيق	حقيقي:ar|حقيقة:ar|حقيقية:ar
--	I would حقيق	حقيقي:ar|حقيقة:ar|حقيقية:ar
-ar	مث	مثل:ar|مثلك:ar|مثير:ar
-ar	مثل	مثلك:ar|مثلي:ar|مثلما:ar
-ar	زل	زلت:ar|زلنا:ar|زلزال:ar
--	I would زل	زلت:ar|زلنا:ar|زلزال:ar
-ar	سي	سيدي:ar|سيكون:ar|سيد:ar
-ar	سيد	سيدي:ar|سيدة:ar|سيدتي:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
--	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الع	العمل:ar|العالم:ar|العودة:ar
--	I would الع	العمل:ar|العالم:ar|العودة:ar
-ar	العش	العشاء:ar|العشب:ar|العشرين:ar
--	I would العش	العشاء:ar|العشب:ar|العشرين:ar
+ar	يأ	يأتي:ar|يأخذ:ar|يأتون:ar
+ar	يأت	يأتي:ar|يأتون:ar|يأتى:ar
+ar	لل	للغاية:ar|للتو:ar|للمنزل:ar
+-	I would لل	للغاية:ar|للتو:ar|للمنزل:ar
+ar	للم	للمنزل:ar|للمساعدة:ar|للمرة:ar
+-	I would للم	للمنزل:ar|للمساعدة:ar|للمرة:ar
+ar	للمن	للمنزل:ar|للمنطقة:ar|للمناقشة:ar
+-	I would للمن	للمنزل:ar|للمنطقة:ar|للمناقشة:ar
+ar	تف	تفعل:ar|تفعله:ar|تفعلين:ar
+-	I would تف	تفعل:ar|تفعله:ar|تفعلين:ar
+ar	تفع	تفعل:ar|تفعله:ar|تفعلين:ar
+-	I would تفع	تفعل:ar|تفعله:ar|تفعلين:ar
+ar	تفعل	تفعله:ar|تفعلين:ar|تفعلي:ar
+-	I would تفعل	تفعله:ar|تفعلين:ar|تفعلي:ar
 ar	تح	تحت:ar|تحتاج:ar|تحاول:ar
-ar	تحص	تحصل:ar|تحصلي:ar|تحصلين:ar
-ar	أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
--	I would أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
-ar	أتي	أتيت:ar|أتينا:ar|أتيتم:ar
--	I would أتي	أتيت:ar|أتينا:ar|أتيتم:ar
-ar	حق	حقا:ar|حقيقي:ar|حقيقة:ar
-ar	حقي	حقيقي:ar|حقيقة:ar|حقيقية:ar
-ar	حقيق	حقيقي:ar|حقيقة:ar|حقيقية:ar
-ar	خم	خمسة:ar|خمس:ar|خمسون:ar
--	I would خم	خمسة:ar|خمس:ar|خمسون:ar
-ar	خمس	خمسة:ar|خمسون:ar|خمسين:ar
--	I would خمس	خمسة:ar|خمسون:ar|خمسين:ar
-ar	بي	بين:ar|بينما:ar|بيت:ar
-ar	سا	ساعة:ar|سام:ar|ساعات:ar
--	I would سا	ساعة:ar|سام:ar|ساعات:ar
-ar	ساع	ساعة:ar|ساعات:ar|ساعدني:ar
--	I would ساع	ساعة:ar|ساعات:ar|ساعدني:ar
-ar	ساعا	ساعات:ar|سأعاود:ar|سأعالج:ar
--	I would ساعا	ساعات:ar|سأعاود:ar|سأعالج:ar
-ar	به	بها:ar|بهذا:ar|بهذه:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الخ	الخاص:ar|الخير:ar|الخاصة:ar
+-	I would الخ	الخاص:ar|الخير:ar|الخاصة:ar
+ar	الخر	الخروج:ar|الخريطة:ar|الخريف:ar
+-	I would الخر	الخروج:ar|الخريطة:ar|الخريف:ar
+ar	بخ	بخير:ar|بخصوص:ar|بخلاف:ar
+ar	بخص	بخصوص:ar|بخصوصه:ar|بخصوصك:ar
+ar	بخصو	بخصوص:ar|بخصوصه:ar|بخصوصك:ar
+ar	وج	وجدت:ar|وجود:ar|وجه:ar
+-	I would وج	وجدت:ar|وجود:ar|وجه:ar
+ar	وجو	وجود:ar|وجودك:ar|وجودي:ar
+-	I would وجو	وجود:ar|وجودك:ar|وجودي:ar
+ar	عن	عندما:ar|عنه:ar|عند:ar
+ar	عند	عندما:ar|عندي:ar|عندك:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
 ar	الم	المكان:ar|المنزل:ar|المال:ar
 -	I would الم	المكان:ar|المنزل:ar|المال:ar
-ar	المو	الموت:ar|الموضوع:ar|الموسيقى:ar
--	I would المو	الموت:ar|الموضوع:ar|الموسيقى:ar
-ar	عم	عمل:ar|عما:ar|عملية:ar
+ar	المر	المرة:ar|المرأة:ar|المراقبة:ar
+-	I would المر	المرة:ar|المرأة:ar|المراقبة:ar
+ar	أم	أمي:ar|أمر:ar|أمك:ar
+ar	عل	على:ar|عليك:ar|علي:ar
+-	I would عل	على:ar|عليك:ar|علي:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الو	الوقت:ar|الوحيد:ar|الواقع:ar
+ar	الوح	الوحيد:ar|الوحيدة:ar|الوحش:ar
+ar	أح	أحد:ar|أحب:ar|أحتاج:ar
+-	I would أح	أحد:ar|أحب:ar|أحتاج:ar
+ar	أحي	أحيانا:ar|أحياء:ar|أحيا:ar
+-	I would أحي	أحيانا:ar|أحياء:ar|أحيا:ar
+ar	أحيا	أحيانا:ar|أحياء:ar|أحيان:ar
+-	I would أحيا	أحيانا:ar|أحياء:ar|أحيان:ar
+ar	أص	أصبح:ar|أصبحت:ar|أصدق:ar
+ar	أصد	أصدق:ar|أصدقاء:ar|أصدقائي:ar
+ar	مس	مساعدتك:ar|مستحيل:ar|مستعد:ar
+-	I would مس	مساعدتك:ar|مستحيل:ar|مستعد:ar
+ar	مسا	مساعدتك:ar|مساعدة:ar|مساء:ar
+-	I would مسا	مساعدتك:ar|مساعدة:ar|مساء:ar
+ar	مساع	مساعدتك:ar|مساعدة:ar|مساعدتي:ar
+-	I would مساع	مساعدتك:ar|مساعدة:ar|مساعدتي:ar
+ar	ما	ماذا:ar|مالذي:ar|مات:ar
+ar	ماي	مايكل:ar|مايك:ar|مايرام:ar
+ar	مايك	مايكل:ar|مايكي:ar|مايكا:ar
+ar	اب	أبدا:ar|أبي:ar|ابدا:ar
+-	I would اب	أبدا:ar|أبي:ar|ابدا:ar
+ar	ابد	أبدا:ar|ابدا:ar|أبدو:ar
+-	I would ابد	أبدا:ar|ابدا:ar|أبدو:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الغ	الغرفة:ar|الغد:ar|الغير:ar
+ar	الغر	الغرفة:ar|الغريب:ar|الغريبة:ar
+ar	عد	عدم:ar|عدة:ar|عدد:ar
+-	I would عد	عدم:ar|عدة:ar|عدد:ar
+ar	رئ	رئيس:ar|رئيسي:ar|رئيسة:ar
+ar	رئي	رئيس:ar|رئيسي:ar|رئيسة:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الأ	الأمر:ar|الأمور:ar|الأشياء:ar
--	I would الأ	الأمر:ar|الأمور:ar|الأشياء:ar
-ar	الأش	الأشياء:ar|الأشخاص:ar|الأشجار:ar
--	I would الأش	الأشياء:ar|الأشخاص:ar|الأشجار:ar
+ar	الن	الناس:ar|النار:ar|النوم:ar
+-	I would الن	الناس:ar|النار:ar|النوم:ar
+ar	النس	النساء:ar|النسخة:ar|النسر:ar
+-	I would النس	النساء:ar|النسخة:ar|النسر:ar
+ar	رس	رسالة:ar|رسائل:ar|رسميا:ar
+ar	رسا	رسالة:ar|رسائل:ar|رسالتك:ar
+ar	رسال	رسالة:ar|رسالتك:ar|رسالتي:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الط	الطريق:ar|الطريقة:ar|الطفل:ar
+-	I would الط	الطريق:ar|الطريقة:ar|الطفل:ar
+ar	الطب	الطبيب:ar|الطبيعة:ar|الطبيعي:ar
+-	I would الطب	الطبيب:ar|الطبيعة:ar|الطبيعي:ar
+ar	يح	يحدث:ar|يحصل:ar|يحاول:ar
+ar	يحص	يحصل:ar|يحصلون:ar|يحصلوا:ar
+ar	بي	بين:ar|بينما:ar|بيت:ar
+-	I would بي	بين:ar|بينما:ar|بيت:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الع	العمل:ar|العالم:ar|العودة:ar
+ar	العد	العديد:ar|العدالة:ar|العدو:ar
+ar	اذ	إذا:ar|اذا:ar|اذهب:ar
+-	I would اذ	إذا:ar|اذا:ar|اذهب:ar
+ar	ذا	ذات:ar|ذاهب:ar|ذاك:ar
+ar	ذاه	ذاهب:ar|ذاهبة:ar|ذاهبون:ar
+ar	نق	نقوم:ar|نقطة:ar|نقول:ar
+-	I would نق	نقوم:ar|نقطة:ar|نقول:ar
+ar	نقو	نقوم:ar|نقول:ar|نقود:ar
+-	I would نقو	نقوم:ar|نقول:ar|نقود:ar
+ar	به	بها:ar|بهذا:ar|بهذه:ar
+ar	وف	وفي:ar|وفقا:ar|وفاة:ar
+-	I would وف	وفي:ar|وفقا:ar|وفاة:ar
 ar	لك	لكن:ar|لكم:ar|لكي:ar
+ar	عم	عمل:ar|عما:ar|عملية:ar
+-	I would عم	عمل:ar|عما:ar|عملية:ar
+ar	ام	أمي:ar|أمر:ar|امرأة:ar
+ar	امر	امرأة:ar|أمرا:ar|أمريكا:ar
+ar	امرأ	امرأة:ar|امرأتين:ar|امرأتان:ar
+ar	مج	مجرد:ar|مجددا:ar|مجنون:ar
+-	I would مج	مجرد:ar|مجددا:ar|مجنون:ar
+ar	مجن	مجنون:ar|مجنونة:ar|مجنونا:ar
+-	I would مجن	مجنون:ar|مجنونة:ar|مجنونا:ar
+ar	مجنو	مجنون:ar|مجنونة:ar|مجنونا:ar
+-	I would مجنو	مجنون:ar|مجنونة:ar|مجنونا:ar
+ar	أخ	أخرى:ar|أخبرني:ar|أخبرك:ar
+ar	أخي	أخيرا:ar|أخيك:ar|أخيرة:ar
+ar	أخير	أخيرا:ar|أخيرة:ar
 ar	وك	وكان:ar|وكل:ar|وكيف:ar
 -	I would وك	وكان:ar|وكل:ar|وكيف:ar
+ar	بو	بواسطة:ar|بول:ar|بوب:ar
+ar	بوا	بواسطة:ar|بوابة:ar|بوارو:ar
+ar	بواس	بواسطة:ar|بواسطته:ar|بواسطتك:ar
+ar	طل	طلب:ar|طلبت:ar|طلقة:ar
+-	I would طل	طلب:ar|طلبت:ar|طلقة:ar
 ar	ني	نيويورك:ar|نيك:ar|نيل:ar
 ar	نيو	نيويورك:ar|نيوتن:ar|نيومان:ar
 ar	نيوي	نيويورك:ar
-ar	أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
--	I would أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
-ar	أتع	أتعلم:ar|أتعرف:ar|أتعلمين:ar
--	I would أتع	أتعلم:ar|أتعرف:ar|أتعلمين:ar
-ar	أتعر	أتعرف:ar|أتعرفين:ar|أتعرفون:ar
--	I would أتعر	أتعرف:ar|أتعرفين:ar|أتعرفون:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الق	القيام:ar|القادمة:ar|القضية:ar
-ar	القا	القادمة:ar|القائد:ar|القانون:ar
-ar	بو	بواسطة:ar|بول:ar|بوب:ar
--	I would بو	بواسطة:ar|بول:ar|بوب:ar
-ar	بوا	بواسطة:ar|بوابة:ar|بوارو:ar
--	I would بوا	بواسطة:ar|بوابة:ar|بوارو:ar
-ar	بواس	بواسطة:ar|بواسطته:ar|بواسطتك:ar
--	I would بواس	بواسطة:ar|بواسطته:ar|بواسطتك:ar
-ar	أه	أهلا:ar|أهذا:ar|أهتم:ar
-ar	أهذ	أهذا:ar|أهذه:ar
 ar	مك	مكان:ar|مكتب:ar|مكانك:ar
 -	I would مك	مكان:ar|مكتب:ar|مكانك:ar
 ar	مكت	مكتب:ar|مكتبي:ar|مكتوب:ar
 -	I would مكت	مكتب:ar|مكتبي:ar|مكتوب:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الر	الرجل:ar|الرجال:ar|الرئيس:ar
+ar	أح	أحد:ar|أحب:ar|أحتاج:ar
+-	I would أح	أحد:ar|أحب:ar|أحتاج:ar
+ar	أحد	أحدهم:ar|أحدا:ar|أحدكم:ar
+-	I would أحد	أحدهم:ar|أحدا:ar|أحدكم:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الق	القيام:ar|القادمة:ar|القضية:ar
+ar	القض	القضية:ar|القضايا:ar|القضاء:ar
 ar	له	لها:ar|لهذا:ar|لهم:ar
+-	I would له	لها:ar|لهذا:ar|لهم:ar
 ar	لهذ	لهذا:ar|لهذه:ar|لهذين:ar
-ar	بد	بدون:ar|بدأت:ar|بدأ:ar
--	I would بد	بدون:ar|بدأت:ar|بدأ:ar
-ar	تح	تحت:ar|تحتاج:ar|تحاول:ar
-ar	تحد	تحدث:ar|تحدثت:ar|تحديد:ar
-ar	ان	أنا:ar|أنت:ar|انا:ar
--	I would ان	أنا:ar|أنت:ar|انا:ar
-ar	انن	أنني:ar|انني:ar|أننا:ar
--	I would انن	أنني:ar|انني:ar|أننا:ar
-ar	بل	بلا:ar|بلى:ar|بلدي:ar
-ar	يف	يفعل:ar|يفترض:ar|يفعله:ar
--	I would يف	يفعل:ar|يفترض:ar|يفعله:ar
-ar	يفت	يفترض:ar|يفتح:ar|يفتقد:ar
--	I would يفت	يفترض:ar|يفتح:ar|يفتقد:ar
-ar	يفتر	يفترض:ar
--	I would يفتر	يفترض:ar
+-	I would لهذ	لهذا:ar|لهذه:ar|لهذين:ar
+ar	جئ	جئت:ar|جئنا:ar|جئتم:ar
+ar	حا	حال:ar|حالك:ar|حالة:ar
+-	I would حا	حال:ar|حالك:ar|حالة:ar
+ar	حاو	حاولت:ar|حاول:ar|حاولي:ar
+-	I would حاو	حاولت:ar|حاول:ar|حاولي:ar
 ar	بش	بشكل:ar|بشأن:ar|بشيء:ar
 ar	بشي	بشيء:ar|بشئ:ar|بشيئ:ar
-ar	تب	تبدو:ar|تبا:ar|تبقى:ar
-ar	تبق	تبقى:ar|تبقي:ar|تبقين:ar
-ar	عم	عمل:ar|عما:ar|عملية:ar
--	I would عم	عمل:ar|عما:ar|عملية:ar
-ar	عمل	عملية:ar|عملت:ar|عملي:ar
--	I would عمل	عملية:ar|عملت:ar|عملي:ar
-ar	عملي	عملية:ar|عمليات:ar|عمليا:ar
--	I would عملي	عملية:ar|عمليات:ar|عمليا:ar
-ar	عد	عدم:ar|عدة:ar|عدد:ar
+ar	نس	نستطيع:ar|نسيت:ar|نسخة:ar
+-	I would نس	نستطيع:ar|نسيت:ar|نسخة:ar
+ar	نسي	نسيت:ar|نسيان:ar|نسير:ar
+-	I would نسي	نسيت:ar|نسيان:ar|نسير:ar
+ar	تف	تفعل:ar|تفعله:ar|تفعلين:ar
+ar	تفك	تفكر:ar|تفكرين:ar|تفكري:ar
 ar	صو	صورة:ar|صوت:ar|صور:ar
 -	I would صو	صورة:ar|صوت:ar|صور:ar
 ar	صور	صورة:ar|صورا:ar|صورتك:ar
 -	I would صور	صورة:ar|صورا:ar|صورتك:ar
-ar	مج	مجرد:ar|مجددا:ar|مجنون:ar
-ar	مجم	مجموعة:ar|مجموعات:ar|مجمع:ar
-ar	مجمو	مجموعة:ar|مجموعات:ar|مجموع:ar
+ar	أم	أمي:ar|أمر:ar|أمك:ar
+-	I would أم	أمي:ar|أمر:ar|أمك:ar
+ar	أما	أمام:ar|أمامك:ar|أمامي:ar
+-	I would أما	أمام:ar|أمامك:ar|أمامي:ar
+ar	جو	جون:ar|جورج:ar|جوني:ar
+ar	جور	جورج:ar|جوردن:ar|جوردان:ar
 ar	عا	عام:ar|عائلة:ar|عاما:ar
 -	I would عا	عام:ar|عائلة:ar|عاما:ar
 ar	عام	عاما:ar|عامل:ar|عامين:ar
 -	I would عام	عاما:ar|عامل:ar|عامين:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الم	المكان:ar|المنزل:ar|المال:ar
+ar	المل	الملك:ar|الملابس:ar|الملازم:ar
+ar	نح	نحن:ar|نحتاج:ar|نحو:ar
+-	I would نح	نحن:ar|نحتاج:ar|نحو:ar
 ar	وق	وقت:ar|وقد:ar|وقتا:ar
 ar	وقت	وقتا:ar|وقتك:ar|وقتها:ar
 ar	وص	وصلت:ar|وصل:ar|وصلنا:ar
+-	I would وص	وصلت:ar|وصل:ar|وصلنا:ar
 ar	وصل	وصلت:ar|وصلنا:ar|وصلوا:ar
-ar	إذ	إذا:ar|إذن:ar|إذهب:ar
--	I would إذ	إذا:ar|إذن:ar|إذهب:ar
-ar	إذه	إذهب:ar|إذهبي:ar|إذهبوا:ar
--	I would إذه	إذهب:ar|إذهبي:ar|إذهبوا:ar
-ar	سو	سوف:ar|سوى:ar|سويا:ar
+-	I would وصل	وصلت:ar|وصلنا:ar|وصلوا:ar
+ar	مد	مدى:ar|مدينة:ar|مدرسة:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الم	المكان:ar|المنزل:ar|المال:ar
--	I would الم	المكان:ar|المنزل:ar|المال:ar
-ar	المل	الملك:ar|الملابس:ar|الملازم:ar
--	I would المل	الملك:ar|الملابس:ar|الملازم:ar
-ar	تف	تفعل:ar|تفعله:ar|تفعلين:ar
-ar	تفه	تفهم:ar|تفهمين:ar|تفهمني:ar
+ar	الأ	الأمر:ar|الأمور:ar|الأشياء:ar
+-	I would الأ	الأمر:ar|الأمور:ar|الأشياء:ar
+ar	الأخ	الأخيرة:ar|الأخرى:ar|الأخبار:ar
+-	I would الأخ	الأخيرة:ar|الأخرى:ar|الأخبار:ar
+ar	فع	فعل:ar|فعلت:ar|فعله:ar
+ar	فعل	فعلت:ar|فعله:ar|فعلا:ar
+ar	فعلت	فعلته:ar|فعلتها:ar|فعلتي:ar
+ar	أص	أصبح:ar|أصبحت:ar|أصدق:ar
+-	I would أص	أصبح:ar|أصبحت:ar|أصدق:ar
+ar	أصد	أصدق:ar|أصدقاء:ar|أصدقائي:ar
+-	I would أصد	أصدق:ar|أصدقاء:ar|أصدقائي:ar
+ar	أصدق	أصدقاء:ar|أصدقائي:ar|أصدقائك:ar
+-	I would أصدق	أصدقاء:ar|أصدقائي:ar|أصدقائك:ar
+ar	حف	حفلة:ar|حفل:ar|حفرة:ar
+ar	حفل	حفلة:ar|حفلات:ar|حفلا:ar
 ar	في	فيه:ar|فيها:ar|فيما:ar
 -	I would في	فيه:ar|فيها:ar|فيما:ar
 ar	فيم	فيما:ar|فيمكنك:ar|فيمكننا:ar
 -	I would فيم	فيما:ar|فيمكنك:ar|فيمكننا:ar
-ar	عد	عدم:ar|عدة:ar|عدد:ar
+ar	قت	قتل:ar|قتلت:ar|قتله:ar
+ar	قتل	قتلت:ar|قتله:ar|قتلي:ar
+ar	تأ	تأتي:ar|تأخذ:ar|تأكيد:ar
+-	I would تأ	تأتي:ar|تأخذ:ar|تأكيد:ar
+ar	تأخ	تأخذ:ar|تأخرت:ar|تأخر:ar
+-	I would تأخ	تأخذ:ar|تأخرت:ar|تأخر:ar
+ar	ثم	ثمة:ar|ثمن:ar|ثمانية:ar
+ar	كه	كهذا:ar|كهذه:ar|كهف:ar
+-	I would كه	كهذا:ar|كهذه:ar|كهف:ar
+ar	كهذ	كهذا:ar|كهذه:ar|كهذان:ar
+-	I would كهذ	كهذا:ar|كهذه:ar|كهذان:ar
+ar	ان	أنا:ar|أنت:ar|انا:ar
+ar	انت	انتظر:ar|انتهى:ar|انتظري:ar
+ar	انته	انتهى:ar|انتهت:ar|انتهيت:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الج	الجميع:ar|الجحيم:ar|الجنس:ar
--	I would الج	الجميع:ar|الجحيم:ar|الجنس:ar
-ar	الجد	الجديد:ar|الجديدة:ar|الجدار:ar
--	I would الجد	الجديد:ar|الجديدة:ar|الجدار:ar
-ar	كه	كهذا:ar|كهذه:ar|كهف:ar
-ar	كهذ	كهذا:ar|كهذه:ar|كهذان:ar
-ar	ان	أنا:ar|أنت:ar|انا:ar
--	I would ان	أنا:ar|أنت:ar|انا:ar
-ar	انت	انتظر:ar|انتهى:ar|انتظري:ar
--	I would انت	انتظر:ar|انتهى:ar|انتظري:ar
-ar	انته	انتهى:ar|انتهت:ar|انتهيت:ar
--	I would انته	انتهى:ar|انتهت:ar|انتهيت:ar
-ar	تأ	تأتي:ar|تأخذ:ar|تأكيد:ar
-ar	تأخ	تأخذ:ar|تأخرت:ar|تأخر:ar
-ar	بي	بين:ar|بينما:ar|بيت:ar
--	I would بي	بين:ar|بينما:ar|بيت:ar
-ar	بين	بينما:ar|بيننا:ar|بيني:ar
--	I would بين	بينما:ar|بيننا:ar|بيني:ar
-ar	بينن	بيننا:ar
--	I would بينن	بيننا:ar
-ar	وا	واحد:ar|واحدة:ar|والآن:ar
--	I would وا	واحد:ar|واحدة:ar|والآن:ar
-ar	واح	واحد:ar|واحدة:ar|واحدا:ar
--	I would واح	واحد:ar|واحدة:ar|واحدا:ar
-ar	واحد	واحدة:ar|واحدا:ar|وأحدهم:ar
--	I would واحد	واحدة:ar|واحدا:ar|وأحدهم:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الح	الحقيقة:ar|الحياة:ar|الحصول:ar
-ar	تو	توقف:ar|توجد:ar|توم:ar
+ar	الد	الدم:ar|الدكتور:ar|الداخل:ar
+-	I would الد	الدم:ar|الدكتور:ar|الداخل:ar
 ar	قو	قول:ar|قوة:ar|قوية:ar
--	I would قو	قول:ar|قوة:ar|قوية:ar
-ar	قي	قيد:ar|قيمة:ar|قيادة:ar
-ar	تش	تشعر:ar|تشارلي:ar|تشعرين:ar
--	I would تش	تشعر:ar|تشارلي:ar|تشعرين:ar
-ar	تشا	تشارلي:ar|تشارلز:ar|تشاك:ar
--	I would تشا	تشارلي:ar|تشارلز:ar|تشاك:ar
-ar	تشار	تشارلي:ar|تشارلز:ar|تشارلى:ar
--	I would تشار	تشارلي:ar|تشارلز:ar|تشارلى:ar
+ar	إل	إلى:ar|إلهي:ar|إليك:ar
+-	I would إل	إلى:ar|إلهي:ar|إليك:ar
+ar	إلي	إليك:ar|إليه:ar|إليها:ar
+-	I would إلي	إليك:ar|إليه:ar|إليها:ar
+ar	إليه	إليها:ar|إليهم:ar|إليهما:ar
+-	I would إليه	إليها:ar|إليهم:ar|إليهما:ar
+ar	يت	يتم:ar|يتحدث:ar|يتعلق:ar
+ar	يتح	يتحدث:ar|يتحرك:ar|يتحدثون:ar
+ar	يتحد	يتحدث:ar|يتحدثون:ar|يتحدثان:ar
+ar	مو	موعد:ar|موجود:ar|موقع:ar
+-	I would مو	موعد:ar|موجود:ar|موقع:ar
+ar	موع	موعد:ar|موعدا:ar|موعدنا:ar
+-	I would موع	موعد:ar|موعدا:ar|موعدنا:ar
+ar	مه	مهلا:ar|مهما:ar|مهم:ar
+ar	تح	تحت:ar|تحتاج:ar|تحاول:ar
+-	I would تح	تحت:ar|تحتاج:ar|تحاول:ar
+ar	تحم	تحمل:ar|تحمله:ar|تحمي:ar
+-	I would تحم	تحمل:ar|تحمله:ar|تحمي:ar
+ar	مم	مما:ar|ممكن:ar|ممتاز:ar
+ar	ممك	ممكن:ar|ممكنا:ar|ممكنة:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الك	الكثير:ar|الكبير:ar|الكلام:ar
+-	I would الك	الكثير:ar|الكبير:ar|الكلام:ar
+ar	الكب	الكبير:ar|الكبيرة:ar|الكبرى:ar
+-	I would الكب	الكبير:ar|الكبيرة:ar|الكبرى:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 ar	الو	الوقت:ar|الوحيد:ar|الواقع:ar
 ar	الوا	الواقع:ar|الواضح:ar|الواحد:ar
-ar	إن	إنه:ar|إنها:ar|إنهم:ar
--	I would إن	إنه:ar|إنها:ar|إنهم:ar
-ar	إنت	إنتظر:ar|إنتهى:ar|إنتظري:ar
--	I would إنت	إنتظر:ar|إنتهى:ar|إنتظري:ar
-ar	إنتظ	إنتظر:ar|إنتظري:ar|إنتظار:ar
--	I would إنتظ	إنتظر:ar|إنتظري:ar|إنتظار:ar
 ar	أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
+-	I would أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
 ar	أتر	أتريد:ar|أترى:ar|أتريدين:ar
+-	I would أتر	أتريد:ar|أترى:ar|أتريدين:ar
 ar	أتري	أتريد:ar|أتريدين:ar|أترين:ar
-ar	أث	أثناء:ar|أثق:ar|أثر:ar
--	I would أث	أثناء:ar|أثق:ar|أثر:ar
-ar	أثن	أثناء:ar|أثنان:ar|أثنين:ar
--	I would أثن	أثناء:ar|أثنان:ar|أثنين:ar
-ar	أثنا	أثناء:ar|أثنان:ar
--	I would أثنا	أثناء:ar|أثنان:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الز	الزواج:ar|الزمن:ar|الزفاف:ar
-ar	الزو	الزواج:ar|الزوجة:ar|الزوج:ar
+-	I would أتري	أتريد:ar|أتريدين:ar|أترين:ar
+ar	تع	تعرف:ar|تعلم:ar|تعال:ar
+ar	تعو	تعود:ar|تعودي:ar|تعويذة:ar
+ar	حب	حبيبتي:ar|حبيبي:ar|حبي:ar
+-	I would حب	حبيبتي:ar|حبيبي:ar|حبي:ar
+ar	حبي	حبيبتي:ar|حبيبي:ar|حبيبتى:ar
+-	I would حبي	حبيبتي:ar|حبيبي:ar|حبيبتى:ar
+ar	حبيب	حبيبتي:ar|حبيبي:ar|حبيبتى:ar
+-	I would حبيب	حبيبتي:ar|حبيبي:ar|حبيبتى:ar
 ar	ست	ستكون:ar|ستة:ar|ستفعل:ar
--	I would ست	ستكون:ar|ستة:ar|ستفعل:ar
-ar	مل	مليون:ar|ملابس:ar|ملك:ar
+ar	سي	سيدي:ar|سيكون:ar|سيد:ar
+-	I would سي	سيدي:ar|سيكون:ar|سيد:ar
+ar	سيح	سيحدث:ar|سيحصل:ar|سيحتاج:ar
+-	I would سيح	سيحدث:ar|سيحصل:ar|سيحتاج:ar
+ar	سيحد	سيحدث:ar|سيحدد:ar|سيحدثه:ar
+-	I would سيحد	سيحدث:ar|سيحدد:ar|سيحدثه:ar
+ar	مل	مليون:ar|ملك:ar|ملابس:ar
 ar	ملي	مليون:ar|مليئة:ar|مليء:ar
 ar	مليو	مليون:ar|مليونا:ar|مليونير:ar
-ar	ذا	ذات:ar|ذاهب:ar|ذاك:ar
--	I would ذا	ذات:ar|ذاهب:ar|ذاك:ar
-ar	تو	توقف:ar|توجد:ar|توم:ar
-ar	توق	توقف:ar|توقفي:ar|توقفوا:ar
-ar	توقف	توقفي:ar|توقفوا:ar|توقفت:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الم	المكان:ar|المنزل:ar|المال:ar
+-	I would الم	المكان:ar|المنزل:ar|المال:ar
+ar	المخ	المخدرات:ar|المخابرات:ar|المختبر:ar
+-	I would المخ	المخدرات:ar|المخابرات:ar|المختبر:ar
+ar	أخ	أخرى:ar|أخبرني:ar|أخبرك:ar
+ar	أخذ	أخذت:ar|أخذه:ar|أخذها:ar
 ar	ان	أنا:ar|أنت:ar|انا:ar
 -	I would ان	أنا:ar|أنت:ar|انا:ar
 ar	انت	انتظر:ar|انتهى:ar|انتظري:ar
 -	I would انت	انتظر:ar|انتهى:ar|انتظري:ar
 ar	انتظ	انتظر:ar|انتظري:ar|انتظروا:ar
 -	I would انتظ	انتظر:ar|انتظري:ar|انتظروا:ar
+ar	أس	أستطيع:ar|أسمع:ar|أسرع:ar
+ar	أسر	أسرع:ar|أسرار:ar|أسرعوا:ar
+ar	اب	أبدا:ar|أبي:ar|ابدا:ar
+-	I would اب	أبدا:ar|أبي:ar|ابدا:ar
 ar	ير	يريد:ar|يرام:ar|يريدون:ar
 ar	يري	يريد:ar|يريدون:ar|يريده:ar
 ar	يريد	يريدون:ar|يريده:ar|يريدك:ar
-ar	عد	عدم:ar|عدة:ar|عدد:ar
--	I would عد	عدم:ar|عدة:ar|عدد:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الص	الصباح:ar|الصغير:ar|الصغيرة:ar
-ar	الصع	الصعب:ar|الصعود:ar|الصعبة:ar
-ar	عذ	عذرا:ar|عذر:ar|عذراء:ar
--	I would عذ	عذرا:ar|عذر:ar|عذراء:ar
-ar	عذر	عذرا:ar|عذراء:ar|عذرك:ar
--	I would عذر	عذرا:ar|عذراء:ar|عذرك:ar
-ar	لأ	لأن:ar|لأنه:ar|لأنك:ar
-ar	لأن	لأنه:ar|لأنك:ar|لأنني:ar
-ar	لأنه	لأنها:ar|لأنهم:ar|لأنهما:ar
+ar	سأ	سأكون:ar|سأذهب:ar|سأفعل:ar
+-	I would سأ	سأكون:ar|سأذهب:ar|سأفعل:ar
+ar	سأع	سأعود:ar|سأعطيك:ar|سأعمل:ar
+-	I would سأع	سأعود:ar|سأعطيك:ar|سأعمل:ar
+ar	سأعو	سأعود:ar|سأعوضك:ar|سأعوض:ar
+-	I would سأعو	سأعود:ar|سأعوضك:ar|سأعوض:ar
+ar	من	منذ:ar|منك:ar|مني:ar
+ar	منك	منكم:ar|منكما:ar|منكن:ar
 ar	مس	مساعدتك:ar|مستحيل:ar|مستعد:ar
 -	I would مس	مساعدتك:ar|مستحيل:ar|مستعد:ar
 ar	مسا	مساعدتك:ar|مساعدة:ar|مساء:ar
 -	I would مسا	مساعدتك:ar|مساعدة:ar|مساء:ar
-ar	أر	أريد:ar|أرجوك:ar|أردت:ar
--	I would أر	أريد:ar|أرجوك:ar|أردت:ar
-ar	أرب	أربعة:ar|أربع:ar|أربعون:ar
--	I would أرب	أربعة:ar|أربع:ar|أربعون:ar
-ar	أربع	أربعة:ar|أربعون:ar|أربعين:ar
--	I would أربع	أربعة:ar|أربعون:ar|أربعين:ar
-ar	يع	يعني:ar|يعرف:ar|يعمل:ar
-ar	يعو	يعود:ar|يعودوا:ar|يعودون:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الح	الحقيقة:ar|الحياة:ar|الحصول:ar
+ar	الحل	الحلقة:ar|الحلوى:ar|الحلم:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الس	السيد:ar|السيارة:ar|السبب:ar
--	I would الس	السيد:ar|السيارة:ar|السبب:ar
-ar	السم	السماء:ar|السماح:ar|السمك:ar
--	I would السم	السماء:ar|السماح:ar|السمك:ar
-ar	أب	أبدا:ar|أبي:ar|أبحث:ar
-ar	أبح	أبحث:ar|أبحاث:ar|أبحر:ar
-ar	بع	بعد:ar|بعض:ar|بعيدا:ar
--	I would بع	بعد:ar|بعض:ar|بعيدا:ar
-ar	بعد	بعدها:ar|بعدما:ar|بعدم:ar
--	I would بعد	بعدها:ar|بعدما:ar|بعدم:ar
-ar	بعده	بعدها:ar|بعدة:ar|بعدهم:ar
--	I would بعده	بعدها:ar|بعدة:ar|بعدهم:ar
-ar	بك	بكل:ar|بكثير:ar|بكم:ar
-ar	بكث	بكثيرا:ar|بكثير:ar|بكثيرة:ar
-ar	بكثي	بكثيرا:ar|بكثير:ar|بكثيرة:ar
-ar	اس	أستطيع:ar|آسف:ar|استطيع:ar
--	I would اس	أستطيع:ar|آسف:ar|استطيع:ar
-ar	اسم	اسمع:ar|اسمه:ar|اسمي:ar
--	I would اسم	اسمع:ar|اسمه:ar|اسمي:ar
-ar	قض	قضية:ar|قضيت:ar|قضاء:ar
-ar	قضي	قضية:ar|قضيت:ar|قضيب:ar
-ar	لل	للغاية:ar|للتو:ar|للمنزل:ar
--	I would لل	للغاية:ar|للتو:ar|للمنزل:ar
-ar	للع	للعمل:ar|للعيش:ar|للعودة:ar
--	I would للع	للعمل:ar|للعيش:ar|للعودة:ar
-ar	للعم	للعمل:ar|للعملية:ar|للعميل:ar
--	I would للعم	للعمل:ar|للعملية:ar|للعميل:ar
-ar	شر	شركة:ar|شرطة:ar|شرطي:ar
-ar	شرط	شرطة:ar|شرطي:ar|شرطيا:ar
-ar	مع	معك:ar|معي:ar|معه:ar
--	I would مع	معك:ar|معي:ar|معه:ar
-ar	معه	معها:ar|معهم:ar|معهد:ar
--	I would معه	معها:ar|معهم:ar|معهد:ar
-ar	أت	أتمنى:ar|أتعلم:ar|أتحدث:ar
-ar	أتع	أتعلم:ar|أتعرف:ar|أتعلمين:ar
-ar	أتعل	أتعلم:ar|أتعلمين:ar|أتعلمون:ar
-ar	عش	عشر:ar|عشرة:ar|عشاء:ar
--	I would عش	عشر:ar|عشرة:ar|عشاء:ar
-ar	عشر	عشرة:ar|عشرون:ar|عشرين:ar
--	I would عشر	عشرة:ar|عشرون:ar|عشرين:ar
-ar	اك	أكثر:ar|أكون:ar|اكثر:ar
-ar	اكو	أكون:ar|اكون:ar|أكواب:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
--	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الت	التي:ar|التحدث:ar|التى:ar
--	I would الت	التي:ar|التحدث:ar|التى:ar
-ar	التا	التالي:ar|التاريخ:ar|التالية:ar
--	I would التا	التالي:ar|التاريخ:ar|التالية:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الد	الدم:ar|الدكتور:ar|الداخل:ar
-ar	الدا	الداخل:ar|الداخلية:ar|الداخلي:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
--	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الث	الثانية:ar|الثاني:ar|الثالث:ar
--	I would الث	الثانية:ar|الثاني:ar|الثالث:ar
-ar	الثا	الثانية:ar|الثاني:ar|الثالث:ar
--	I would الثا	الثانية:ar|الثاني:ar|الثالث:ar
-ar	يا	يارجل:ar|يأتي:ar|يارفاق:ar
-ar	يار	يارجل:ar|يارفاق:ar|ياردة:ar
-ar	يارج	يارجل:ar|يارجال:ar
-ar	وأ	وأنا:ar|وأنت:ar|وأن:ar
--	I would وأ	وأنا:ar|وأنت:ar|وأن:ar
-ar	هذ	هذا:ar|هذه:ar|هذان:ar
-ar	جز	جزء:ar|جزيلا:ar|جزءا:ar
--	I would جز	جزء:ar|جزيلا:ar|جزءا:ar
-ar	جزي	جزيلا:ar|جزيرة:ar|جزيئات:ar
--	I would جزي	جزيلا:ar|جزيرة:ar|جزيئات:ar
-ar	جزيل	جزيلا:ar
--	I would جزيل	جزيلا:ar
-ar	بك	بكل:ar|بكثير:ar|بكم:ar
-ar	مخ	مختلف:ar|مختلفة:ar|مخدرات:ar
--	I would مخ	مختلف:ar|مختلفة:ar|مخدرات:ar
-ar	مخت	مختلف:ar|مختلفة:ar|مختلفا:ar
--	I would مخت	مختلف:ar|مختلفة:ar|مختلفا:ar
-ar	مختل	مختلف:ar|مختلفة:ar|مختلفا:ar
--	I would مختل	مختلف:ar|مختلفة:ar|مختلفا:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
 ar	الب	الباب:ar|البيت:ar|البعض:ar
-ar	البح	البحث:ar|البحر:ar|البحرية:ar
-ar	ست	ستكون:ar|ستة:ar|ستفعل:ar
--	I would ست	ستكون:ar|ستة:ar|ستفعل:ar
-ar	ستف	ستفعل:ar|ستفعلين:ar|ستفعله:ar
--	I would ستف	ستفعل:ar|ستفعلين:ar|ستفعله:ar
-ar	ستفع	ستفعل:ar|ستفعلين:ar|ستفعله:ar
--	I would ستفع	ستفعل:ar|ستفعلين:ar|ستفعله:ar
-ar	جه	جهاز:ar|جهة:ar|جهدي:ar
-ar	جها	جهاز:ar|جهازي:ar|جهازك:ar
-ar	أه	أهلا:ar|أهذا:ar|أهتم:ar
--	I would أه	أهلا:ar|أهذا:ar|أهتم:ar
-ar	أهت	أهتم:ar|أهتمام:ar
--	I would أهت	أهتم:ar|أهتمام:ar
-ar	مر	مرحبا:ar|مرة:ar|مرات:ar
-ar	مرا	مرات:ar|مراقبة:ar|مرارا:ar
-ar	أم	أمي:ar|أمر:ar|أمك:ar
--	I would أم	أمي:ar|أمر:ar|أمك:ar
-ar	تو	توقف:ar|توجد:ar|توم:ar
-ar	اق	أقول:ar|اقول:ar|أقصد:ar
--	I would اق	أقول:ar|اقول:ar|أقصد:ar
-ar	اقو	أقول:ar|اقول:ar|أقوم:ar
--	I would اقو	أقول:ar|اقول:ar|أقوم:ar
-ar	لو	لويس:ar|لوس:ar|لوك:ar
-ar	لوي	لويس:ar|لويد:ar|لويز:ar
-ar	نر	نريد:ar|نرى:ar|نرحل:ar
--	I would نر	نريد:ar|نرى:ar|نرحل:ar
-ar	بن	بنا:ar|بنفسك:ar|بنفسي:ar
-ar	خط	خطأ:ar|خطر:ar|خطة:ar
--	I would خط	خطأ:ar|خطر:ar|خطة:ar
-ar	مخ	مختلف:ar|مختلفة:ar|مخدرات:ar
-ar	مخت	مختلف:ar|مختلفة:ar|مختلفا:ar
-ar	مختل	مختلف:ar|مختلفة:ar|مختلفا:ar
-ar	عا	عام:ar|عائلة:ar|عاما:ar
--	I would عا	عام:ar|عائلة:ar|عاما:ar
-ar	عال	عالم:ar|عالية:ar|عالي:ar
--	I would عال	عالم:ar|عالية:ar|عالي:ar
-ar	لف	لفترة:ar|لفعل:ar|لفعله:ar
-ar	لفت	لفترة:ar|لفتاة:ar|لفتح:ar
-ar	لفتر	لفترة:ar|لفترات:ar
+-	I would الب	الباب:ar|البيت:ar|البعض:ar
+ar	البد	البداية:ar|البدء:ar|البدلة:ar
+-	I would البد	البداية:ar|البدء:ar|البدلة:ar
+ar	بك	بكل:ar|بكثير:ar|بكم:ar
+ar	بكث	بكثير:ar|بكثرة:ar|بكثافة:ar
+ar	بكثي	بكثيرا:ar|بكثير:ar|بكثيرة:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
 ar	الم	المكان:ar|المنزل:ar|المال:ar
 -	I would الم	المكان:ar|المنزل:ar|المال:ar
 ar	المن	المنزل:ar|المناسب:ar|المنطقة:ar
 -	I would المن	المنزل:ar|المناسب:ar|المنطقة:ar
-ar	طب	طبعا:ar|طبيب:ar|طبيعي:ar
-ar	طبع	طبعا:ar|طبعة:ar|طبعت:ar
-ar	مؤ	مؤخرا:ar|مؤخرتك:ar|مؤخرة:ar
--	I would مؤ	مؤخرا:ar|مؤخرتك:ar|مؤخرة:ar
-ar	مؤخ	مؤخرا:ar|مؤخرتك:ar|مؤخرة:ar
--	I would مؤخ	مؤخرا:ar|مؤخرتك:ar|مؤخرة:ar
-ar	مؤخر	مؤخرا:ar|مؤخرتك:ar|مؤخرة:ar
--	I would مؤخر	مؤخرا:ar|مؤخرتك:ar|مؤخرة:ar
-ar	طا	طالما:ar|طائرة:ar|طابت:ar
-ar	طال	طالما:ar|طالب:ar|طالبة:ar
-ar	طالم	طالما:ar
-ar	من	منذ:ar|منك:ar|مني:ar
--	I would من	منذ:ar|منك:ar|مني:ar
-ar	منت	منتصف:ar|منتج:ar|منتجات:ar
--	I would منت	منتصف:ar|منتج:ar|منتجات:ar
-ar	منتص	منتصف:ar|منتصب:ar
--	I would منتص	منتصف:ar|منتصب:ar
-ar	بإ	بإمكانك:ar|بإمكاني:ar|بإمكاننا:ar
-ar	بإم	بإمكانك:ar|بإمكاني:ar|بإمكاننا:ar
-ar	بإمك	بإمكانك:ar|بإمكاني:ar|بإمكاننا:ar
-ar	عا	عام:ar|عائلة:ar|عاما:ar
--	I would عا	عام:ar|عائلة:ar|عاما:ar
-ar	عاد	عادة:ar|عادت:ar|عادي:ar
--	I would عاد	عادة:ar|عادت:ar|عادي:ar
-ar	بع	بعد:ar|بعض:ar|بعيدا:ar
-ar	بعم	بعمل:ar|بعمر:ar|بعملك:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الس	السيد:ar|السيارة:ar|السبب:ar
+ar	السم	السماء:ar|السمك:ar|السماح:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
 ar	الس	السيد:ar|السيارة:ar|السبب:ar
 -	I would الس	السيد:ar|السيارة:ar|السبب:ar
-ar	السن	السنة:ar|السنوات:ar|السنين:ar
--	I would السن	السنة:ar|السنوات:ar|السنين:ar
+ar	السؤ	السؤال:ar|السؤالا:ar|السؤالك:ar
+-	I would السؤ	السؤال:ar|السؤالا:ar|السؤالك:ar
+ar	لل	للغاية:ar|للتو:ar|للمنزل:ar
+ar	للع	للعمل:ar|للعيش:ar|للعودة:ar
+ar	للعم	للعمل:ar|للعملية:ar|للعميل:ar
+ar	وع	وعندما:ar|وعلى:ar|وعدت:ar
+-	I would وع	وعندما:ar|وعلى:ar|وعدت:ar
+ar	وعن	وعندما:ar|وعندها:ar|وعند:ar
+-	I would وعن	وعندما:ar|وعندها:ar|وعند:ar
+ar	وعند	وعندما:ar|وعندها:ar|وعندئذ:ar
+-	I would وعند	وعندما:ar|وعندها:ar|وعندئذ:ar
+ar	عن	عندما:ar|عنه:ar|عند:ar
+ar	عند	عندما:ar|عندي:ar|عندك:ar
+ar	زا	زال:ar|زالت:ar|زاك:ar
+-	I would زا	زال:ar|زالت:ar|زاك:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الآ	الآن:ar|الآخر:ar|الآخرين:ar
+ar	الآخ	الآخر:ar|الآخرين:ar|الآخرون:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الش	الشيء:ar|الشرطة:ar|الشخص:ar
+-	I would الش	الشيء:ar|الشرطة:ar|الشخص:ar
+ar	الشم	الشمس:ar|الشمال:ar|الشمالية:ar
+-	I would الشم	الشمس:ar|الشمال:ar|الشمالية:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الت	التي:ar|التحدث:ar|التى:ar
+ar	التا	التالي:ar|التاريخ:ar|التالية:ar
+ar	تق	تقول:ar|تقوم:ar|تقريبا:ar
+-	I would تق	تقول:ar|تقوم:ar|تقريبا:ar
+ar	تقص	تقصد:ar|تقصدين:ar|تقصده:ar
+-	I would تقص	تقصد:ar|تقصدين:ar|تقصده:ar
+ar	أع	أعرف:ar|أعتقد:ar|أعلم:ar
+ar	أعو	أعود:ar|أعوام:ar|أعواد:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الد	الدم:ar|الدكتور:ar|الداخل:ar
+-	I would الد	الدم:ar|الدكتور:ar|الداخل:ar
+ar	الدا	الداخل:ar|الداخلية:ar|الداخلي:ar
+-	I would الدا	الداخل:ar|الداخلية:ar|الداخلي:ar
+ar	سؤ	سؤال:ar|سؤالا:ar|سؤالك:ar
+ar	سؤا	سؤال:ar|سؤالا:ar|سؤالك:ar
+ar	بب	ببعض:ar|ببساطة:ar|ببطء:ar
+-	I would بب	ببعض:ar|ببساطة:ar|ببطء:ar
+ar	ببع	ببعض:ar|ببعضنا:ar|ببعضها:ar
+-	I would ببع	ببعض:ar|ببعضنا:ar|ببعضها:ar
+ar	يا	يارجل:ar|يأتي:ar|يارفاق:ar
+ar	يار	يارجل:ar|يارفاق:ar|ياردة:ar
+ar	يارج	يارجل:ar|يارجال:ar
+ar	جز	جزء:ar|جزيلا:ar|جزءا:ar
+ar	جزي	جزيلا:ar|جزيرة:ar|جزيئات:ar
+ar	جزيل	جزيلا:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الد	الدم:ar|الدكتور:ar|الداخل:ar
+-	I would الد	الدم:ar|الدكتور:ar|الداخل:ar
+ar	الدخ	الدخول:ar|الدخان:ar|الدخل:ar
+-	I would الدخ	الدخول:ar|الدخان:ar|الدخل:ar
+ar	مش	مشكلة:ar|مشاكل:ar|مشاهدة:ar
+ar	مشا	مشاكل:ar|مشاهدة:ar|مشاعر:ar
+ar	مشاك	مشاكل:ar|مشاكلك:ar|مشاكلي:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الج	الجميع:ar|الجحيم:ar|الجنس:ar
+-	I would الج	الجميع:ar|الجحيم:ar|الجنس:ar
+ar	الجز	الجزء:ar|الجزيرة:ar|الجزر:ar
+-	I would الجز	الجزء:ar|الجزيرة:ar|الجزر:ar
+ar	بك	بكل:ar|بكثير:ar|بكم:ar
+ar	ما	ماذا:ar|مالذي:ar|مات:ar
+-	I would ما	ماذا:ar|مالذي:ar|مات:ar
+ar	مار	ماري:ar|مارك:ar|مارتن:ar
+-	I would مار	ماري:ar|مارك:ar|مارتن:ar
+ar	أم	أمي:ar|أمر:ar|أمك:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الق	القيام:ar|القادمة:ar|القضية:ar
+-	I would الق	القيام:ar|القادمة:ar|القضية:ar
+ar	القد	القديمة:ar|القديم:ar|القدم:ar
+-	I would القد	القديمة:ar|القديم:ar|القدم:ar
+ar	بض	بضعة:ar|بضع:ar|بضرب:ar
+ar	بضع	بضعة:ar|بضعيف:ar|بضعف:ar
+ar	رأ	رأيت:ar|رأيك:ar|رأيته:ar
+-	I would رأ	رأيت:ar|رأيك:ar|رأيته:ar
+ar	رأي	رأيت:ar|رأيك:ar|رأيته:ar
+-	I would رأي	رأيت:ar|رأيك:ar|رأيته:ar
+ar	رأيت	رأيته:ar|رأيتك:ar|رأيتها:ar
+-	I would رأيت	رأيته:ar|رأيتك:ar|رأيتها:ar
+ar	يم	يمكن:ar|يمكنك:ar|يمكنني:ar
+ar	يمك	يمكن:ar|يمكنك:ar|يمكنني:ar
+ar	يمكن	يمكنك:ar|يمكنني:ar|يمكننا:ar
+ar	دو	دون:ar|دولار:ar|دوما:ar
+-	I would دو	دون:ar|دولار:ar|دوما:ar
+ar	دوم	دوما:ar|دومينيك:ar|دومنيك:ar
+-	I would دوم	دوما:ar|دومينيك:ar|دومنيك:ar
+ar	نر	نريد:ar|نرى:ar|نرحل:ar
+ar	لو	لويس:ar|لوس:ar|لوك:ar
+-	I would لو	لويس:ar|لوس:ar|لوك:ar
+ar	لوي	لويس:ar|لويد:ar|لويز:ar
+-	I would لوي	لويس:ar|لويد:ar|لويز:ar
+ar	بي	بين:ar|بينما:ar|بيت:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الق	القيام:ar|القادمة:ar|القضية:ar
+-	I would الق	القيام:ar|القادمة:ar|القضية:ar
+ar	القص	القصة:ar|القصص:ar|القصر:ar
+-	I would القص	القصة:ar|القصص:ar|القصر:ar
+ar	أط	أطفال:ar|أطلب:ar|أطلق:ar
+ar	أطل	أطلب:ar|أطلق:ar|أطلقت:ar
+ar	أم	أمي:ar|أمر:ar|أمك:ar
+-	I would أم	أمي:ar|أمر:ar|أمك:ar
+ar	أمر	أمرا:ar|أمريكا:ar|أمرك:ar
+-	I would أمر	أمرا:ar|أمريكا:ar|أمرك:ar
+ar	أق	أقول:ar|أقصد:ar|أقوم:ar
+ar	أقس	أقسم:ar|أقسمت:ar|أقسى:ar
+ar	ما	ماذا:ar|مالذي:ar|مات:ar
+-	I would ما	ماذا:ar|مالذي:ar|مات:ar
+ar	ماك	ماكس:ar|ماكان:ar|ماكنت:ar
+-	I would ماك	ماكس:ar|ماكان:ar|ماكنت:ar
+ar	خط	خطأ:ar|خطر:ar|خطة:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الق	القيام:ar|القادمة:ar|القضية:ar
+-	I would الق	القيام:ar|القادمة:ar|القضية:ar
+ar	القا	القادمة:ar|القائد:ar|القانون:ar
+-	I would القا	القادمة:ar|القائد:ar|القانون:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الش	الشيء:ar|الشرطة:ar|الشخص:ar
+ar	الشا	الشارع:ar|الشاب:ar|الشاحنة:ar
+ar	ان	أنا:ar|أنت:ar|انا:ar
+-	I would ان	أنا:ar|أنت:ar|انا:ar
+ar	انت	انتظر:ar|انتهى:ar|انتظري:ar
+-	I would انت	انتظر:ar|انتهى:ar|انتظري:ar
+ar	رؤ	رؤية:ar|رؤيتك:ar|رؤيته:ar
+ar	رؤي	رؤية:ar|رؤيتك:ar|رؤيته:ar
+ar	رؤيت	رؤيتك:ar|رؤيته:ar|رؤيتها:ar
+ar	عا	عام:ar|عائلة:ar|عاما:ar
+-	I would عا	عام:ar|عائلة:ar|عاما:ar
+ar	عاد	عادة:ar|عادت:ar|عادي:ar
+-	I would عاد	عادة:ar|عادت:ar|عادي:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الك	الكثير:ar|الكبير:ar|الكلام:ar
+-	I would الك	الكثير:ar|الكبير:ar|الكلام:ar
+ar	الكت	الكتاب:ar|الكتب:ar|الكتابة:ar
+-	I would الكت	الكتاب:ar|الكتب:ar|الكتابة:ar
+ar	حي	حيث:ar|حياتي:ar|حين:ar
+ar	حيا	حياتي:ar|حياة:ar|حياتك:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الم	المكان:ar|المنزل:ar|المال:ar
+-	I would الم	المكان:ar|المنزل:ar|المال:ar
+ar	المع	المعلومات:ar|المعذرة:ar|المعركة:ar
+-	I would المع	المعلومات:ar|المعذرة:ar|المعركة:ar
+ar	سن	سنوات:ar|سنة:ar|سنذهب:ar
+ar	سنك	سنكون:ar|سنكتشف:ar|سنكمل:ar
+ar	سنكو	سنكون:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
 ar	الا	الآن:ar|الأمر:ar|الان:ar
+-	I would الا	الآن:ar|الأمر:ar|الان:ar
 ar	الاش	الأشياء:ar|الاشياء:ar|الأشخاص:ar
-ar	طب	طبعا:ar|طبيب:ar|طبيعي:ar
--	I would طب	طبعا:ar|طبيب:ar|طبيعي:ar
-ar	طبي	طبيب:ar|طبيعي:ar|طبيعية:ar
--	I would طبي	طبيب:ar|طبيعي:ar|طبيعية:ar
-ar	نف	نفسك:ar|نفس:ar|نفسي:ar
-ar	نفس	نفسك:ar|نفسي:ar|نفسه:ar
-ar	نفسه	نفسها:ar|نفسهم:ar
+-	I would الاش	الأشياء:ar|الاشياء:ar|الأشخاص:ar
+ar	أن	أنا:ar|أنت:ar|أنه:ar
+ar	أنت	أنتم:ar|أنتي:ar|أنتظر:ar
+ar	أنتظ	أنتظر:ar|أنتظري:ar|أنتظرك:ar
+ar	مم	مما:ar|ممكن:ar|ممتاز:ar
+-	I would مم	مما:ar|ممكن:ar|ممتاز:ar
+ar	ممت	ممتاز:ar|ممتعا:ar|ممتع:ar
+-	I would ممت	ممتاز:ar|ممتعا:ar|ممتع:ar
+ar	ممتا	ممتاز:ar|ممتازة:ar|ممتازا:ar
+-	I would ممتا	ممتاز:ar|ممتازة:ar|ممتازا:ar
+ar	أج	أجل:ar|أجد:ar|أجلك:ar
 ar	فأ	فأنا:ar|فأنت:ar|فأن:ar
 -	I would فأ	فأنا:ar|فأنت:ar|فأن:ar
 ar	فأن	فأنا:ar|فأنت:ar|فأنه:ar
 -	I would فأن	فأنا:ar|فأنت:ar|فأنه:ar
-ar	وا	واحد:ar|واحدة:ar|والآن:ar
-ar	وال	والآن:ar|والدك:ar|والدي:ar
-ar	والذ	والذي:ar|والذى:ar|والذين:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
--	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الط	الطريق:ar|الطريقة:ar|الطفل:ar
--	I would الط	الطريق:ar|الطريقة:ar|الطفل:ar
-ar	الطا	الطائرة:ar|الطابق:ar|الطاقة:ar
--	I would الطا	الطائرة:ar|الطابق:ar|الطاقة:ar
-ar	فل	فلا:ar|فلن:ar|فلم:ar
-ar	أع	أعرف:ar|أعتقد:ar|أعلم:ar
--	I would أع	أعرف:ar|أعتقد:ar|أعلم:ar
+ar	سا	ساعة:ar|سام:ar|ساعات:ar
+ar	سار	سارة:ar|ساره:ar|سأراك:ar
+ar	هر	هراء:ar|هرب:ar|هربت:ar
+-	I would هر	هراء:ar|هرب:ar|هربت:ar
+ar	هرا	هراء:ar|هرائك:ar|هراءات:ar
+-	I would هرا	هراء:ar|هرائك:ar|هراءات:ar
 ar	أو	أوه:ar|أولا:ar|أود:ar
 ar	أول	أولا:ar|أولئك:ar|أولاد:ar
 ar	أولئ	أولئك:ar
-ar	هر	هراء:ar|هرب:ar|هربت:ar
--	I would هر	هراء:ar|هرب:ar|هربت:ar
-ar	هرا	هراء:ar|هرائك:ar
--	I would هرا	هراء:ar|هرائك:ar
 ar	فع	فعل:ar|فعلت:ar|فعله:ar
+-	I would فع	فعل:ar|فعلت:ar|فعله:ar
 ar	فعل	فعلت:ar|فعله:ar|فعلا:ar
-ar	فعله	فعلها:ar|فعلهم:ar|فعلة:ar
-ar	هن	هنا:ar|هناك:ar|هنالك:ar
--	I would هن	هنا:ar|هناك:ar|هنالك:ar
-ar	هنر	هنري:ar|هنريك:ar
--	I would هنر	هنري:ar|هنريك:ar
-ar	حق	حقا:ar|حقيقي:ar|حقيقة:ar
-ar	حقي	حقيقي:ar|حقيقة:ar|حقيقية:ar
-ar	حقيق	حقيقي:ar|حقيقة:ar|حقيقية:ar
+-	I would فعل	فعلت:ar|فعله:ar|فعلا:ar
+ar	فعله	فعلها:ar|فعلهم:ar
+-	I would فعله	فعلها:ar|فعلهم:ar
 ar	صد	صديقي:ar|صديق:ar|صديقك:ar
--	I would صد	صديقي:ar|صديق:ar|صديقك:ar
 ar	صدي	صديقي:ar|صديق:ar|صديقك:ar
--	I would صدي	صديقي:ar|صديق:ar|صديقك:ar
 ar	صديق	صديقي:ar|صديقك:ar|صديقة:ar
--	I would صديق	صديقي:ar|صديقك:ar|صديقة:ar
-ar	اب	أبدا:ar|أبي:ar|ابدا:ar
-ar	ابن	ابني:ar|ابنتي:ar|ابنك:ar
-ar	مي	ميت:ar|ميلاد:ar|ميل:ar
--	I would مي	ميت:ar|ميلاد:ar|ميل:ar
-ar	ميل	ميلاد:ar|ميلر:ar|ميلادي:ar
--	I would ميل	ميلاد:ar|ميلر:ar|ميلادي:ar
-ar	ميلا	ميلاد:ar|ميلادي:ar|ميلادك:ar
--	I would ميلا	ميلاد:ar|ميلادي:ar|ميلادك:ar
-ar	وج	وجدت:ar|وجود:ar|وجه:ar
-ar	أج	أجل:ar|أجلك:ar|أجد:ar
--	I would أج	أجل:ar|أجلك:ar|أجد:ar
-ar	حو	حول:ar|حوالي:ar|حولك:ar
-ar	حوا	حوالي:ar|حوالى:ar|حوادث:ar
-ar	حوال	حوالي:ar|حوالى:ar
-ar	حا	حال:ar|حالك:ar|حالة:ar
--	I would حا	حال:ar|حالك:ar|حالة:ar
-ar	حاج	حاجة:ar|حاجز:ar|حاجتي:ar
--	I would حاج	حاجة:ar|حاجز:ar|حاجتي:ar
+ar	عم	عمل:ar|عما:ar|عملية:ar
+-	I would عم	عمل:ar|عما:ar|عملية:ar
+ar	عمل	عملية:ar|عملت:ar|عملي:ar
+-	I would عمل	عملية:ar|عملت:ar|عملي:ar
+ar	تم	تماما:ar|تمت:ar|تملك:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+-	I would ال	الذي:ar|الآن:ar|إلى:ar
+ar	الل	الليلة:ar|اللعنة:ar|الله:ar
+-	I would الل	الليلة:ar|اللعنة:ar|الله:ar
+ar	اللع	اللعنة:ar|اللعين:ar|اللعبة:ar
+-	I would اللع	اللعنة:ar|اللعين:ar|اللعبة:ar
+ar	أج	أجل:ar|أجد:ar|أجلك:ar
+ar	أجل	أجلك:ar|أجلي:ar|أجلس:ar
+ar	وإ	وإذا:ar|وإلا:ar|وإن:ar
+-	I would وإ	وإذا:ar|وإلا:ar|وإن:ar
+ar	وإذ	وإذا:ar|وإذهب:ar|وإذن:ar
+-	I would وإذ	وإذا:ar|وإذهب:ar|وإذن:ar
+ar	قل	قلت:ar|قليلا:ar|قليل:ar
+ar	قلي	قليلا:ar|قليل:ar|قليلة:ar
 ar	أن	أنا:ar|أنت:ar|أنه:ar
+-	I would أن	أنا:ar|أنت:ar|أنه:ar
 ar	أنت	أنتم:ar|أنتي:ar|أنتظر:ar
-ar	أنتم	أنتما:ar|أنتمي:ar
-ar	دل	دليل:ar|دليلا:ar|دلتا:ar
--	I would دل	دليل:ar|دليلا:ar|دلتا:ar
-ar	دلي	دليل:ar|دليلا:ar|دليلك:ar
--	I would دلي	دليل:ar|دليلا:ar|دليلك:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الق	القيام:ar|القادمة:ar|القضية:ar
-ar	القا	القادمة:ar|القائد:ar|القانون:ar
-ar	ول	ولكن:ar|ولا:ar|ولم:ar
--	I would ول	ولكن:ar|ولا:ar|ولم:ar
-ar	ولق	ولقد:ar|ولقتل:ar|ولقاء:ar
--	I would ولق	ولقد:ar|ولقتل:ar|ولقاء:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
-ar	الص	الصباح:ar|الصغير:ar|الصغيرة:ar
-ar	الصح	الصحيح:ar|الصحراء:ar|الصحافة:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
--	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الب	الباب:ar|البيت:ar|البعض:ar
--	I would الب	الباب:ar|البيت:ar|البعض:ar
-ar	البل	البلدة:ar|البلاد:ar|البلد:ar
--	I would البل	البلدة:ar|البلاد:ar|البلد:ar
-ar	أس	أستطيع:ar|أسمع:ar|أسرع:ar
-ar	أسف	أسفل:ar|أسفة:ar|أسفه:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
--	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الص	الصباح:ar|الصغير:ar|الصغيرة:ar
--	I would الص	الصباح:ar|الصغير:ar|الصغيرة:ar
-ar	الصو	الصورة:ar|الصور:ar|الصوت:ar
--	I would الصو	الصورة:ar|الصور:ar|الصوت:ar
-ar	تر	تريد:ar|تريدين:ar|ترى:ar
-ar	ترغ	ترغب:ar|ترغبين:ar|ترغبي:ar
-ar	ال	الذي:ar|الآن:ar|إلى:ar
--	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الخ	الخاص:ar|الخير:ar|الخاصة:ar
--	I would الخ	الخاص:ar|الخير:ar|الخاصة:ar
-ar	تز	تزال:ar|تزوجت:ar|تزداد:ar
-ar	تزا	تزال:ar|تزالين:ar|تزايد:ar
+-	I would أنت	أنتم:ar|أنتي:ar|أنتظر:ar
+ar	أنتم	أنتما:ar|أنتمي:ar|أنتمى:ar
+-	I would أنتم	أنتما:ar|أنتمي:ar|أنتمى:ar
+ar	كل	كلا:ar|كله:ar|كلمة:ar
+ar	كلم	كلمة:ar|كلما:ar|كلمات:ar
+ar	عم	عمل:ar|عما:ar|عملية:ar
+-	I would عم	عمل:ar|عما:ar|عملية:ar
+ar	عمل	عملية:ar|عملت:ar|عملي:ar
+-	I would عمل	عملية:ar|عملت:ar|عملي:ar
+ar	أط	أطفال:ar|أطلب:ar|أطلق:ar
+ar	أطل	أطلب:ar|أطلق:ar|أطلقت:ar
+ar	يم	يمكن:ar|يمكنك:ar|يمكنني:ar
+-	I would يم	يمكن:ar|يمكنك:ar|يمكنني:ar
+ar	يمو	يموت:ar|يموتون:ar|يموتوا:ar
+-	I would يمو	يموت:ar|يموتون:ar|يموتوا:ar
+ar	ست	ستكون:ar|ستة:ar|ستفعل:ar
+ar	ستع	ستعمل:ar|ستعود:ar|ستعرف:ar
+ar	ستعم	ستعمل:ar|ستعملين:ar|ستعملون:ar
+ar	تب	تبدو:ar|تبا:ar|تبقى:ar
+-	I would تب	تبدو:ar|تبا:ar|تبقى:ar
+ar	تبح	تبحث:ar|تبحثين:ar|تبحثون:ar
+-	I would تبح	تبحث:ar|تبحثين:ar|تبحثون:ar
+ar	عا	عام:ar|عائلة:ar|عاما:ar
 ar	يت	يتم:ar|يتحدث:ar|يتعلق:ar
 -	I would يت	يتم:ar|يتحدث:ar|يتعلق:ar
 ar	يتع	يتعلق:ar|يتعين:ar|يتعامل:ar
@@ -4107,57 +4118,69 @@ ar	يتعل	يتعلق:ar|يتعلم:ar|يتعلمون:ar
 -	I would يتعل	يتعلق:ar|يتعلم:ar|يتعلمون:ar
 ar	يج	يجب:ar|يجري:ar|يجعل:ar
 ar	يجع	يجعل:ar|يجعلك:ar|يجعلني:ar
-ar	تف	تفعل:ar|تفعله:ar|تفعلين:ar
--	I would تف	تفعل:ar|تفعله:ar|تفعلين:ar
-ar	تفع	تفعل:ar|تفعله:ar|تفعلين:ar
--	I would تفع	تفعل:ar|تفعله:ar|تفعلين:ar
-ar	تفعل	تفعله:ar|تفعلين:ar|تفعلي:ar
--	I would تفعل	تفعله:ar|تفعلين:ar|تفعلي:ar
-ar	عن	عندما:ar|عنه:ar|عند:ar
-ar	عند	عندما:ar|عندي:ar|عندك:ar
-ar	عنده	عندها:ar|عندهم:ar
-ar	دا	دائما:ar|داخل:ar|داني:ar
--	I would دا	دائما:ar|داخل:ar|داني:ar
-ar	دان	داني:ar|دانيال:ar|دانييل:ar
--	I would دان	داني:ar|دانيال:ar|دانييل:ar
-ar	يس	يستطيع:ar|يستحق:ar|يسمح:ar
-ar	يست	يستطيع:ar|يستحق:ar|يستخدم:ar
-ar	يستح	يستحق:ar|يستحسن:ar|يستحقون:ar
+ar	تز	تزال:ar|تزوجت:ar|تزداد:ar
+-	I would تز	تزال:ar|تزوجت:ar|تزداد:ar
+ar	تزا	تزال:ar|تزالين:ar|تزايد:ar
+-	I would تزا	تزال:ar|تزالين:ar|تزايد:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الخ	الخاص:ar|الخير:ar|الخاصة:ar
 ar	ال	الذي:ar|الآن:ar|إلى:ar
 -	I would ال	الذي:ar|الآن:ar|إلى:ar
-ar	الق	القيام:ar|القادمة:ar|القضية:ar
--	I would الق	القيام:ar|القادمة:ar|القضية:ar
-ar	القه	القهوة:ar|القهري:ar|ألقه:ar
--	I would القه	القهوة:ar|القهري:ar|ألقه:ar
+ar	الع	العمل:ar|العالم:ar|العودة:ar
+-	I would الع	العمل:ar|العالم:ar|العودة:ar
+ar	العر	العرض:ar|العربة:ar|العراق:ar
+-	I would العر	العرض:ar|العربة:ar|العراق:ar
+ar	ال	الذي:ar|الآن:ar|إلى:ar
+ar	الس	السيد:ar|السيارة:ar|السبب:ar
+ar	السف	السفينة:ar|السفر:ar|السفلي:ar
+ar	يس	يستطيع:ar|يستحق:ar|يسمح:ar
+-	I would يس	يستطيع:ar|يستحق:ar|يسمح:ar
+ar	يست	يستطيع:ar|يستحق:ar|يستخدم:ar
+-	I would يست	يستطيع:ar|يستحق:ar|يستخدم:ar
+ar	يستح	يستحق:ar|يستحسن:ar|يستحقون:ar
+-	I would يستح	يستحق:ar|يستحسن:ar|يستحقون:ar
+ar	تف	تفعل:ar|تفعله:ar|تفعلين:ar
+ar	تفع	تفعل:ar|تفعله:ar|تفعلين:ar
+ar	تفعل	تفعله:ar|تفعلين:ar|تفعلي:ar
+ar	عن	عندما:ar|عنه:ar|عند:ar
+-	I would عن	عندما:ar|عنه:ar|عند:ar
+ar	عند	عندما:ar|عندي:ar|عندك:ar
+-	I would عند	عندما:ar|عندي:ar|عندك:ar
+ar	عنده	عندها:ar|عندهم:ar
+-	I would عنده	عندها:ar|عندهم:ar
+ar	كل	كلا:ar|كله:ar|كلمة:ar
+ar	كلن	كلنا:ar|كلنذهب:ar|كلنفسك:ar
+ar	أن	أنا:ar|أنت:ar|أنه:ar
+-	I would أن	أنا:ar|أنت:ar|أنه:ar
+ar	أنن	أنني:ar|أننا:ar|أننى:ar
+-	I would أنن	أنني:ar|أننا:ar|أننى:ar
+ar	ور	وراء:ar|وربما:ar|ورقة:ar
+ar	ورا	وراء:ar|ورائي:ar|وراءه:ar
+ar	مع	معك:ar|معي:ar|معه:ar
+-	I would مع	معك:ar|معي:ar|معه:ar
+ar	معل	معلومات:ar|معلم:ar|معلومة:ar
+-	I would معل	معلومات:ar|معلم:ar|معلومة:ar
+ar	معلو	معلومات:ar|معلومة:ar|معلوماتك:ar
+-	I would معلو	معلومات:ar|معلومة:ar|معلوماتك:ar
 ar	اب	أبدا:ar|أبي:ar|ابدا:ar
-ar	مو	موعد:ar|موجود:ar|موقع:ar
--	I would مو	موعد:ar|موجود:ar|موقع:ar
-ar	موق	موقع:ar|موقف:ar|موقعك:ar
--	I would موق	موقع:ar|موقف:ar|موقعك:ar
-ar	عم	عمل:ar|عما:ar|عملية:ar
-ar	عمل	عملية:ar|عملت:ar|عملي:ar
-ar	شب	شباب:ar|شبكة:ar|شبح:ar
--	I would شب	شباب:ar|شبكة:ar|شبح:ar
-ar	شبا	شباب:ar|شبابي:ar|شباك:ar
--	I would شبا	شباب:ar|شبابي:ar|شباك:ar
-ar	حي	حيث:ar|حياتي:ar|حين:ar
-ar	حين	حينما:ar|حينها:ar|حينئذ:ar
-ar	حينه	حينها:ar
 ar	أم	أمي:ar|أمر:ar|أمك:ar
 -	I would أم	أمي:ar|أمر:ar|أمك:ar
 ar	أمل	أملك:ar|أملي:ar|أملكه:ar
 -	I would أمل	أملك:ar|أملي:ar|أملكه:ar
-ar	مر	مرحبا:ar|مرة:ar|مرات:ar
-ar	لل	للغاية:ar|للتو:ar|للمنزل:ar
--	I would لل	للغاية:ar|للتو:ar|للمنزل:ar
-ar	للح	للحصول:ar|للحظة:ar|للحياة:ar
--	I would للح	للحصول:ar|للحظة:ar|للحياة:ar
-ar	للحص	للحصلت:ar|للحصل:ar|للحصول:ar
--	I would للحص	للحصلت:ar|للحصل:ar|للحصول:ar
-ar	لأ	لأن:ar|لأنه:ar|لأنك:ar
-ar	لأن	لأنه:ar|لأنك:ar|لأنني:ar
-ar	لأنن	لأنني:ar|لأننا:ar|لأننى:ar
-ar	تج	تجد:ar|تجعل:ar|تجربة:ar
--	I would تج	تجد:ar|تجعل:ar|تجربة:ar
-ar	يد	يديك:ar|يدعى:ar|يدك:ar
-ar	يدي	يديك:ar|يدير:ar|يديه:ar
+ar	حي	حيث:ar|حياتي:ar|حين:ar
+ar	حين	حينما:ar|حينها:ar|حينئذ:ar
+ar	حينه	حينها:ar
+ar	تس	تستطيع:ar|تستطيعين:ar|تسمع:ar
+-	I would تس	تستطيع:ar|تستطيعين:ar|تسمع:ar
+ar	تست	تستطيع:ar|تستطيعين:ar|تستحق:ar
+-	I would تست	تستطيع:ar|تستطيعين:ar|تستحق:ar
+ar	تستط	تستطيع:ar|تستطيعين:ar|تستطع:ar
+-	I would تستط	تستطيع:ar|تستطيعين:ar|تستطع:ar
+ar	قا	قال:ar|قام:ar|قالت:ar
+ar	قات	قاتل:ar|قاتلة:ar|قاتلا:ar
+ar	شب	شباب:ar|شبكة:ar|شبح:ar
+-	I would شب	شباب:ar|شبكة:ar|شبح:ar
+ar	شبا	شباب:ar|شبابي:ar|شبان:ar
+-	I would شبا	شباب:ar|شبابي:ar|شبان:ar
+ar	ما	ماذا:ar|مالذي:ar|مات:ar
+ar	ماه	ماهو:ar|ماهذا:ar|ماهي:ar

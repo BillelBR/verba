@@ -72,6 +72,17 @@ struct Entry {
     count: u64,
 }
 
+/// How many words of a language's list the suggestions use (the most frequent ones, after the cleaning). English and Arabic have more than
+/// French: measured on real text (`examples/realtext_accuracy.rs`, docs/ACCURACY.md), a longer list finds more rare words (Arabic most),
+/// and the spelling correction does not change, because it keeps its dictionary of 50 000 lines (`WordList::spell_min_count`).
+pub const fn list_cap(lang: Lang) -> usize {
+    match lang {
+        Lang::En => 100_000,
+        Lang::Ar => 150_000,
+        _ => 50_000,
+    }
+}
+
 /// Words of one language, sorted by comparison key so that all the words starting the same way sit together.
 pub struct WordList {
     entries: Vec<Entry>,
@@ -79,6 +90,9 @@ pub struct WordList {
     total: f64,
     /// The lookup tables of the spelling correction, built the first time a correction is asked for (see `spell.rs`).
     spell: OnceLock<spell::Index>,
+    /// The spelling correction knows the words that are at least this frequent: the frequency of the 50 000th line of the file the list
+    /// was read from (0 for a list of 50 000 lines or less). A longer list serves the suggestions, not the spelling.
+    spell_min_count: u64,
 }
 
 impl WordList {
@@ -95,10 +109,16 @@ impl WordList {
     fn build(lang: Option<Lang>, text: &str, max_words: usize) -> Self {
         let mut counts: HashMap<String, u64> = HashMap::new();
         let (mut not_total, mut stems_total) = (0u64, 0u64);
+        let (mut lines_read, mut spell_min_count) = (0usize, 0u64);
         for line in text.lines() {
             let mut parts = line.split_whitespace();
             let (Some(raw), Some(count)) = (parts.next(), parts.next()) else { continue };
             let Ok(count) = count.parse::<u64>() else { continue };
+            // the lists are sorted by frequency: the line where the spelling dictionary of old ends gives the frequency it stops at
+            lines_read += 1;
+            if lines_read == spell::SPELL_WORDS {
+                spell_min_count = count;
+            }
             let word = match lang.map_or(Special::None, |l| special(l, raw)) {
                 Special::Drop => continue,
                 Special::NotContraction => {
@@ -130,7 +150,7 @@ impl WordList {
         let mut entries: Vec<Entry> =
             all.into_iter().map(|(word, count)| Entry { key: fold(&word), canonical: false, word, count }).collect();
         entries.sort_by(|a, b| a.key.cmp(&b.key).then_with(|| a.word.cmp(&b.word)));
-        let mut list = Self { entries, total: 1.0, spell: OnceLock::new() };
+        let mut list = Self { entries, total: 1.0, spell: OnceLock::new(), spell_min_count };
         list.finish();
         list
     }
@@ -233,9 +253,21 @@ impl WordList {
                 best.truncate(limit);
             }
         }
-        best.into_iter().map(|(e, score)| (e.word.as_str(), score)).collect()
+        let mut found: Vec<(&str, f64)> = best.into_iter().map(|(e, score)| (e.word.as_str(), score)).collect();
+        // The tail of a long list (the words beyond the 50 000 lines the lists used to have) is rare words, names and slips of the corpus.
+        // A word of the tail is offered when it is not far less frequent than the best word offered (`bobsledder` for `bobsl`), not to fill
+        // a place with `eitaro` after `either`.
+        if self.spell_min_count > 0 {
+            if let Some(top) = found.first().map(|f| f.1) {
+                found.retain(|(word, score)| *score >= top * TAIL_FLOOR || self.count_of(word) >= self.spell_min_count);
+            }
+        }
+        found
     }
 }
+
+/// How much less frequent than the best word offered a word of the tail of a long list may be and still be offered (see `complete`).
+const TAIL_FLOOR: f64 = 1.0 / 200.0;
 
 /// Arabic words carry the article and one-letter particles attached: `و` and, `ف` so, `ب` with, `ل` for, `ك` like,
 /// `ال` the, and their combinations (`وبال`, `لل` = `ل` + `ال`). Longest first.
@@ -281,12 +313,28 @@ impl LocalEngine {
     }
 
     /// Loads `en.txt`, `fr.txt` and `ar.txt` from a folder; a missing file only means that language is off.
+    /// Only the three word lists of a folder, each cut to its `max_words` most frequent words (after the cleaning), with the words that
+    /// belong to the other language taken out: no next-word table, no dictionary. For measuring what the size of a list does
+    /// (`examples/realtext_accuracy.rs`); the program itself uses `load_dir`.
+    pub fn load_lists(dir: &Path, max_words: usize) -> io::Result<Self> {
+        let mut engine = Self::new();
+        for lang in [Lang::En, Lang::Fr, Lang::Ar] {
+            match std::fs::read_to_string(dir.join(format!("{}.txt", lang.code()))) {
+                Ok(text) => engine.add(lang, WordList::parse_for(lang, &text, max_words)),
+                Err(e) if e.kind() == io::ErrorKind::NotFound => {}
+                Err(e) => return Err(e),
+            }
+        }
+        engine.remove_bleed();
+        Ok(engine)
+    }
+
     pub fn load_dir(dir: &Path) -> io::Result<Self> {
         let mut engine = Self::new();
         for lang in [Lang::En, Lang::Fr, Lang::Ar] {
             let path = dir.join(format!("{}.txt", lang.code()));
             match std::fs::read_to_string(&path) {
-                Ok(text) => engine.add(lang, WordList::parse_for(lang, &text, 50_000)),
+                Ok(text) => engine.add(lang, WordList::parse_for(lang, &text, list_cap(lang))),
                 Err(e) if e.kind() == io::ErrorKind::NotFound => {}
                 Err(e) => return Err(e),
             }

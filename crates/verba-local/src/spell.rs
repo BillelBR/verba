@@ -131,13 +131,23 @@ pub(crate) struct Index {
     alphabet: Vec<char>,
 }
 
+/// The length of the lists the spelling correction was made for: its dictionary is the first 50 000 lines of a list, as it always was. A
+/// list can be longer for the suggestions (the words beyond are rare words, names and slips of the corpus): such a word is no reason to
+/// leave a typo alone, and no fix to offer. See `WordList::spell_min_count`.
+pub(crate) const SPELL_WORDS: usize = 50_000;
+
 impl Index {
-    pub(crate) fn build(entries: &[Entry]) -> Self {
+    /// The tables of the entries that occur at least `min_count` times (all of them for 0). The ids stay the positions in `entries`, so
+    /// the rest of the code reads the entries as before.
+    pub(crate) fn build(entries: &[Entry], min_count: u64) -> Self {
         let mut words = HashMap::with_capacity(entries.len());
         let mut keys: HashMap<String, Vec<u32>> = HashMap::with_capacity(entries.len());
         let mut by_first: HashMap<char, Vec<u32>> = HashMap::new();
         let mut alphabet = BTreeSet::new();
         for (i, e) in entries.iter().enumerate() {
+            if e.count < min_count {
+                continue;
+            }
             words.insert(e.word.clone(), i as u32);
             keys.entry(e.key.clone()).or_default().push(i as u32);
             if let Some(c) = e.key.chars().next() {
@@ -159,7 +169,7 @@ impl Index {
 
 impl WordList {
     fn index(&self) -> &Index {
-        self.spell.get_or_init(|| Index::build(&self.entries))
+        self.spell.get_or_init(|| Index::build(&self.entries, self.spell_min_count))
     }
 }
 
@@ -688,5 +698,74 @@ mod tests {
         assert_eq!(d("abcdef", "abxxef"), Some(2));
         assert_eq!(d("abcdef", "xyzdef"), None);
         assert_eq!(d("abc", "abcdef"), None, "too different in length");
+    }
+}
+
+#[cfg(test)]
+mod tail_tests {
+    use super::*;
+
+    fn entry(word: &str, count: u64) -> Entry {
+        Entry { key: fold(word), canonical: true, word: word.to_string(), count }
+    }
+
+    #[test]
+    fn the_words_beyond_the_limit_are_not_known_to_the_spelling_but_keep_their_place() {
+        let entries = vec![entry("apple", 900), entry("banana", 50), entry("cherry", 800), entry("damson", 40), entry("elder", 700)];
+        // the words that occur at least 700 times: apple, cherry, elder
+        let idx = Index::build(&entries, 700);
+        assert!(idx.words.contains_key("apple") && idx.words.contains_key("cherry") && idx.words.contains_key("elder"));
+        assert!(!idx.words.contains_key("banana") && !idx.words.contains_key("damson"));
+        assert!(!idx.keys.contains_key(&fold("banana")), "a rare word is not a candidate either");
+        // the ids are the positions in the list, not in the index
+        assert_eq!(idx.words["cherry"], 2);
+        assert_eq!(idx.words["elder"], 4);
+        // every entry still has its rank
+        assert_eq!(idx.rank.len(), 5);
+        assert_eq!(idx.rank[0], 0);
+    }
+
+    /// A different word of six letters for every number (a consonant and a vowel in turn: nothing the cleaning of the lists would drop).
+    fn word_of(mut i: usize) -> String {
+        let (consonants, vowels) = (b"bcdfghjklmnpqrstvwxyz", b"aeiou");
+        let mut word = String::new();
+        for position in 0..6 {
+            if position % 2 == 0 {
+                word.push(consonants[i % 21] as char);
+                i /= 21;
+            } else {
+                word.push(vowels[i % 5] as char);
+                i /= 5;
+            }
+        }
+        word
+    }
+
+    #[test]
+    fn a_list_of_more_than_50000_lines_has_the_frequency_where_the_spelling_stops() {
+        // 50 004 lines, the frequency going down by one: the spelling stops at the frequency of line 50 000
+        let text: String = (0..50_004usize).map(|i| format!("{} {}
+", word_of(i), 1_000_000 - i)).collect();
+        let list = WordList::parse(&text, 60_000);
+        assert_eq!(list.entries.len(), 50_004, "the suggestions get every word");
+        assert_eq!(list.spell_min_count, 1_000_000 - 49_999);
+        let idx = list.index();
+        assert!(idx.words.contains_key(&word_of(49_999)) && !idx.words.contains_key(&word_of(50_000)));
+        // a list of 50 000 lines or less is used whole
+        let short: String = (0..100usize).map(|i| format!("{} {}
+", word_of(i), 1000 - i)).collect();
+        assert_eq!(WordList::parse(&short, 60_000).spell_min_count, 0);
+    }
+
+    #[test]
+    fn a_threshold_of_zero_keeps_every_word_and_ties_with_it_stay() {
+        let entries = vec![entry("apple", 900), entry("banana", 50), entry("cherry", 50), entry("damson", 40)];
+        let whole = Index::build(&entries, 0);
+        assert_eq!(whole.words.len(), 4);
+        // the threshold is the frequency of a word: those that tie with it stay
+        let two = Index::build(&entries, 50);
+        assert_eq!(two.words.len(), 3);
+        assert!(!two.words.contains_key("damson"));
+        assert_eq!(SPELL_WORDS, 50_000);
     }
 }

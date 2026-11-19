@@ -26,10 +26,25 @@ New-Item -ItemType Directory -Force $dir | Out-Null
 
 # hermitdave/FrequencyWords, 2018 lists built from OpenSubtitles. Code MIT, content CC-BY-SA-4.0.
 $base = "https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018"
+# How many lines of each list are kept (the most frequent ones). English and Arabic are longer than French: measured on real text, a longer
+# list finds more rare words (docs/ACCURACY.md, "Size of the lists"). The engine cuts each list again to `list_cap` (crates/verba-local/src/lib.rs).
+$keep = @{ en = 100000; fr = 50000; ar = 150000 }
+$utf8 = New-Object System.Text.UTF8Encoding($false)
 foreach ($lang in "en", "fr", "ar") {
     $out = Join-Path $dir "$lang.txt"
+    $n = $keep[$lang]
     Write-Host "downloading $lang ..."
-    Get-FileWithRetry "$base/$lang/${lang}_50k.txt" $out
+    if ($n -le 50000) {
+        # the 50k file of the project is exactly the size wanted
+        Get-FileWithRetry "$base/$lang/${lang}_50k.txt" $out
+    } else {
+        # the full list (millions of lines, sorted by frequency): only the first lines are kept
+        $full = Join-Path $dir "$lang.full.tmp"
+        Get-FileWithRetry "$base/$lang/${lang}_full.txt" $full
+        $top = Get-Content $full -Encoding UTF8 -TotalCount $n
+        [System.IO.File]::WriteAllLines($out, $top, $utf8)
+        Remove-Item $full -Force
+    }
     $lines = (Get-Content $out -Encoding UTF8 | Measure-Object -Line).Lines
     Write-Host "  $lang.txt: $lines words"
 }

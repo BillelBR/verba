@@ -7,14 +7,15 @@ The lists are **not stored in this repository**: `scripts/fetch-data.ps1` downlo
 
 | Language | File | Source | License of the list |
 |---|---|---|---|
-| English | `data/words/en.txt` | [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords), `content/2018/en/en_50k.txt` | CC-BY-SA-4.0 |
+| English | `data/words/en.txt` | [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords), `content/2018/en/en_full.txt`, the first **100 000** lines | CC-BY-SA-4.0 |
 | French | `data/words/fr.txt` | same project, `content/2018/fr/fr_50k.txt` | CC-BY-SA-4.0 |
-| Arabic | `data/words/ar.txt` | same project, `content/2018/ar/ar_50k.txt` | CC-BY-SA-4.0 |
+| Arabic | `data/words/ar.txt` | same project, `content/2018/ar/ar_full.txt`, the first **150 000** lines | CC-BY-SA-4.0 |
 | Algerian Darija in Latin letters, **built in** (seed) | `crates/verba-local/seed/dz-seed.txt` (embedded in the program) | written by the Verba authors, no corpus | PolyForm Noncommercial 1.0.0 (same as the code) |
 | Algerian Darija in Latin letters, **optional** | `data/words/dz.txt`, built by `scripts/fetch-dz.ps1` | [NArabizi treebank](https://universaldependencies.org/treebanks/qaf_arabizi/) (UD_Maghrebi_Arabic_French-Arabizi): the tokens labelled Algerian, counted | CC BY-SA 4.0 |
 | Algerian Darija in Arabic letters, **built in** (seed) | `crates/verba-local/seed/dz-ar-seed.txt` (embedded in the program) | written by the Verba authors, no corpus | PolyForm Noncommercial 1.0.0 (same as the code) |
 | Algerian Darija in Arabic letters, **optional** | `data/words/dz-ar.txt`, built by `scripts/fetch-dz-ar.ps1` | [Algerian Dialect](https://data.mendeley.com/datasets/zzwg3nnhsz/2), 45 000 YouTube comments from Algerian press channels (Benmounah and Boulesnane, Mendeley Data V2, doi 10.17632/zzwg3nnhsz.2): the words the Arabic list lacks, counted | CC BY 4.0 |
 
+- **Sizes.** English 100 000 lines, French 50 000, Arabic 150 000 (`scripts/fetch-data.ps1`; the engine cuts each list again to `list_cap` in `crates/verba-local/src/lib.rs`, after cleaning). They were 50 000 each before: measured on real text, a longer list finds more of the rare words, Arabic most (see [ACCURACY.md](ACCURACY.md#size-of-the-lists)). French was not measured and stays at 50 000. The spelling correction keeps its dictionary of the first 50 000 lines of any list (`WordList::spell_min_count`), so a longer list does not change it.
 - The project's code is MIT; its generated lists are CC-BY-SA-4.0 (checked on 2026-11-16 in its README).
 - The lists were built from OpenSubtitles (opus.nlpl.eu/OpenSubtitles2018.php): they are spoken, subtitle-style language.
 - **Attribution:** word frequency lists from hermitdave/FrequencyWords, CC-BY-SA-4.0.

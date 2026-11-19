@@ -1474,3 +1474,39 @@ Known weaknesses, measured:
 - **A text that is only symbols** (an Arabic word typed entirely on punctuation keys) has no letter: nothing is offered.
 - **Words of three letters typed right** (`cat`) have too little evidence to count as right, so a one-word selection of this kind is offered an Arabic reading (0.5 % of the one-word texts above).
 - Not measured: other keyboards than these three, the dead keys of the French layout, Arabic text with diacritics, text of several scripts mixed, the long texts in real apps (the typing over the selection).
+
+## Size of the lists
+
+Does a longer word list help the suggestions? Measured on real text, not on the lists' own words (the harness above uses those). Reproduce:
+
+```
+# the full lists (FrequencyWords _full.txt) cut to N lines, and the text
+cargo run --release -p verba-local --example realtext_accuracy -- --dir <folder with en.txt fr.txt ar.txt> --max-words N --lang ar --tsv <ara_sentences.tsv> [--typos --base-dir <folder>]
+```
+
+- **Text:** Tatoeba sentences (20 000 of the 2 million English ones, the 69 000 Arabic ones; short everyday sentences), and the introductions of random Wikipedia articles (1 351 English and 980 Arabic sentences; written, formal language; the sample is small because the site limited the requests).
+- **Method:** every word of 4 letters or more is typed letter by letter after the words before it (the last 48 characters, as the program sees them), 3 suggestions asked after each letter; names (a capital inside a sentence), words with an apostrophe, hyphen or digit, and other scripts are left out. Lists only (no next-word table), so nothing built from the same sentences flatters the numbers.
+
+| Text | List | Words the list has | Hit within 3 letters | Letters saved |
+|---|---|---|---|---|
+| Arabic, Tatoeba | 50 000 (44 401 after cleaning) | 82.2 % | 50.3 % | 28.6 % |
+| | 100 000 | 87.4 % | 51.1 % | 29.7 % |
+| | **150 000** | 90.2 % | 51.2 % | 30.0 % |
+| | 300 000 | 92.6 % | 51.4 % | 30.5 % |
+| Arabic, Wikipedia | 50 000 | 70.4 % | 31.4 % | 24.4 % |
+| | 100 000 | 79.9 % | 32.3 % | 26.3 % |
+| | **150 000** | 83.6 % | 32.5 % | 27.0 % |
+| | 300 000 | 87.9 % | 32.6 % | 27.9 % |
+| English, Tatoeba | 50 000 (46 257) | 98.2 % | 74.4 % | 45.7 % |
+| | **100 000** | 98.9 % | 74.4 % | 46.0 % |
+| | 300 000 | 99.2 % | 74.4 % | 46.2 % |
+| English, Wikipedia | 50 000 | 93.4 % | 47.8 % | 39.4 % |
+| | **100 000** | 95.7 % | 47.9 % | 40.5 % |
+| | 300 000 | 96.8 % | 47.9 % | 40.9 % |
+
+- **What a longer list gives:** more of the rare words, mostly after 4 letters; the hits within 2 and 3 letters hardly move (the frequent words win those places either way). Arabic gains most: +10 points of covered words on formal text at 100 000, +13 at 150 000, with 1.9 to 2.6 points of letters saved on formal text (1.1 to 1.4 on everyday sentences). English gains little: 1.1 points of letters saved on formal text at 100 000 and 0.3 on everyday sentences. **Shipped: English 100 000, Arabic 150 000, French 50 000 (not measured).** More than that gains less each time and costs more.
+- **Cost** (the three languages at the same size): memory 11 MB at 50 000, 21 MB at 100 000, 31 MB at 150 000, 59 MB at 300 000; loading 0.26 s, 0.5 s, 0.8 s, 1.7 s; one suggestion 6 to 25 µs at 50 000 and 10 to 160 µs at 100 000 to 150 000 (the old harness: p99 137 µs before, 674 µs after, worst 1.4 ms).
+- **The spelling correction is unchanged.** A longer list would hide more typos (a typo that is a rare word of the list is left alone: with the whole list, the share of typos that are a word went from 4.5 % to 10.3 % in Arabic and from 1.6 % to 5.3 % in English at 300 000). So the spelling keeps the dictionary it always had, the first 50 000 lines of the list (`WordList::spell_min_count`). On the same 8 240 Arabic and 7 810 English typos, the correction offered, the right word first and among three are the same to a tenth of a point at 50 000, 100 000, 150 000, 200 000 and 300 000.
+- **The tail does not fill places with junk.** A word beyond the first 50 000 lines is offered only when its frequency is at least 1/200 of the best word offered (`TAIL_FLOOR`): without it, `eit` offered `either`, `eitan`, `eitaro`. Values of 1/50, 1/200, 1/1000 and none give the same hit rates to 0.1 point; a strict 1/1 loses about one point in Arabic. With the floor, 16 of the 2 267 answers of the "answers as before" check (`golden_real.txt`) changed (0 in English alone, 11 in Arabic, 3 first suggestions), and the check was written again.
+- **The old harness** (3 000 commonest words of each list) gives the same numbers as before to a tenth of a point, except Arabic top-1 after 3 and 4 letters (+0.3 and +0.7).
+- **Not measured:** French; text written as messages or in Algerian Darija (the texts above are Tatoeba and Wikipedia); the effect on the next-word suggestions (their tables are separate: 10 467 Arabic pairs, 29 993 English); typos made by people (the ones above are made by a program: a letter left out, swapped, doubled or replaced).

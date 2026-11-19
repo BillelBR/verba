@@ -18,7 +18,7 @@ use windows::Win32::Graphics::Direct2D::{
 };
 use windows::Win32::Graphics::DirectWrite::{
     DWRITE_FACTORY_TYPE_SHARED, DWRITE_FONT_STRETCH_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_WEIGHT_NORMAL,
-    DWRITE_READING_DIRECTION_RIGHT_TO_LEFT, DWRITE_TEXT_METRICS, DWriteCreateFactory, IDWriteFactory, IDWriteTextLayout,
+    DWRITE_LINE_METRICS, DWRITE_READING_DIRECTION_RIGHT_TO_LEFT, DWRITE_TEXT_METRICS, DWriteCreateFactory, IDWriteFactory, IDWriteTextLayout,
 };
 use windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT_B8G8R8A8_UNORM;
 use windows::Win32::Graphics::Gdi::{
@@ -385,15 +385,43 @@ fn build_and_present(
         // a sentence (a translation of a whole selection) is wrapped in a card of a reasonable width, and the card grows downwards
         let max_text_w = ((work.right - work.left) as f32 * 0.5).min(520.0 * s);
         let mut row_h = item_h;
-        for sug in suggestions {
-            let (layout, mut tw, mut th) = text_layout(&sug.text, sug.lang.is_rtl(), font_px, false)?;
+        // the layout of one text in the card: wrapped when it is wider than the card, and with the number of lines it has (a text with line
+        // breaks has several even when none of them is wider than the card)
+        let fitted = |text: &str, rtl: bool| -> windows::core::Result<(IDWriteTextLayout, f32, f32, u32)> {
+            let (layout, mut tw, mut th) = text_layout(text, rtl, font_px, false)?;
             if tw > max_text_w {
                 layout.SetMaxWidth(max_text_w)?;
-                let mut m = DWRITE_TEXT_METRICS::default();
-                layout.GetMetrics(&mut m)?;
                 // the box keeps the full width: a right-to-left text is placed against the right edge of its box
                 tw = max_text_w;
+            }
+            let mut m = DWRITE_TEXT_METRICS::default();
+            layout.GetMetrics(&mut m)?;
+            if m.lineCount > 1 {
                 th = m.height;
+            }
+            Ok((layout, tw, th, m.lineCount))
+        };
+        // how many lines fit in half of the screen: more than that is cut for the preview (what is typed stays whole)
+        let max_lines = (((work.bottom - work.top) as f32 * 0.5 / (font_px * 1.4)).floor() as u32).max(4);
+        for sug in suggestions {
+            let rtl = sug.lang.is_rtl();
+            let (mut layout, mut tw, mut th, mut lines) = fitted(&sug.text, rtl)?;
+            if lines > max_lines {
+                let mut metrics = vec![DWRITE_LINE_METRICS::default(); lines as usize];
+                let mut count = 0u32;
+                layout.GetLineMetrics(Some(&mut metrics), &mut count)?;
+                let keep: usize = metrics.iter().take(max_lines as usize).map(|l| l.length as usize).sum();
+                let mut units: Vec<u16> = sug.text.encode_utf16().take(keep).collect();
+                // not in the middle of a surrogate pair, and no blank at the end before the ellipsis
+                if units.last().is_some_and(|u| (0xD800..0xDC00).contains(u)) {
+                    units.pop();
+                }
+                let mut cut = String::from_utf16_lossy(&units);
+                cut.truncate(cut.trim_end().len());
+                cut.push('\u{2026}');
+                (layout, tw, th, lines) = fitted(&cut, rtl)?;
+            }
+            if lines > 1 {
                 row_h = row_h.max(th + 14.0 * s);
             }
             let w = (tw + 2.0 * pad_x).max(40.0 * s);

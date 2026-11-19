@@ -33,6 +33,15 @@ Select a sentence (or a few lines, up to 1200 characters) in any app and press t
 
 It is Modern Standard Arabic, the Arabic of news and writing. **Algerian Darija is not understood**: the model writes words that do not exist. Check a translation before you send it; a translation program makes mistakes, especially with idioms and names.
 
+### Text typed with the wrong keyboard
+
+You wrote a long paragraph in Arabic and the keyboard was English (or French)? Select the text and press **Ctrl+Alt+K** (changeable in Settings > Translate). Verba works out which keyboard the keys were pressed on and shows the text as it should have been, above the selection: the arrows choose when there are two readings, **Tab** types the chosen one over the selection, **Esc** closes.
+
+- It uses the keyboards installed in Windows (Settings > Time & language > Language): at least two languages among English, French and Arabic. QWERTY, AZERTY, Arabic 101 or 102: each is read as Windows defines it.
+- It looks for the reading that is made of real words (the same word lists as the suggestions, plus the Darija words written in Arabic letters). If the text is right already, or no keyboard turns it into words, it says so and changes nothing.
+- Select the text first: with nothing selected it does nothing (it never selects a whole document by itself). Up to 6000 characters at a time.
+- Limits: a text that is half right and half wrong is not split; a letter made with a dead key (the French `^` then a vowel) is not traced back; the text is typed over the selection key by key, so a very long one takes a moment in some apps.
+
 ### "Windows protected your PC" (SmartScreen)
 
 The installer is **not code-signed yet** (a certificate costs money and the project is new), so Windows may warn that the publisher is unknown.

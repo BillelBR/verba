@@ -2,6 +2,7 @@
 
 pub mod apps;
 pub mod focus;
+pub mod layouts;
 pub mod look;
 pub mod overlay;
 pub mod splash;

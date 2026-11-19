@@ -179,6 +179,9 @@ impl Settings {
                 "key_translate" => {
                     s.keys.translate = Binding::parse(value).filter(|b| Binding::usable_hotkey(b.vk, b.mods)).unwrap_or(Keys::default().translate)
                 }
+                "key_fixkeys" => {
+                    s.keys.fixkeys = Binding::parse(value).filter(|b| Binding::usable_hotkey(b.vk, b.mods)).unwrap_or(Keys::default().fixkeys)
+                }
                 "translate_to" => {
                     s.translate_to = match value {
                         "fr" => Lang::Fr,
@@ -209,7 +212,7 @@ impl Settings {
         let flag = |b: bool| if b { "1" } else { "0" };
         let mode = if self.app_mode == AppMode::OnlyThese { "only" } else { "except" };
         format!(
-            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\ntranslate_to={}\nfollow_keyboard={}\napp_mode={mode}\napps={}\n",
+            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\nkey_fixkeys={}\ntranslate_to={}\nfollow_keyboard={}\napp_mode={mode}\napps={}\n",
             flag(self.english),
             flag(self.french),
             flag(self.arabic),
@@ -223,6 +226,7 @@ impl Settings {
             self.keys.get(Action::Next).render(),
             self.keys.get(Action::Close).render(),
             self.keys.translate.render(),
+            self.keys.fixkeys.render(),
             self.translate_to.code(),
             flag(self.follow_keyboard),
             self.apps.join(";")

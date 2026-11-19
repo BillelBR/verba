@@ -107,6 +107,23 @@ impl Locator {
 }
 
 impl Locator {
+    /// The text selected in the focused field, up to `max_chars` characters (a longer selection comes back cut: the caller compares the
+    /// length with its own limit). Unlike `pick`, a word before the caret is not taken instead: without a selection this is `None`.
+    /// Nothing is kept. Password fields are never read.
+    pub fn pick_selection(&self, max_chars: usize) -> Option<Picked> {
+        unsafe {
+            let el = self.uia.GetFocusedElement().ok()?;
+            if is_password(&el) {
+                return None;
+            }
+            let anchor = classic_caret().map(|rect| Anchor { rect, kind: AnchorKind::Caret }).or_else(|| uia_anchor(&el))?;
+            let text = uia_selection_up_to(&el, max_chars).or_else(|| classic_edit_selection(max_chars))?;
+            Some(Picked { text, anchor, layout: crate::apps::keyboard_lang(), app: crate::apps::foreground_app().unwrap_or_default(), selected: true })
+        }
+    }
+}
+
+impl Locator {
     /// A step-by-step account of reading the focused field, for finding out why a field cannot be read.
     /// It never contains the text itself, only which steps worked.
     pub fn diagnose(&self) -> String {
@@ -273,6 +290,11 @@ fn classic_edit_before_caret(max_chars: i32) -> Option<String> {
 
 /// The text selected in the field, through its text pattern (empty selection: `None`).
 unsafe fn uia_selection(el: &IUIAutomationElement) -> Option<String> {
+    unsafe { uia_selection_up_to(el, SELECTION_READ_MAX) }
+}
+
+/// The text selected in a modern field, at most `max` characters.
+unsafe fn uia_selection_up_to(el: &IUIAutomationElement, max: usize) -> Option<String> {
     unsafe {
         let tp = el.GetCurrentPatternAs::<IUIAutomationTextPattern>(UIA_TextPatternId).ok()?;
         let selection = tp.GetSelection().ok()?;
@@ -280,7 +302,7 @@ unsafe fn uia_selection(el: &IUIAutomationElement) -> Option<String> {
             return None;
         }
         let range = selection.GetElement(0).ok()?;
-        let text = range.GetText(SELECTION_READ_MAX as i32).ok()?.to_string();
+        let text = range.GetText(max as i32).ok()?.to_string();
         (!text.trim().is_empty()).then_some(text)
     }
 }

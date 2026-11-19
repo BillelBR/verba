@@ -109,9 +109,12 @@ pub struct Candidate {
     pub score: f64,
 }
 
-/// A result needs at least this share of real words, and must be clearly better than the text as it is.
+/// A result needs at least this share of real words, and must be clearly better than the text as it is: better by `MARGIN`, or
+/// (when most words of the text were right on both layouts, so there is little room left) leaving at most this part of the words
+/// that were not real words before.
 const MIN_SCORE: f64 = 0.34;
 const MARGIN: f64 = 0.2;
+const MOST_FIXED: f64 = 0.3;
 /// Text that no language recognises at all (under this share) is probably gibberish: then a weaker result is still worth offering.
 const UNRECOGNISED: f64 = 0.15;
 const WEAK_SCORE: f64 = 0.1;
@@ -156,7 +159,8 @@ pub fn candidates(text: &str, layouts: &[Layout], known: &dyn Fn(Lang, &str) -> 
     }
     // best first; on a tie the layout that comes first in the list (the order Windows gives is the user's own)
     all.sort_by(|a, b| b.score.partial_cmp(&a.score).unwrap_or(std::cmp::Ordering::Equal).then(a.from.cmp(&b.from)).then(a.to.cmp(&b.to)));
-    let strict: Vec<Candidate> = all.iter().filter(|c| c.score >= MIN_SCORE && c.score > as_typed + MARGIN).cloned().collect();
+    let clearly_better = |score: f64| score >= MIN_SCORE && score > as_typed && (score >= as_typed + MARGIN || 1.0 - score <= (1.0 - as_typed) * MOST_FIXED);
+    let strict: Vec<Candidate> = all.iter().filter(|c| clearly_better(c.score)).cloned().collect();
     let chosen = if !strict.is_empty() {
         strict
     } else if as_typed < UNRECOGNISED {
@@ -333,6 +337,18 @@ mod tests {
         let on_french = convert("quel elle", &azerty(), &qwerty());
         let found = candidates(&on_french, &layouts(), &known);
         assert!(found.iter().any(|c| c.text == "quel elle" && c.to == 1), "{found:?}");
+    }
+
+    #[test]
+    fn text_whose_words_mostly_survive_the_wrong_keyboard_is_still_put_right() {
+        // most keys are the same on both layouts: only `quick` changes (q is a on the French one), so 17 letters of 22 are real words as typed
+        let text = "the fox she he the fox quick";
+        let typed = convert(text, &qwerty(), &azerty());
+        assert_eq!(typed, "the fox she he the fox auick");
+        let found = candidates(&typed, &layouts(), &known);
+        assert_eq!(found.first().map(|c| c.text.as_str()), Some(text));
+        // one word that is not in the list is not a reason to change a text that is right
+        assert!(candidates("the fox she he the fox zzzzz", &layouts(), &known).is_empty());
     }
 
     #[test]

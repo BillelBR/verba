@@ -18,6 +18,7 @@ use std::time::{Duration, Instant, SystemTime};
 use std::sync::{Arc, Mutex};
 use std::sync::atomic::{AtomicBool, AtomicIsize, AtomicU32, AtomicUsize, Ordering};
 
+mod fixkeys;
 mod keys;
 mod learning;
 mod sentences;
@@ -65,6 +66,8 @@ const WM_TRANSLATE: u32 = WM_APP + 6;
 const WM_NOTICE_END: u32 = WM_APP + 7;
 /// A sentence translation is done (or failed): its result is waiting in `SENTENCE_DONE`.
 const WM_SENTENCE: u32 = WM_APP + 8;
+/// The reader thread read the selection to put right (typed with the wrong keyboard): it is waiting in `FIXKEYS_PICKED`.
+const WM_FIXKEYS: u32 = WM_APP + 9;
 /// wParam of `WM_ACCEPT` that means "the highlighted one" (a click sends the number of the candidate instead).
 const ACCEPT_HIGHLIGHTED: usize = usize::MAX;
 /// How often the worker thread looks at the app being typed in.
@@ -73,6 +76,7 @@ const HOTKEY_QUIT: i32 = 1;
 const HOTKEY_PAUSE: i32 = 2;
 const HOTKEY_APP: i32 = 3;
 const HOTKEY_TRANSLATE: i32 = 4;
+const HOTKEY_FIXKEYS: i32 = 5;
 const CMD_PAUSE: usize = 1001;
 const CMD_QUIT: usize = 1002;
 const CMD_APP: usize = 1003;
@@ -93,6 +97,12 @@ static PICKED: Mutex<Option<Option<Picked>>> = Mutex::new(None);
 static SENTENCE_DONE: Mutex<Option<(usize, Lang, Lang, Result<String, String>)>> = Mutex::new(None);
 /// The shortcut that is registered with Windows now.
 static TRANSLATE_KEY: Mutex<Option<Binding>> = Mutex::new(None);
+/// The wrong-keyboard shortcut was pressed: the reader thread should read the selection now.
+static FIXKEYS_REQUEST: AtomicBool = AtomicBool::new(false);
+/// What the reader thread read for it (outer `Some` = new, not yet taken; inner `None` = no readable selection).
+static FIXKEYS_PICKED: Mutex<Option<Option<Picked>>> = Mutex::new(None);
+/// The wrong-keyboard shortcut that is registered with Windows now.
+static FIXKEYS_KEY: Mutex<Option<Binding>> = Mutex::new(None);
 /// How many candidates the popup shows now.
 static POPUP_COUNT: AtomicUsize = AtomicUsize::new(0);
 /// The key (virtual key code) whose press the hook kept from the app, so that its release is kept too; 0 when none.
@@ -134,6 +144,8 @@ struct App {
     /// Set while the popup shows translations: how many characters before the caret to erase when one is chosen (0: the word was
     /// selected, typing replaces it).
     translating: Option<usize>,
+    /// While the popup shows readings of text typed on the wrong keyboard: the label of each (`EN to AR`), shown for the highlighted one.
+    pair_labels: Vec<String>,
     /// The program that translates sentences (started at the first one), and the number of the last request: an answer for an
     /// older one is dropped (the user pressed Esc, moved on, or asked again).
     sentences: Arc<sentences::Translator>,
@@ -211,7 +223,7 @@ fn main() {
 
         APP.with(|a| {
             *a.borrow_mut() =
-                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, last_check: Instant::now() });
+                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, pair_labels: Vec::new(), sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, last_check: Instant::now() });
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
@@ -221,6 +233,7 @@ fn main() {
         let _ = RegisterHotKey(Some(hwnd), HOTKEY_PAUSE, mods, 'V' as u32);
         let _ = RegisterHotKey(Some(hwnd), HOTKEY_APP, mods, 'A' as u32);
         with_app(|app| sync_translate_hotkey(hwnd, app.settings.keys.translate));
+        with_app(|app| sync_fixkeys_hotkey(hwnd, app.settings.keys.fixkeys));
 
         with_app(|app| app.overlay.set_click_target(hwnd, WM_ACCEPT));
         add_tray(hwnd);
@@ -324,6 +337,8 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
                 HOTKEY_APP => toggle_app(foreground_app()),
                 // the reader thread reads the word (UI Automation must not be called from this thread)
                 HOTKEY_TRANSLATE => TRANSLATE_REQUEST.store(true, Ordering::SeqCst),
+                // the same for the selection to put right
+                HOTKEY_FIXKEYS => FIXKEYS_REQUEST.store(true, Ordering::SeqCst),
                 _ => {}
             }
             LRESULT(0)
@@ -362,6 +377,13 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
             let picked = PICKED.lock().ok().and_then(|mut p| p.take());
             if let Some(picked) = picked {
                 with_app(|app| show_translation(app, picked));
+            }
+            LRESULT(0)
+        }
+        WM_FIXKEYS => {
+            let picked = FIXKEYS_PICKED.lock().ok().and_then(|mut p| p.take());
+            if let Some(picked) = picked {
+                with_app(|app| show_fixkeys(app, picked));
             }
             LRESULT(0)
         }
@@ -430,6 +452,7 @@ fn hide(app: &mut App) {
     app.fix = None;
     app.selected = 0;
     app.translating = None;
+    app.pair_labels.clear();
     app.notice = false;
     POPUP_COUNT.store(0, Ordering::SeqCst);
     POPUP_VISIBLE.store(false, Ordering::SeqCst);
@@ -474,6 +497,21 @@ fn spawn_reader() {
                 if controller != 0 {
                     unsafe {
                         let _ = PostMessageW(Some(HWND(controller as *mut _)), WM_TRANSLATE, WPARAM(0), LPARAM(0));
+                    }
+                }
+            }
+            // the wrong-keyboard shortcut was pressed: read the selected text now (never a word: the whole selection or nothing)
+            if FIXKEYS_REQUEST.swap(false, Ordering::SeqCst) {
+                let front = foreground_app();
+                let allowed = RULES.lock().ok().and_then(|r| r.as_ref().map(|st| st.allows_app(front.as_deref().unwrap_or("")))).unwrap_or(true);
+                let picked = if allowed { locator.pick_selection(fixkeys::READ_CAP) } else { None };
+                if let Ok(mut slot) = FIXKEYS_PICKED.lock() {
+                    *slot = Some(picked);
+                }
+                let controller = CONTROLLER.load(Ordering::SeqCst);
+                if controller != 0 {
+                    unsafe {
+                        let _ = PostMessageW(Some(HWND(controller as *mut _)), WM_FIXKEYS, WPARAM(0), LPARAM(0));
                     }
                 }
             }
@@ -706,6 +744,38 @@ fn show_sentence(app: &mut App, seq: usize, from: Lang, to: Lang, result: Result
     }
 }
 
+/// The wrong-keyboard shortcut was pressed: the reader thread read the selected text (or found none). The keys that gave the text are
+/// traced back, and the readings that are made of real words are offered; Tab types the highlighted one over the selection.
+fn show_fixkeys(app: &mut App, picked: Option<Picked>) {
+    let Some(picked) = picked else {
+        notice(app, None, "Select the text typed with the wrong keyboard first, then press the shortcut.");
+        return;
+    };
+    let anchor = Some(picked.anchor);
+    if picked.text.chars().count() > fixkeys::MAX_CHARS {
+        let text = format!("Select at most {} characters at a time.", fixkeys::MAX_CHARS);
+        notice(app, anchor, &text);
+        return;
+    }
+    match fixkeys::offer(&picked.text, &verba_win::layouts::installed(), &app.engine) {
+        fixkeys::Outcome::NeedTwoLanguages => {
+            notice(app, anchor, "Add the other keyboards in Windows (Settings, Time & language, Language), then try again.");
+        }
+        fixkeys::Outcome::NothingToFix => {
+            notice(app, anchor, "No other keyboard turns this text into words.");
+        }
+        fixkeys::Outcome::Found(readings) => {
+            app.fix = None;
+            app.typed_len = 0;
+            let list: Vec<Suggestion> = readings.iter().map(|r| Suggestion { text: r.text.clone(), lang: r.lang }).collect();
+            present(app, picked.anchor, list, readings.first().map(|r| r.label.clone()));
+            // present() ran with the old state: this popup is readings of the selection, and typing replaces it
+            app.pair_labels = readings.into_iter().map(|r| r.label).collect();
+            app.translating = Some(0);
+        }
+    }
+}
+
 /// A short message in the popup's style, that goes away by itself after a moment (it is not a list to choose from: no key cap,
 /// and the keys of the popup are not taken).
 fn notice(app: &mut App, anchor: Option<Anchor>, text: &str) {
@@ -772,6 +842,7 @@ fn present(app: &mut App, anchor: Anchor, list: Vec<Suggestion>, lead: Option<St
     app.selected = app.selected.min(list.len().saturating_sub(1));
     app.anchor = Some(anchor);
     app.lead = lead;
+    app.pair_labels.clear();
     app.notice = false;
     app.shown = list;
     redraw(app);
@@ -785,7 +856,9 @@ fn redraw(app: &mut App) {
     let k = app.settings.keys;
     let hint = if app.shown.len() >= 2 { format!("{} {}  {}", k.prev.label(), k.next.label(), k.accept.label()) } else { k.accept.label() };
     app.overlay.set_hint(&hint);
-    app.overlay.show_with(anchor, &app.shown, app.selected, look_for(&app.settings), app.lead.as_deref());
+    // readings of text typed on the wrong keyboard each have their own label; the other lists have one for all
+    let lead = app.pair_labels.get(app.selected).map(String::as_str).or(app.lead.as_deref());
+    app.overlay.show_with(anchor, &app.shown, app.selected, look_for(&app.settings), lead);
 }
 
 /// The "left" or "right" key (-1 or +1): highlight the candidate on that side, round the end. In an Arabic popup the first
@@ -929,6 +1002,7 @@ pub(crate) fn update_settings(change: impl FnOnce(&mut Settings)) {
         PAUSED.store(app.settings.paused, Ordering::SeqCst);
         share_keys(&app.settings.keys);
         sync_translate_hotkey(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _), app.settings.keys.translate);
+        sync_fixkeys_hotkey(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _), app.settings.keys.fixkeys);
         if !app.settings.learn {
             app.learn_buf.clear();
             app.learn_words = 0;
@@ -946,12 +1020,21 @@ pub(crate) fn update_settings(change: impl FnOnce(&mut Settings)) {
 
 /// Registers the translate shortcut with Windows (and drops the old one when the user changed it).
 fn sync_translate_hotkey(hwnd: HWND, binding: Binding) {
-    let Ok(mut current) = TRANSLATE_KEY.lock() else { return };
+    sync_hotkey(hwnd, HOTKEY_TRANSLATE, &TRANSLATE_KEY, binding, "translate");
+}
+
+/// The same for the shortcut that puts right text typed with the wrong keyboard.
+fn sync_fixkeys_hotkey(hwnd: HWND, binding: Binding) {
+    sync_hotkey(hwnd, HOTKEY_FIXKEYS, &FIXKEYS_KEY, binding, "wrong keyboard");
+}
+
+fn sync_hotkey(hwnd: HWND, id: i32, current: &Mutex<Option<Binding>>, binding: Binding, what: &str) {
+    let Ok(mut current) = current.lock() else { return };
     if *current == Some(binding) || hwnd.is_invalid() {
         return;
     }
     unsafe {
-        let _ = UnregisterHotKey(Some(hwnd), HOTKEY_TRANSLATE);
+        let _ = UnregisterHotKey(Some(hwnd), id);
         let mut mods = MOD_NOREPEAT;
         if binding.mods & keys::MOD_CTRL != 0 {
             mods |= MOD_CONTROL;
@@ -962,8 +1045,8 @@ fn sync_translate_hotkey(hwnd: HWND, binding: Binding) {
         if binding.mods & keys::MOD_SHIFT != 0 {
             mods |= MOD_SHIFT;
         }
-        if RegisterHotKey(Some(hwnd), HOTKEY_TRANSLATE, mods, binding.vk).is_err() {
-            log("could not register the translate shortcut (another program uses it): choose another in Settings > Translate");
+        if RegisterHotKey(Some(hwnd), id, mods, binding.vk).is_err() {
+            log(&format!("could not register the {what} shortcut (another program uses it): choose another in the settings"));
         }
     }
     *current = Some(binding);

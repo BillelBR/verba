@@ -120,6 +120,8 @@ pub struct Keys {
     pub close: Binding,
     /// The shortcut that translates the selected word, in every app (not only while the popup is open).
     pub translate: Binding,
+    /// The shortcut that puts right the selected text typed with the wrong keyboard layout, in every app.
+    pub fixkeys: Binding,
 }
 
 /// Tab picks, the left and right arrows move, Esc closes.
@@ -129,6 +131,7 @@ pub const DEFAULT_KEYS: Keys = Keys {
     next: Binding::new(VK_RIGHT, 0),
     close: Binding::new(VK_ESCAPE, 0),
     translate: Binding::new(0x54, MOD_CTRL | MOD_ALT), // Ctrl+Alt+T
+    fixkeys: Binding::new(0x4B, MOD_CTRL | MOD_ALT),   // Ctrl+Alt+K (K for keyboard)
 };
 
 impl Default for Keys {
@@ -231,6 +234,13 @@ mod tests {
                 assert_ne!(a, b);
             }
         }
+    }
+
+    #[test]
+    fn the_wrong_keyboard_shortcut_is_not_the_translate_shortcut() {
+        assert_eq!(Keys::default().fixkeys.label(), "Ctrl+Alt+K");
+        assert_ne!(Keys::default().fixkeys, Keys::default().translate);
+        assert!(Binding::usable_hotkey(Keys::default().fixkeys.vk, Keys::default().fixkeys.mods));
     }
 
     #[test]

@@ -5,12 +5,14 @@
 Verba helps you write anywhere: it suggests the next word as you type, in a small popup above the text, and (next) fixes mistakes on the spot.
 It is built to work for every major language, to run fully on your own device, and to cost nothing.
 
-## The two features
+## The features
 
 1. **Suggestions** – while you type, Verba offers the word you are likely to write. *(working, v0)*
 2. **Instant correction** – when you finish a word that looks misspelled (you type a space or punctuation), a small **Fix** popup offers the right spelling; **Tab** applies it and keeps your space or punctuation. It is **off by default**: turn it on in Settings. It never changes your text by itself.
 
 3. **Word translation** – select a word (or put the cursor after it) and press **Ctrl+Alt+T**: its translations between English, French and Arabic appear above it; the arrows choose, **Tab** puts one in place. It works offline from a dictionary built from Wiktionary (CC BY-SA 4.0). **Sentences** work too, between Arabic and English: select a sentence or a short text (up to 1200 characters) and press the same shortcut; the translation appears above it and **Tab** types it over the selection, with the line breaks kept. Translation models (OPUS-MT, int8: a big one of 245 MB for Arabic into English, a base one of 78 MB for English into Arabic) runs on your PC, offline, in a separate program (`verba-translate.exe`) that starts at the first sentence and ends itself after ten minutes without work. Modern Standard Arabic is translated well; Algerian Darija is **not** (the model invents words), see [docs/ACCURACY.md](docs/ACCURACY.md#sentence-translation-arabic--english). Game and chat abbreviations (`gg`, `gn`, `brb`, `afk`, `see u`, `ez`, `wp`, `noob`, PUBG's `wwcd` and about 160 more) are explained in English, French and Arabic, and written out inside a sentence before it is translated (`gn guys` becomes "Good night guys"; in an Arabic sentence `gg يا شباب` becomes "Good game, guys"). Spoken Arabic (Algerian Darija and the commonest Levantine, Gulf and Egyptian words, about 240 spellings) is made standard before a sentence goes from Arabic to English, so that "نتا فين راك دروك؟" gives "Hey, where are you now?" instead of "Nata Vin Rack Drake?". Both lists are written from general knowledge and not reviewed by a native speaker or a player yet. Algerian Darija is translated only for its commonest words, in Arabic and in Latin letters (a small glossary, not checked by an Algerian yet).
+
+4. **Wrong keyboard** – typed a whole paragraph in Arabic while the keyboard was English (it comes out as `lkhvh`)? Select it and press **Ctrl+Alt+K**: Verba finds which keyboard the text came from and offers it back as it should have been written; **Tab** types it over the selection. It traces every character back to the **key** that gave it, using the keyboards installed in Windows (English, French and Arabic, whatever their variant: QWERTY, AZERTY…), then keeps the reading that is made of real words of the word lists. Nothing to set up, nothing sent anywhere; the selected text is read only when you press the shortcut.
 
 ## Try it (Windows)
 

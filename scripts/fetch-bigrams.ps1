@@ -40,6 +40,28 @@ New-Item -ItemType Directory -Force $src | Out-Null
 # the Tatoeba code of each language (Arabic is `ara`, a single macro-language export)
 $codes = @{ en = "eng"; fr = "fra"; ar = "ara" }
 
+# A second, much bigger corpus for a language whose Tatoeba corpus is small and made of everyday sentences: the sentences of its Wikipedia, as
+# collected by the Leipzig Corpora Collection (100 000 sentences, about 1.5 million words, text under CC BY-SA 4.0). The Tatoeba sentences count
+# `weight` times each, so that the everyday phrases are not drowned: measured in docs/ACCURACY.md (Arabic next-word prediction).
+$extra = @{ ar = @{ name = "ara_wikipedia_2021_100K"; weight = 6 } }
+
+# Takes one file out of a .tar.gz (Python 3, else tar, which Windows 10 and the GitHub runners have).
+function Expand-TarMember($tgz, $member, $to) {
+    $python = Get-Command python -ErrorAction SilentlyContinue
+    if (-not $python) { $python = Get-Command py -ErrorAction SilentlyContinue }
+    if ($python) {
+        & $python.Source -I -c "import shutil, sys, tarfile; t = tarfile.open(sys.argv[1]); shutil.copyfileobj(t.extractfile(sys.argv[2]), open(sys.argv[3], 'wb'))" $tgz $member $to
+        if ($LASTEXITCODE -ne 0) { throw "python could not unpack $member from $tgz" }
+    } else {
+        $tmp = Join-Path (Split-Path -Parent $to) "untar.tmp"
+        New-Item -ItemType Directory -Force $tmp | Out-Null
+        & tar -xzf $tgz -C $tmp $member
+        if ($LASTEXITCODE -ne 0) { throw "tar could not unpack $member from $tgz" }
+        Move-Item (Join-Path $tmp $member) $to -Force
+        Remove-Item $tmp -Recurse -Force
+    }
+}
+
 function Expand-Bzip2($from, $to) {
     $python = Get-Command python -ErrorAction SilentlyContinue
     if (-not $python) { $python = Get-Command py -ErrorAction SilentlyContinue }
@@ -71,14 +93,27 @@ foreach ($l in $Lang) {
     Write-Host "unpacking ..."
     Expand-Bzip2 $bz $tsv
     Remove-Item $bz
+    $tsvArgs = @("--tsv", $tsv)
+    $more = $null
+    if ($extra.ContainsKey($l)) {
+        $name = $extra[$l].name
+        $tgz = Join-Path $src "$name.tar.gz"
+        $more = Join-Path $src "$name-sentences.txt"
+        Write-Host "downloading the Wikipedia sentences ($name) ..."
+        Get-FileWithRetry "https://downloads.wortschatz-leipzig.de/corpora/$name.tar.gz" $tgz
+        Expand-TarMember $tgz "$name/$name-sentences.txt" $more
+        Remove-Item $tgz
+        # the Tatoeba sentences count `weight` times each
+        $tsvArgs = @("--tsv", "$tsv@$($extra[$l].weight)", "--tsv", $more)
+    }
     Write-Host "building $l.bigrams.txt ..."
     Push-Location $root
     try {
-        cargo run --release -q -p verba-local --example build_bigrams -- --lang $l --tsv $tsv --out (Join-Path $dir "$l.bigrams.txt")
+        cargo run --release -q -p verba-local --example build_bigrams -- --lang $l @tsvArgs --out (Join-Path $dir "$l.bigrams.txt")
         if ($LASTEXITCODE -ne 0) { throw "build_bigrams failed for $l" }
     } finally {
         Pop-Location
     }
-    if ($Clean) { Remove-Item $tsv }
+    if ($Clean) { Remove-Item $tsv; if ($more) { Remove-Item $more } }
 }
 Write-Host "done: $dir"

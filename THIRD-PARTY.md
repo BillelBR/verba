@@ -32,6 +32,7 @@ See [docs/DATA.md](docs/DATA.md).
 | What | License |
 |---|---|
 | Next-word counts (English, French, Arabic) built by `scripts/fetch-bigrams.ps1` from sentences of [Tatoeba](https://tatoeba.org), (c) Tatoeba contributors | **CC BY 2.0 FR** (attribution) |
+| Next-word counts (Arabic) also built from 100 000 sentences of Arabic [Wikipedia](https://www.wikipedia.org), (c) Wikipedia contributors, as collected by the [Leipzig Corpora Collection](https://wortschatz.uni-leipzig.de) | **CC BY-SA 4.0** (attribution, share alike); counts only, no sentence is stored. See docs/DATA.md for the open license point about the collection |
 
 The tables hold counts only, no sentence. They are not part of the source repository. A copy of a table must keep the attribution above.
 See [docs/DATA.md](docs/DATA.md).

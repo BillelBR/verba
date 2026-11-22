@@ -1523,3 +1523,28 @@ cargo run --release -p verba-local --example seed_coverage -- --show 500
 - **Wiktionary's data has real noise in the first translation of common words**, found by reading the disagreements: `قروض` die; gnaw; loan, `كوارث` heir; successor, `لولا` Lula, `قرآن` conjunction; century, `بنى` brown, `سلطات` salad, `أسنان` mold; sharpen, `علوم` know. About 80 of them were put right in `dict-fixes.txt` (the corrected word goes in front; the rest stays). The lines whose first translation is none of the written ones went from 231 to 188, and the lines that share nothing from 206 to 177.
 - **The suggestions gain almost nothing:** the Arabic list (150 000 lines) already had all but **16 of the 1 308 one-word headwords (1.2 %)**. Measured on the same real Arabic text as above (Tatoeba, Wikipedia): the same 30.0 % and 27.0 % of letters saved with and without them. The words written here are not where the Arabic list is short: it is short of rare words (see the sizes above).
 - **Not measured:** that the 1 392 lines are right (they were written, not verified by a native speaker, and the dictionary's rare senses are not all wrong: a line that agrees with the dictionary only confirms one sense); the effect on a sentence (the sentence translator is a neural model and does not read the dictionary).
+
+## Arabic next-word with Wikipedia text
+
+The next-word table of Arabic was built from Tatoeba only (69 000 short everyday sentences, 0.3 million words). Measured on sentences it was NOT built from, with the tool of the next-word section (`--train` can be given several files, `file@6` counts each sentence of a file 6 times, `--eval` names the file whose held-out sentences are the questions):
+
+```
+cargo run --release -p verba-local --example nextword_accuracy -- --lang ar --train ara_sentences.tsv@6 --train ara_wikipedia_100K.tsv --eval ara_wikipedia_100K.tsv
+```
+
+The questions come from three kinds of text: **Wikipedia** (written Modern Standard Arabic: 2 504 held-out sentences, 33 017 positions, near copies of the training part dropped), **Tatoeba** (1 773 sentences, 5 383 positions) and **everyday messages written by hand** (217 positions, the set the tool always uses). "Top-3" is the share of positions where the next word is among the 3 offered, counting a position where nothing is offered as a miss.
+
+| The table is built from | Wikipedia top-1 / top-3 | Tatoeba top-1 / top-3 | Everyday top-1 / top-3 |
+|---|---|---|---|
+| nothing (always the 3 commonest words of the training text) | 4.1 % / 8.4 % (Tatoeba's) and 4.1 % / 9.0 % (Tatoeba's and Wikipedia's) | 3.0 % / 7.0 % | |
+| **Tatoeba (what was shipped until 0.10.5)** | **3.4 % / 5.2 %** | 9.2 % / 14.8 % | 18.0 % / 29.0 % |
+| Wikipedia alone | 7.1 % / 10.7 % | | 8.8 % / 12.4 % |
+| Tatoeba x1 + Wikipedia | 7.3 % / 11.1 % | 7.8 % / 12.8 % | 13.8 % / 23.0 % |
+| Tatoeba x3 + Wikipedia | 7.3 % / 11.1 % | 9.2 % / 14.6 % | 17.1 % / 27.2 % |
+| **Tatoeba x6 + Wikipedia (shipped from 0.10.6)** | **6.9 % / 10.7 %** | **9.7 % / 15.4 %** | **18.0 % / 28.6 %** |
+| Tatoeba x12 + Wikipedia | 6.6 % / 10.2 % | 9.9 % / 15.7 % | 18.9 % / 30.4 % |
+
+- **The Tatoeba table did not suit written Arabic:** on Wikipedia sentences it was worse than the dumb rule (5.2 % against 8.4 % for the 3 commonest words of the same Tatoeba text). With Wikipedia text added the right word is among the 3 offered 10.7 % of the time: twice as often.
+- **Without a weight, Wikipedia drowns the everyday phrases** (everyday 29.0 % down to 23.0 %): its 1.5 million words outweigh the 0.3 million of Tatoeba. Counting each Tatoeba sentence 6 times keeps the everyday and Tatoeba numbers where they were (28.6 % against 29.0 %, 15.4 % against 14.8 %) and keeps nearly all of the gain on Wikipedia (10.7 % of 11.1 %). 6 was chosen from the sweep above (1, 3, 6, 12); 12 gives a little more everyday and a little less Wikipedia.
+- **Cost:** the table goes from 534 KB (10 446 contexts) to 1 433 KB (22 663 contexts), as big as the English one. Memory and load time of this table were not measured (the 889 KB table of the 1 + 1 experiment took 2.75 MB and 11 ms to load).
+- **Limits:** the Wikipedia questions are encyclopedic text, not letters or chat; the weights were chosen on the same three sets they are reported on (no fourth set was kept apart); French and English are unchanged; the license of the Leipzig collection is an open point (DATA.md).

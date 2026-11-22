@@ -31,7 +31,8 @@ Used by `LocalEngine::next_words`: after a finished word and a space, the words 
 |---|---|---|---|
 | English | `eng`, about 2.0 million sentences, 15.7 million words | [Tatoeba](https://tatoeba.org) per-language export `https://downloads.tatoeba.org/exports/per_language/eng/eng_sentences.tsv.bz2` | CC BY 2.0 FR |
 | French | `fra`, about 730 000 sentences, 5.2 million words | same, `.../fra/fra_sentences.tsv.bz2` | CC BY 2.0 FR |
-| Arabic | `ara`, about 69 000 sentences, 0.3 million words | same, `.../ara/ara_sentences.tsv.bz2` | CC BY 2.0 FR |
+| Arabic | `ara`, about 69 000 sentences, 0.3 million words, each counted **6 times** | same, `.../ara/ara_sentences.tsv.bz2` | CC BY 2.0 FR |
+| Arabic, second corpus | 100 000 sentences of Arabic Wikipedia (about 1.5 million words), counted once | [Leipzig Corpora Collection](https://wortschatz.uni-leipzig.de), `https://downloads.wortschatz-leipzig.de/corpora/ara_wikipedia_2021_100K.tar.gz` (its `-sources.txt` names the Wikipedia article of every sentence) | text: CC BY-SA 4.0 (Wikipedia); see the license point below |
 
 - **License, checked on 2026-11-16** on tatoeba.org (terms of use and downloads page): "These files are released under CC BY 2.0 FR."
   ([Creative Commons Attribution 2.0 France](https://creativecommons.org/licenses/by/2.0/fr/)); "A part of our sentences are also available
@@ -47,6 +48,8 @@ Used by `LocalEngine::next_words`: after a finished word and a space, the words 
 - **Words that are a trait of the corpus are never predicted.** Tatoeba is full of the names `Tom` and `Mary`; a word that is at least 8
   times more frequent in the sentences than in the subtitle list is left out (English and French also leave out words the subtitle list does not
   hold). It is the only use of the subtitle lists here.
+- **Wikipedia for Arabic (added in 0.10.6).** The Tatoeba table was good at everyday sentences and useless for written Modern Standard Arabic: on held-out Wikipedia sentences it got the next word among its 3 right 5.2 % of the time, less than always offering the 3 commonest words (8.4 %). A second corpus fixes that (numbers in [ACCURACY.md](ACCURACY.md#arabic-next-word-with-wikipedia-text)); the Tatoeba sentences count 6 times each so that the everyday phrases are not drowned (`scripts/fetch-bigrams.ps1`, `build_bigrams --tsv file@6`).
+  **License point, to be settled by the owner:** the text is Wikipedia's, under CC BY-SA 4.0 (the Wikimedia Terms of Use, quoted in the dictionary section below), and the generated table keeps that attribution in its header and in `THIRD-PARTY.md`; it holds counts only, never a sentence. The sentences are taken from the Leipzig Corpora Collection, whose own terms of use could not be read (its site is a page built by JavaScript): a web search reported CC BY for its text corpora and CC BY-NC for the project's data in general (this file said so on 2026-11-16, and the Leipzig corpora were left out for that reason). The `-sources.txt` of the corpus names the Wikipedia article of every sentence, so the text could be fetched from Wikipedia itself instead (its dump is 2.2 GB); that is the way out if the Leipzig terms turn out to forbid commercial use.
 - **Why Tatoeba.** Candidates checked on the same day: the Leipzig Corpora Collection (a web search of its Terms of Usage reports CC BY for the text corpora but
   CC BY-NC for the project's data in general; the site itself sits behind a bot check and could not be read, the same open point as for the Arabic word
   list, see ACCURACY.md, so it is not used); Common Voice sentences (CC0, but contributors report very few Arabic sentences; not examined further);

@@ -415,25 +415,33 @@ impl NextBuilder {
 
     /// Adds one sentence. A sentence that was added before (same words, any capitals) is skipped. Returns whether it was new.
     pub fn add_sentence(&mut self, text: &str) -> bool {
+        self.add_sentence_times(text, 1)
+    }
+
+    /// Adds one sentence as if it had been seen `times` times: a corpus of everyday sentences can weigh more than a bigger corpus of another
+    /// kind of text. A sentence that was added before is skipped. Returns whether it was new.
+    pub fn add_sentence_times(&mut self, text: &str, times: usize) -> bool {
         if !self.seen.insert(hash64(&text.trim().to_lowercase())) {
             return false;
         }
         for run in runs(text, self.rules) {
-            for w in run {
-                let id = match self.ids.get(&w) {
-                    Some(id) => *id,
-                    None => {
-                        let id = self.words.len() as u32;
-                        self.ids.insert(w.clone(), id);
-                        self.words.push(w);
-                        self.counts.push(0);
-                        id
-                    }
-                };
-                self.counts[id as usize] += 1;
-                self.flat.push(id);
+            for _ in 0..times.max(1) {
+                for w in &run {
+                    let id = match self.ids.get(w) {
+                        Some(id) => *id,
+                        None => {
+                            let id = self.words.len() as u32;
+                            self.ids.insert(w.clone(), id);
+                            self.words.push(w.clone());
+                            self.counts.push(0);
+                            id
+                        }
+                    };
+                    self.counts[id as usize] += 1;
+                    self.flat.push(id);
+                }
+                self.flat.push(BREAK);
             }
-            self.flat.push(BREAK);
         }
         true
     }

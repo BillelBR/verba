@@ -2,6 +2,7 @@
 //!
 //!   powershell -ExecutionPolicy Bypass -File scripts\fetch-bigrams.ps1      # once: downloads the sentences, builds the tables
 //!   cargo run --release -p verba-local --example nextword_accuracy -- --lang en [--sweep] [--tsv path]
+//!   ... --lang ar --train a.tsv --train b.tsv --eval b.tsv      (train on the sentences of several files, measure on the held-out ones of one)
 //!
 //! Method: the corpus (Tatoeba sentences) is split by sentence id: 1 in 40 sentences is held out. A table is built from the rest
 //! with exactly the code that builds the shipped tables, then every position of every held-out sentence is a question: the words before
@@ -215,7 +216,9 @@ fn everyday(lang: Lang) -> Vec<&'static str> {
 
 struct Args {
     lang: Lang,
-    tsv: PathBuf,
+    /// The files the table is built from (all but the held-out sentences), and the one whose held-out sentences are the questions.
+    train: Vec<(PathBuf, usize)>,
+    eval: PathBuf,
     words: PathBuf,
     sweep: bool,
 }
@@ -224,6 +227,7 @@ fn args() -> Args {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../data/words");
     let mut lang = Lang::En;
     let (mut tsv, mut sweep) = (None, false);
+    let (mut train, mut eval): (Vec<(PathBuf, usize)>, Option<PathBuf>) = (Vec::new(), None);
     let mut it = std::env::args().skip(1);
     while let Some(a) = it.next() {
         match a.as_str() {
@@ -235,6 +239,16 @@ fn args() -> Args {
                 }
             }
             "--tsv" => tsv = it.next().map(PathBuf::from),
+            // a file, and how many times its sentences count when they are the weighted kind: `--train everyday.tsv@4`
+            "--train" => {
+                if let Some(spec) = it.next() {
+                    match spec.rsplit_once('@').and_then(|(p, w)| w.parse::<usize>().ok().map(|w| (p.to_string(), w))) {
+                        Some((p, w)) => train.push((PathBuf::from(p), w)),
+                        None => train.push((PathBuf::from(spec), 1)),
+                    }
+                }
+            }
+            "--eval" => eval = it.next().map(PathBuf::from),
             "--sweep" => sweep = true,
             _ => {}
         }
@@ -246,7 +260,20 @@ fn args() -> Args {
     } else {
         "eng"
     };
-    Args { lang, tsv: tsv.unwrap_or_else(|| root.join(format!("src/{name}_sentences.tsv"))), words: root, sweep }
+    // without --train and --eval: the one corpus (Tatoeba, or --tsv) is both
+    let default = tsv.unwrap_or_else(|| root.join(format!("src/{name}_sentences.tsv")));
+    if train.is_empty() {
+        train.push((eval.clone().unwrap_or_else(|| default.clone()), 1));
+    }
+    let eval = eval.unwrap_or_else(|| train[0].0.clone());
+    Args { lang, train, eval, words: root, sweep }.with_sweep(sweep)
+}
+
+impl Args {
+    fn with_sweep(mut self, sweep: bool) -> Self {
+        self.sweep = sweep;
+        self
+    }
 }
 
 fn is_held_out(id: &str) -> Option<bool> {
@@ -257,24 +284,35 @@ fn main() {
     let a = args();
     let list_text = std::fs::read_to_string(a.words.join(format!("{}.txt", a.lang.code()))).expect("run scripts/fetch-data.ps1 first");
     let reference = WordList::parse_for(a.lang, &list_text, 50_000);
-    let corpus = std::fs::read_to_string(&a.tsv).expect("run scripts/fetch-bigrams.ps1 first");
+    let corpora: Vec<(String, usize)> = a.train.iter().map(|(p, w)| (std::fs::read_to_string(p).unwrap_or_else(|_| panic!("{} is missing: run scripts/fetch-bigrams.ps1 first", p.display())), *w)).collect();
+    let eval_corpus = std::fs::read_to_string(&a.eval).unwrap_or_else(|_| panic!("{} is missing", a.eval.display()));
 
     let t0 = Instant::now();
     let mut builder = NextBuilder::new(a.lang);
     let mut held: Vec<&str> = Vec::new();
-    let mut train: Vec<&str> = Vec::new();
-    for line in corpus.lines() {
+    let mut train: Vec<(&str, usize)> = Vec::new();
+    // the table is built from every sentence of the training files that is not held out; the questions are the held-out sentences of one file
+    for (corpus, weight) in &corpora {
+        for line in corpus.lines() {
+            let mut f = line.splitn(3, '\t');
+            let (Some(id), Some(second)) = (f.next(), f.next()) else { continue };
+            let text = f.next().unwrap_or(second);
+            if is_held_out(id) == Some(false) {
+                train.push((text, *weight));
+            }
+        }
+    }
+    for line in eval_corpus.lines() {
         let mut f = line.splitn(3, '\t');
-        let (Some(id), Some(_), Some(text)) = (f.next(), f.next(), f.next()) else { continue };
-        match is_held_out(id) {
-            Some(true) => held.push(text),
-            Some(false) => train.push(text),
-            None => {}
+        let (Some(id), Some(second)) = (f.next(), f.next()) else { continue };
+        let text = f.next().unwrap_or(second);
+        if is_held_out(id) == Some(true) {
+            held.push(text);
         }
     }
     let mut train_sentences = 0usize;
-    for text in &train {
-        train_sentences += usize::from(builder.add_sentence(text));
+    for (text, weight) in &train {
+        train_sentences += usize::from(builder.add_sentence_times(text, *weight));
     }
     println!(
         "{}: {} training sentences ({} distinct), {} words; built in {:.1}s",
@@ -287,7 +325,7 @@ fn main() {
 
     // held-out runs, without exact copies and near copies of the training part
     let mut triples: HashSet<u64> = HashSet::new();
-    for text in &train {
+    for (text, _) in &train {
         for run in word_runs(a.lang, text) {
             for w in run.windows(3) {
                 triples.insert(hash(&w.join(" ")));

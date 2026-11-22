@@ -161,7 +161,13 @@ fn main() {
     // the engine (lists only), with its cost
     let before = LIVE.load(Ordering::Relaxed);
     let t = Instant::now();
-    let engine = LocalEngine::load_lists_seeded(&dir, max_words, args.iter().any(|a| a == "--seed")).expect("the lists");
+    // `--shipped`: the folder is loaded as the program loads it (each list at its own size, the next-word tables, the dictionary file set
+    // aside to be read at the first translation), to measure the cost of what ships
+    let engine = if args.iter().any(|a| a == "--shipped") {
+        LocalEngine::load_dir(&dir).expect("the folder")
+    } else {
+        LocalEngine::load_lists_seeded(&dir, max_words, args.iter().any(|a| a == "--seed")).expect("the lists")
+    };
     let load = t.elapsed();
     let memory = LIVE.load(Ordering::Relaxed).saturating_sub(before);
     let list_len = engine.word_count(lang);

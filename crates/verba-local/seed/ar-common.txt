@@ -1410,3 +1410,209 @@
 نفسها	herself; itself
 بنفسي	myself
 بنفسك	yourself
+# ── words of written news and encyclopedia text that the dictionary lacked (found by reading the commonest Arabic words of Wikipedia that
+# had no translation, examples/dict_coverage.rs): verbal nouns, verbs in the past and present, participles, adverbs
+تطوير	development; developing
+التطوير	the development
+لتطوير	to develop; for the development of
+تعزيز	strengthening; promotion; enhancement
+لتعزيز	to strengthen; to promote
+العثور	finding; locating
+تأسست	was founded; was established
+تأسس	was founded; was established
+يشار	is referred to; is indicated
+تتميز	is distinguished by; is characterized by
+يتميز	is distinguished by; is characterized by
+تألفت	consisted of; was made up of
+مشاركا	participating; participant
+شيوعا	commonly; widely
+المتوقع	expected; anticipated
+الاحترافية	professionalism
+قائلا	saying
+المتبقية	remaining
+التنفيذية	executive
+الباحثين	researchers
+مسبقا	in advance; previously
+أحدهما	one of the two
+بعضهما	each other; one another
+اندلاع	outbreak; eruption
+القاطنين	residents; inhabitants
+معيلون	breadwinners; providers
+البكالوريوس	bachelor's degree
+بكالوريوس	bachelor's degree
+السبعينيات	the seventies; the 1970s
+الستينيات	the sixties; the 1960s
+الثمانينيات	the eighties; the 1980s
+التسعينيات	the nineties; the 1990s
+الخمسينيات	the fifties; the 1950s
+الأربعينيات	the forties; the 1940s
+الثلاثينيات	the thirties; the 1930s
+العشرينيات	the twenties; the 1920s
+تحقيق	achieving; investigation
+تحسين	improving; improvement
+توفير	providing; saving
+استخدام	use; using
+إنشاء	establishing; creation
+تنفيذ	implementation; execution
+مشاركة	participation; sharing
+مساهمة	contribution
+منافسة	competition
+مواجهة	confrontation; facing
+مراقبة	monitoring; surveillance
+مناقشة	discussion; discussing
+ملاحظة	note; observation
+معالجة	treatment; processing
+مقارنة	comparison
+تقديم	presenting; submitting
+تنظيم	organizing; organization
+تدريس	teaching
+ترجمة	translation
+كتابة	writing
+قراءة	reading
+# ── organizations and brands
+الأمم المتحدة	United Nations
+الاتحاد الأوروبي	European Union
+حلف الناتو	NATO
+الناتو	NATO
+اليونسكو	UNESCO
+اليونيسف	UNICEF
+منظمة الصحة العالمية	World Health Organization
+صندوق النقد الدولي	International Monetary Fund
+البنك الدولي	World Bank
+جامعة الدول العربية	Arab League
+أوبك	OPEC
+الفيفا	FIFA
+كوفيد	COVID
+كورونا	corona; coronavirus
+فيروس كورونا	coronavirus
+فيسبوك	Facebook
+غوغل	Google
+جوجل	Google
+أمازون	Amazon
+أبل	Apple
+مايكروسوفت	Microsoft
+تويتر	Twitter
+إنستغرام	Instagram
+إنستجرام	Instagram
+واتساب	WhatsApp
+يوتيوب	YouTube
+نتفليكس	Netflix
+تيك توك	TikTok
+سامسونغ	Samsung
+هواوي	Huawei
+سوني	Sony
+تسلا	Tesla
+أندرويد	Android
+ويندوز	Windows
+لينكس	Linux
+بايثون	Python
+جيت هاب	GitHub
+ويكيبيديا	Wikipedia
+سكايب	Skype
+زوم	Zoom
+تيليغرام	Telegram
+سناب شات	Snapchat
+لينكدإن	LinkedIn
+باي بال	PayPal
+أوبر	Uber
+# ── people
+ترامب	Trump
+بايدن	Biden
+أوباما	Obama
+بوتين	Putin
+ماكرون	Macron
+ميركل	Merkel
+تشرشل	Churchill
+نابليون	Napoleon
+أينشتاين	Einstein
+نيوتن	Newton
+داروين	Darwin
+شكسبير	Shakespeare
+ميسي	Messi
+رونالدو	Ronaldo
+نيمار	Neymar
+مارادونا	Maradona
+بيكاسو	Picasso
+بيتهوفن	Beethoven
+موزارت	Mozart
+دافيد	David
+ديفيد	David
+جون	John
+جيمس	James
+مايكل	Michael
+روبرت	Robert
+ويليام	William
+ريتشارد	Richard
+توماس	Thomas
+تشارلز	Charles
+دونالد	Donald
+جورج	George
+بيتر	Peter
+بول	Paul
+مارك	Mark
+ستيف	Steve
+ماريا	Maria
+ماري	Mary
+ليندا	Linda
+إليزابيث	Elizabeth
+كاثرين	Catherine
+# ── places
+نيويورك	New York
+لندن	London
+باريس	Paris
+برلين	Berlin
+روما	Rome
+مدريد	Madrid
+موسكو	Moscow
+بكين	Beijing
+طوكيو	Tokyo
+واشنطن	Washington
+كاليفورنيا	California
+تكساس	Texas
+فلوريدا	Florida
+لوس أنجلوس	Los Angeles
+سان فرانسيسكو	San Francisco
+كييف	Kyiv
+القدس	Jerusalem
+مكة	Mecca
+مكة المكرمة	Mecca
+المدينة المنورة	Medina
+القاهرة	Cairo
+بغداد	Baghdad
+دمشق	Damascus
+بيروت	Beirut
+عمان	Amman; Oman
+الرياض	Riyadh
+الدوحة	Doha
+أبوظبي	Abu Dhabi
+دبي	Dubai
+الجزائر العاصمة	Algiers
+وهران	Oran
+قسنطينة	Constantine
+عنابة	Annaba
+تلمسان	Tlemcen
+سطيف	Setif
+باتنة	Batna
+بجاية	Bejaia
+تيزي وزو	Tizi Ouzou
+غرداية	Ghardaia
+تمنراست	Tamanrasset
+الرباط	Rabat
+الدار البيضاء	Casablanca
+مراكش	Marrakesh
+فاس	Fez
+طنجة	Tangier
+تونس العاصمة	Tunis
+صفاقس	Sfax
+طرابلس	Tripoli
+بنغازي	Benghazi
+الخرطوم	Khartoum
+المتوسط	Mediterranean; average
+البحر المتوسط	the Mediterranean Sea
+المحيط الأطلسي	the Atlantic Ocean
+الأطلسي	the Atlantic
+الصحراء الكبرى	the Sahara
+أمريكا الشمالية	North America
+أمريكا الجنوبية	South America
+الشرق الأوسط	the Middle East
+شمال أفريقيا	North Africa

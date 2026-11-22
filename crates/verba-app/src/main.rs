@@ -840,16 +840,18 @@ pub(crate) fn sentence_pairs() -> Vec<(Lang, Lang)> {
 }
 
 /// How many words the dictionary holds (summed over its directions), `None` when it is not installed: for the settings window.
-pub(crate) fn dictionary_words() -> Option<usize> {
+pub(crate) fn dictionary_words() -> Option<Option<usize>> {
     APP.with(|a| {
         a.try_borrow().ok().and_then(|b| {
             b.as_ref().and_then(|app| {
                 if !app.engine.has_dictionary() {
                     return None;
                 }
-                let d = app.engine.dictionary();
-                let langs = [Lang::En, Lang::Fr, Lang::Ar];
-                Some(langs.iter().flat_map(|f| langs.iter().map(move |t| (*f, *t))).filter(|(f, t)| f != t).map(|(f, t)| d.len(f, t)).sum())
+                // the dictionary is read at the first translation: until then only the fact that it is there can be said
+                Some(app.engine.dictionary_if_read().map(|d| {
+                    let langs = [Lang::En, Lang::Fr, Lang::Ar];
+                    langs.iter().flat_map(|f| langs.iter().map(move |t| (*f, *t))).filter(|(f, t)| f != t).map(|(f, t)| d.len(f, t)).sum()
+                }))
             })
         })
     })

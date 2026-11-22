@@ -1570,3 +1570,38 @@ python score.py out.txt                                                         
 - **The network is robust to careless spelling.** The same 300 sentences with no hamza (`أ إ آ` as `ا`), `ى` as `ي`, `ة` as `ه` half of the time and no short vowels: BLEU 41.5 down to 40.5, chrF 66.7 down to 65.9. Restoring the spelling first would gain at most that.
 - **What the weakest sentences look like** (sentence-level chrF below 40: 31 of 1 012; below 50: 105): mostly a different wording from the reference, which the metric counts as an error. Real errors: a word taken for another one (`الرّكائب`, stirrups, as "Riders": the vowel mark on the first letter may have confused it), and a clause left out (`وفقًا لنص المؤتمر الصحفي`, "according to the transcript of the news conference", is missing from one answer).
 - **Not measured, so not claimed:** Algerian Darija and chat text (FLORES is formal written Arabic; the replacement of spoken words has no test set with references); human judgement (BLEU and chrF are automatic and reward the wording of one translator); sentences longer than 60 words (cut at commas by the program); the mistranslations that a person reported, which were not reproduced here (examples of them would show which kind of text it is); the 120-sentence comparison with MADLAD is small, but the gap is larger than the difference between the shipped runs.
+
+## Version 0.10.7: longer lists again, a bigger dictionary
+
+**Lists: English 150 000 lines (was 100 000), Arabic 300 000 (was 150 000), French 50 000.** Measured as in "Size of the lists" (`realtext_accuracy`, the tail floor and the written words in place):
+
+| Text | List | Words the list has | Letters saved |
+|---|---|---|---|
+| Arabic, Tatoeba | 150 000 | 90.2 % | 30.0 % |
+| | **300 000** | **92.7 %** | **30.5 %** |
+| Arabic, Wikipedia | 150 000 | 83.6 % | 27.0 % |
+| | **300 000** | **87.9 %** | **27.9 %** |
+| English, Wikipedia | 100 000 | 95.8 % | 40.4 % |
+| | **150 000** | **96.3 %** | **40.7 %** |
+| English, Tatoeba | 100 000 | 98.9 % | 46.0 % |
+| | **150 000** | **99.0 %** | **46.1 %** |
+
+- English 200 000 gave 96.5 % and 40.8 % on Wikipedia: almost nothing more than 150 000, so it was not taken. The Arabic gain is the one that counts: 4.3 points more of the words of formal text covered, 0.9 more letters saved.
+- **Cost**, the program's own configuration (`--shipped`: each list at its size, the next-word tables): 37.8 MB and 0.77 s to load before, **50.3 MB and 1.38 s** now (+12.5 MB, +0.6 s); one suggestion 132 µs before and 196 µs now on Arabic text. The spelling correction is unchanged (it keeps its dictionary of the first 50 000 lines).
+- The "answers as before" check (`golden_real.txt`): 9 of the 2 316 answers it asks about changed (0.4 %; 0 in English alone), among them the disappearance of two odd third suggestions (`mlas`, `genryu`): a word of the tail of a list is now compared with the best word of ALL the lists, not of its own list only.
+
+**Dictionary: 28 MB (was 14 MB), with the forms of English and Arabic first.** The cut by size used to keep forms (plurals, feminine, conjugations) in the order of how common their lemma is; French was half of them (fr>en alone 14.4 MB of 38). French forms now come last, so that Arabic and English forms are kept whole: `ar>en` has **275 877 entries (was 63 816)**. Measured on real Arabic text (`dict_coverage`: the share of the Arabic words of a text that have a translation, the lookup stripping particles and pronoun endings as the program does):
+
+| Text | Words of the text with a translation | Distinct words with one |
+|---|---|---|
+| Wikipedia (100 000 sentences), dictionary of 0.10.6 (14 MB) | 91.9 % | 64.9 % |
+| **Wikipedia, 28 MB with the words written for Verba** | **95.1 %** | **75.5 %** |
+| Tatoeba (69 000 sentences), 14 MB | 94.8 % | 81.1 % |
+| **Tatoeba, 28 MB with the words written for Verba** | **97.5 %** | **91.1 %** |
+
+- The words seen once in Wikipedia: 53.6 % translated before, 66 % now.
+- **Memory:** the dictionary takes 155 MB once read (79 MB for the 14 MB one; 202 MB for the whole 38 MB). It is now **read at the first translation of a word** (0.65 s), not at startup, so a session that never translates a word does not pay it; the settings window says "installed" until then and shows the number of entries afterwards.
+- **About 200 lines were added to the words written for Verba** (`seed/ar-common.txt`, now 1 593 lines): verbal nouns, verbs and participles of written Arabic that Wiktionary's data lacks (`تطوير`, `تعزيز`, `تأسست`, `المتوقع`, `قائلا`), the decades (`السبعينيات`), organizations, brands, common first names and surnames, cities (Algerian ones too). That is 38 more headwords the dictionary lacked, and 0.2 point more of the words of Wikipedia.
+- **What was tried and not kept:** endings for the plural and dual of nouns, the tanween and the past tense of verbs in the Arabic lookup (`ون ين ان ا ت وا`). With all of them +0.5 point of words translated, but names became words (`بوكانان` "and was", `تاون` "wye", `جزئين` "punish; reward") and 762 translations that were right changed. With only `ون` and `ين`, tried last and for stems of 4 letters or more: +0.2 point, and by reading 36 of the new matches about a third were wrong (`الكارتون` "hater", `الدرون` "pearl", `لتونتون` "tuna"). A wrong translation is worse than none: not kept.
+- **Why `تطوير` and `تعزيز` were missing:** English Wiktionary does not have an entry for them (they are not in the extract at all); `شيوع` is only listed as a verbal noun of `شاع` in a verb table, a kind of form that the build leaves out. The data is the limit, not the filters.
+- **Not measured:** that the 200 added lines are right (written, not checked by a native speaker); the dictionary on text other than Wikipedia and Tatoeba; the time of the first translation on a slow disk.

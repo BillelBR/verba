@@ -4,7 +4,7 @@
 #
 #   powershell -ExecutionPolicy Bypass -File scripts\fetch-dict.ps1
 #   powershell -ExecutionPolicy Bypass -File scripts\fetch-dict.ps1 -Keep          # keep the downloads and the extracts (data\words\src\dict\)
-#   powershell -ExecutionPolicy Bypass -File scripts\fetch-dict.ps1 -MaxMB 24      # a larger dictionary (default 14 MB; the commonest words are kept first)
+#   powershell -ExecutionPolicy Bypass -File scripts\fetch-dict.ps1 -MaxMB 40      # no cut at all (38 MB; default 28 MB: all headwords, then the forms of English and Arabic, French forms last)
 #
 # What it does, in order (the whole run takes about 3 to 5 minutes, 2 to 3 of them for the download; see docs/ACCURACY.md):
 #   1. downloads three gzip files from https://kaikki.org/dictionary/ (English 534 MB, Arabic 72 MB, French 59 MB). A download that was
@@ -16,7 +16,7 @@
 
 param(
     [switch]$Keep,
-    [double]$MaxMB = 14
+    [double]$MaxMB = 28
 )
 
 $ErrorActionPreference = "Stop"

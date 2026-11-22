@@ -298,7 +298,11 @@ fn translate(ui: &mut Ui, s: &mut Settings) {
     ui.section("Dictionary");
     ui.card_begin();
     match crate::dictionary_words() {
-        Some(n) => ui.info_row(&format!("English, French and Arabic: {} entries", group_thousands(n)), Some("Built from Wiktionary (CC BY-SA 4.0). It never goes online.")),
+        Some(Some(n)) => ui.info_row(&format!("English, French and Arabic: {} entries", group_thousands(n)), Some("Built from Wiktionary (CC BY-SA 4.0). It never goes online.")),
+        Some(None) => ui.info_row(
+            "English, French and Arabic: installed.",
+            Some("It is read the first time you translate a word (about a second), and the number of entries is shown then. Built from Wiktionary (CC BY-SA 4.0). It never goes online."),
+        ),
         None => ui.info_row("The dictionary is not installed.", Some("The Setup installs it next to the program, in data\\words\\dict.txt.")),
     }
     ui.card_end();

@@ -39,7 +39,7 @@ pub use spell::SpellParams;
 
 use std::collections::{HashMap, HashSet};
 use std::io;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
 use verba_core::{Engine, Lang, Suggestion, current_word, is_arabic_word, match_case, strip_arabic_marks};
@@ -73,12 +73,13 @@ struct Entry {
 }
 
 /// How many words of a language's list the suggestions use (the most frequent ones, after the cleaning). English and Arabic have more than
-/// French: measured on real text (`examples/realtext_accuracy.rs`, docs/ACCURACY.md), a longer list finds more rare words (Arabic most),
-/// and the spelling correction does not change, because it keeps its dictionary of 50 000 lines (`WordList::spell_min_count`).
+/// French: measured on real text (`examples/realtext_accuracy.rs`, docs/ACCURACY.md), a longer list finds more rare words (Arabic most;
+/// English 100 000 and Arabic 150 000 were the sizes of 0.10.5, 150 000 and 300 000 are those of 0.10.7), and the spelling correction does not change, because
+/// it keeps its dictionary of 50 000 lines (`WordList::spell_min_count`).
 pub const fn list_cap(lang: Lang) -> usize {
     match lang {
-        Lang::En => 100_000,
-        Lang::Ar => 150_000,
+        Lang::En => 150_000,
+        Lang::Ar => 300_000,
         _ => 50_000,
     }
 }
@@ -329,8 +330,10 @@ pub struct LocalEngine {
     personal: PersonalDict,
     /// The bundled next-word tables (see `nextword.rs`).
     next_tables: HashMap<Lang, NextTable>,
-    /// The bilingual dictionary for word translation (see `translate.rs`).
-    dict: Dictionary,
+    /// The bilingual dictionary for word translation (see `translate.rs`). It is read from `dict_path` the first time a word is translated:
+    /// it takes 0.9 s and about 140 MB, which a session that never translates a word should not pay.
+    dict: OnceLock<Dictionary>,
+    dict_path: Option<PathBuf>,
     /// Algerian Darija in Latin letters (see `dz.rs`). Off until switched on.
     dz: Option<DzList>,
     /// The same in Arabic letters. The one `Lang::Dz` switch covers both.
@@ -346,7 +349,8 @@ impl LocalEngine {
             ignored: HashSet::new(),
             personal: PersonalDict::new(),
             next_tables: HashMap::new(),
-            dict: Dictionary::default(),
+            dict: OnceLock::new(),
+            dict_path: None,
             dz: None,
             dz_ar: None,
         }
@@ -396,9 +400,10 @@ impl LocalEngine {
             }
         }
         engine.load_next_words_dir(dir);
-        // the bilingual dictionary, when it was downloaded (a missing or unreadable file only means no translation)
-        if let Ok(text) = std::fs::read_to_string(dir.join("dict.txt")) {
-            engine.load_dictionary(&text);
+        // the bilingual dictionary, when it was downloaded: read at the first translation (a missing or unreadable file only means no translation)
+        let dict_file = dir.join("dict.txt");
+        if dict_file.is_file() {
+            engine.dict_path = Some(dict_file);
         }
         engine.remove_bleed();
         Ok(engine)
@@ -636,6 +641,16 @@ impl LocalEngine {
             self.dz_ar_merge(only, before_caret, typed, &typed_key, ar, max, &mut found);
         }
         found.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
+        // A word of the tail of a long list (see `WordList::complete`) has to be near the best word of ALL the lists: `genryu` of the English
+        // tail is not offered after the French `genre`, though it is the best word of the English list for `ge`.
+        if let Some(top) = found.first().map(|f| f.1) {
+            found.retain(|(word, score, lang)| {
+                let Some((_, list)) = langs.iter().find(|(l, _)| l == lang) else { return true };
+                let count = list.count_of(word);
+                let in_tail = list.spell_min_count > 0 && count > 0 && count < list.spell_min_count;
+                !in_tail || *score >= top * TAIL_FLOOR
+            });
+        }
 
         let mut out: Vec<Suggestion> = Vec::new();
         for (word, _, lang) in found {
@@ -690,6 +705,36 @@ mod tests {
 ");
         // the shipped seed has words to add
         assert!(arabic_common_words().count() > 400);
+    }
+
+    #[test]
+    fn a_word_of_the_tail_of_one_list_is_not_offered_after_a_much_better_word_of_another() {
+        // an English list of more than 50 000 lines ends with a rare word; the French list has a common one that starts the same way
+        let english: String = (0..50_000usize).map(|i| format!("{} {}\n", tail_word(i), 1_000_000 - i)).collect::<String>() + "zyxwvu 3\n";
+        let mut e = LocalEngine::new();
+        e.add(Lang::En, WordList::parse(&english, 100_000));
+        e.add(Lang::Fr, WordList::parse("zyxfrench 100000\n", 100_000));
+        assert_eq!(texts(e.suggest("zyx", 3)), ["zyxfrench"], "the tail word of the English list is not near the best word");
+        // alone it is offered: nothing better exists
+        let mut alone = LocalEngine::new();
+        alone.add(Lang::En, WordList::parse(&english, 100_000));
+        assert_eq!(texts(alone.suggest("zyx", 3)), ["zyxwvu"]);
+    }
+
+    /// A different word of six letters for every number (a consonant and a vowel in turn), none of which starts with `zyx`.
+    fn tail_word(mut i: usize) -> String {
+        let (consonants, vowels) = (b"bcdfghjklmnpqrstvw", b"aeiou");
+        let mut word = String::new();
+        for position in 0..6 {
+            if position % 2 == 0 {
+                word.push(consonants[i % 18] as char);
+                i /= 18;
+            } else {
+                word.push(vowels[i % 5] as char);
+                i /= 5;
+            }
+        }
+        word
     }
 
     #[test]

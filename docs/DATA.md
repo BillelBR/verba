@@ -7,15 +7,15 @@ The lists are **not stored in this repository**: `scripts/fetch-data.ps1` downlo
 
 | Language | File | Source | License of the list |
 |---|---|---|---|
-| English | `data/words/en.txt` | [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords), `content/2018/en/en_full.txt`, the first **100 000** lines | CC-BY-SA-4.0 |
+| English | `data/words/en.txt` | [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords), `content/2018/en/en_full.txt`, the first **150 000** lines | CC-BY-SA-4.0 |
 | French | `data/words/fr.txt` | same project, `content/2018/fr/fr_50k.txt` | CC-BY-SA-4.0 |
-| Arabic | `data/words/ar.txt` | same project, `content/2018/ar/ar_full.txt`, the first **150 000** lines | CC-BY-SA-4.0 |
+| Arabic | `data/words/ar.txt` | same project, `content/2018/ar/ar_full.txt`, the first **300 000** lines | CC-BY-SA-4.0 |
 | Algerian Darija in Latin letters, **built in** (seed) | `crates/verba-local/seed/dz-seed.txt` (embedded in the program) | written by the Verba authors, no corpus | PolyForm Noncommercial 1.0.0 (same as the code) |
 | Algerian Darija in Latin letters, **optional** | `data/words/dz.txt`, built by `scripts/fetch-dz.ps1` | [NArabizi treebank](https://universaldependencies.org/treebanks/qaf_arabizi/) (UD_Maghrebi_Arabic_French-Arabizi): the tokens labelled Algerian, counted | CC BY-SA 4.0 |
 | Algerian Darija in Arabic letters, **built in** (seed) | `crates/verba-local/seed/dz-ar-seed.txt` (embedded in the program) | written by the Verba authors, no corpus | PolyForm Noncommercial 1.0.0 (same as the code) |
 | Algerian Darija in Arabic letters, **optional** | `data/words/dz-ar.txt`, built by `scripts/fetch-dz-ar.ps1` | [Algerian Dialect](https://data.mendeley.com/datasets/zzwg3nnhsz/2), 45 000 YouTube comments from Algerian press channels (Benmounah and Boulesnane, Mendeley Data V2, doi 10.17632/zzwg3nnhsz.2): the words the Arabic list lacks, counted | CC BY 4.0 |
 
-- **Sizes.** English 100 000 lines, French 50 000, Arabic 150 000 (`scripts/fetch-data.ps1`; the engine cuts each list again to `list_cap` in `crates/verba-local/src/lib.rs`, after cleaning). They were 50 000 each before: measured on real text, a longer list finds more of the rare words, Arabic most (see [ACCURACY.md](ACCURACY.md#size-of-the-lists)). French was not measured and stays at 50 000. The spelling correction keeps its dictionary of the first 50 000 lines of any list (`WordList::spell_min_count`), so a longer list does not change it.
+- **Sizes.** English 150 000 lines, French 50 000, Arabic 300 000 (`scripts/fetch-data.ps1`; they were 50 000 each up to 0.10.4, English 100 000 and Arabic 150 000 in 0.10.5 and 0.10.6; the engine cuts each list again to `list_cap` in `crates/verba-local/src/lib.rs`, after cleaning). They were 50 000 each before: measured on real text, a longer list finds more of the rare words, Arabic most (see [ACCURACY.md](ACCURACY.md#size-of-the-lists)). French was not measured and stays at 50 000. The spelling correction keeps its dictionary of the first 50 000 lines of any list (`WordList::spell_min_count`), so a longer list does not change it.
 - The project's code is MIT; its generated lists are CC-BY-SA-4.0 (checked on 2026-11-16 in its README).
 - The lists were built from OpenSubtitles (opus.nlpl.eu/OpenSubtitles2018.php): they are spoken, subtitle-style language.
 - **Attribution:** word frequency lists from hermitdave/FrequencyWords, CC-BY-SA-4.0.
@@ -101,7 +101,7 @@ file is **not stored in this repository**: `scripts/fetch-dict.ps1` downloads th
   - **Rude words:** a sense tagged vulgar, offensive, derogatory, slur, ethnic slur, pejorative or obscene is left out, and so is a translation tagged like that or belonging to such a sense of the English word. A headword that is left with
     no ordinary sense is dropped (an English word is dropped when at least two thirds of its senses are of that kind: `fuck`, `slut`); a word that is also an ordinary word (`dog`, `cock`) keeps its ordinary senses. Obsolete,
     archaic, historical, rare, misspelled and dialectal senses are left out; slang and informal ones count half.
-  - **Size.** The file is cut to 14 MiB by default (`-MaxMB`): all headwords first (the commonest first), then the inflected forms that are words of the frequency lists, then the other forms of the commonest lemmas. Without the cut it has 944 000 lines and 37.7 MiB.
+  - **Size.** The file is cut to 28 MiB by default (`-MaxMB`; it was 14 until 0.10.6): all headwords first (the commonest first), then the inflected forms that are words of the frequency lists, then the other forms of the commonest lemmas, and the forms of French words after those of English and Arabic. At 28 MiB every English and Arabic form is kept (`ar>en` has 275 877 entries) and French keeps its headwords and part of its forms. Without the cut it has 944 000 lines and 37.9 MiB. The program reads the file at the first translation of a word, not at startup (about 155 MB of memory once read).
 - **Looked at and not used:** the [FreeDict](https://freedict.org) dictionaries (checked on 2026-11-17 in the TEI header of each source file): `eng-fra` (8 799 headwords) and `fra-eng` (8 505) are small and `eng-ara` (87 424) and
   `ara-eng` (52 996) come from the Arabeyes word list; all four are under the **GNU General Public License, version 2 or later**, which would put the file (and anything combined with it) under the GPL: not used. Apertium's language data
   is also GPL-licensed (not examined further, for the same reason).

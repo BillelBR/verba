@@ -6,7 +6,7 @@
 //!      small tab-separated extract of what the dictionary needs. The stream is read line by line and never held whole.
 //!        build_dict extract --lang en --out data/words/src/dict-en.tsv  < kaikki.org-dictionary-English.jsonl
 //!   2. `build`: reads the three extracts and the frequency lists (`scripts/fetch-data.ps1`) and writes `dict.txt`.
-//!        build_dict build --src data/words/src --out data/words/dict.txt [--max-mb 14] [--report data/words/src/dict-report.txt]
+//!        build_dict build --src data/words/src --out data/words/dict.txt [--max-mb 28] [--report data/words/src/dict-report.txt]
 //!
 //! What goes in and how translations are chosen is documented in docs/DATA.md ("Word translation") and measured in docs/ACCURACY.md.
 //! In short: translations of English entries (en>fr, en>ar, and the same pairs read backwards) and the English glosses of French and Arabic
@@ -1023,10 +1023,16 @@ fn build(src: &Path, words: &Path, out: &Path, max_mb: f64, report_path: Option<
                     Some(&r) => r as f32,
                     None => 1_000_000.0 + if k.contains(' ') { 500_000.0 } else { 0.0 } + k.len() as f32,
                 },
-                Some(lr) => match ff.rank.get(k) {
-                    Some(&r) => 2_000_000.0 + r as f32,
-                    None => 3_000_000.0 + *lr as f32,
-                },
+                // The forms of French words come last, after those of English and Arabic: French is half of the forms (fr>en alone is 14 MB of
+                // the 38) and the dictionary is used most between Arabic and English. French headwords are all kept.
+                Some(lr) => {
+                    let french_forms = if from == "fr" { 10_000_000.0 } else { 0.0 };
+                    french_forms
+                        + match ff.rank.get(k) {
+                            Some(&r) => 2_000_000.0 + r as f32,
+                            None => 3_000_000.0 + *lr as f32,
+                        }
+                }
             };
             total += line.len();
             lines.push((prio, di, k.clone(), line));
@@ -1035,7 +1041,7 @@ fn build(src: &Path, words: &Path, out: &Path, max_mb: f64, report_path: Option<
     {
         let mut by_tier = [(0usize, 0usize); 3]; // lines and bytes: headwords, forms in the frequency list, other forms
         for (prio, _, _, line) in &lines {
-            let t = if *prio < 2_000_000.0 { 0 } else if *prio < 3_000_000.0 { 1 } else { 2 };
+            let t = if *prio < 2_000_000.0 { 0 } else if prio.rem_euclid(10_000_000.0) < 3_000_000.0 { 1 } else { 2 };
             by_tier[t].0 += 1;
             by_tier[t].1 += line.len();
         }
@@ -1140,13 +1146,13 @@ fn main() {
             let src = get("--src").map(PathBuf::from).unwrap_or_else(|| root.join("src"));
             let words = get("--words").map(PathBuf::from).unwrap_or(root.clone());
             let out = get("--out").map(PathBuf::from).unwrap_or_else(|| root.join("dict.txt"));
-            let max_mb: f64 = get("--max-mb").and_then(|s| s.parse().ok()).unwrap_or(14.0);
+            let max_mb: f64 = get("--max-mb").and_then(|s| s.parse().ok()).unwrap_or(28.0);
             let report = get("--report").map(PathBuf::from);
             let direct = !args.iter().any(|a| a == "--no-fr-ar");
             build(&src, &words, &out, max_mb, report.as_deref(), direct);
         }
         _ => {
-            eprintln!("usage:\n  build_dict extract --lang en|fr|ar [--in <jsonl>] --out <tsv>\n  build_dict build [--src dir] [--words dir] [--out dict.txt] [--max-mb 14] [--report file]");
+            eprintln!("usage:\n  build_dict extract --lang en|fr|ar [--in <jsonl>] --out <tsv>\n  build_dict build [--src dir] [--words dir] [--out dict.txt] [--max-mb 28] [--report file]");
             std::process::exit(2);
         }
     }

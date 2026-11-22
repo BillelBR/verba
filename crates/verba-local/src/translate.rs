@@ -17,6 +17,7 @@
 //! Words are looked up without case, accents, hamza or short vowels (the same folding as the suggestions), so `cafe` finds `café`.
 
 use std::collections::HashMap;
+use std::sync::OnceLock;
 
 use verba_core::{Lang, Suggestion, is_arabic_word, match_case};
 
@@ -443,25 +444,33 @@ impl Dictionary {
 }
 
 impl LocalEngine {
-    /// Gives the engine the text of a dictionary file (`dict.txt`).
+    /// Gives the engine the text of a dictionary file (`dict.txt`), read now.
     pub fn load_dictionary(&mut self, text: &str) {
-        self.dict = Dictionary::parse_with_fixes(text);
+        self.dict = OnceLock::from(Dictionary::parse_with_fixes(text));
+        self.dict_path = None;
     }
 
-    /// Whether a dictionary was loaded.
+    /// Whether there is a dictionary: one was given, or `dict.txt` is there to be read at the first translation.
     pub fn has_dictionary(&self) -> bool {
-        !self.dict.is_empty()
+        self.dict_path.is_some() || self.dict.get().is_some_and(|d| !d.is_empty())
     }
 
-    /// Translates one word with the dictionary. See `Dictionary::translate`.
+    /// Translates one word with the dictionary. See `Dictionary::translate`. The first call reads the dictionary file.
     pub fn translate_word(&self, word: &str, targets: &[Lang], from_hint: Option<Lang>) -> Option<Translation> {
-        self.dict.translate(word, targets, from_hint)
+        self.dictionary().translate(word, targets, from_hint)
     }
 
-    /// The dictionary itself (for the measuring tools).
-    #[doc(hidden)]
+    /// The dictionary if it was read already, without reading it (the settings window shows its size only then).
+    pub fn dictionary_if_read(&self) -> Option<&Dictionary> {
+        self.dict.get()
+    }
+
+    /// The dictionary itself (for the measuring tools). Reads the file if it was not read yet; an unreadable file gives an empty dictionary.
     pub fn dictionary(&self) -> &Dictionary {
-        &self.dict
+        self.dict.get_or_init(|| match &self.dict_path {
+            Some(path) => std::fs::read_to_string(path).map(|text| Dictionary::parse_with_fixes(&text)).unwrap_or_default(),
+            None => Dictionary::default(),
+        })
     }
 }
 
@@ -628,6 +637,26 @@ mod tests {
         assert_eq!(d.len(Lang::En, Lang::Fr), 4);
         assert!(!d.is_empty());
         assert!(Dictionary::parse("").is_empty());
+    }
+
+    #[test]
+    fn the_dictionary_file_is_read_at_the_first_translation_not_before() {
+        let dir = std::env::temp_dir().join(format!("verba-lazy-dict-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(dir.join("dict.txt"), "en>fr\thello\tbonjour\n").unwrap();
+        let mut e = LocalEngine::new();
+        e.dict_path = Some(dir.join("dict.txt"));
+        assert!(e.has_dictionary(), "the file is there");
+        assert!(e.dict.get().is_none(), "but it was not read");
+        let t = e.translate_word("hello", &[Lang::Fr], None).expect("translated");
+        assert_eq!(t.candidates[0].text, "bonjour");
+        assert!(e.dict.get().is_some(), "read by the first translation");
+        // a file that is not there or cannot be read is an empty dictionary, not a failure
+        let mut missing = LocalEngine::new();
+        missing.dict_path = Some(dir.join("nope.txt"));
+        assert!(missing.translate_word("hello", &[Lang::Fr], None).is_none());
+        let _ = std::fs::remove_dir_all(&dir);
+        e.dict_path = None;
     }
 
     #[test]

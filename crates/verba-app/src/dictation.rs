@@ -595,8 +595,9 @@ pub fn end_session() {
     }
 }
 
-/// (Development builds, for the checks of `VERBA_TEST_DICTATION`.) The samples of a 16 kHz mono WAV file with 16-bit integers or 32-bit floats.
-#[cfg(debug_assertions)]
+/// (For the checks of `VERBA_TEST_DICTATION`, which only development builds run.) The samples of a 16 kHz mono WAV file with 16-bit integers or
+/// 32-bit floats.
+#[cfg_attr(not(debug_assertions), allow(dead_code))]
 pub fn read_wav_pcm(path: &Path) -> Result<Vec<i16>, String> {
     let bytes = std::fs::read(path).map_err(|e| e.to_string())?;
     let (mut at, mut format, mut bits) = (12usize, 1u16, 16u16);

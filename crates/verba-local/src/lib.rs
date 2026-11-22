@@ -22,6 +22,7 @@ pub mod sentence;
 pub mod slang;
 mod spell;
 mod translate;
+mod usertr;
 pub mod wrongkeys;
 
 pub use dz::{DZ_AR_SEED, DZ_SEED, DzList};
@@ -32,6 +33,7 @@ pub use nextword::{BuildParams, NextBuilder, NextParams, word_runs};
 pub use nextword::NextTable;
 pub use personal::PersonalDict;
 pub use translate::{Dictionary, Translation};
+pub use usertr::{MAX_ENTRIES as MAX_USER_TRANSLATIONS, UserEntry, UserTranslations};
 #[doc(hidden)]
 pub use personal::UsageParams;
 #[doc(hidden)]
@@ -334,6 +336,9 @@ pub struct LocalEngine {
     /// it takes 0.9 s and about 140 MB, which a session that never translates a word should not pay.
     dict: OnceLock<Dictionary>,
     dict_path: Option<PathBuf>,
+    /// The translations the user wrote (see `usertr.rs`), and the same as a small dictionary that is asked before the big one.
+    user_tr: UserTranslations,
+    user_dict: Dictionary,
     /// Algerian Darija in Latin letters (see `dz.rs`). Off until switched on.
     dz: Option<DzList>,
     /// The same in Arabic letters. The one `Lang::Dz` switch covers both.
@@ -351,6 +356,8 @@ impl LocalEngine {
             next_tables: HashMap::new(),
             dict: OnceLock::new(),
             dict_path: None,
+            user_tr: UserTranslations::new(),
+            user_dict: Dictionary::default(),
             dz: None,
             dz_ar: None,
         }

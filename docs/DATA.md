@@ -148,6 +148,8 @@ About 190 spellings: Algerian Darija words in Arabic letters (`دروك`, `بز�
 (counts of single words that are in no dictionary, `w` lines; of dictionary words the user writes, common ones included, `u` lines, with a count that fades; and of pairs of neighbouring words, `b` lines; tab separated). The engine does not know where they live: the app passes the paths to
 `PersonalDict::load` and `save`. Nothing else is stored; see [ACCURACY.md](ACCURACY.md#personal-dictionary) for what learning keeps and refuses.
 
+`my-translations.txt` (translations the user wrote for single words) is in the format of `dict.txt` (`ar>en`, TAB, word, TAB, `t1; t2`; `#` starts a comment) and is read by `UserTranslations::load` (`usertr.rs`). At most 2 000 entries, words of 60 characters, 5 translations of 80 characters; the script of the word and of the translation must fit the direction. `LocalEngine::translate_word` asks these entries first and puts their translations in front of the dictionary's (a small `Dictionary` built with `apply_fixes`, so the lookup strips particles and endings the same way).
+
 ## Algerian Darija (Arabizi)
 
 - **Seed, in the program:** `crates/verba-local/seed/dz-seed.txt` is original work of the Verba authors, so it carries the project's license

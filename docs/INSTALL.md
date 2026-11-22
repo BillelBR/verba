@@ -95,7 +95,8 @@ Two options, both **off** until you turn them on in the settings, keep something
   3. pairs of neighbouring words (two words, never more), with how often.
 
   It never stores a sentence, never three words in a row, no dates or times, no numbers, addresses, e-mails or paths, and nothing from the programs you excluded or from password boxes. At most 5 000 words of each kind and 20 000 pairs are kept. Someone who opens the file sees which words and pairs you write most, not what you wrote. The files are plain text in `%APPDATA%\Verba` (`learned.txt`, readable by anyone who can open your user folder). *Forget what it learned* in the settings, or deleting `learned.txt`, erases it all.
-- **My words:** `personal.txt` in the same folder, one word per line. You can edit it (the settings open it in Notepad) to add words Verba must never flag as typos and should offer as suggestions.
+- **My words:** `personal.txt` in the same folder, one word per line. *Writing help > Add a word* in the settings asks for a word in a small window and the list there removes one; or edit the file (the settings open it in Notepad). They are words Verba must never flag as typos and should offer as suggestions.
+- **My translations:** `my-translations.txt` in the same folder. *Translate > Add a translation* asks for a word, its direction (Arabic, English, French, in any pair) and up to five translations separated by `;`. When you select that word and translate it, yours come first, then the dictionary's. A sentence is translated by the neural translator, which does not read this list. The file is plain text, one line per word (`ar>en`, a TAB, the word, a TAB, the translations), and Verba reads it again when you save it.
 
 ## For maintainers
 

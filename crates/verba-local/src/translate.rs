@@ -443,6 +443,28 @@ impl Dictionary {
     }
 }
 
+/// The answer of the user's own translations and the dictionary's for one word. When both found the word in the same direction, the user's
+/// translations come first, then the dictionary's that are not the same (at most `MAX_TRANSLATIONS`); when the directions differ the user's
+/// answer is the one given, because the person wrote it for this word.
+fn merge_user(user: Option<Translation>, base: Option<Translation>) -> Option<Translation> {
+    match (user, base) {
+        (None, base) => base,
+        (user, None) => user,
+        (Some(mut user), Some(base)) => {
+            if (user.from, user.to) == (base.from, base.to) {
+                for c in base.candidates {
+                    if !user.candidates.iter().any(|u| u.text.to_lowercase() == c.text.to_lowercase()) {
+                        user.candidates.push(c);
+                    }
+                }
+                user.candidates.truncate(MAX_TRANSLATIONS);
+            }
+            user.via_english = false;
+            Some(user)
+        }
+    }
+}
+
 impl LocalEngine {
     /// Gives the engine the text of a dictionary file (`dict.txt`), read now.
     pub fn load_dictionary(&mut self, text: &str) {
@@ -455,9 +477,27 @@ impl LocalEngine {
         self.dict_path.is_some() || self.dict.get().is_some_and(|d| !d.is_empty())
     }
 
-    /// Translates one word with the dictionary. See `Dictionary::translate`. The first call reads the dictionary file.
+    /// Translates one word with the dictionary. See `Dictionary::translate`. The first call reads the dictionary file. The translations the user
+    /// wrote for the word (`set_user_translations`) come first.
     pub fn translate_word(&self, word: &str, targets: &[Lang], from_hint: Option<Lang>) -> Option<Translation> {
-        self.dictionary().translate(word, targets, from_hint)
+        let base = self.dictionary().translate(word, targets, from_hint);
+        if self.user_tr.is_empty() {
+            return base;
+        }
+        merge_user(self.user_dict.translate(word, targets, from_hint), base)
+    }
+
+    /// Gives the engine the translations the user wrote.
+    pub fn set_user_translations(&mut self, translations: crate::UserTranslations) {
+        let mut dict = Dictionary::default();
+        dict.apply_fixes(&translations.to_dictionary_text());
+        self.user_dict = dict;
+        self.user_tr = translations;
+    }
+
+    /// The translations the user wrote.
+    pub fn user_translations(&self) -> &crate::UserTranslations {
+        &self.user_tr
     }
 
     /// The dictionary if it was read already, without reading it (the settings window shows its size only then).
@@ -637,6 +677,31 @@ mod tests {
         assert_eq!(d.len(Lang::En, Lang::Fr), 4);
         assert!(!d.is_empty());
         assert!(Dictionary::parse("").is_empty());
+    }
+
+    #[test]
+    fn the_translations_the_user_wrote_come_before_the_dictionarys() {
+        let mut e = LocalEngine::new();
+        e.load_dictionary("ar>en\tخبر\ttry; news\nen>ar\tprogram\tبرنامج\n");
+        let text = |t: Option<Translation>| t.map(|t| t.candidates.into_iter().map(|c| c.text).collect::<Vec<_>>());
+        let before = text(e.translate_word("خبر", &[Lang::En], Some(Lang::Ar))).unwrap();
+        assert!(before.contains(&"news".to_string()) && !before.contains(&"my news".to_string()), "{before:?}");
+        let mut mine = crate::UserTranslations::new();
+        mine.add(Lang::Ar, Lang::En, "خبر", "my news; news").unwrap();
+        mine.add(Lang::Ar, Lang::En, "قرقوشة", "app").unwrap();
+        e.set_user_translations(mine);
+        // mine first, then the dictionary's that are not the same
+        let after = text(e.translate_word("خبر", &[Lang::En], Some(Lang::Ar))).unwrap();
+        assert_eq!(&after[..2], ["my news", "news"], "{after:?}");
+        assert!(after.len() <= 5 && after.iter().filter(|t| t.as_str() == "news").count() == 1, "{after:?}");
+        // a word the dictionary does not have, and the same word with the article and a preposition
+        assert_eq!(text(e.translate_word("قرقوشة", &[Lang::En], Some(Lang::Ar))), Some(vec!["app".to_string()]));
+        assert_eq!(text(e.translate_word("بالقرقوشة", &[Lang::En], Some(Lang::Ar))), Some(vec!["app".to_string()]));
+        // the dictionary alone for the other words
+        assert_eq!(text(e.translate_word("program", &[Lang::Ar], None)), Some(vec!["برنامج".to_string()]));
+        // taking them away gives the dictionary back
+        e.set_user_translations(crate::UserTranslations::new());
+        assert!(e.translate_word("قرقوشة", &[Lang::En], Some(Lang::Ar)).is_none());
     }
 
     #[test]

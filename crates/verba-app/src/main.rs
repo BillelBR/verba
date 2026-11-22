@@ -28,7 +28,7 @@ mod settings_window;
 use keys::{Binding, DEFAULT_KEYS, Keys};
 use settings::{Settings, ThemeMode};
 use verba_core::{Engine, Lang, Suggestion, current_word, current_word_dz};
-use verba_local::{LocalEngine, PersonalDict};
+use verba_local::{LocalEngine, PersonalDict, UserEntry, UserTranslations};
 use verba_win::{Anchor, AnchorKind, Locator, Picked, Look, Overlay, Snapshot, Theme, describe_foreground, foreground_app, run_with_splash};
 use windows::Win32::Foundation::{ERROR_ALREADY_EXISTS, GetLastError, HINSTANCE, HWND, LPARAM, LRESULT, POINT, WPARAM};
 use windows::Win32::Graphics::Gdi::{CreateBitmap, DeleteObject};
@@ -159,6 +159,9 @@ struct App {
     /// The personal dictionary files, the time `personal.txt` was last changed (a person may edit it), and when it was last looked at.
     files: Option<(PathBuf, PathBuf)>,
     words_stamp: Option<SystemTime>,
+    /// The file of the translations the user wrote (`my-translations.txt`) and the time it was last changed.
+    tr_file: Option<PathBuf>,
+    tr_stamp: Option<SystemTime>,
     last_check: Instant,
 }
 
@@ -198,10 +201,15 @@ fn main() {
                 engine.set_personal(PersonalDict::load(words, learned));
             }
             let words_stamp = files.as_ref().and_then(|(w, _)| stamp_of(w));
+            let tr_file = Settings::dir().map(|d| d.join("my-translations.txt"));
+            if let Some(path) = &tr_file {
+                engine.set_user_translations(UserTranslations::load(path));
+            }
+            let tr_stamp = tr_file.as_deref().and_then(stamp_of);
             engine.add_dz_seed();
-            (engine, files, words_stamp)
+            (engine, files, words_stamp, tr_file, tr_stamp)
         };
-        let (mut engine, files, words_stamp) =
+        let (mut engine, files, words_stamp, tr_file, tr_stamp) =
             if std::env::args().any(|a| a == "--startup") { load() } else { run_with_splash(look_for(&settings), load) };
         for lang in [Lang::En, Lang::Fr, Lang::Ar, Lang::Dz] {
             engine.set_enabled(lang, settings.lang_on(lang));
@@ -223,7 +231,7 @@ fn main() {
 
         APP.with(|a| {
             *a.borrow_mut() =
-                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, pair_labels: Vec::new(), sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, last_check: Instant::now() });
+                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, pair_labels: Vec::new(), sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, tr_file, tr_stamp, last_check: Instant::now() });
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
@@ -241,6 +249,11 @@ fn main() {
         let hook = SetWindowsHookExW(WH_KEYBOARD_LL, Some(keyboard_hook), Some(hinst), 0).ok();
         if hook.is_none() {
             log("keyboard hook failed: Tab and Esc will not work");
+        }
+
+        // (a development build can open the settings window by itself, VERBA_TEST_SETTINGS=1, to look at it)
+        if cfg!(debug_assertions) && std::env::var("VERBA_TEST_SETTINGS").is_ok() {
+            open_settings();
         }
 
         let mut msg = MSG::default();
@@ -434,6 +447,11 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
         }
         _ => unsafe { DefWindowProcW(hwnd, msg, wp, lp) },
     }
+}
+
+/// Like `with_app`, and gives back what `f` answers (`None` when the app is busy: a borrow is taken further up).
+fn with_app_ret<R>(f: impl FnOnce(&mut App) -> R) -> Option<R> {
+    APP.with(|a| a.try_borrow_mut().ok().and_then(|mut b| b.as_mut().map(f)))
 }
 
 fn with_app(f: impl FnOnce(&mut App)) {
@@ -977,12 +995,90 @@ fn reload_personal_if_edited(app: &mut App) {
         return;
     }
     app.last_check = Instant::now();
-    let Some((words, learned)) = app.files.clone() else { return };
-    let stamp = stamp_of(&words);
-    if stamp != app.words_stamp && !app.engine.personal().is_dirty() {
-        app.engine.set_personal(PersonalDict::load(&words, &learned));
-        app.words_stamp = stamp;
+    if let Some((words, learned)) = app.files.clone() {
+        let stamp = stamp_of(&words);
+        if stamp != app.words_stamp && !app.engine.personal().is_dirty() {
+            app.engine.set_personal(PersonalDict::load(&words, &learned));
+            app.words_stamp = stamp;
+        }
     }
+    if let Some(path) = app.tr_file.clone() {
+        let stamp = stamp_of(&path);
+        if stamp != app.tr_stamp {
+            app.engine.set_user_translations(UserTranslations::load(&path));
+            app.tr_stamp = stamp;
+        }
+    }
+}
+
+/// The words the user added by hand, for the settings window.
+pub(crate) fn my_words() -> Vec<String> {
+    APP.with(|a| a.try_borrow().ok().and_then(|b| b.as_ref().map(|app| app.engine.personal().added_words())).unwrap_or_default())
+}
+
+/// Adds a word by hand. Returns whether it was new (a word the person already has, or one that is not a word, is not added).
+pub(crate) fn add_my_word(word: &str) -> bool {
+    with_app_ret(|app| {
+        let added = app.engine.personal_mut().add_word(word);
+        if added {
+            save_personal(app);
+        }
+        added
+    })
+    .unwrap_or(false)
+}
+
+/// Removes a word the user added by hand.
+pub(crate) fn remove_my_word(word: &str) {
+    with_app(|app| {
+        app.engine.personal_mut().remove_word(word);
+        save_personal(app);
+    });
+}
+
+/// The translations the user wrote, for the settings window.
+pub(crate) fn my_translations() -> Vec<UserEntry> {
+    APP.with(|a| a.try_borrow().ok().and_then(|b| b.as_ref().map(|app| app.engine.user_translations().entries().to_vec()))).unwrap_or_default()
+}
+
+/// Writes a translation by hand (or replaces the one written before for the same word). The error is a sentence for the person.
+pub(crate) fn add_my_translation(from: Lang, to: Lang, word: &str, translations: &str) -> Result<(), String> {
+    with_app_ret(|app| {
+        let mut all = app.engine.user_translations().clone();
+        all.add(from, to, word, translations)?;
+        save_translations(app, all)
+    })
+    .unwrap_or_else(|| Err("Verba is busy; try again.".to_string()))
+}
+
+/// Removes the translation at that place of `my_translations()`.
+pub(crate) fn remove_my_translation(index: usize) {
+    with_app(|app| {
+        let mut all = app.engine.user_translations().clone();
+        if all.remove(index) {
+            let _ = save_translations(app, all);
+        }
+    });
+}
+
+/// Gives the engine the translations and writes the file. The engine has them even when the file could not be written (the error says so).
+fn save_translations(app: &mut App, all: UserTranslations) -> Result<(), String> {
+    app.engine.set_user_translations(all);
+    let Some(path) = app.tr_file.clone() else { return Ok(()) };
+    let saved = std::fs::create_dir_all(path.parent().unwrap_or(Path::new("."))).and_then(|_| app.engine.user_translations().save(&path));
+    app.tr_stamp = stamp_of(&path);
+    saved.map_err(|e| format!("Could not write the file: {e}"))
+}
+
+/// Opens `my-translations.txt` in Notepad (made with its explanation when it does not exist yet).
+pub(crate) fn open_my_translations() {
+    with_app(|app| {
+        let Some(path) = app.tr_file.clone() else { return };
+        if !path.exists() {
+            let _ = save_translations(app, app.engine.user_translations().clone());
+        }
+        let _ = std::process::Command::new("notepad.exe").arg(&path).spawn();
+    });
 }
 
 /// Opens `personal.txt` in Notepad (made with its explanation when it does not exist yet).

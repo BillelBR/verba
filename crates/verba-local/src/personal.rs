@@ -697,7 +697,7 @@ fn read_lossy(path: &Path) -> Option<String> {
 }
 
 /// Writes next to the file, then renames over it.
-fn write_atomic(path: &Path, text: &str) -> io::Result<()> {
+pub(crate) fn write_atomic(path: &Path, text: &str) -> io::Result<()> {
     if let Some(dir) = path.parent().filter(|d| !d.as_os_str().is_empty()) {
         std::fs::create_dir_all(dir)?;
     }

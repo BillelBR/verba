@@ -39,7 +39,7 @@ use windows::Win32::UI::Input::KeyboardAndMouse::{
 };
 use windows::Win32::UI::WindowsAndMessaging::{
     CreateWindowExW, DefWindowProcW, DestroyWindow, GetClientRect, GetSystemMetrics, HICON, IDC_ARROW, IDC_HAND, IsWindow, KillTimer, LoadCursorW,
-    RegisterClassW, SM_CXSCREEN, SM_CYSCREEN, SW_SHOW, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, SWP_SHOWWINDOW, SetCursor, SetForegroundWindow, SetTimer,
+    RegisterClassW, SM_CXSCREEN, SM_CYSCREEN, SW_SHOW, SW_SHOWNOACTIVATE, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, SWP_SHOWWINDOW, SetCursor, SetForegroundWindow, SetTimer,
     SetWindowPos, ShowWindow, WINDOW_EX_STYLE, WM_CLOSE, WM_DESTROY, WM_ERASEBKGND, WM_KEYDOWN, WM_LBUTTONDOWN, WM_LBUTTONUP, WM_MOUSEMOVE,
     WM_PAINT, WM_SETCURSOR, WM_SIZE, WM_SYSCHAR, WM_SYSKEYDOWN, WM_TIMER, WNDCLASSW, WS_CAPTION, WS_MINIMIZEBOX, WS_OVERLAPPED, WS_SYSMENU,
 };
@@ -189,6 +189,14 @@ enum Font {
 }
 
 type Layout = (IDWriteTextLayout, f32, f32);
+
+/// One entry of `Ui::entry_list`: an optional tag, a title and an optional detail line.
+#[derive(Clone, Debug, Default)]
+pub struct ListEntry {
+    pub tag: String,
+    pub title: String,
+    pub detail: String,
+}
 
 /// How a button looks.
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -901,6 +909,75 @@ impl<'a> Ui<'a> {
         removed
     }
 
+    /// A list of entries, each with a small tinted tag (a direction such as "AR to EN"), a title, a quieter detail line under it and a remove
+    /// cross at the right; a row is lit under the pointer. Returns the index whose cross was pressed.
+    pub fn entry_list(&mut self, name: &str, items: &[ListEntry], empty_text: &str) -> Option<usize> {
+        let p = self.p;
+        let (x, w) = (self.content_x(), self.content_w());
+        if items.is_empty() {
+            let (tw, th) = self.measure(empty_text, 13.0, Font::Text, w - 40.0);
+            let h = 74.0;
+            self.text(x + (w - tw) / 2.0, self.cy + (h - th) / 2.0, empty_text, 13.0, Font::Text, p.muted, w - 40.0);
+            self.cy += h;
+            if let Some(card) = &mut self.card {
+                card.first = false;
+            }
+            return None;
+        }
+        let mut removed = None;
+        for (i, item) in items.iter().enumerate() {
+            let h = if item.detail.is_empty() { 50.0 } else { 64.0 };
+            if let Some(card) = &mut self.card {
+                if !card.first {
+                    self.main.push(Cmd::Rect { r: R::new(x + ROW_PAD_X, self.cy, w - 2.0 * ROW_PAD_X, 1.0), radius: 0.0, fill: Some(with_alpha(p.border, 0.8)), stroke: None });
+                }
+                card.first = false;
+            }
+            let row = R::new(x, self.cy, w, h);
+            let id = id_of(&format!("{name}:{i}"));
+            let lit = self.anim(id ^ 0x77, if self.pointer_inside(row) { 1.0 } else { 0.0 }, 0.1);
+            if lit > 0.0 {
+                self.push(Cmd::Rect { r: R::new(x + 6.0, row.y + 3.0, w - 12.0, h - 6.0), radius: 6.0, fill: Some(with_alpha(p.hover, lit)), stroke: None });
+            }
+            let mut tx = x + ROW_PAD_X;
+            if !item.tag.is_empty() {
+                let (tw, th) = self.measure(&item.tag, 11.0, Font::Semibold, 200.0);
+                // one width for every tag, so the titles line up
+                let chip = R::new(tx, row.y + (h - 24.0) / 2.0, tw.max(46.0) + 24.0, 24.0);
+                self.push(Cmd::Rect { r: chip, radius: 12.0, fill: Some(with_alpha(p.accent, if p.dark { 0.22 } else { 0.14 })), stroke: None });
+                self.text(chip.x + (chip.w - tw) / 2.0, chip.y + (chip.h - th) / 2.0, &item.tag, 11.0, Font::Semibold, if p.dark { mix(p.accent, p.text, 0.35) } else { p.accent }, 200.0);
+                tx = chip.right() + 14.0;
+            }
+            let text_w = (row.right() - ROW_PAD_X - 44.0 - tx).max(60.0);
+            if item.detail.is_empty() {
+                let (_, th) = self.measure(&item.title, 14.0, Font::Semibold, text_w);
+                self.text(tx, row.y + (h - th) / 2.0, &item.title, 14.0, Font::Semibold, p.text, text_w);
+            } else {
+                let (_, t1) = self.measure(&item.title, 14.5, Font::Semibold, text_w);
+                let (_, t2) = self.measure(&item.detail, 12.5, Font::Text, text_w);
+                let top = row.y + (h - (t1 + 3.0 + t2)) / 2.0;
+                self.text(tx, top, &item.title, 14.5, Font::Semibold, p.text, text_w);
+                self.text(tx, top + t1 + 3.0, &item.detail, 12.5, Font::Text, p.muted, text_w);
+            }
+            let cross = R::new(row.right() - ROW_PAD_X - 28.0, row.y + (h - 28.0) / 2.0, 28.0, 28.0);
+            let rid = id_of(&format!("{name}:x{i}"));
+            let resp = self.hit(rid, cross, true);
+            let a = self.anim(rid ^ 0x55, if resp.hover { 1.0 } else { 0.0 }, 0.1);
+            if a > 0.0 {
+                self.push(Cmd::Rect { r: cross, radius: 6.0, fill: Some(with_alpha(p.danger, 0.16 * a)), stroke: None });
+            }
+            self.glyph(cross, '\u{E711}', 11.0, mix(p.muted, p.danger, a));
+            if resp.focused && self.s.focus_visible {
+                self.focus_ring(cross, 6.0);
+            }
+            if resp.clicked {
+                removed = Some(i);
+            }
+            self.cy += h;
+        }
+        removed
+    }
+
     /// A row with a title, a description and a key cap: click it, then press the new key. `label` is the current key; `is_default`
     /// says whether it is the original one (the reset button is only offered when it is not).
     pub fn key_row(&mut self, name: &str, title: &str, desc: Option<&str>, label: &str, is_default: bool) -> KeyRow {
@@ -1067,11 +1144,15 @@ pub fn open(cfg: Config, draw: Box<dyn FnMut(&mut Ui)>) -> Option<HWND> {
             tracking: false,
         };
         CTX.with(|c| *c.borrow_mut() = Some(ctx));
-        let _ = ShowWindow(hwnd, SW_SHOW);
+        // (a development build run by a test, VERBA_TEST_QUIET=1, shows the window without taking the focus)
+        let quiet = cfg!(debug_assertions) && std::env::var("VERBA_TEST_QUIET").is_ok();
+        let _ = ShowWindow(hwnd, if quiet { SW_SHOWNOACTIVATE } else { SW_SHOW });
         // the very first ShowWindow of a program is overridden by how the program was started (hidden, minimised...);
         // this one is not, so the window always appears
-        let _ = SetWindowPos(hwnd, None, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
-        let _ = SetForegroundWindow(hwnd);
+        let _ = SetWindowPos(hwnd, None, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | if quiet { SWP_SHOWWINDOW | SWP_NOACTIVATE } else { SWP_SHOWWINDOW });
+        if !quiet {
+            let _ = SetForegroundWindow(hwnd);
+        }
         Some(hwnd)
     }
 }

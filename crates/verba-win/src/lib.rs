@@ -1,6 +1,7 @@
 //! Verba on Windows.
 
 pub mod apps;
+pub mod dialog;
 pub mod focus;
 pub mod layouts;
 pub mod look;

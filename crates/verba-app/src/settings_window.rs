@@ -8,8 +8,9 @@ use std::cell::Cell;
 use std::sync::atomic::{AtomicIsize, Ordering};
 
 use verba_core::Lang;
+use verba_win::dialog::{self, Field, Form};
 use verba_win::running_apps;
-use verba_win::ui::{self, ButtonStyle, Config, Ui};
+use verba_win::ui::{self, ButtonStyle, Config, ListEntry, Ui};
 use verba_win::{Look, Theme};
 use windows::Win32::Foundation::{HWND, POINT};
 use windows::Win32::UI::Shell::ShellExecuteW;
@@ -132,16 +133,38 @@ fn writing(ui: &mut Ui, s: &mut Settings) {
         &mut s.learn,
         true,
     );
+    ui.card_end();
+
+    ui.card_begin();
+    let words = crate::my_words();
+    let entries: Vec<ListEntry> = words.iter().map(|w| ListEntry { title: w.clone(), ..Default::default() }).collect();
+    if let Some(i) = ui.entry_list("myword", &entries, "No word added yet. Names, brands and words of your work go here.") {
+        let word = words[i].clone();
+        ui.defer(move || crate::remove_my_word(&word));
+    }
+    if ui.button_row(
+        "addword",
+        "Add a word",
+        Some("A word Verba should never flag as a typo and should always offer: a name, a brand, a term of your work."),
+        "Add a word…",
+        ButtonStyle::Primary,
+        true,
+    ) {
+        ui.defer(add_word);
+    }
     if ui.button_row(
         "mywords",
-        "My words",
-        Some("Words Verba should never flag as typos and should always offer. They are kept in a plain text file you can edit."),
+        "Edit as a text file",
+        Some("The same words in a plain text file, one per line. Verba reads it again when you save it."),
         "Open my words…",
         ButtonStyle::Secondary,
         true,
     ) {
         ui.defer(crate::open_my_words);
     }
+    ui.card_end();
+
+    ui.card_begin();
     if ui.button_row(
         "forget",
         "Forget what it learned",
@@ -203,6 +226,35 @@ fn translate(ui: &mut Ui, s: &mut Settings) {
             2 => Lang::Ar,
             _ => Lang::En,
         };
+    }
+    ui.card_end();
+
+    ui.section("My translations");
+    ui.card_begin();
+    let mine = crate::my_translations();
+    let items: Vec<ListEntry> = mine.iter().map(translation_entry).collect();
+    if let Some(i) = ui.entry_list("mytr", &items, "No translation written yet. Add the ones the dictionary gets wrong or does not have.") {
+        ui.defer(move || crate::remove_my_translation(i));
+    }
+    if ui.button_row(
+        "addtr",
+        "Write a translation",
+        Some("For a word you select and translate: yours come first, before the dictionary's. A sentence is translated by the neural translator, which does not read this list."),
+        "Add a translation…",
+        ButtonStyle::Primary,
+        true,
+    ) {
+        ui.defer(add_translation);
+    }
+    if ui.button_row(
+        "mytrfile",
+        "Edit as a text file",
+        Some("One line per word in a plain text file: direction, the word and its translations. Verba reads it again when you save it."),
+        "Open my translations…",
+        ButtonStyle::Secondary,
+        true,
+    ) {
+        ui.defer(crate::open_my_translations);
     }
     ui.card_end();
 
@@ -471,6 +523,71 @@ fn general(ui: &mut Ui) {
 }
 
 // ───────────── what the buttons do ─────────────
+
+/// The theme of the window, for the forms it opens.
+fn theme() -> Theme {
+    look().theme
+}
+
+/// A translation of the list: the direction as a tag, the word, and its translations under it.
+fn translation_entry(e: &verba_local::UserEntry) -> ListEntry {
+    ListEntry {
+        tag: format!("{} \u{2192} {}", e.from.code().to_uppercase(), e.to.code().to_uppercase()),
+        title: e.word.clone(),
+        detail: e.translations.join("  \u{B7}  "),
+    }
+}
+
+/// The form that asks for a word to keep.
+fn add_word() {
+    let form = Form {
+        title: "Add a word",
+        intro: "One word, 2 to 40 letters. Verba will not flag it as a typo and will offer it when you type its first letters.",
+        choice: None,
+        fields: &[Field { label: "Word", rtl: None }],
+        initial: &[],
+        ok_label: "Add",
+        activate: true,
+    };
+    dialog::ask(owner(), theme(), &form, &mut |_, texts| {
+        if crate::add_my_word(&texts[0]) {
+            Ok(())
+        } else {
+            Err("This is not a single word of 2 to 40 letters, or you already have it.".to_string())
+        }
+    });
+}
+
+/// The directions of the form that asks for a translation: what is written, and from which language to which.
+const DIRECTIONS: [(&str, Lang, Lang); 6] = [
+    ("Arabic \u{2192} English", Lang::Ar, Lang::En),
+    ("English \u{2192} Arabic", Lang::En, Lang::Ar),
+    ("French \u{2192} English", Lang::Fr, Lang::En),
+    ("English \u{2192} French", Lang::En, Lang::Fr),
+    ("Arabic \u{2192} French", Lang::Ar, Lang::Fr),
+    ("French \u{2192} Arabic", Lang::Fr, Lang::Ar),
+];
+
+/// The form that asks for a word and what it should be translated to.
+fn add_translation() {
+    let names: Vec<&str> = DIRECTIONS.iter().map(|d| d.0).collect();
+    let form = Form {
+        title: "Write a translation",
+        intro: "When you translate this word, your translations come first. Write several separated by ; (at most 5).",
+        choice: Some(("Translate", &names)),
+        fields: &[
+            Field { label: "Word", rtl: Some(|i| DIRECTIONS[i].1 == Lang::Ar) },
+            Field { label: "Translation", rtl: Some(|i| DIRECTIONS[i].2 == Lang::Ar) },
+        ],
+        initial: &[],
+        ok_label: "Add",
+        activate: true,
+    };
+    dialog::ask(owner(), theme(), &form, &mut |choice, texts| {
+        let (_, from, to) = DIRECTIONS[choice.min(DIRECTIONS.len() - 1)];
+        crate::add_my_translation(from, to, &texts[0], &texts[1])
+    });
+}
 
 fn confirm_forget() {
     let ask = wide("Forget every word Verba learned from what you typed? The words you added yourself stay.");

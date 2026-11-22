@@ -1691,3 +1691,16 @@ The English-only models are not better than the multilingual ones here (base.en 
 **Size budget.** The program is about 400 MB installed and one pack is 484 MB: either pack fits under 900 MB (about 880 MB), **both together do not** (about 1 360 MB). The files are the fp16 ones as published: an int8 conversion (about 250 MB each) was not made.
 
 **What was checked in the program** (development build, no keyboard, no focus): the download of a pack through the program's own code (progress, size and checksum of every file, the mark that says it is complete), the writing down of a recording through the real speech program, the microphone opened for a second and a half (only the number of samples is kept), and the pure parts (catalogue, silence detection, the messages). **Not checked:** a dictation made by speaking and pressing the shortcut in a real application, a microphone that Windows blocks, Algerian Darija, noisy rooms.
+
+## Algerian Darija dictation: candidates measured, nothing shipped yet
+
+The Arabic pack is Whisper small for Modern Standard Arabic and does not know Darija. Fine-tuned Algerian models exist on Hugging Face (found by searching the Hub for `algerian` and `darija`): LoRA adapters `algerian-nlp/EL-ANKA-Lite` (over Whisper small, MIT) and `algerian-nlp/EL-ANKA` (over Whisper medium, MIT), and merged small models such as `khier12/800min_whisper_small_FT_Algerian_Dialect` (Apache-2.0). Their model cards report 15 to 35 % WER (Lite) and under 1 % (medium) on the `oddadmix` Algerian collections, but those datasets have only a `train` split, so the "test" figures are not independent: they were **not trusted**.
+
+**Independent test:** the first 60 utterances (178 s) of the Algerian test split of **Casablanca** (UBC-NLP; CC BY-NC-ND 4.0: used for measuring only, never redistributed; real conversational Algerian speech, short sentences). `scripts/fetch-casablanca-test.py` makes the WAV files; `scripts/build-darija-pack.py` (adapter merged into Whisper small, then CTranslate2 int8) and `scripts/convert-hf-whisper.py` (a full model) make the packs; `whisper_eval` and `scripts/wer.py` measure (4 threads, beam 5).
+
+| Model | WER | CER | Pack size |
+|---|---|---|---|
+| Whisper small, the Arabic pack (no Darija) | 92.7 % | 42.2 % | 484 MB (fp16) |
+| EL-ANKA-Lite merged, int8 | **76.3 %** | **29.0 %** | 248 MB |
+
+Both are poor in absolute terms: Darija has no standard spelling (`بسيف` against `بالسيف` counts as a wrong word) and the audio is conversational, so these numbers say "the meaning is usually there, many words need a fix". Other candidates were being converted and measured on the same 60 utterances when this was written; their results go here when done. To be decided: which model becomes the Darija pack, and where its files are hosted (the pack catalogue pins files by address and SHA-256; a release asset built by a workflow is the plan, since the owner's repository is public).

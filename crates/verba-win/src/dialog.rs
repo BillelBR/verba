@@ -48,6 +48,8 @@ pub struct Form<'a> {
     /// The text each box starts with (may be shorter than `fields`: the other boxes start empty).
     pub initial: &'a [&'a str],
     pub ok_label: &'a str,
+    /// Lines of a text area under the boxes where `accept` can show an answer (`Reply::Show`); 0 for none. The Cancel button then says Close.
+    pub result_lines: usize,
     /// `false` shows the form without taking the keyboard focus (to look at it from a test).
     pub activate: bool,
 }
@@ -104,8 +106,26 @@ fn wide(text: &str) -> Vec<u16> {
     text.encode_utf16().chain(std::iter::once(0)).collect()
 }
 
+/// What `accept` answers when the person presses the button.
+pub enum Reply {
+    /// Done: the form closes.
+    Close,
+    /// A sentence shown in red; the form stays open with the text kept.
+    Error(String),
+    /// A text shown in the result area (`Form::result_lines`); the form stays open.
+    Show(String),
+}
+
 /// Opens the form and returns when it is closed: `true` when `accept` said `Ok`, `false` when the person cancelled.
 pub fn ask(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn FnMut(usize, &[String]) -> Result<(), String>) -> bool {
+    ask_with(owner, theme, form, &mut |choice, texts| match accept(choice, texts) {
+        Ok(()) => Reply::Close,
+        Err(sentence) => Reply::Error(sentence),
+    })
+}
+
+/// Like `ask`, with an answer that may also show a text in the form without closing it.
+pub fn ask_with(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn FnMut(usize, &[String]) -> Reply) -> bool {
     unsafe {
         let dark = theme == Theme::Dark;
         let (bg_c, colors) = if dark {
@@ -142,6 +162,10 @@ pub fn ask(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn FnMu
         for _ in form.fields {
             field_y.push(y);
             y += 20 + 4 + 26 + 12;
+        }
+        let result_y = y;
+        if form.result_lines > 0 {
+            y += form.result_lines as i32 * 21 + 10;
         }
         let error_y = y;
         y += 36;
@@ -211,10 +235,11 @@ pub fn ask(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn FnMu
             // a thin border (WS_EX_CLIENTEDGE) keeps the box visible on both backgrounds
             edits.push(control(w!("EDIT"), "", ES_AUTOHSCROLL | WS_TABSTOP.0, 0x200, ID_EDIT + i as i32, MARGIN, field_y[i] + 24, inner, 26));
         }
+        let result = (form.result_lines > 0).then(|| control(w!("STATIC"), "", SS_LEFT, 0, -1, MARGIN, result_y, inner, form.result_lines as i32 * 21));
         let error = control(w!("STATIC"), "", SS_LEFT, 0, -1, MARGIN, error_y, inner, 32);
         let ok_w = 100;
         let ok = control(w!("BUTTON"), form.ok_label, BS_DEFPUSHBUTTON | WS_TABSTOP.0, 0, ID_OK, WIDTH - MARGIN - 2 * ok_w - 8, buttons_y, ok_w, 30);
-        let cancel = control(w!("BUTTON"), "Cancel", WS_TABSTOP.0, 0, ID_CANCEL, WIDTH - MARGIN - ok_w, buttons_y, ok_w, 30);
+        let cancel = control(w!("BUTTON"), if form.result_lines > 0 { "Close" } else { "Cancel" }, WS_TABSTOP.0, 0, ID_CANCEL, WIDTH - MARGIN - ok_w, buttons_y, ok_w, 30);
         if dark {
             let explorer = w!("DarkMode_Explorer");
             let cfd = w!("DarkMode_CFD");
@@ -277,11 +302,18 @@ pub fn ask(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn FnMu
                 let choice = with_state(|s| s.combo).flatten().map(|c| SendMessageW(c, CB_GETCURSEL, None, None).0.max(0) as usize).unwrap_or(0);
                 let texts: Vec<String> = edits.iter().map(|e| text_of(*e)).collect();
                 match accept(choice, &texts) {
-                    Ok(()) => {
+                    Reply::Close => {
                         saved = true;
                         break;
                     }
-                    Err(sentence) => {
+                    Reply::Show(text) => {
+                        if let Some(r) = result {
+                            let t = wide(&text);
+                            let _ = SetWindowTextW(r, PCWSTR(t.as_ptr()));
+                        }
+                        let _ = SetWindowTextW(error, PCWSTR(wide("").as_ptr()));
+                    }
+                    Reply::Error(sentence) => {
                         let t = wide(&sentence);
                         let _ = SetWindowTextW(error, PCWSTR(t.as_ptr()));
                         // the box the sentence is about is not known here: the person is back in the first one

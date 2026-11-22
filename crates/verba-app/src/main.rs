@@ -1177,6 +1177,26 @@ pub(crate) fn import_backup(path: &Path) -> Result<Imported, String> {
     Ok(Imported { words, translations, settings: changed })
 }
 
+/// The text of the dictionary window for a word: one line per language it can be translated into. `None` when there is nothing to show.
+pub(crate) fn look_up_word(word: &str) -> Option<String> {
+    let found = with_app_ret(|app| app.engine.lookup_word(word, None))?;
+    if found.is_empty() {
+        return None;
+    }
+    let name = |l: Lang| match l {
+        Lang::En => "English",
+        Lang::Fr => "French",
+        Lang::Ar => "Arabic",
+        Lang::Dz => "Darija",
+    };
+    let mut out = format!("{} \u{2192}\n", name(found[0].from));
+    for t in &found {
+        let words: Vec<&str> = t.candidates.iter().map(|c| c.text.as_str()).collect();
+        out.push_str(&format!("{}:  {}\n", name(t.to), words.join("  \u{B7}  ")));
+    }
+    Some(out)
+}
+
 /// Opens `my-translations.txt` in Notepad (made with its explanation when it does not exist yet).
 pub(crate) fn open_my_translations() {
     with_app(|app| {

@@ -27,6 +27,8 @@ use crate::slang::SlangEntry;
 
 /// How many translations one lookup gives at most.
 const MAX_TRANSLATIONS: usize = 5;
+/// The dictionary window shows this many translations of a word into one language.
+pub const LOOKUP_LIMIT: usize = 10;
 /// Through English: how many English words of the middle step are followed.
 const PIVOT_WIDTH: usize = 3;
 
@@ -375,6 +377,11 @@ impl Dictionary {
     /// Translates a word. `targets` are the languages to translate into, in order of preference (the language the word is in is
     /// skipped); `from_hint` is the language of the keyboard, used when the word exists in both English and French.
     pub fn translate(&self, word: &str, targets: &[Lang], from_hint: Option<Lang>) -> Option<Translation> {
+        self.translate_limited(word, targets, from_hint, MAX_TRANSLATIONS)
+    }
+
+    /// The same with at most `limit` translations (the popup shows 5; the dictionary window shows more).
+    pub fn translate_limited(&self, word: &str, targets: &[Lang], from_hint: Option<Lang>, limit: usize) -> Option<Translation> {
         let asked = clean(word);
         if asked.is_empty() {
             return None;
@@ -403,7 +410,7 @@ impl Dictionary {
                 if let Some((list, via_english)) = self.lookup(from, to, asked) {
                     let candidates = list
                         .into_iter()
-                        .take(MAX_TRANSLATIONS)
+                        .take(limit)
                         .map(|t| Suggestion { text: if to == Lang::Ar { t } else { match_case(asked, &t) }, lang: to })
                         .collect();
                     return Some(Translation { from, to, word: asked.to_string(), candidates, via_english });
@@ -495,7 +502,7 @@ impl LocalEngine {
 /// The answer of the user's own translations and the dictionary's for one word. When both found the word in the same direction, the user's
 /// translations come first, then the dictionary's that are not the same (at most `MAX_TRANSLATIONS`); when the directions differ the user's
 /// answer is the one given, because the person wrote it for this word.
-fn merge_user(user: Option<Translation>, base: Option<Translation>) -> Option<Translation> {
+fn merge_user(user: Option<Translation>, base: Option<Translation>, limit: usize) -> Option<Translation> {
     match (user, base) {
         (None, base) => base,
         (user, None) => user,
@@ -506,7 +513,7 @@ fn merge_user(user: Option<Translation>, base: Option<Translation>) -> Option<Tr
                         user.candidates.push(c);
                     }
                 }
-                user.candidates.truncate(MAX_TRANSLATIONS);
+                user.candidates.truncate(limit);
             }
             user.via_english = false;
             Some(user)
@@ -529,11 +536,25 @@ impl LocalEngine {
     /// Translates one word with the dictionary. See `Dictionary::translate`. The first call reads the dictionary file. The translations the user
     /// wrote for the word (`set_user_translations`) come first.
     pub fn translate_word(&self, word: &str, targets: &[Lang], from_hint: Option<Lang>) -> Option<Translation> {
-        let base = self.dictionary().translate(word, targets, from_hint);
+        self.translate_word_limited(word, targets, from_hint, MAX_TRANSLATIONS)
+    }
+
+    /// The same with at most `limit` translations.
+    pub fn translate_word_limited(&self, word: &str, targets: &[Lang], from_hint: Option<Lang>, limit: usize) -> Option<Translation> {
+        let base = self.dictionary().translate_limited(word, targets, from_hint, limit);
         if self.user_tr.is_empty() {
             return base;
         }
-        merge_user(self.user_dict.translate(word, targets, from_hint), base)
+        merge_user(self.user_dict.translate_limited(word, targets, from_hint, limit), base, limit)
+    }
+
+    /// A word looked up for the dictionary window: its translations (at most `LOOKUP_LIMIT`) into each of English, French and Arabic, the
+    /// language it is in left out. Empty when the dictionary does not know the word.
+    pub fn lookup_word(&self, word: &str, from_hint: Option<Lang>) -> Vec<Translation> {
+        [Lang::En, Lang::Fr, Lang::Ar]
+            .iter()
+            .filter_map(|&to| self.translate_word_limited(word, &[to], from_hint, LOOKUP_LIMIT).filter(|t| t.to == to && t.from != t.to))
+            .collect()
     }
 
     /// Gives the engine the translations the user wrote.
@@ -726,6 +747,19 @@ mod tests {
         assert_eq!(d.len(Lang::En, Lang::Fr), 4);
         assert!(!d.is_empty());
         assert!(Dictionary::parse("").is_empty());
+    }
+
+    #[test]
+    fn a_word_is_looked_up_into_every_other_language_with_more_translations_than_the_popup() {
+        let mut e = LocalEngine::new();
+        e.load_dictionary("en>fr\tcold\tfroid; rhume; glacial; frais; enrhumé; frigide; glacé\nen>ar\tcold\tبارد; زكام\nar>en\tبارد\tcold\n");
+        let found = e.lookup_word("cold", None);
+        let to: Vec<Lang> = found.iter().map(|t| t.to).collect();
+        assert!(to.contains(&Lang::Fr) && to.contains(&Lang::Ar) && !to.contains(&Lang::En), "{to:?}");
+        let fr = found.iter().find(|t| t.to == Lang::Fr).unwrap();
+        assert!(fr.candidates.len() > 5, "the window shows more than the popup: {}", fr.candidates.len());
+        assert!(e.translate_word("cold", &[Lang::Fr], None).unwrap().candidates.len() <= 5, "the popup keeps 5");
+        assert!(e.lookup_word("zzzz", None).is_empty());
     }
 
     #[test]

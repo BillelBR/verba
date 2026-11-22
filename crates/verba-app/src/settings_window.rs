@@ -385,6 +385,16 @@ fn translate(ui: &mut Ui, s: &mut Settings) {
 
     ui.section("Dictionary");
     ui.card_begin();
+    if ui.button_row(
+        "lookup",
+        "Look up a word",
+        Some("Type a word in English, French, Arabic or Darija (Latin letters) and see its translations into the other languages, more of them than the popup shows. Yours come first."),
+        "Look up…",
+        ButtonStyle::Primary,
+        true,
+    ) {
+        ui.defer(look_up);
+    }
     match crate::dictionary_words() {
         Some(Some(n)) => ui.info_row(&format!("English, French and Arabic: {} entries", group_thousands(n)), Some("Built from Wiktionary (CC BY-SA 4.0). It never goes online.")),
         Some(None) => ui.info_row(
@@ -630,6 +640,7 @@ fn add_word() {
         fields: &[Field { label: "Word", rtl: None }],
         initial: &[],
         ok_label: "Add",
+        result_lines: 0,
         activate: true,
     };
     dialog::ask(owner(), theme(), &form, &mut |_, texts| {
@@ -664,11 +675,36 @@ fn add_translation() {
         ],
         initial: &[],
         ok_label: "Add",
+        result_lines: 0,
         activate: true,
     };
     dialog::ask(owner(), theme(), &form, &mut |choice, texts| {
         let (_, from, to) = DIRECTIONS[choice.min(DIRECTIONS.len() - 1)];
         crate::add_my_translation(from, to, &texts[0], &texts[1])
+    });
+}
+
+/// The dictionary window: a word is typed, its translations into the other languages are shown under it, and the box stays for the next word.
+fn look_up() {
+    let form = Form {
+        title: "Look up a word",
+        intro: "A word in English, French, Arabic, or Algerian Darija in Latin letters.",
+        choice: None,
+        fields: &[Field { label: "Word", rtl: None }],
+        initial: &[],
+        ok_label: "Look up",
+        result_lines: 6,
+        activate: true,
+    };
+    dialog::ask_with(owner(), theme(), &form, &mut |_, texts| {
+        let word = texts[0].trim();
+        if word.is_empty() {
+            return dialog::Reply::Error("Type a word.".to_string());
+        }
+        match crate::look_up_word(word) {
+            Some(text) => dialog::Reply::Show(text),
+            None => dialog::Reply::Error(format!("The dictionary has no translation for \u{201C}{word}\u{201D}.")),
+        }
     });
 }
 

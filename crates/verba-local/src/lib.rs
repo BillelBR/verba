@@ -33,7 +33,7 @@ pub use dz::{dz_ar_key, dz_sound_key};
 pub use nextword::{BuildParams, NextBuilder, NextParams, word_runs};
 pub use nextword::NextTable;
 pub use personal::PersonalDict;
-pub use translate::{Dictionary, LOOKUP_LIMIT, Translation};
+pub use translate::{Dictionary, LOOKUP_LIMIT, Translation, WordsReading};
 pub use arabizi::{ArabiziIndex, arabic_skeleton, looks_like_arabizi};
 pub use usertr::{MAX_ENTRIES as MAX_USER_TRANSLATIONS, UserEntry, UserTranslations};
 #[doc(hidden)]

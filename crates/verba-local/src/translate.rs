@@ -232,6 +232,8 @@ impl Dictionary {
     pub fn parse_with_fixes(text: &str) -> Self {
         let mut dict = Self::parse(text);
         dict.apply_fixes(include_str!("../seed/dict-fixes.txt"));
+        // Algerian Darija in Arabic letters: spoken forms of verbs, pronouns that end a word, the little words
+        dict.apply_fixes(include_str!("../seed/dz-ar-dict.txt"));
         dict.apply_extras(include_str!("../seed/ar-common.txt"));
         dict.latin = LatinGlossary::parse(include_str!("../seed/dz-latin-glossary.txt"));
         dict
@@ -447,6 +449,66 @@ impl Dictionary {
             }
         }
         None
+    }
+}
+
+/// A text translated word by word: what the sentence translator could not do, the dictionary does for each word on its own.
+#[derive(Clone, Debug, PartialEq)]
+pub struct WordsReading {
+    pub text: String,
+    /// How many words the dictionary translated, and how many the text has (the others stay as written).
+    pub translated: usize,
+    pub words: usize,
+}
+
+/// A character that belongs to a word: a letter, a vowel mark, a digit, or an apostrophe or hyphen.
+fn is_word_char(c: char) -> bool {
+    c.is_alphanumeric() || verba_core::is_arabic_mark(c) || c == '\'' || c == '\u{2019}' || c == '-'
+}
+
+impl LocalEngine {
+    /// Translates `text` word by word into `to`: every word is looked up on its own (yours first, then the dictionary's) and its first
+    /// translation is written in its place; a word the dictionary does not know, a number and all the punctuation stay as they are (the
+    /// comma and the question mark take the form of the target language). It is the answer when the sentence translator is not installed, fails or does not
+    /// answer: the words are right, the sentence is not a real one. `from_hint` is the language of the keyboard, for a Latin word that English and French both
+    /// know. `None` when no word could be translated.
+    pub fn translate_words(&self, text: &str, to: Lang, from_hint: Option<Lang>) -> Option<WordsReading> {
+        let mut out = String::new();
+        let (mut translated, mut words) = (0, 0);
+        let chars: Vec<char> = text.chars().collect();
+        let mut i = 0;
+        while i < chars.len() {
+            if !is_word_char(chars[i]) {
+                out.push(match (chars[i], to == Lang::Ar) {
+                    (',', true) => '\u{060C}',
+                    ('?', true) => '\u{061F}',
+                    ('\u{060C}', false) => ',',
+                    ('\u{061F}', false) => '?',
+                    (c, _) => c,
+                });
+                i += 1;
+                continue;
+            }
+            let start = i;
+            while i < chars.len() && is_word_char(chars[i]) {
+                i += 1;
+            }
+            let word: String = chars[start..i].iter().collect();
+            let trimmed = word.trim_matches(|c| c == '\'' || c == '\u{2019}' || c == '-');
+            if !trimmed.chars().any(char::is_alphabetic) {
+                out.push_str(&word);
+                continue;
+            }
+            words += 1;
+            match self.translate_word(trimmed, &[to], from_hint).and_then(|t| (t.to == to && t.from != t.to).then_some(t)).and_then(|t| t.candidates.into_iter().next()) {
+                Some(first) => {
+                    translated += 1;
+                    out.push_str(&first.text);
+                }
+                None => out.push_str(&word),
+            }
+        }
+        (translated > 0).then_some(WordsReading { text: out, translated, words })
     }
 }
 
@@ -708,6 +770,29 @@ mod tests {
     }
 
     #[test]
+    fn algerian_darija_words_are_translated_and_the_file_is_well_formed() {
+        let d = Dictionary::parse_with_fixes("ar>en	عمل	work
+");
+        let en = |w: &str| d.translate(w, &[Lang::En], Some(Lang::Ar)).map(|t| t.candidates[0].text.clone());
+        assert_eq!(en("يخدمو").as_deref(), Some("they work"));
+        assert_eq!(en("معليش").as_deref(), Some("never mind"));
+        assert_eq!(en("درتو").as_deref(), Some("you did (pl.)"));
+        assert_eq!(d.translate("يخدمو", &[Lang::Fr], Some(Lang::Ar)).unwrap().candidates[0].text, "ils travaillent");
+        let shipped = include_str!("../seed/dz-ar-dict.txt");
+        let lines: Vec<&str> = shipped.lines().filter(|l| !l.is_empty() && !l.starts_with('#')).collect();
+        assert!(lines.len() > 400, "{} lines", lines.len());
+        for line in &lines {
+            let f: Vec<&str> = line.split('\t').collect();
+            assert_eq!(f.len(), 3, "{line}");
+            assert!(f[0] == "ar>en" || f[0] == "ar>fr", "{line}");
+            assert!(f[1].chars().any(verba_core::is_arabic) && !f[1].contains(' ') && !f[2].trim().is_empty(), "{line}");
+        }
+        // every word has both an English and a French line
+        let en_n = lines.iter().filter(|l| l.starts_with("ar>en")).count();
+        assert_eq!(en_n * 2, lines.len());
+    }
+
+    #[test]
     fn hand_written_fixes_go_in_front() {
         let mut d = Dictionary::parse("ar>en\tخبر\ttry; news\n");
         d.apply_fixes("# c\nar>en\tخبر\tnews\nar>fr\tخبر\tnouvelle\n");
@@ -752,6 +837,27 @@ mod tests {
         assert_eq!(d.len(Lang::En, Lang::Fr), 4);
         assert!(!d.is_empty());
         assert!(Dictionary::parse("").is_empty());
+    }
+
+    #[test]
+    fn a_text_is_translated_word_by_word_and_keeps_what_it_cannot_translate() {
+        let mut e = LocalEngine::new();
+        e.load_dictionary("ar>en\tشكرا\tthanks\nar>en\tاخي\tmy brother\nen>ar\thello\tمرحبا\nen>ar\tworld\tعالم\n");
+        let r = e.translate_words("شكرا لك اخي، 2024؟ ", Lang::En, Some(Lang::Ar)).unwrap();
+        assert_eq!(r.text, "thanks to you my brother, 2024? ");
+        assert_eq!((r.translated, r.words), (3, 3));
+        // a word the dictionary does not know stays as written; the punctuation takes the Arabic form into Arabic
+        let r = e.translate_words("Hello, strange world?", Lang::Ar, Some(Lang::En)).unwrap();
+        assert_eq!(r.text, "مرحبا\u{060C} strange عالم\u{061F}");
+        assert_eq!((r.translated, r.words), (2, 3));
+        // nothing known: no answer, not the text given back
+        assert!(e.translate_words("xyzzy plugh", Lang::Ar, Some(Lang::En)).is_none());
+        assert!(e.translate_words("", Lang::En, None).is_none());
+        // the translations the user wrote come first
+        let mut mine = crate::UserTranslations::new();
+        mine.add(Lang::Ar, Lang::En, "اخي", "bro").unwrap();
+        e.set_user_translations(mine);
+        assert_eq!(e.translate_words("شكرا اخي", Lang::En, Some(Lang::Ar)).unwrap().text, "thanks bro");
     }
 
     #[test]

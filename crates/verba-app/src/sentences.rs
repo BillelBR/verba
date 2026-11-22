@@ -5,10 +5,13 @@
 //! between two sentences, the next request starts it again.
 
 use std::io::{BufReader, BufWriter};
+use std::os::windows::io::AsRawHandle;
 use std::os::windows::process::CommandExt;
 use std::path::{Path, PathBuf};
 use std::process::{Child, ChildStdin, ChildStdout, Command, Stdio};
 use std::sync::Mutex;
+use std::sync::mpsc::{self, RecvTimeoutError};
+use std::time::Duration;
 
 use verba_core::Lang;
 use verba_local::sentence::{BEAM, Request, Response, installed_pairs, pair_name, read_frame, translate_with, write_frame};
@@ -17,6 +20,9 @@ const CREATE_NO_WINDOW: u32 = 0x0800_0000;
 /// Threads the network may use: more gave nothing in the measurements (4 and 8 threads took the same time).
 const THREADS: &str = "4";
 const IDLE_SECS: &str = "600";
+/// A request that has no answer after this long is given up: the translator is stopped and the request fails (the program that wrote the
+/// request then translates word by word). A sentence takes a second or two; the first one also loads the model (a few seconds).
+const ANSWER_WITHIN: Duration = Duration::from_secs(45);
 
 struct Session {
     child: Child,
@@ -99,11 +105,30 @@ impl Translator {
                 *slot = Some(self.start()?);
             }
             let session = slot.as_mut().ok_or("no translator")?;
+            // a watchdog: when the translator is alive but does not answer, it is stopped, which ends the read below with an error
+            let handle = session.child.as_raw_handle() as usize;
+            let (done, waiting) = mpsc::channel::<()>();
+            let watchdog = std::thread::spawn(move || {
+                if matches!(waiting.recv_timeout(ANSWER_WITHIN), Err(RecvTimeoutError::Timeout)) {
+                    unsafe {
+                        let _ = windows::Win32::System::Threading::TerminateProcess(windows::Win32::Foundation::HANDLE(handle as *mut _), 1);
+                    }
+                    true
+                } else {
+                    false
+                }
+            });
             let outcome = write_frame(&mut session.input, &request.encode())
                 .and_then(|_| read_frame(&mut session.output))
                 .map_err(|e| e.to_string())
                 .and_then(|frame| frame.ok_or_else(|| "the translator closed".to_string()))
                 .and_then(|frame| Response::decode(&frame));
+            let _ = done.send(());
+            if watchdog.join().unwrap_or(false) {
+                // it was stopped for not answering: a second try would wait as long again, so the request fails now
+                *slot = None;
+                return Err("the translator did not answer in time".to_string());
+            }
             match outcome {
                 Ok(Response::Done(items)) => return Ok(items),
                 Ok(Response::Failed(why)) => return Err(why),

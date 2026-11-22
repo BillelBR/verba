@@ -177,6 +177,11 @@ struct App {
     last_check: Instant,
     /// The last spelling fix the user accepted, for the undo shortcut.
     last_fix: Option<LastFix>,
+    /// The sentence being translated (for the word-by-word translation when the translator fails), the text before the caret when it was asked
+    /// (a reading with other text means the user moved on), and the languages.
+    sentence_text: String,
+    sentence_ctx: Option<String>,
+    sentence_langs: Option<(Lang, Lang)>,
 }
 
 /// What the undo shortcut needs to put a corrected word back.
@@ -255,7 +260,7 @@ fn main() {
 
         APP.with(|a| {
             *a.borrow_mut() =
-                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, pair_labels: Vec::new(), sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, tr_file, tr_stamp, last_check: Instant::now(), last_fix: None });
+                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, pair_labels: Vec::new(), sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, tr_file, tr_stamp, last_check: Instant::now(), last_fix: None, sentence_text: String::new(), sentence_ctx: None, sentence_langs: None });
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
@@ -656,9 +661,18 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
         }
         return;
     };
+    // a reading with the same text before the caret as when the sentence was asked (the field's rectangle moved a pixel, the caret blinked) is the
+    // same selection: what is shown ("Translating...", then the translation) stays as it is
+    let same_selection = app.sentence_ctx.as_deref() == Some(snap.before_caret.as_str());
+    if same_selection && POPUP_VISIBLE.load(Ordering::SeqCst) {
+        return;
+    }
     app.translating = None;
     // the selection may be gone: a translation still on its way is for text that is no longer there
-    app.sentence_seq += 1;
+    if !same_selection {
+        app.sentence_seq += 1;
+        app.sentence_ctx = None;
+    }
     let previous = std::mem::replace(&mut app.last_text, snap.before_caret.clone());
     if app.settings.learn && app.settings.allows_app(&snap.app) {
         if let Some((word, separators)) = learning::finished_word(&previous, &snap.before_caret) {
@@ -762,8 +776,9 @@ fn show_translation(app: &mut App, picked: Option<Picked>) {
             app.translating = Some(if picked.selected { 0 } else { picked.text.chars().count() });
         }
         None => {
-            // two or three selected words that are not in the dictionary as such: the sentence translator may know them
-            if picked.selected && words >= 2 && !app.sentences.installed().is_empty() {
+            // two or three selected words that are not in the dictionary as such: the sentence translator may know them, and when it is not
+            // there (or fails) the words are translated one by one
+            if picked.selected && words >= 2 {
                 start_sentence(app, picked);
                 return;
             }
@@ -787,17 +802,23 @@ fn start_sentence(app: &mut App, picked: Picked) {
         return;
     }
     let installed = app.sentences.installed();
-    if installed.is_empty() {
-        notice(app, anchor, "Sentence translation is not installed. Run the Verba setup again and tick it.");
-        return;
-    }
-    let Some((from, to)) = verba_local::sentence::pair_for(&picked.text, picked.layout, app.settings.translate_to, &installed) else {
-        notice(app, anchor, "This language pair is not installed (Arabic and English are).");
+    // without the sentence translator, or for a pair it has no model for, the words are translated one by one
+    let pair = if installed.is_empty() { None } else { verba_local::sentence::pair_for(&picked.text, picked.layout, app.settings.translate_to, &installed) };
+    let Some((from, to)) = pair else {
+        let (from, to) = word_pair(&picked.text, picked.layout, app.settings.translate_to);
+        app.anchor = Some(picked.anchor);
+        if !show_words(app, picked.anchor, &picked.text, from, to) {
+            let why = if installed.is_empty() { "Sentence translation is not installed, and the dictionary knows none of these words." } else { "This language pair is not installed (Arabic and English are)." };
+            notice(app, anchor, why);
+        }
         return;
     };
     app.sentence_seq += 1;
     let seq = app.sentence_seq;
     app.anchor = Some(picked.anchor);
+    app.sentence_text = picked.text.clone();
+    app.sentence_ctx = Some(app.last_text.clone());
+    app.sentence_langs = Some((from, to));
     show_notice(app, anchor, "Translating\u{2026}", false);
     let translator = Arc::clone(&app.sentences);
     let text = picked.text;
@@ -833,8 +854,50 @@ fn show_sentence(app: &mut App, seq: usize, from: Lang, to: Lang, result: Result
         }
         Err(why) => {
             log(&format!("sentence translation failed: {why}"));
-            notice(app, anchor, "The sentence could not be translated.");
+            // the translator failed or did not answer: the words are translated one by one instead
+            let text = std::mem::take(&mut app.sentence_text);
+            let shown = anchor.is_some_and(|a| show_words(app, a, &text, from, to));
+            if !shown {
+                notice(app, anchor, "The sentence could not be translated.");
+            }
         }
+    }
+}
+
+/// The languages of a word-by-word translation of `text`: Arabic goes to the language chosen for translation (English when that is Arabic), and any other
+/// text to Arabic, like the sentence translator.
+fn word_pair(text: &str, layout: Option<Lang>, translate_to: Lang) -> (Lang, Lang) {
+    if text.chars().any(verba_core::is_arabic) {
+        (Lang::Ar, if translate_to == Lang::Ar { Lang::En } else { translate_to })
+    } else {
+        (if layout == Some(Lang::Fr) { Lang::Fr } else { Lang::En }, Lang::Ar)
+    }
+}
+
+/// Shows `text` translated word by word, with its label; Tab types it over the selection. False when the dictionary knew no word.
+fn show_words(app: &mut App, anchor: Anchor, text: &str, from: Lang, to: Lang) -> bool {
+    let hint = if from == Lang::Ar { Some(Lang::Ar) } else { Some(from) };
+    let Some(reading) = app.engine.translate_words(text, to, hint) else { return false };
+    let label = format!("{} \u{2192} {}, word by word", from.code().to_uppercase(), to.code().to_uppercase());
+    app.fix = None;
+    app.typed_len = 0;
+    present(app, anchor, vec![Suggestion { text: reading.text, lang: to }], Some(label));
+    // the selection is still there: typing replaces it
+    app.translating = Some(0);
+    true
+}
+
+#[cfg(test)]
+mod word_by_word_tests {
+    use super::*;
+
+    #[test]
+    fn the_languages_of_a_word_by_word_translation_follow_the_text() {
+        assert_eq!(word_pair("شكرا لك", None, Lang::En), (Lang::Ar, Lang::En));
+        assert_eq!(word_pair("شكرا لك", None, Lang::Fr), (Lang::Ar, Lang::Fr));
+        assert_eq!(word_pair("شكرا لك", None, Lang::Ar), (Lang::Ar, Lang::En), "never from Arabic into Arabic");
+        assert_eq!(word_pair("thank you", None, Lang::En), (Lang::En, Lang::Ar));
+        assert_eq!(word_pair("merci beaucoup", Some(Lang::Fr), Lang::En), (Lang::Fr, Lang::Ar));
     }
 }
 

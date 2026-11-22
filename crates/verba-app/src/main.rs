@@ -20,6 +20,7 @@ use std::sync::atomic::{AtomicBool, AtomicIsize, AtomicU32, AtomicUsize, Orderin
 
 mod backup;
 mod diagnostics;
+mod dictation;
 mod fixkeys;
 mod sync;
 mod update;
@@ -74,6 +75,12 @@ const WM_SENTENCE: u32 = WM_APP + 8;
 const WM_FIXKEYS: u32 = WM_APP + 9;
 /// The answer of a check for a newer version arrived (see `update.rs`).
 const WM_UPDATE: u32 = WM_APP + 10;
+/// The download of a dictation pack moved (or ended): the settings window draws again.
+const WM_DICTATION: u32 = WM_APP + 11;
+/// A dictation was written down (or failed): the text is typed.
+const WM_DICTATED: u32 = WM_APP + 12;
+/// The timer that listens to the microphone while a dictation is recorded.
+const TIMER_DICTATE: usize = 4711;
 /// wParam of `WM_ACCEPT` that means "the highlighted one" (a click sends the number of the candidate instead).
 const ACCEPT_HIGHLIGHTED: usize = usize::MAX;
 /// How often the worker thread looks at the app being typed in.
@@ -84,6 +91,7 @@ const HOTKEY_APP: i32 = 3;
 const HOTKEY_TRANSLATE: i32 = 4;
 const HOTKEY_FIXKEYS: i32 = 5;
 const HOTKEY_UNDO: i32 = 6;
+const HOTKEY_DICTATE: i32 = 7;
 const CMD_PAUSE: usize = 1001;
 const CMD_QUIT: usize = 1002;
 const CMD_APP: usize = 1003;
@@ -111,6 +119,9 @@ static FIXKEYS_PICKED: Mutex<Option<Option<Picked>>> = Mutex::new(None);
 /// The wrong-keyboard shortcut that is registered with Windows now.
 static FIXKEYS_KEY: Mutex<Option<Binding>> = Mutex::new(None);
 static UNDO_KEY: Mutex<Option<Binding>> = Mutex::new(None);
+static DICTATE_KEY: Mutex<Option<Binding>> = Mutex::new(None);
+/// What the thread that wrote a dictation down found: the text, or why not.
+static DICTATED: Mutex<Option<Result<String, String>>> = Mutex::new(None);
 /// What the thread that asked for a newer version found: whether the person asked (a message box answers) or the daily check did (a short
 /// notice, and only when there is news), and `Ok(Some(tag))` for a newer version, `Ok(None)` for none, or the reason it could not be told.
 static UPDATE_DONE: Mutex<Option<(bool, Result<Option<String>, String>)>> = Mutex::new(None);
@@ -186,6 +197,13 @@ struct App {
     /// The times of the files of the sync folder, of `personal.txt` and of `my-translations.txt` when the last sync looked, and when it did.
     sync_seen: (Option<SystemTime>, Option<SystemTime>, Option<SystemTime>),
     sync_checked: Instant,
+    /// The microphone, while a dictation is being recorded, and the pack that will write it down.
+    recorder: Option<dictation::Recorder>,
+    dictation_pack: Option<&'static dictation::Pack>,
+    /// A recording is being written down (a second one waits for it).
+    dictation_busy: bool,
+    /// The language of the keyboard of the last field that was read.
+    last_layout: Option<Lang>,
 }
 
 /// What the undo shortcut needs to put a corrected word back.
@@ -264,7 +282,7 @@ fn main() {
 
         APP.with(|a| {
             *a.borrow_mut() =
-                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, pair_labels: Vec::new(), sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, tr_file, tr_stamp, last_check: Instant::now(), last_fix: None, sentence_text: String::new(), sentence_ctx: None, sentence_langs: None, sync_seen: (None, None, None), sync_checked: Instant::now() - Duration::from_secs(3600) });
+                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, pair_labels: Vec::new(), sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, tr_file, tr_stamp, last_check: Instant::now(), last_fix: None, sentence_text: String::new(), sentence_ctx: None, sentence_langs: None, sync_seen: (None, None, None), sync_checked: Instant::now() - Duration::from_secs(3600), recorder: None, dictation_pack: None, dictation_busy: false, last_layout: None });
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
@@ -278,6 +296,7 @@ fn main() {
         with_app(|app| sync_translate_hotkey(hwnd, app.settings.keys.translate));
         with_app(|app| sync_fixkeys_hotkey(hwnd, app.settings.keys.fixkeys));
         with_app(|app| sync_undo_hotkey(hwnd, app.settings.keys.undo));
+        with_app(|app| sync_dictate_hotkey(hwnd, app.settings.keys.dictate));
 
         with_app(|app| app.overlay.set_click_target(hwnd, WM_ACCEPT));
         add_tray(hwnd);
@@ -291,6 +310,14 @@ fn main() {
         let quiet_test = cfg!(debug_assertions) && std::env::var("VERBA_TEST_QUIET").is_ok();
         if !quiet_test && with_app_ret(|app| app.settings.check_updates).unwrap_or(false) {
             check_for_update_if_due();
+        }
+        // (a development build run by a test can try the dictation without a keyboard: VERBA_TEST_DICTATION=download:<pack> | file:<pack>:<wav> | mic;
+        // what happens is written to `dictation-test.txt` in the settings folder; the sound of the microphone is never kept)
+        if cfg!(debug_assertions) {
+            if let Ok(what) = std::env::var("VERBA_TEST_DICTATION") {
+                let exe = app_sentences_exe();
+                std::thread::spawn(move || test_dictation(&what, exe));
+            }
         }
         // (a development build run by a test syncs once at start, VERBA_TEST_SYNC=1, and writes what happened to `sync-test.txt`)
         if cfg!(debug_assertions) && std::env::var("VERBA_TEST_SYNC").is_ok() {
@@ -320,6 +347,7 @@ fn main() {
         let _ = UnregisterHotKey(Some(hwnd), HOTKEY_PAUSE);
         let _ = UnregisterHotKey(Some(hwnd), HOTKEY_APP);
         let _ = UnregisterHotKey(Some(hwnd), HOTKEY_UNDO);
+        let _ = UnregisterHotKey(Some(hwnd), HOTKEY_DICTATE);
     }
 }
 
@@ -413,6 +441,8 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
                 HOTKEY_FIXKEYS => FIXKEYS_REQUEST.store(true, Ordering::SeqCst),
                 // puts back the word the last fix replaced
                 HOTKEY_UNDO => with_app(undo_last_fix),
+                // starts a dictation, or ends the one being recorded
+                HOTKEY_DICTATE => with_app(toggle_dictation),
                 _ => {}
             }
             LRESULT(0)
@@ -451,6 +481,21 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
             let picked = PICKED.lock().ok().and_then(|mut p| p.take());
             if let Some(picked) = picked {
                 with_app(|app| show_translation(app, picked));
+            }
+            LRESULT(0)
+        }
+        windows::Win32::UI::WindowsAndMessaging::WM_TIMER if wp.0 == TIMER_DICTATE => {
+            with_app(listen);
+            LRESULT(0)
+        }
+        WM_DICTATION => {
+            settings_window::refresh();
+            LRESULT(0)
+        }
+        WM_DICTATED => {
+            let done = DICTATED.lock().ok().and_then(|mut d| d.take());
+            if let Some(result) = done {
+                with_app(|app| type_dictation(app, result));
             }
             LRESULT(0)
         }
@@ -687,6 +732,7 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
         app.sentence_seq += 1;
         app.sentence_ctx = None;
     }
+    app.last_layout = snap.layout;
     let previous = std::mem::replace(&mut app.last_text, snap.before_caret.clone());
     if app.settings.learn && app.settings.allows_app(&snap.app) {
         if let Some((word, separators)) = learning::finished_word(&previous, &snap.before_caret) {
@@ -1100,6 +1146,218 @@ fn undo_last_fix(app: &mut App) {
     notice(app, None, &text);
 }
 
+// ───────────── dictation ─────────────
+
+/// The pack that writes the next dictation down: the one the setting names, or the one of the keyboard that is in use. An error is a sentence for the person.
+fn pick_pack(app: &App) -> Result<&'static dictation::Pack, String> {
+    use settings::DictationLanguage;
+    let wanted = match app.settings.dictation_language {
+        DictationLanguage::Arabic => Some("ar"),
+        DictationLanguage::English => Some("en"),
+        DictationLanguage::Auto => match app.last_layout {
+            Some(Lang::Ar) => Some("ar"),
+            Some(Lang::En) => Some("en"),
+            _ => None,
+        },
+    };
+    let ready: Vec<&'static dictation::Pack> = dictation::PACKS.iter().filter(|p| dictation::installed(p)).collect();
+    match wanted {
+        Some(id) => ready.iter().copied().find(|p| p.id == id).ok_or_else(|| {
+            let title = dictation::pack(id).map_or("", |p| p.title);
+            format!("The {title} dictation pack is not installed: Settings, Dictation, Download.")
+        }),
+        // another keyboard (French, German...) or none: the only pack that is installed
+        None => ready.first().copied().ok_or_else(|| "Dictation is not installed: Settings, Dictation, Download.".to_string()),
+    }
+}
+
+/// The shortcut of the dictation: starts listening, or ends the recording and writes it down.
+fn toggle_dictation(app: &mut App) {
+    if app.recorder.is_some() {
+        finish_dictation(app);
+        return;
+    }
+    if app.dictation_busy {
+        notice(app, None, "Still writing down the last dictation\u{2026}");
+        return;
+    }
+    let pack = match pick_pack(app) {
+        Ok(pack) => pack,
+        Err(why) => {
+            notice(app, None, &why);
+            return;
+        }
+    };
+    if app.sentences.exe().is_none() {
+        notice(app, None, "The speech program (verba-translate.exe) is not installed: run the Verba setup again.");
+        return;
+    }
+    match dictation::Recorder::start() {
+        Ok(recorder) => {
+            app.recorder = Some(recorder);
+            app.dictation_pack = Some(pack);
+            unsafe {
+                windows::Win32::UI::WindowsAndMessaging::SetTimer(Some(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _)), TIMER_DICTATE, 100, None);
+            }
+            let text = format!("Listening ({})\u{2026} press the key again when you are done", pack.title);
+            show_notice(app, None, &text, false);
+        }
+        Err(why) => notice(app, None, &why),
+    }
+}
+
+/// Every 100 ms while recording: takes the sound, and ends the recording when the person stopped talking.
+fn listen(app: &mut App) {
+    let Some(recorder) = app.recorder.as_mut() else {
+        unsafe {
+            let _ = windows::Win32::UI::WindowsAndMessaging::KillTimer(Some(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _)), TIMER_DICTATE);
+        }
+        return;
+    };
+    if recorder.poll() || recorder.vad.dead() {
+        finish_dictation(app);
+    }
+}
+
+/// Ends the recording and has it written down on a thread of its own (a few seconds).
+fn finish_dictation(app: &mut App) {
+    unsafe {
+        let _ = windows::Win32::UI::WindowsAndMessaging::KillTimer(Some(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _)), TIMER_DICTATE);
+    }
+    let (Some(recorder), Some(pack)) = (app.recorder.take(), app.dictation_pack.take()) else { return };
+    let (pcm, vad) = recorder.finish();
+    if vad.dead() {
+        notice(app, None, "No sound reached Verba: check that the microphone is allowed in Windows, Settings, Privacy, Microphone.");
+        return;
+    }
+    if !vad.heard_speech() || vad.seconds() < 0.4 {
+        notice(app, None, "No speech was heard.");
+        return;
+    }
+    let Some(exe) = app.sentences.exe() else { return };
+    app.dictation_busy = true;
+    show_notice(app, None, "Writing down\u{2026}", false);
+    std::thread::spawn(move || {
+        let result = dictation::transcribe(&exe, pack, &pcm);
+        if let Ok(mut slot) = DICTATED.lock() {
+            *slot = Some(result);
+        }
+        let controller = CONTROLLER.load(Ordering::SeqCst);
+        if controller != 0 {
+            unsafe {
+                let _ = PostMessageW(Some(HWND(controller as *mut _)), WM_DICTATED, WPARAM(0), LPARAM(0));
+            }
+        }
+    });
+}
+
+/// The words came back: they are typed where the cursor is, followed by a space.
+fn type_dictation(app: &mut App, result: Result<String, String>) {
+    app.dictation_busy = false;
+    hide(app);
+    match result {
+        Ok(text) if !text.trim().is_empty() => {
+            send_replacement(0, &format!("{} ", text.trim()), app.settings.line_break_shift, "dictation");
+            app.dismissed = None;
+        }
+        Ok(_) => notice(app, None, "Nothing was written down."),
+        Err(why) => {
+            log(&format!("dictation failed: {why}"));
+            notice(app, None, "The dictation could not be written down.");
+        }
+    }
+}
+
+/// (Development builds.) The program that writes speech down, for the test thread.
+fn app_sentences_exe() -> Option<PathBuf> {
+    APP.with(|a| a.try_borrow().ok().and_then(|b| b.as_ref().and_then(|app| app.sentences.exe())))
+}
+
+/// (Development builds.) The checks of `VERBA_TEST_DICTATION`, on a thread of their own.
+fn test_dictation(what: &str, exe: Option<PathBuf>) {
+    let Some(dir) = Settings::dir() else { return };
+    let out = dir.join("dictation-test.txt");
+    let say = |text: String| {
+        let _ = std::fs::OpenOptions::new().create(true).append(true).open(&out).and_then(|mut f| std::io::Write::write_all(&mut f, format!("{text}\n").as_bytes()));
+    };
+    let mut parts = what.splitn(3, ':');
+    match (parts.next(), parts.next(), parts.next()) {
+        (Some("download"), Some(id), _) => {
+            if let Err(why) = dictation_download(id) {
+                say(format!("not started: {why}"));
+                return;
+            }
+            let mut last = String::new();
+            loop {
+                std::thread::sleep(Duration::from_millis(1000));
+                let line = match dictation::progress() {
+                    Some(p) => format!("{:?} {} / {} MB ({:.0} %)", p.phase, p.done / 1_000_000, p.total / 1_000_000, p.fraction() * 100.0),
+                    None => {
+                        say(format!("finished: installed = {}", dictation::pack(id).is_some_and(dictation::installed)));
+                        return;
+                    }
+                };
+                if line != last {
+                    say(line.clone());
+                    last = line;
+                }
+                if matches!(dictation::progress().map(|p| p.phase), Some(dictation::Phase::Failed(_))) {
+                    return;
+                }
+            }
+        }
+        (Some("file"), Some(id), Some(wav)) => {
+            let (Some(pack), Some(exe)) = (dictation::pack(id), exe) else { return say("no pack or no program".to_string()) };
+            match dictation::read_wav_pcm(Path::new(wav)) {
+                Ok(pcm) => {
+                    let t = Instant::now();
+                    let first = dictation::transcribe(&exe, pack, &pcm);
+                    say(format!("1 ({:.1}s): {first:?}", t.elapsed().as_secs_f32()));
+                    // a second request in the same session: the model is loaded already
+                    let t = Instant::now();
+                    let second = dictation::transcribe(&exe, pack, &pcm);
+                    say(format!("2 ({:.1}s): {second:?}", t.elapsed().as_secs_f32()));
+                }
+                Err(why) => say(format!("cannot read the file: {why}")),
+            }
+        }
+        (Some("mic"), _, _) => match dictation::Recorder::start() {
+            Ok(mut r) => {
+                for _ in 0..15 {
+                    std::thread::sleep(Duration::from_millis(100));
+                    r.poll();
+                }
+                let (pcm, vad) = r.finish();
+                say(format!("microphone: {} samples ({:.1} s), speech heard {}, dead {}", pcm.len(), vad.seconds(), vad.heard_speech(), vad.dead()));
+            }
+            Err(why) => say(format!("microphone: {why}")),
+        },
+        _ => say(format!("unknown: {what}")),
+    }
+}
+
+/// Starts the download of a dictation pack; the settings window is drawn again as it moves. An error is a sentence for the person.
+pub(crate) fn dictation_download(id: &str) -> Result<(), String> {
+    let pack = dictation::pack(id).ok_or("There is no such pack.")?;
+    dictation::clear_failure();
+    dictation::start_download(pack, || {
+        let controller = CONTROLLER.load(Ordering::SeqCst);
+        if controller != 0 {
+            unsafe {
+                let _ = PostMessageW(Some(HWND(controller as *mut _)), WM_DICTATION, WPARAM(0), LPARAM(0));
+            }
+        }
+    })
+}
+
+/// Takes a dictation pack off the disk.
+pub(crate) fn dictation_remove(id: &str) {
+    if let Some(pack) = dictation::pack(id) {
+        dictation::end_session();
+        dictation::remove(pack);
+    }
+}
+
 /// Whether the corrected word may be taken back: it is still the last thing before the caret and the fix is recent. Anything typed
 /// since would be erased with it.
 fn undo_applies(before_caret: &str, corrected: &str, age: Duration) -> bool {
@@ -1446,6 +1704,7 @@ pub(crate) fn update_settings(change: impl FnOnce(&mut Settings)) {
         sync_translate_hotkey(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _), app.settings.keys.translate);
         sync_fixkeys_hotkey(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _), app.settings.keys.fixkeys);
         sync_undo_hotkey(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _), app.settings.keys.undo);
+        sync_dictate_hotkey(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _), app.settings.keys.dictate);
         if !app.settings.learn {
             app.learn_buf.clear();
             app.learn_words = 0;
@@ -1469,6 +1728,11 @@ fn sync_translate_hotkey(hwnd: HWND, binding: Binding) {
 /// The same for the shortcut that puts right text typed with the wrong keyboard.
 fn sync_fixkeys_hotkey(hwnd: HWND, binding: Binding) {
     sync_hotkey(hwnd, HOTKEY_FIXKEYS, &FIXKEYS_KEY, binding, "wrong keyboard");
+}
+
+/// The same for the shortcut that starts and ends a dictation.
+fn sync_dictate_hotkey(hwnd: HWND, binding: Binding) {
+    sync_hotkey(hwnd, HOTKEY_DICTATE, &DICTATE_KEY, binding, "dictation");
 }
 
 /// The same for the shortcut that puts back the word Verba corrected.

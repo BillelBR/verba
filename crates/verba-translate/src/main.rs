@@ -8,11 +8,15 @@
 //! verba-translate serve --models <folder> [--threads 4] [--idle-secs 600]
 //! verba-translate translate <models folder> <ar-en> "text"      (one sentence, for a quick look)
 //! verba-translate bench <models folder> <ar-en> <threads> <beam> <runs> "sentence" ...
+//! verba-translate dictate --model <folder> [--threads 4] [--idle-secs 600]      (speech to text, see dictate.rs)
+//! verba-translate transcribe <model folder> <ar|en|fr|auto> <file.wav>
 //! verba-translate batch <models folder> <ar-en> <beam> <input.txt> <output.txt> [--raw]    (one text per line, as the program translates it)
 //! ```
 //!
 //! The models are OPUS-MT networks converted to int8 for CTranslate2, one folder per direction (`ar-en`, `en-ar`, ...), each with
 //! `model.bin`, `shared_vocabulary.json`, `config.json`, `source.spm` and `target.spm` (see `scripts/fetch-models.ps1`).
+
+mod dictate;
 
 use std::collections::HashMap;
 use std::io::{self, BufReader, BufWriter};
@@ -252,6 +256,14 @@ fn main() -> Result<()> {
             }
             Ok(())
         }
+        Some("dictate") => {
+            let option = |name: &str| args.iter().position(|a| a == name).and_then(|i| args.get(i + 1));
+            let model = option("--model").ok_or_else(|| anyhow!("--model <folder> is needed"))?;
+            let threads = option("--threads").and_then(|t| t.parse().ok()).unwrap_or(4);
+            let idle = option("--idle-secs").and_then(|t| t.parse().ok()).unwrap_or(600);
+            dictate::serve(PathBuf::from(model), threads, Duration::from_secs(idle))
+        }
+        Some("transcribe") => dictate::transcribe_file(&args[1..]),
         Some("bench") => bench(&args[1..]),
         Some("batch") => batch(&args[1..]),
         Some("tokens") => {

@@ -1,14 +1,14 @@
 ﻿; Inno Setup 6.3 or later script for Verba.
 ;
 ; Build it with scripts\build-installer.ps1 (which passes the version), or by hand:
-;     ISCC.exe /DAppVersion=0.11.4 installer\verba.iss
+;     ISCC.exe /DAppVersion=0.12.0 installer\verba.iss
 ; Output: dist\Verba-Setup-<version>.exe
 ;
 ; Per-user by default (no administrator rights needed); the "dialog" override lets the user choose
 ; to install for all users instead.
 
 #ifndef AppVersion
-  #define AppVersion "0.11.4"
+  #define AppVersion "0.12.0"
 #endif
 
 [Setup]
@@ -83,8 +83,9 @@ Source: "word-lists-notice.txt"; DestDir: "{app}"; DestName: "WORD-LISTS-LICENSE
 #ifdef WithSentences
 ; sentence translation: a program of its own (CTranslate2 and oneDNN, MIT and Apache-2.0) and one OPUS-MT model per direction (Apache-2.0),
 ; see THIRD-PARTY.md. vcomp140.dll is the Visual C++ OpenMP runtime, a redistributable file of Microsoft.
-Source: "..\target\mt\release\verba-translate.exe"; DestDir: "{app}"; Flags: ignoreversion; Tasks: sentences
-Source: "..\target\mt\release\vcomp140.dll"; DestDir: "{app}"; Flags: ignoreversion; Tasks: sentences
+; the program is installed in every case (the dictation packs of the settings need it); only the translation models belong to the option
+Source: "..\target\mt\release\verba-translate.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\target\mt\release\vcomp140.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\models\ar-en\*"; DestDir: "{app}\models\ar-en"; Flags: ignoreversion; Tasks: sentences
 Source: "..\models\en-ar\*"; DestDir: "{app}\models\en-ar"; Flags: ignoreversion; Tasks: sentences
 #endif

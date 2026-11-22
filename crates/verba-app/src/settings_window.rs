@@ -36,6 +36,8 @@ thread_local! {
     static FIXKEYS_PROBLEM: Cell<Option<&'static str>> = const { Cell::new(None) };
     /// The same for the undo shortcut on the Writing help page.
     static UNDO_PROBLEM: Cell<Option<&'static str>> = const { Cell::new(None) };
+    /// The same for the dictation shortcut.
+    static DICTATE_PROBLEM: Cell<Option<&'static str>> = const { Cell::new(None) };
     /// Whether "Start with Windows" is on: asked of the registry once, not at every frame.
     static AUTOSTART: Cell<Option<bool>> = const { Cell::new(None) };
 }
@@ -82,10 +84,11 @@ fn draw(ui: &mut Ui) {
     ui.nav_item("nav:writing", '\u{E70F}', "Writing help", 0);
     ui.nav_item("nav:languages", '\u{E774}', "Languages", 1);
     ui.nav_item("nav:translate", '\u{E8C1}', "Translate", 2);
-    ui.nav_item("nav:keys", '\u{E765}', "Keyboard", 3);
-    ui.nav_item("nav:apps", '\u{E71D}', "Apps", 4);
-    ui.nav_item("nav:look", '\u{E790}', "Appearance", 5);
-    ui.nav_item("nav:general", '\u{E713}', "General", 6);
+    ui.nav_item("nav:dictation", '\u{E720}', "Dictation", 3);
+    ui.nav_item("nav:keys", '\u{E765}', "Keyboard", 4);
+    ui.nav_item("nav:apps", '\u{E71D}', "Apps", 5);
+    ui.nav_item("nav:look", '\u{E790}', "Appearance", 6);
+    ui.nav_item("nav:general", '\u{E713}', "General", 7);
     let mut on = !s.paused;
     if ui.sidebar_switch("master", "Suggestions", if on { "On" } else { "Paused" }, &mut on) {
         s.paused = !on;
@@ -95,9 +98,10 @@ fn draw(ui: &mut Ui) {
         0 => writing(ui, &mut s),
         1 => languages(ui, &mut s),
         2 => translate(ui, &mut s),
-        3 => keyboard(ui, &mut s),
-        4 => apps(ui, &mut s),
-        5 => appearance(ui, &mut s),
+        3 => dictation_page(ui, &mut s),
+        4 => keyboard(ui, &mut s),
+        5 => apps(ui, &mut s),
+        6 => appearance(ui, &mut s),
         _ => general(ui, &mut s),
     }
 
@@ -417,6 +421,119 @@ fn group_thousands(n: usize) -> String {
         out.push(c);
     }
     out
+}
+
+/// The Dictation page: one pack per language to download, and how to dictate.
+fn dictation_page(ui: &mut Ui, s: &mut Settings) {
+    use crate::dictation::{self, Phase};
+    ui.page_begin("Dictation", "Speak and Verba writes what you say where the cursor is. It works on this PC, offline: the sound is never sent anywhere, and is never kept.");
+    let progress = dictation::progress();
+    let busy = progress.as_ref().is_some_and(|p| !matches!(p.phase, Phase::Failed(_)));
+    for pack in dictation::PACKS {
+        ui.section(&format!("{} dictation", pack.title));
+        ui.card_begin();
+        let size = dictation::megabytes(pack.total_bytes());
+        let mine = progress.as_ref().filter(|p| p.pack == pack.id);
+        if dictation::installed(pack) {
+            ui.info_row(&format!("{} dictation is installed.", pack.title), Some(&format!("It uses {size} on the disk. Press the shortcut below and speak.")));
+            if ui.button_row(&format!("dict-remove-{}", pack.id), "Remove the pack", Some("Frees the disk. You can download it again."), "Remove", ButtonStyle::Secondary, !busy) {
+                let id = pack.id;
+                ui.defer(move || {
+                    crate::dictation_remove(id);
+                    refresh();
+                });
+            }
+        } else if let Some(p) = mine {
+            match &p.phase {
+                Phase::Downloading | Phase::Verifying => {
+                    let done = dictation::megabytes(p.done);
+                    let text = if p.phase == Phase::Verifying { "Checking the files\u{2026}".to_string() } else { format!("{:.0} %  \u{00B7}  {done} of {size}", p.fraction() * 100.0) };
+                    if ui.progress_row(&format!("dict-progress-{}", pack.id), &format!("Downloading the {} pack\u{2026}", pack.title), Some(&text), p.fraction(), "Cancel", ButtonStyle::Secondary) {
+                        ui.defer(dictation::cancel_download);
+                    }
+                }
+                Phase::Failed(why) => {
+                    ui.info_row("The download did not finish.", Some(why));
+                    let id = pack.id;
+                    if ui.button_row(&format!("dict-retry-{}", pack.id), "Try again", Some("What was downloaded is kept: it goes on from there."), "Try again", ButtonStyle::Primary, true) {
+                        ui.defer(move || download_pack(id));
+                    }
+                }
+            }
+        } else {
+            let desc = match pack.id {
+                "ar" => "Writes Modern Standard Arabic well enough to correct (about one word in four needs a fix on clear speech); Algerian Darija is weaker. Needs a microphone.",
+                _ => "Writes English well (about one word in eighteen needs a fix on clear speech). Needs a microphone.",
+            };
+            if ui.button_row(&format!("dict-get-{}", pack.id), &format!("Download the {} pack", pack.title), Some(&format!("{desc} {size} to download, once.")), &format!("Download ({size})"), ButtonStyle::Primary, !busy) {
+                let id = pack.id;
+                ui.defer(move || download_pack(id));
+            }
+        }
+        ui.card_end();
+    }
+
+    ui.section("How to dictate");
+    ui.card_begin();
+    let current = s.keys.dictate;
+    let default = Keys::default().dictate;
+    let row = ui.key_row(
+        "key:dictate",
+        "Start and end a dictation",
+        Some("Click in a text field, press it, speak, then press it again (or stop talking for two seconds). The words are typed at the cursor after a few seconds."),
+        &current.label(),
+        current == default,
+    );
+    if let Some((vk, mods)) = row.captured {
+        let b = Binding::new(vk, mods);
+        if !Binding::usable_hotkey(vk, mods) {
+            DICTATE_PROBLEM.with(|p| p.set(Some("A shortcut that works in every app needs Ctrl or Alt together with another key.")));
+        } else if b == s.keys.translate || b == s.keys.fixkeys || b == s.keys.undo {
+            DICTATE_PROBLEM.with(|p| p.set(Some("That key already has another job: choose another one.")));
+        } else {
+            s.keys.dictate = b;
+            DICTATE_PROBLEM.with(|p| p.set(None));
+        }
+    }
+    if row.reset {
+        s.keys.dictate = default;
+        DICTATE_PROBLEM.with(|p| p.set(None));
+    }
+    let mut which = match s.dictation_language {
+        crate::settings::DictationLanguage::Auto => 0,
+        crate::settings::DictationLanguage::Arabic => 1,
+        crate::settings::DictationLanguage::English => 2,
+    };
+    if ui.segmented_row(
+        "dict-language",
+        "Language to write",
+        Some("\u{201C}Keyboard\u{201D} writes in the language of the keyboard you are typing with (English or Arabic); the other two always use that pack."),
+        &["Keyboard", "Arabic", "English"],
+        &mut which,
+    ) {
+        s.dictation_language = match which {
+            1 => crate::settings::DictationLanguage::Arabic,
+            2 => crate::settings::DictationLanguage::English,
+            _ => crate::settings::DictationLanguage::Auto,
+        };
+    }
+    ui.card_end();
+    if let Some(problem) = DICTATE_PROBLEM.with(|p| p.get()) {
+        ui.card_begin();
+        ui.note('\u{E783}', problem);
+        ui.card_end();
+    }
+    ui.card_begin();
+    ui.note('\u{E946}', "Measured on people reading aloud in a quiet room (docs/ACCURACY.md); a noisy room, a cheap microphone or fast speech make more mistakes, and Algerian Darija is not measured.");
+    ui.card_end();
+}
+
+/// Starts the download of a pack; a reason it could not start is shown in a message.
+fn download_pack(id: &'static str) {
+    if let Err(why) = crate::dictation_download(id) {
+        say(&why, windows::Win32::UI::WindowsAndMessaging::MB_ICONWARNING);
+    }
+    refresh();
 }
 
 fn keyboard(ui: &mut Ui, s: &mut Settings) {

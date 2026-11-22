@@ -1672,3 +1672,22 @@ Data: the first 60 utterances of the test set of **FLEURS** (Google; CC BY 4.0; 
 - **Speed.** About 5 s per utterance on 4 threads whatever its length (Whisper's encoder always works on a 30-second window), so it is "press, speak, release, wait a few seconds", not live typing. `base` takes 2 s. These times were taken while the PC was also compiling, so they are a little pessimistic.
 - **Size.** The int8 file of `small` was not made or measured here; about 250 MB is the usual figure for it, to be checked. With it the installed program would be about 650 MB; with the fp16 file as downloaded, about 880 MB.
 - **Not built:** microphone capture, the push-to-talk key, voice-activity cut, typing the text with the keys, the settings and the installer part. Verdict for the owner: size fits with `small`; the accuracy is acceptable for English and French and only "usable with corrections" for Modern Standard Arabic.
+
+## Dictation: built, as two packs (version 0.12.0)
+
+Dictation is in the program: *Dictation* in the settings downloads one pack per language, **Arabic** (Whisper small, multilingual, told to write Arabic) and **English** (Whisper small.en), 484 MB each, from the repositories named in `THIRD-PARTY.md`, pinned to a revision and checked against a SHA-256 per file. They are not in the installer. The shortcut (Ctrl+Alt+D) records from the default microphone (16 kHz, `waveIn`), ends after two seconds of silence once words were heard or after 28 seconds, and `verba-translate.exe dictate` writes the sound down (the model stays loaded while it is used and ends after ten minutes without work).
+
+English measured on the same 60 FLEURS utterances as above (read speech, `whisper_eval`, 4 threads, beam 5):
+
+| English model | Size | WER | CER | Time per utterance |
+|---|---|---|---|---|
+| base (multilingual) | 145 MB | 8.6 % | 4.5 % | 1.8 s |
+| base.en | 145 MB | 10.0 % | 5.6 % | 2.3 s |
+| small (multilingual) | 484 MB | 5.6 % | 2.7 % | 5.3 s |
+| **small.en (the English pack)** | 484 MB | **5.4 %** | 3.1 % | see above |
+
+The English-only models are not better than the multilingual ones here (base.en is worse than base); small.en was taken because the English pack is its own download anyway and it is the best of the measured. Arabic: small, 27.6 % WER (see above).
+
+**Size budget.** The program is about 400 MB installed and one pack is 484 MB: either pack fits under 900 MB (about 880 MB), **both together do not** (about 1 360 MB). The files are the fp16 ones as published: an int8 conversion (about 250 MB each) was not made.
+
+**What was checked in the program** (development build, no keyboard, no focus): the download of a pack through the program's own code (progress, size and checksum of every file, the mark that says it is complete), the writing down of a recording through the real speech program, the microphone opened for a second and a half (only the number of samples is kept), and the pure parts (catalogue, silence detection, the messages). **Not checked:** a dictation made by speaking and pressing the shortcut in a real application, a microphone that Windows blocks, Algerian Darija, noisy rooms.

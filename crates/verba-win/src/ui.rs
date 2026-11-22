@@ -689,6 +689,24 @@ impl<'a> Ui<'a> {
         self.button_shape(id_of(name), b, label, style, enabled).clicked
     }
 
+    /// A row with a title, a description, a progress bar under them (`fraction` from 0 to 1) and a button at the right (a "Cancel" while it works).
+    /// Returns true when the button was pressed.
+    pub fn progress_row(&mut self, name: &str, title: &str, desc: Option<&str>, fraction: f32, label: &str, style: ButtonStyle) -> bool {
+        let p = self.p;
+        let (bw, _) = self.measure(label, 13.0, Font::Text, 400.0);
+        let btn_w = (bw + 34.0).max(96.0);
+        let r = self.row(title, desc, btn_w, ROW_MIN + 26.0);
+        let bar_w = (r.w - 2.0 * ROW_PAD_X - btn_w - 16.0).max(120.0);
+        let bar = R::new(r.x + ROW_PAD_X, r.bottom() - 18.0, bar_w, 6.0);
+        self.push(Cmd::Rect { r: bar, radius: 3.0, fill: Some(with_alpha(p.muted, 0.28)), stroke: None });
+        let done = bar.w * fraction.clamp(0.0, 1.0);
+        if done > 0.5 {
+            self.push(Cmd::Rect { r: R::new(bar.x, bar.y, done.max(6.0), bar.h), radius: 3.0, fill: Some(p.accent), stroke: None });
+        }
+        let b = R::new(r.right() - ROW_PAD_X - btn_w, r.y + (r.h - 32.0) / 2.0, btn_w, 32.0);
+        self.button_shape(id_of(name), b, label, style, true).clicked
+    }
+
     /// A button on its own line inside a card, or at a given place: returns true when pressed.
     pub fn button_at(&mut self, name: &str, r: R, label: &str, style: ButtonStyle) -> bool {
         self.button_shape(id_of(name), r, label, style, true).clicked

@@ -39,6 +39,33 @@ pub enum AppMode {
     OnlyThese,
 }
 
+/// Which language is dictated.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum DictationLanguage {
+    /// The language of the keyboard that is in use (English or Arabic; another keyboard uses the only pack that is installed).
+    Auto,
+    Arabic,
+    English,
+}
+
+impl DictationLanguage {
+    pub fn code(self) -> &'static str {
+        match self {
+            Self::Auto => "auto",
+            Self::Arabic => "ar",
+            Self::English => "en",
+        }
+    }
+
+    pub fn parse(value: &str) -> Self {
+        match value.trim() {
+            "ar" => Self::Arabic,
+            "en" => Self::English,
+            _ => Self::Auto,
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Settings {
     pub theme: ThemeMode,
@@ -59,6 +86,8 @@ pub struct Settings {
     pub check_updates: bool,
     /// A folder (OneDrive, Dropbox...) where my words and my translations are kept in step with the other PCs; empty when not syncing.
     pub sync_folder: String,
+    /// Which dictation pack writes what is said: the one of the keyboard's language, or always one of them.
+    pub dictation_language: DictationLanguage,
     /// The keys that drive the popup: accept, previous, next, close (Tab, left, right and Esc unless the user changed them).
     pub keys: Keys,
     /// The language a word is translated into (a word in that language goes to the next one: English, then French, then Arabic).
@@ -87,6 +116,7 @@ impl Default for Settings {
             learn: false,
             check_updates: false,
             sync_folder: String::new(),
+            dictation_language: DictationLanguage::Auto,
             keys: Keys::default(),
             translate_to: Lang::En,
             follow_keyboard: true,
@@ -186,6 +216,10 @@ impl Settings {
                 "learn" => s.learn = on,
                 "check_updates" => s.check_updates = on,
                 "sync_folder" => s.sync_folder = value.trim().to_string(),
+                "dictation_language" => s.dictation_language = DictationLanguage::parse(value),
+                "key_dictate" => {
+                    s.keys.dictate = Binding::parse(value).filter(|b| Binding::usable_hotkey(b.vk, b.mods)).unwrap_or(Keys::default().dictate)
+                }
                 "key_accept" => s.keys.accept = Binding::parse(value).unwrap_or(Keys::default().accept),
                 "key_prev" => s.keys.prev = Binding::parse(value).unwrap_or(Keys::default().prev),
                 "key_next" => s.keys.next = Binding::parse(value).unwrap_or(Keys::default().next),
@@ -229,7 +263,7 @@ impl Settings {
         let flag = |b: bool| if b { "1" } else { "0" };
         let mode = if self.app_mode == AppMode::OnlyThese { "only" } else { "except" };
         format!(
-            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\ncheck_updates={}\nsync_folder={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\nkey_fixkeys={}\nkey_undo={}\ntranslate_to={}\nfollow_keyboard={}\nline_break={}\napp_mode={mode}\napps={}\n",
+            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\ncheck_updates={}\nsync_folder={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\nkey_fixkeys={}\nkey_undo={}\ndictation_language={}\nkey_dictate={}\ntranslate_to={}\nfollow_keyboard={}\nline_break={}\napp_mode={mode}\napps={}\n",
             flag(self.english),
             flag(self.french),
             flag(self.arabic),
@@ -247,6 +281,8 @@ impl Settings {
             self.keys.translate.render(),
             self.keys.fixkeys.render(),
             self.keys.undo.render(),
+            self.dictation_language.code(),
+            self.keys.dictate.render(),
             self.translate_to.code(),
             flag(self.follow_keyboard),
             if self.line_break_shift { "shift" } else { "enter" },
@@ -343,6 +379,20 @@ mod tests {
         let mut s = Settings::default();
         s.sync_folder = r"C:\Users\Some One\OneDrive\Verba sync".to_string();
         assert_eq!(Settings::parse(&s.render()).sync_folder, s.sync_folder);
+    }
+
+    #[test]
+    fn the_dictation_settings_default_and_survive_a_save() {
+        let d = Settings::default();
+        assert_eq!(d.dictation_language, DictationLanguage::Auto);
+        let mut s = Settings::default();
+        s.dictation_language = DictationLanguage::Arabic;
+        s.keys.dictate = Binding::new(0x45, crate::keys::MOD_CTRL | crate::keys::MOD_ALT);
+        let back = Settings::parse(&s.render());
+        assert_eq!(back.dictation_language, DictationLanguage::Arabic);
+        assert_eq!(back.keys.dictate, s.keys.dictate);
+        assert_eq!(DictationLanguage::parse("nonsense"), DictationLanguage::Auto);
+        assert_eq!(Settings::parse("key_dictate=D\n").keys.dictate, Keys::default().dictate, "a plain key cannot be a shortcut for every app");
     }
 
     #[test]

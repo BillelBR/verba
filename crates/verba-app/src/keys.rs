@@ -124,6 +124,8 @@ pub struct Keys {
     pub fixkeys: Binding,
     /// The shortcut that puts back the word Verba just corrected, in every app.
     pub undo: Binding,
+    /// The shortcut that starts and ends a dictation, in every app.
+    pub dictate: Binding,
 }
 
 /// Tab picks, the left and right arrows move, Esc closes.
@@ -135,6 +137,7 @@ pub const DEFAULT_KEYS: Keys = Keys {
     translate: Binding::new(0x54, MOD_CTRL | MOD_ALT), // Ctrl+Alt+T
     fixkeys: Binding::new(0x4B, MOD_CTRL | MOD_ALT),   // Ctrl+Alt+K (K for keyboard)
     undo: Binding::new(0x5A, MOD_CTRL | MOD_ALT),      // Ctrl+Alt+Z
+    dictate: Binding::new(0x44, MOD_CTRL | MOD_ALT),   // Ctrl+Alt+D
 };
 
 impl Default for Keys {
@@ -245,6 +248,14 @@ mod tests {
         assert_eq!(k.undo.label(), "Ctrl+Alt+Z");
         assert!(k.undo != k.translate && k.undo != k.fixkeys && k.translate != k.fixkeys);
         assert!(Binding::usable_hotkey(k.undo.vk, k.undo.mods));
+    }
+
+    #[test]
+    fn the_dictation_shortcut_is_its_own_and_usable() {
+        let k = Keys::default();
+        assert_eq!(k.dictate.label(), "Ctrl+Alt+D");
+        assert!(k.dictate != k.translate && k.dictate != k.fixkeys && k.dictate != k.undo);
+        assert!(Binding::usable_hotkey(k.dictate.vk, k.dictate.mods));
     }
 
     #[test]

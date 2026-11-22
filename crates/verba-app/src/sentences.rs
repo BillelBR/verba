@@ -71,6 +71,11 @@ impl Translator {
         Translator { exe, models, session: Mutex::new(None) }
     }
 
+    /// The program, when it is installed (the dictation uses it too).
+    pub fn exe(&self) -> Option<PathBuf> {
+        self.exe.clone()
+    }
+
     /// The directions that can be translated now: the program and a model for the direction are both installed.
     pub fn installed(&self) -> Vec<(Lang, Lang)> {
         match (&self.exe, &self.models) {

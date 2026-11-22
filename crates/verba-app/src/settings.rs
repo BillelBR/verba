@@ -186,6 +186,9 @@ impl Settings {
                 "key_fixkeys" => {
                     s.keys.fixkeys = Binding::parse(value).filter(|b| Binding::usable_hotkey(b.vk, b.mods)).unwrap_or(Keys::default().fixkeys)
                 }
+                "key_undo" => {
+                    s.keys.undo = Binding::parse(value).filter(|b| Binding::usable_hotkey(b.vk, b.mods)).unwrap_or(Keys::default().undo)
+                }
                 "translate_to" => {
                     s.translate_to = match value {
                         "fr" => Lang::Fr,
@@ -217,7 +220,7 @@ impl Settings {
         let flag = |b: bool| if b { "1" } else { "0" };
         let mode = if self.app_mode == AppMode::OnlyThese { "only" } else { "except" };
         format!(
-            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\nkey_fixkeys={}\ntranslate_to={}\nfollow_keyboard={}\nline_break={}\napp_mode={mode}\napps={}\n",
+            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\nkey_fixkeys={}\nkey_undo={}\ntranslate_to={}\nfollow_keyboard={}\nline_break={}\napp_mode={mode}\napps={}\n",
             flag(self.english),
             flag(self.french),
             flag(self.arabic),
@@ -232,6 +235,7 @@ impl Settings {
             self.keys.get(Action::Close).render(),
             self.keys.translate.render(),
             self.keys.fixkeys.render(),
+            self.keys.undo.render(),
             self.translate_to.code(),
             flag(self.follow_keyboard),
             if self.line_break_shift { "shift" } else { "enter" },
@@ -335,6 +339,15 @@ mod tests {
         let back = Settings::parse(&s.render());
         assert_eq!(back.keys, s.keys);
         assert_eq!(back, s);
+    }
+
+    #[test]
+    fn the_undo_shortcut_survives_a_save_and_a_bad_one_falls_back() {
+        let mut s = Settings::default();
+        s.keys.undo = Binding::new(0x55, crate::keys::MOD_CTRL | crate::keys::MOD_ALT);
+        assert_eq!(Settings::parse(&s.render()).keys.undo, s.keys.undo);
+        // a plain key cannot be a shortcut for every app
+        assert_eq!(Settings::parse("key_undo=Z\n").keys.undo, Keys::default().undo);
     }
 
     #[test]

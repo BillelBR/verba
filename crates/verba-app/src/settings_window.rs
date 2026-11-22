@@ -34,6 +34,8 @@ thread_local! {
     static TRANSLATE_PROBLEM: Cell<Option<&'static str>> = const { Cell::new(None) };
     /// The same for the wrong-keyboard shortcut.
     static FIXKEYS_PROBLEM: Cell<Option<&'static str>> = const { Cell::new(None) };
+    /// The same for the undo shortcut on the Writing help page.
+    static UNDO_PROBLEM: Cell<Option<&'static str>> = const { Cell::new(None) };
     /// Whether "Start with Windows" is on: asked of the registry once, not at every frame.
     static AUTOSTART: Cell<Option<bool>> = const { Cell::new(None) };
 }
@@ -123,6 +125,38 @@ fn writing(ui: &mut Ui, s: &mut Settings) {
         true,
     );
     ui.card_end();
+
+    ui.section("Undo");
+    ui.card_begin();
+    let current = s.keys.undo;
+    let default = Keys::default().undo;
+    let row = ui.key_row(
+        "key:undo",
+        "Put back the word Verba corrected",
+        Some("Press it right after a fix and your own word comes back; Verba then leaves that word alone. It only works while the corrected word is still just before the cursor."),
+        &current.label(),
+        current == default,
+    );
+    if let Some((vk, mods)) = row.captured {
+        if !Binding::usable_hotkey(vk, mods) {
+            UNDO_PROBLEM.with(|p| p.set(Some("A shortcut that works in every app needs Ctrl or Alt together with another key.")));
+        } else if Binding::new(vk, mods) == s.keys.translate || Binding::new(vk, mods) == s.keys.fixkeys {
+            UNDO_PROBLEM.with(|p| p.set(Some("That key already has another job: choose another one.")));
+        } else {
+            s.keys.undo = Binding::new(vk, mods);
+            UNDO_PROBLEM.with(|p| p.set(None));
+        }
+    }
+    if row.reset {
+        s.keys.undo = default;
+        UNDO_PROBLEM.with(|p| p.set(None));
+    }
+    ui.card_end();
+    if let Some(problem) = UNDO_PROBLEM.with(|p| p.get()) {
+        ui.card_begin();
+        ui.note('\u{E783}', problem);
+        ui.card_end();
+    }
 
     ui.section("My words");
     ui.card_begin();
@@ -270,7 +304,9 @@ fn translate(ui: &mut Ui, s: &mut Settings) {
         current == default,
     );
     if let Some((vk, mods)) = row.captured {
-        if Binding::usable_hotkey(vk, mods) {
+        if Binding::usable_hotkey(vk, mods) && (Binding::new(vk, mods) == s.keys.fixkeys || Binding::new(vk, mods) == s.keys.undo) {
+            TRANSLATE_PROBLEM.with(|p| p.set(Some("That key already has another job: choose another one.")));
+        } else if Binding::usable_hotkey(vk, mods) {
             s.keys.translate = Binding::new(vk, mods);
             TRANSLATE_PROBLEM.with(|p| p.set(None));
         } else {
@@ -303,8 +339,8 @@ fn translate(ui: &mut Ui, s: &mut Settings) {
     if let Some((vk, mods)) = row.captured {
         if !Binding::usable_hotkey(vk, mods) {
             FIXKEYS_PROBLEM.with(|p| p.set(Some("A shortcut that works in every app needs Ctrl or Alt together with another key.")));
-        } else if Binding::new(vk, mods) == s.keys.translate {
-            FIXKEYS_PROBLEM.with(|p| p.set(Some("That is the translate shortcut: choose another one.")));
+        } else if Binding::new(vk, mods) == s.keys.translate || Binding::new(vk, mods) == s.keys.undo {
+            FIXKEYS_PROBLEM.with(|p| p.set(Some("That key already has another job: choose another one.")));
         } else {
             s.keys.fixkeys = Binding::new(vk, mods);
             FIXKEYS_PROBLEM.with(|p| p.set(None));

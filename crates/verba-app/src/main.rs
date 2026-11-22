@@ -77,6 +77,7 @@ const HOTKEY_PAUSE: i32 = 2;
 const HOTKEY_APP: i32 = 3;
 const HOTKEY_TRANSLATE: i32 = 4;
 const HOTKEY_FIXKEYS: i32 = 5;
+const HOTKEY_UNDO: i32 = 6;
 const CMD_PAUSE: usize = 1001;
 const CMD_QUIT: usize = 1002;
 const CMD_APP: usize = 1003;
@@ -103,6 +104,7 @@ static FIXKEYS_REQUEST: AtomicBool = AtomicBool::new(false);
 static FIXKEYS_PICKED: Mutex<Option<Option<Picked>>> = Mutex::new(None);
 /// The wrong-keyboard shortcut that is registered with Windows now.
 static FIXKEYS_KEY: Mutex<Option<Binding>> = Mutex::new(None);
+static UNDO_KEY: Mutex<Option<Binding>> = Mutex::new(None);
 /// How many candidates the popup shows now.
 static POPUP_COUNT: AtomicUsize = AtomicUsize::new(0);
 /// The key (virtual key code) whose press the hook kept from the app, so that its release is kept too; 0 when none.
@@ -163,6 +165,18 @@ struct App {
     tr_file: Option<PathBuf>,
     tr_stamp: Option<SystemTime>,
     last_check: Instant,
+    /// The last spelling fix the user accepted, for the undo shortcut.
+    last_fix: Option<LastFix>,
+}
+
+/// What the undo shortcut needs to put a corrected word back.
+struct LastFix {
+    /// What was typed in place of the word (the fix and what followed the word), and what it replaced.
+    corrected: String,
+    original: String,
+    /// The word as the user had written it.
+    word: String,
+    at: Instant,
 }
 
 /// What accepting a spelling fix has to replace.
@@ -231,7 +245,7 @@ fn main() {
 
         APP.with(|a| {
             *a.borrow_mut() =
-                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, pair_labels: Vec::new(), sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, tr_file, tr_stamp, last_check: Instant::now() });
+                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, pair_labels: Vec::new(), sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, tr_file, tr_stamp, last_check: Instant::now(), last_fix: None });
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
@@ -242,6 +256,7 @@ fn main() {
         let _ = RegisterHotKey(Some(hwnd), HOTKEY_APP, mods, 'A' as u32);
         with_app(|app| sync_translate_hotkey(hwnd, app.settings.keys.translate));
         with_app(|app| sync_fixkeys_hotkey(hwnd, app.settings.keys.fixkeys));
+        with_app(|app| sync_undo_hotkey(hwnd, app.settings.keys.undo));
 
         with_app(|app| app.overlay.set_click_target(hwnd, WM_ACCEPT));
         add_tray(hwnd);
@@ -268,6 +283,7 @@ fn main() {
         let _ = UnregisterHotKey(Some(hwnd), HOTKEY_QUIT);
         let _ = UnregisterHotKey(Some(hwnd), HOTKEY_PAUSE);
         let _ = UnregisterHotKey(Some(hwnd), HOTKEY_APP);
+        let _ = UnregisterHotKey(Some(hwnd), HOTKEY_UNDO);
     }
 }
 
@@ -352,6 +368,8 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
                 HOTKEY_TRANSLATE => TRANSLATE_REQUEST.store(true, Ordering::SeqCst),
                 // the same for the selection to put right
                 HOTKEY_FIXKEYS => FIXKEYS_REQUEST.store(true, Ordering::SeqCst),
+                // puts back the word the last fix replaced
+                HOTKEY_UNDO => with_app(undo_last_fix),
                 _ => {}
             }
             LRESULT(0)
@@ -927,6 +945,16 @@ fn highlight_after(selected: usize, count: usize, toward: isize, rtl: bool) -> u
 /// Tab, or a click: replace the typed part of the word with that suggestion, plus a space.
 fn accept(app: &mut App, index: usize) {
     let Some(chosen) = app.shown.get(index).cloned() else { return };
+    // a spelling fix is remembered, so that the undo shortcut can put the word back
+    app.last_fix = match (&app.translating, &app.fix) {
+        (None, Some(fix)) => Some(LastFix {
+            corrected: format!("{}{}", chosen.text, fix.trailing),
+            original: format!("{}{}", fix.original, fix.trailing),
+            word: fix.original.clone(),
+            at: Instant::now(),
+        }),
+        _ => None,
+    };
     // a completion replaces the part of the word typed and adds a space; a fix replaces the whole word and puts back what followed it
     let (erase, text) = match (&app.translating, &app.fix) {
         // a translation replaces the selected word (typing over it) or the word before the caret, and adds nothing
@@ -935,10 +963,41 @@ fn accept(app: &mut App, index: usize) {
         (None, None) => (app.typed_len, format!("{} ", chosen.text)),
     };
     hide(app);
-    let shift_enter = app.settings.line_break_shift;
+    send_replacement(erase, &text, app.settings.line_break_shift, &chosen.text);
+    // the next tick sees a fresh word: nothing to remember
+    app.dismissed = None;
+}
+
+/// Puts the word Verba corrected back as the user wrote it, when it is still right before the caret, and stops flagging it for now.
+fn undo_last_fix(app: &mut App) {
+    let Some(last) = app.last_fix.take() else {
+        notice(app, None, "Nothing to undo.");
+        return;
+    };
+    // only while the corrected word is still the last thing before the caret: anything typed since would be erased otherwise
+    if !undo_applies(&app.last_text, &last.corrected, last.at.elapsed()) {
+        notice(app, None, "Nothing to undo: the text has changed since.");
+        return;
+    }
+    hide(app);
+    send_replacement(last.corrected.chars().count(), &last.original, app.settings.line_break_shift, &last.word);
+    app.engine.ignore_word(&last.word);
+    app.dismissed = None;
+    let text = format!("Put back \u{201C}{}\u{201D}. Verba leaves it alone.", last.word);
+    notice(app, None, &text);
+}
+
+/// Whether the corrected word may be taken back: it is still the last thing before the caret and the fix is recent. Anything typed
+/// since would be erased with it.
+fn undo_applies(before_caret: &str, corrected: &str, age: Duration) -> bool {
+    age <= Duration::from_secs(120) && !corrected.is_empty() && before_caret.ends_with(corrected)
+}
+
+/// Erases `erase` characters before the caret and types `text`, with keys the program recognises as its own.
+fn send_replacement(erase: usize, text: &str, shift_enter: bool, what: &str) {
     unsafe {
         let mut inputs: Vec<INPUT> = Vec::new();
-        for typed in replace_keys(erase, &text) {
+        for typed in replace_keys(erase, text) {
             match typed {
                 Typed::Backspace => {
                     inputs.push(key(VK_BACK, 0, KEYBD_EVENT_FLAGS(0)));
@@ -956,10 +1015,8 @@ fn accept(app: &mut App, index: usize) {
             }
         }
         let sent = SendInput(&inputs, std::mem::size_of::<INPUT>() as i32);
-        log(&format!("accepted '{}': {} keys to send, {} sent, {} characters replaced", chosen.text, inputs.len(), sent, erase));
+        log(&format!("typed '{}': {} keys to send, {} sent, {} characters replaced", what, inputs.len(), sent, erase));
     }
-    // the next tick sees a fresh word: nothing to remember
-    app.dismissed = None;
 }
 
 // ───────────── the personal dictionary ─────────────
@@ -1125,6 +1182,7 @@ pub(crate) fn update_settings(change: impl FnOnce(&mut Settings)) {
         share_keys(&app.settings.keys);
         sync_translate_hotkey(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _), app.settings.keys.translate);
         sync_fixkeys_hotkey(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _), app.settings.keys.fixkeys);
+        sync_undo_hotkey(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _), app.settings.keys.undo);
         if !app.settings.learn {
             app.learn_buf.clear();
             app.learn_words = 0;
@@ -1148,6 +1206,11 @@ fn sync_translate_hotkey(hwnd: HWND, binding: Binding) {
 /// The same for the shortcut that puts right text typed with the wrong keyboard.
 fn sync_fixkeys_hotkey(hwnd: HWND, binding: Binding) {
     sync_hotkey(hwnd, HOTKEY_FIXKEYS, &FIXKEYS_KEY, binding, "wrong keyboard");
+}
+
+/// The same for the shortcut that puts back the word Verba corrected.
+fn sync_undo_hotkey(hwnd: HWND, binding: Binding) {
+    sync_hotkey(hwnd, HOTKEY_UNDO, &UNDO_KEY, binding, "undo");
 }
 
 fn sync_hotkey(hwnd: HWND, id: i32, current: &Mutex<Option<Binding>>, binding: Binding, what: &str) {
@@ -1387,6 +1450,18 @@ fn replace_keys(erase: usize, text: &str) -> Vec<Typed> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_fix_is_taken_back_only_while_it_is_the_last_thing_before_the_caret() {
+        let fresh = Duration::from_secs(3);
+        assert!(undo_applies("I wrote teh ", "the ", fresh) == false, "the original is there, not the fix");
+        assert!(undo_applies("I wrote the ", "the ", fresh));
+        // something was typed after the fix: erasing would take it too
+        assert!(!undo_applies("I wrote the cat", "the ", fresh));
+        // too old, or nothing was corrected
+        assert!(!undo_applies("I wrote the ", "the ", Duration::from_secs(600)));
+        assert!(!undo_applies("I wrote the ", "", fresh));
+    }
 
     const TAB: u32 = 0x09;
     const ESC: u32 = 0x1B;

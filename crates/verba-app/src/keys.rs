@@ -122,6 +122,8 @@ pub struct Keys {
     pub translate: Binding,
     /// The shortcut that puts right the selected text typed with the wrong keyboard layout, in every app.
     pub fixkeys: Binding,
+    /// The shortcut that puts back the word Verba just corrected, in every app.
+    pub undo: Binding,
 }
 
 /// Tab picks, the left and right arrows move, Esc closes.
@@ -132,6 +134,7 @@ pub const DEFAULT_KEYS: Keys = Keys {
     close: Binding::new(VK_ESCAPE, 0),
     translate: Binding::new(0x54, MOD_CTRL | MOD_ALT), // Ctrl+Alt+T
     fixkeys: Binding::new(0x4B, MOD_CTRL | MOD_ALT),   // Ctrl+Alt+K (K for keyboard)
+    undo: Binding::new(0x5A, MOD_CTRL | MOD_ALT),      // Ctrl+Alt+Z
 };
 
 impl Default for Keys {
@@ -234,6 +237,14 @@ mod tests {
                 assert_ne!(a, b);
             }
         }
+    }
+
+    #[test]
+    fn the_three_global_shortcuts_are_different_and_usable() {
+        let k = Keys::default();
+        assert_eq!(k.undo.label(), "Ctrl+Alt+Z");
+        assert!(k.undo != k.translate && k.undo != k.fixkeys && k.translate != k.fixkeys);
+        assert!(Binding::usable_hotkey(k.undo.vk, k.undo.mods));
     }
 
     #[test]

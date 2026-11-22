@@ -15,7 +15,7 @@ use verba_win::{Look, Theme};
 use windows::Win32::Foundation::{HWND, POINT};
 use windows::Win32::UI::Shell::ShellExecuteW;
 use windows::Win32::UI::WindowsAndMessaging::{
-    AppendMenuW, CreatePopupMenu, DestroyMenu, GetCursorPos, HICON, IDYES, MB_ICONQUESTION, MB_YESNO, MF_GRAYED, MF_STRING, MessageBoxW, SW_SHOW,
+    AppendMenuW, CreatePopupMenu, DestroyMenu, GetCursorPos, HICON, MF_GRAYED, MF_STRING, SW_SHOW,
     TPM_LEFTALIGN, TPM_RETURNCMD, TPM_TOPALIGN, TrackPopupMenu,
 };
 use windows::core::{PCWSTR, w};
@@ -684,6 +684,7 @@ fn add_word() {
         initial: &[],
         ok_label: "Add",
         result_lines: 0,
+        cancel_label: None,
         activate: true,
     };
     dialog::ask(owner(), theme(), &form, &mut |_, texts| {
@@ -719,6 +720,7 @@ fn add_translation() {
         initial: &[],
         ok_label: "Add",
         result_lines: 0,
+        cancel_label: None,
         activate: true,
     };
     dialog::ask(owner(), theme(), &form, &mut |choice, texts| {
@@ -737,6 +739,7 @@ fn look_up() {
         initial: &[],
         ok_label: "Look up",
         result_lines: 6,
+        cancel_label: None,
         activate: true,
     };
     dialog::ask_with(owner(), theme(), &form, &mut |_, texts| {
@@ -801,30 +804,30 @@ fn sync_and_say() {
 
 /// What a check for a newer version found, said to the person who asked: with a button to open the page of the new version.
 pub fn show_update_result(result: Result<Option<String>, String>) {
-    use windows::Win32::UI::WindowsAndMessaging::{MB_ICONINFORMATION, MB_ICONWARNING};
+    let current = env!("CARGO_PKG_VERSION");
     match result {
         Ok(Some(tag)) => {
-            let text = wide(&format!("Verba {tag} is available (this is {}).\n\nOpen its page to download it?", env!("CARGO_PKG_VERSION")));
-            let title = wide("Verba");
-            let answer = unsafe { MessageBoxW(owner(), PCWSTR(text.as_ptr()), PCWSTR(title.as_ptr()), MB_YESNO | MB_ICONQUESTION) };
-            if answer == IDYES {
+            let text = format!("Verba {tag} is available. You have {current}.\n\nThe page of the new version has the installer.");
+            if dialog::message(owner(), theme(), "A new version is available", &text, "Open the page", Some("Later")) {
                 let page = wide(&crate::update::release_page(&tag));
                 unsafe {
                     ShellExecuteW(None, w!("open"), PCWSTR(page.as_ptr()), None, None, SW_SHOW);
                 }
             }
         }
-        Ok(None) => say(&format!("Verba {} is the latest version.", env!("CARGO_PKG_VERSION")), MB_ICONINFORMATION),
-        Err(e) => say(&e, MB_ICONWARNING),
+        Ok(None) => {
+            dialog::message(owner(), theme(), "You are up to date", &format!("Verba {current} is the latest version."), "OK", None);
+        }
+        Err(e) => {
+            dialog::message(owner(), theme(), "Could not check for updates", &e, "OK", None);
+        }
     }
 }
 
 /// A message box with a title and an icon, owned by the settings window.
 fn say(text: &str, icon: windows::Win32::UI::WindowsAndMessaging::MESSAGEBOX_STYLE) {
-    let (t, title) = (wide(text), wide("Verba"));
-    unsafe {
-        MessageBoxW(owner(), PCWSTR(t.as_ptr()), PCWSTR(title.as_ptr()), icon | windows::Win32::UI::WindowsAndMessaging::MB_OK);
-    }
+    let warning = icon == windows::Win32::UI::WindowsAndMessaging::MB_ICONWARNING;
+    dialog::message(owner(), theme(), if warning { "That did not work" } else { "Done" }, text, "OK", None);
 }
 
 /// "Save a backup": asks for a file and writes it.
@@ -855,10 +858,8 @@ fn import_backup() {
 }
 
 fn confirm_forget() {
-    let ask = wide("Forget every word Verba learned from what you typed? The words you added yourself stay.");
-    let title = wide("Verba");
-    let answer = unsafe { MessageBoxW(owner(), PCWSTR(ask.as_ptr()), PCWSTR(title.as_ptr()), MB_YESNO | MB_ICONQUESTION) };
-    if answer == IDYES {
+    let text = "Verba will forget every word and word pair it learned from what you typed. The words you added yourself stay.";
+    if dialog::message(owner(), theme(), "Forget what Verba learned?", text, "Forget", Some("Cancel")) {
         crate::forget_learned();
     }
 }

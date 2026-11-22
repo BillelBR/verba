@@ -46,6 +46,7 @@ impl State {
         backup::render(&words, &tr, "")
     }
 
+    #[cfg(test)]
     pub fn word_list(&self) -> Vec<String> {
         self.words.values().cloned().collect()
     }

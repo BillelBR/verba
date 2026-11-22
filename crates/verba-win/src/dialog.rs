@@ -34,7 +34,7 @@ use windows::Win32::UI::Input::KeyboardAndMouse::{EnableWindow, GetFocus, Releas
 use windows::Win32::UI::WindowsAndMessaging::{
     CreateWindowExW, DefWindowProcW, DestroyWindow, DispatchMessageW, GWL_EXSTYLE, GetClientRect, GetCursorPos, GetForegroundWindow,
     GetMessageW, GetWindowLongPtrW, GetWindowRect, GetWindowTextLengthW, GetWindowTextW, HMENU, IDC_ARROW, IsDialogMessageW, IsWindow, KillTimer,
-    LoadCursorW, MSG, PostQuitMessage, RegisterClassW, SW_SHOW, SW_SHOWNOACTIVATE, SWP_FRAMECHANGED, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, SendMessageW,
+    LoadCursorW, MSG, PostQuitMessage, RegisterClassW, SW_SHOW, SW_HIDE, SW_SHOWNOACTIVATE, SWP_FRAMECHANGED, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, SendMessageW,
     SetForegroundWindow, SetTimer, SetWindowLongPtrW, SetWindowPos, SetWindowTextW, ShowWindow, TranslateMessage, WINDOW_EX_STYLE, WINDOW_STYLE, WM_CLOSE,
     WM_COMMAND, WM_CTLCOLOREDIT, WM_CTLCOLORLISTBOX, WM_CTLCOLORSTATIC, WM_ERASEBKGND, WM_KEYDOWN, WM_LBUTTONDOWN, WM_MOUSEMOVE, WM_PAINT, WM_SETFONT, WM_TIMER,
     WindowFromPoint, WNDCLASSW, WS_CAPTION, WS_CHILD, WS_CLIPCHILDREN, WS_EX_NOACTIVATE, WS_EX_TOOLWINDOW, WS_EX_TOPMOST, WS_POPUP, WS_SYSMENU,
@@ -65,6 +65,8 @@ pub struct Form<'a> {
     pub ok_label: &'a str,
     /// Lines of a text area under the boxes where `accept` can show an answer (`Reply::Show`); 0 for none. The Cancel button then says Close.
     pub result_lines: usize,
+    /// The words on the second button: `None` is Cancel (Close with a result area), `Some("")` has no second button (a message).
+    pub cancel_label: Option<&'a str>,
     /// `false` shows the form without taking the keyboard focus (to look at it from a test).
     pub activate: bool,
 }
@@ -386,6 +388,23 @@ pub fn ask(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn FnMu
     })
 }
 
+/// A message in the look of the settings window: a heading, a text and one button (`cancel_label` `None`), or two (`Some("Later")`): `true` when the
+/// first one was pressed. It replaces the plain Windows message box.
+pub fn message(owner: Option<HWND>, theme: Theme, heading: &str, text: &str, ok_label: &str, cancel_label: Option<&str>) -> bool {
+    let form = Form {
+        title: heading,
+        intro: text,
+        choice: None,
+        fields: &[],
+        initial: &[],
+        ok_label,
+        result_lines: 0,
+        cancel_label: Some(cancel_label.unwrap_or("")),
+        activate: true,
+    };
+    ask_with(owner, theme, &form, &mut |_, _| Reply::Close)
+}
+
 /// Like `ask`, with an answer that may also show a text in the form without closing it.
 pub fn ask_with(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn FnMut(usize, &[String]) -> Reply) -> bool {
     unsafe {
@@ -443,7 +462,9 @@ pub fn ask_with(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn
             y += result_h + 14;
         }
         let error_y = y;
-        y += 40;
+        // a message (no box to type in, no answer to show) has no line for an error
+        let bare = form.fields.is_empty() && form.choice.is_none() && form.result_lines == 0;
+        y += if bare { 4 } else { 40 };
         let buttons_y = y;
         y += BUTTON_H + 26;
         let (client_w, client_h) = (s(WIDTH), s(y));
@@ -519,8 +540,15 @@ pub fn ask_with(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn
         });
         let error = control(w!("STATIC"), "", SS_LEFT, 0, -1, pick(font_intro), MARGIN, error_y, inner, 36);
         let ok_w = 112;
-        let ok = control(w!("BUTTON"), form.ok_label, BS_OWNERDRAW | WS_TABSTOP.0, 0, ID_OK, pick(font_button), WIDTH - MARGIN - 2 * ok_w - 10, buttons_y, ok_w, BUTTON_H);
-        let cancel = control(w!("BUTTON"), if form.result_lines > 0 { "Close" } else { "Cancel" }, BS_OWNERDRAW | WS_TABSTOP.0, 0, ID_CANCEL, pick(font_button), WIDTH - MARGIN - ok_w, buttons_y, ok_w, BUTTON_H);
+        let one_button = form.cancel_label == Some("");
+        let ok_x = if one_button { WIDTH - MARGIN - ok_w } else { WIDTH - MARGIN - 2 * ok_w - 10 };
+        let ok = control(w!("BUTTON"), form.ok_label, BS_OWNERDRAW | WS_TABSTOP.0, 0, ID_OK, pick(font_button), ok_x, buttons_y, ok_w, BUTTON_H);
+        let cancel_text = form.cancel_label.filter(|l| !l.is_empty()).unwrap_or(if form.result_lines > 0 { "Close" } else { "Cancel" });
+        let cancel = control(w!("BUTTON"), cancel_text, BS_OWNERDRAW | WS_TABSTOP.0, 0, ID_CANCEL, pick(font_button), WIDTH - MARGIN - ok_w, buttons_y, ok_w, BUTTON_H);
+        if one_button {
+            // a message: one button; Esc and the close box still answer "no"
+            let _ = ShowWindow(cancel, SW_HIDE);
+        }
         if pal.dark {
             let v = windows::core::BOOL(1);
             let _ = windows::Win32::Graphics::Dwm::DwmSetWindowAttribute(
@@ -579,9 +607,7 @@ pub fn ask_with(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn
         if form.activate {
             let _ = ShowWindow(hwnd, SW_SHOW);
             let _ = SetForegroundWindow(hwnd);
-            if let Some(first) = edits.first().copied().or(combo) {
-                let _ = SetFocus(Some(first));
-            }
+            let _ = SetFocus(Some(edits.first().copied().or(combo).unwrap_or(ok)));
         } else {
             let _ = ShowWindow(hwnd, SW_SHOWNOACTIVATE);
         }

@@ -12,7 +12,7 @@ fn main() {
     let translation_fields = [Field { label: "Word", rtl: Some(|i| i == 0) }, Field { label: "Translation", rtl: Some(|i| i == 1) }];
     let word_fields = [Field { label: "Word", rtl: None }];
     let form = if word {
-        Form { title: "Add a word", intro: "One word, 2 to 40 letters. Verba will not flag it as a typo.", choice: None, fields: &word_fields, initial: &["Snow"], ok_label: "Add", result_lines: 0, activate: false }
+        Form { title: "Add a word", intro: "One word, 2 to 40 letters. Verba will not flag it as a typo.", choice: None, fields: &word_fields, initial: &["Snow"], ok_label: "Add", result_lines: 0, cancel_label: None, activate: false }
     } else {
         Form {
             title: "Write a translation",
@@ -22,9 +22,16 @@ fn main() {
             initial: &["\u{062A}\u{0637}\u{0628}\u{064A}\u{0642}", "app; application"],
             ok_label: "Add",
             result_lines: 0,
+            cancel_label: None,
             activate: false,
         }
     };
+    if args.get(2).map(String::as_str) == Some("message") {
+        // activate is true in `message`: this demo only looks, so it builds the form itself without taking the focus
+        let form = Form { title: "You are up to date", intro: "Verba 0.11.4 is the latest version.", choice: None, fields: &[], initial: &[], ok_label: "OK", result_lines: 0, cancel_label: Some(""), activate: false };
+        dialog::ask_with(None, theme, &form, &mut |_, _| dialog::Reply::Close);
+        return;
+    }
     if args.get(2).map(String::as_str) == Some("lookup") {
         let lookup_fields = [Field { label: "Word", rtl: None }];
         let form = Form {
@@ -35,6 +42,7 @@ fn main() {
             initial: &["cold"],
             ok_label: "Look up",
             result_lines: 6,
+            cancel_label: None,
             activate: false,
         };
         let text = "English \u{2192}\nFrench:  froid  \u{B7}  rhume  \u{B7}  glacial  \u{B7}  frais\nArabic:  \u{0628}\u{0627}\u{0631}\u{062F}  \u{B7}  \u{0632}\u{0643}\u{0627}\u{0645}\n";

@@ -268,6 +268,10 @@ struct UiState {
     scroll: f32,
     content_h: f32,
     view_h: f32,
+    /// The scroll bar is being dragged: how far below the top of its thumb the pointer took hold.
+    bar_drag: Option<f32>,
+    /// The pointer is over the scroll bar (or drags it): it is drawn wider.
+    bar_hover: bool,
     hand: bool,
     reveal: Option<R>,
     /// The key row waiting for the user to press a key.
@@ -290,6 +294,8 @@ impl UiState {
             scroll: 0.0,
             content_h: 0.0,
             view_h: 0.0,
+            bar_drag: None,
+            bar_hover: false,
             hand: false,
             reveal: None,
             capture: None,
@@ -1369,6 +1375,16 @@ fn capture_key(hwnd: HWND, vk: u32) -> bool {
     true
 }
 
+/// How wide the strip at the right edge is where the pointer takes hold of the scroll bar (the bar itself is thinner: easy to hit).
+const SCROLL_HIT_W: f32 = 18.0;
+
+/// Where the scroll bar's track starts, how long it is, and how long its thumb is, for a page of `content_h` in a window of `height`.
+fn scroll_bar_geometry(height: f32, content_h: f32) -> (f32, f32, f32) {
+    let track = (height - 16.0).max(1.0);
+    let thumb = (track * height / content_h.max(1.0)).clamp(32.0_f32.min(track), track);
+    (8.0, track, thumb)
+}
+
 /// One frame: runs the caller's `draw`, draws the result, then runs what the caller deferred.
 fn paint(hwnd: HWND) {
     let Some(mut ctx) = CTX.with(|c| c.try_borrow_mut().ok().and_then(|mut b| b.take())) else { return };
@@ -1418,6 +1434,43 @@ fn paint(hwnd: HWND) {
             }
             let max_scroll = (ctx.ui.content_h - ctx.ui.view_h).max(0.0);
             ctx.ui.scroll = ctx.ui.scroll.clamp(0.0, max_scroll);
+
+            // the scroll bar is a real one: take the thumb and drag it, click the track to go a page up or down
+            ctx.ui.bar_hover = false;
+            if ctx.ui.content_h > height + 1.0 {
+                let (track_top, track, thumb_h) = scroll_bar_geometry(height, ctx.ui.content_h);
+                let room = (track - thumb_h).max(1.0);
+                let span = (ctx.ui.content_h - height).max(1.0);
+                let thumb_top = track_top + room * (ctx.ui.scroll / span);
+                let mouse = ctx.input.mouse;
+                if let Some(grab) = ctx.ui.bar_drag {
+                    // the pointer may leave the window while the thumb is held (the window has the mouse captured)
+                    if ctx.input.down {
+                        if let Some((_, my)) = mouse {
+                            let top = (my - grab).clamp(track_top, track_top + room);
+                            ctx.ui.scroll = (top - track_top) / room * span;
+                        }
+                    } else {
+                        ctx.ui.bar_drag = None;
+                    }
+                    ctx.ui.bar_hover = true;
+                } else if let Some((mx, my)) = mouse.filter(|(mx, my)| *mx >= width - SCROLL_HIT_W && *my >= 0.0 && *my <= height) {
+                    ctx.ui.bar_hover = true;
+                    if ctx.input.pressed {
+                        if my >= thumb_top && my <= thumb_top + thumb_h {
+                            ctx.ui.bar_drag = Some(my - thumb_top);
+                        } else {
+                            ctx.ui.scroll += if my < thumb_top { -height * 0.9 } else { height * 0.9 };
+                        }
+                        // the click was for the bar, not for what is under it
+                        ctx.input.pressed = false;
+                    }
+                    let _ = mx;
+                }
+                ctx.ui.scroll = ctx.ui.scroll.clamp(0.0, span);
+            } else {
+                ctx.ui.bar_drag = None;
+            }
 
             let (side, main, content_end, d, c, hand_anim) = {
                 let Ctx { gfx, ui, input, draw, pal, .. } = &mut ctx;
@@ -1537,12 +1590,19 @@ fn render(ctx: &Ctx, target: &ID2D1HwndRenderTarget, side: &[Cmd], main: &[Cmd],
         target.SetTransform(&Matrix3x2::identity());
         // a thin scroll bar when the page is longer than the window
         if ctx.ui.content_h > height + 1.0 {
-            let track = height - 16.0;
-            let thumb_h = (track * height / ctx.ui.content_h).max(32.0);
-            let top = 8.0 + (track - thumb_h) * (ctx.ui.scroll / (ctx.ui.content_h - height).max(1.0));
-            brush.SetColor(&with_alpha(p.muted, 0.45));
-            let r = R::new(width - 8.0, top, 4.0, thumb_h);
-            target.FillRoundedRectangle(&D2D1_ROUNDED_RECT { rect: r.d2d(), radiusX: 2.0, radiusY: 2.0 }, &brush);
+            let (track_top, track, thumb_h) = scroll_bar_geometry(height, ctx.ui.content_h);
+            let top = track_top + (track - thumb_h) * (ctx.ui.scroll / (ctx.ui.content_h - height).max(1.0));
+            let active = ctx.ui.bar_hover || ctx.ui.bar_drag.is_some();
+            // wider and darker while the pointer is on it, with a faint track behind
+            if active {
+                brush.SetColor(&with_alpha(p.muted, 0.14));
+                let t = R::new(width - 14.0, track_top, 10.0, track);
+                target.FillRoundedRectangle(&D2D1_ROUNDED_RECT { rect: t.d2d(), radiusX: 5.0, radiusY: 5.0 }, &brush);
+            }
+            let w = if active { 6.0 } else { 4.0 };
+            brush.SetColor(&with_alpha(p.muted, if ctx.ui.bar_drag.is_some() { 0.9 } else if active { 0.7 } else { 0.45 }));
+            let r = R::new(width - 9.0 - (w - 4.0) / 2.0 - 0.0, top, w, thumb_h);
+            target.FillRoundedRectangle(&D2D1_ROUNDED_RECT { rect: r.d2d(), radiusX: w / 2.0, radiusY: w / 2.0 }, &brush);
         }
         target.PopAxisAlignedClip();
         run(target, &brush, round.as_ref(), side);
@@ -1651,5 +1711,22 @@ mod tests {
         let c = mix(rgba(0.0, 0.0, 0.0, 1.0), rgba(1.0, 1.0, 1.0, 0.0), 0.5);
         assert!((c.r - 0.5).abs() < 1e-6 && (c.a - 0.5).abs() < 1e-6);
         assert_eq!(hex(0xFF8000, 1.0).g.round(), 1.0 * (128.0_f32 / 255.0).round());
+    }
+
+    #[test]
+    fn the_scroll_thumb_follows_the_page_and_stays_in_its_track() {
+        // a page three times as long as the window: the thumb is a third of the track
+        let (top, track, thumb) = scroll_bar_geometry(600.0, 1800.0);
+        assert_eq!(top, 8.0);
+        assert!((track - 584.0).abs() < 0.01);
+        assert!((thumb - 584.0 / 3.0).abs() < 0.5);
+        // a very long page: the thumb never gets smaller than something a hand can take hold of
+        assert_eq!(scroll_bar_geometry(600.0, 600_000.0).2, 32.0);
+        // a page just over the window: the thumb fills almost the whole track and never goes past it
+        let (_, track, thumb) = scroll_bar_geometry(600.0, 601.0);
+        assert!(thumb <= track && thumb > track * 0.99);
+        // a window shorter than the minimum thumb does not make a thumb longer than the track
+        let (_, track, thumb) = scroll_bar_geometry(30.0, 3000.0);
+        assert!(thumb <= track);
     }
 }

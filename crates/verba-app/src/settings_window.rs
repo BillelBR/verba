@@ -644,6 +644,10 @@ fn general(ui: &mut Ui, s: &mut Settings) {
     ui.section("About");
     ui.card_begin();
     ui.about_block("Verba", concat!("Version ", env!("CARGO_PKG_VERSION")), "");
+    ui.info_row(
+        "The idea is BillelBR\u{2019}s, and Verba was built by BillelBR together with Claude.",
+        Some("BillelBR owns the idea and every decision about what Verba does. Claude, the AI assistant made by Anthropic, wrote the code with them, step by step."),
+    );
     ui.info_row("Free for personal and other noncommercial use.", Some("Using Verba for work needs a commercial license."));
     if ui.button_row("license", "License", Some("The terms Verba is released under (PolyForm Noncommercial 1.0.0)."), "Open", ButtonStyle::Secondary, true) {
         ui.defer(|| open_doc("LICENSE"));

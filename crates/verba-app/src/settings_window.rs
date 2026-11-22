@@ -555,6 +555,24 @@ fn general(ui: &mut Ui, s: &mut Settings) {
     }
     ui.card_end();
 
+    ui.section("Sync between PCs");
+    ui.card_begin();
+    let folder = s.sync_folder.trim().to_string();
+    ui.info_row(
+        &if folder.is_empty() { "Not syncing.".to_string() } else { format!("Syncing with {folder}") },
+        Some("My words and my translations are kept in one file in a folder that OneDrive, Dropbox or Google Drive already copies to your other PCs. Choose the same kind of folder on each PC. Verba talks to no server."),
+    );
+    if ui.button_row("sync-choose", "Choose the folder", Some("A folder of your cloud drive, for example OneDrive\\Verba."), "Choose…", ButtonStyle::Primary, true) {
+        ui.defer(choose_sync_folder);
+    }
+    if ui.button_row("sync-now", "Sync now", Some("Verba also looks every 20 seconds, and syncs when something changed."), "Sync now", ButtonStyle::Secondary, !folder.is_empty()) {
+        ui.defer(sync_and_say);
+    }
+    if ui.button_row("sync-stop", "Stop syncing", Some("The words and translations stay on this PC; the file in the folder is not deleted."), "Stop", ButtonStyle::Secondary, !folder.is_empty()) {
+        ui.defer(|| crate::update_settings(|s| s.sync_folder.clear()));
+    }
+    ui.card_end();
+
     ui.section("Updates");
     ui.card_begin();
     ui.toggle_row(
@@ -727,6 +745,54 @@ fn look_up() {
             None => dialog::Reply::Error(format!("The dictionary has no translation for \u{201C}{word}\u{201D}.")),
         }
     });
+}
+
+/// The Windows dialog that asks for a folder.
+fn pick_folder() -> Option<std::path::PathBuf> {
+    use windows::Win32::System::Com::CoTaskMemFree;
+    use windows::Win32::UI::Shell::{BIF_RETURNONLYFSDIRS, BROWSEINFOW, SHBrowseForFolderW, SHGetPathFromIDListW};
+    let title = wide("Choose the folder of your cloud drive where Verba keeps its sync file");
+    unsafe {
+        let info = BROWSEINFOW { hwndOwner: owner().unwrap_or_default(), lpszTitle: PCWSTR(title.as_ptr()), ulFlags: BIF_RETURNONLYFSDIRS, ..Default::default() };
+        let item = SHBrowseForFolderW(&info);
+        if item.is_null() {
+            return None;
+        }
+        let mut buf = [0u16; 260];
+        let ok = SHGetPathFromIDListW(item, &mut buf).as_bool();
+        CoTaskMemFree(Some(item as *const _));
+        if !ok {
+            return None;
+        }
+        let len = buf.iter().position(|u| *u == 0).unwrap_or(buf.len());
+        Some(std::path::PathBuf::from(String::from_utf16_lossy(&buf[..len])))
+    }
+}
+
+/// "Choose the folder": asks for it, then syncs and says what happened.
+fn choose_sync_folder() {
+    let Some(path) = pick_folder() else { return };
+    let text = path.display().to_string();
+    crate::update_settings(|s| s.sync_folder = text);
+    sync_and_say();
+}
+
+/// Syncs and tells the person what came in and what went out.
+fn sync_and_say() {
+    use windows::Win32::UI::WindowsAndMessaging::{MB_ICONINFORMATION, MB_ICONWARNING};
+    match crate::sync_now() {
+        Ok(r) => say(
+            &format!(
+                "Synced. From the folder: {} new words, {} words removed, {} translations new or changed.{}",
+                r.words_added,
+                r.words_removed,
+                r.translations_changed,
+                if r.file_written { " The file in the folder was updated with what this PC has." } else { "" }
+            ),
+            MB_ICONINFORMATION,
+        ),
+        Err(e) => say(&e, MB_ICONWARNING),
+    }
 }
 
 /// What a check for a newer version found, said to the person who asked: with a button to open the page of the new version.

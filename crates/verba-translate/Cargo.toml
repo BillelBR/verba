@@ -1,4 +1,4 @@
-[package]
+﻿[package]
 name = "verba-translate"
 version.workspace = true
 edition.workspace = true
@@ -16,5 +16,5 @@ verba-local = { path = "../verba-local" }
 # oneDNN is the fast int8 kernel on AMD and Intel CPUs; the OpenMP runtime lets CTranslate2 itself use several threads (without it
 # the spike measured 2.5 times the time of the Python build). The sentencepiece feature reads the models' source.spm and target.spm.
 # Build it with scripts/build-translate.ps1: it needs CMake and the MSVC tools (see that script).
-ct2rs = { version = "0.11.2", default-features = false, features = ["sentencepiece", "dnnl", "openmp-runtime-comp"] }
+ct2rs = { version = "0.11.2", default-features = false, features = ["sentencepiece", "dnnl", "openmp-runtime-comp", "whisper"] }
 anyhow = "1"

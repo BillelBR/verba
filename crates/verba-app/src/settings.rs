@@ -57,6 +57,8 @@ pub struct Settings {
     /// Ask the project's releases page once a day whether a newer Verba exists (off until the user turns it on: it is the only thing that
     /// goes over the network).
     pub check_updates: bool,
+    /// A folder (OneDrive, Dropbox...) where my words and my translations are kept in step with the other PCs; empty when not syncing.
+    pub sync_folder: String,
     /// The keys that drive the popup: accept, previous, next, close (Tab, left, right and Esc unless the user changed them).
     pub keys: Keys,
     /// The language a word is translated into (a word in that language goes to the next one: English, then French, then Arabic).
@@ -84,6 +86,7 @@ impl Default for Settings {
             predict_next: false,
             learn: false,
             check_updates: false,
+            sync_folder: String::new(),
             keys: Keys::default(),
             translate_to: Lang::En,
             follow_keyboard: true,
@@ -182,6 +185,7 @@ impl Settings {
                 "predict_next" => s.predict_next = on,
                 "learn" => s.learn = on,
                 "check_updates" => s.check_updates = on,
+                "sync_folder" => s.sync_folder = value.trim().to_string(),
                 "key_accept" => s.keys.accept = Binding::parse(value).unwrap_or(Keys::default().accept),
                 "key_prev" => s.keys.prev = Binding::parse(value).unwrap_or(Keys::default().prev),
                 "key_next" => s.keys.next = Binding::parse(value).unwrap_or(Keys::default().next),
@@ -225,7 +229,7 @@ impl Settings {
         let flag = |b: bool| if b { "1" } else { "0" };
         let mode = if self.app_mode == AppMode::OnlyThese { "only" } else { "except" };
         format!(
-            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\ncheck_updates={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\nkey_fixkeys={}\nkey_undo={}\ntranslate_to={}\nfollow_keyboard={}\nline_break={}\napp_mode={mode}\napps={}\n",
+            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\ncheck_updates={}\nsync_folder={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\nkey_fixkeys={}\nkey_undo={}\ntranslate_to={}\nfollow_keyboard={}\nline_break={}\napp_mode={mode}\napps={}\n",
             flag(self.english),
             flag(self.french),
             flag(self.arabic),
@@ -235,6 +239,7 @@ impl Settings {
             flag(self.predict_next),
             flag(self.learn),
             flag(self.check_updates),
+            self.sync_folder.replace(['\r', '\n'], ""),
             self.keys.get(Action::Accept).render(),
             self.keys.get(Action::Prev).render(),
             self.keys.get(Action::Next).render(),
@@ -330,6 +335,14 @@ mod tests {
         let mut s = Settings::default();
         s.check_updates = true;
         assert!(Settings::parse(&s.render()).check_updates);
+    }
+
+    #[test]
+    fn the_sync_folder_is_off_until_chosen_and_survives_a_save_with_spaces() {
+        assert!(Settings::default().sync_folder.is_empty());
+        let mut s = Settings::default();
+        s.sync_folder = r"C:\Users\Some One\OneDrive\Verba sync".to_string();
+        assert_eq!(Settings::parse(&s.render()).sync_folder, s.sync_folder);
     }
 
     #[test]

@@ -21,6 +21,7 @@ use std::sync::atomic::{AtomicBool, AtomicIsize, AtomicU32, AtomicUsize, Orderin
 mod backup;
 mod diagnostics;
 mod fixkeys;
+mod sync;
 mod update;
 mod keys;
 mod learning;
@@ -182,6 +183,9 @@ struct App {
     sentence_text: String,
     sentence_ctx: Option<String>,
     sentence_langs: Option<(Lang, Lang)>,
+    /// The times of the files of the sync folder, of `personal.txt` and of `my-translations.txt` when the last sync looked, and when it did.
+    sync_seen: (Option<SystemTime>, Option<SystemTime>, Option<SystemTime>),
+    sync_checked: Instant,
 }
 
 /// What the undo shortcut needs to put a corrected word back.
@@ -260,7 +264,7 @@ fn main() {
 
         APP.with(|a| {
             *a.borrow_mut() =
-                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, pair_labels: Vec::new(), sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, tr_file, tr_stamp, last_check: Instant::now(), last_fix: None, sentence_text: String::new(), sentence_ctx: None, sentence_langs: None });
+                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, pair_labels: Vec::new(), sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, tr_file, tr_stamp, last_check: Instant::now(), last_fix: None, sentence_text: String::new(), sentence_ctx: None, sentence_langs: None, sync_seen: (None, None, None), sync_checked: Instant::now() - Duration::from_secs(3600) });
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
@@ -287,6 +291,16 @@ fn main() {
         let quiet_test = cfg!(debug_assertions) && std::env::var("VERBA_TEST_QUIET").is_ok();
         if !quiet_test && with_app_ret(|app| app.settings.check_updates).unwrap_or(false) {
             check_for_update_if_due();
+        }
+        // (a development build run by a test syncs once at start, VERBA_TEST_SYNC=1, and writes what happened to `sync-test.txt`)
+        if cfg!(debug_assertions) && std::env::var("VERBA_TEST_SYNC").is_ok() {
+            let said = match sync_now() {
+                Ok(report) => format!("{report:?}"),
+                Err(why) => format!("error: {why}"),
+            };
+            if let Some(dir) = Settings::dir() {
+                let _ = std::fs::write(dir.join("sync-test.txt"), said);
+            }
         }
         // (a development build can open the settings window by itself, VERBA_TEST_SETTINGS=1, to look at it)
         if cfg!(debug_assertions) && std::env::var("VERBA_TEST_SETTINGS").is_ok() {
@@ -1165,6 +1179,87 @@ fn reload_personal_if_edited(app: &mut App) {
             app.tr_stamp = stamp;
         }
     }
+    sync_if_news(app);
+}
+
+/// The file of the sync folder.
+const SYNC_FILE: &str = "verba-sync.txt";
+
+/// With a sync folder chosen: looks every 20 seconds whether the file there, `personal.txt` or `my-translations.txt` changed since the last sync,
+/// and syncs when one did (cheap: three times of files).
+fn sync_if_news(app: &mut App) {
+    if app.settings.sync_folder.trim().is_empty() || app.sync_checked.elapsed() < Duration::from_secs(20) {
+        return;
+    }
+    app.sync_checked = Instant::now();
+    let seen = (stamp_of(&Path::new(app.settings.sync_folder.trim()).join(SYNC_FILE)), app.words_stamp, app.tr_stamp);
+    if seen == app.sync_seen {
+        return;
+    }
+    if let Err(why) = sync_with(app) {
+        log(&format!("sync: {why}"));
+        // looked at: tried again when something changes, not every 20 seconds
+        app.sync_seen = seen;
+    }
+}
+
+/// Syncs now: merges the words and translations of this PC with the file of the sync folder, and writes what changed on each side.
+pub(crate) fn sync_now() -> Result<sync::Report, String> {
+    with_app_ret(sync_with).ok_or("Verba is busy; try again.")?
+}
+
+fn sync_with(app: &mut App) -> Result<sync::Report, String> {
+    use sync::State;
+    let folder = PathBuf::from(app.settings.sync_folder.trim());
+    if folder.as_os_str().is_empty() {
+        return Err("No sync folder is chosen.".to_string());
+    }
+    if !folder.is_dir() {
+        return Err(format!("The folder {} is not there (is the drive connected?).", folder.display()));
+    }
+    let file = folder.join(SYNC_FILE);
+    let remote = match std::fs::read_to_string(&file) {
+        Ok(text) => State::from_text(&text).ok_or_else(|| format!("{} is not a Verba sync file.", file.display()))?,
+        Err(_) => State::default(),
+    };
+    let remote_time = stamp_of(&file);
+    let dir = Settings::dir().ok_or("Verba has no folder for its files.")?;
+    let base_path = dir.join("sync-base.txt");
+    let base = std::fs::read_to_string(&base_path).ok().and_then(|t| State::from_text(&t)).unwrap_or_default();
+    let local = State::from_parts(&app.engine.personal().added_words(), app.engine.user_translations());
+    // which side changed last: the file in the folder, or the files here
+    let local_time = [app.words_stamp, app.tr_stamp].into_iter().flatten().max();
+    let remote_newer = match (remote_time, local_time) {
+        (Some(r), Some(l)) => r >= l,
+        (Some(_), None) => true,
+        _ => false,
+    };
+    let merged = sync::merge(&base, &local, &remote, remote_newer);
+    let report = sync::report(&local, &merged, &remote);
+
+    // here: the words and translations the others added or changed come in, the ones they removed go out
+    for (key, form) in &merged.words {
+        if !local.words.contains_key(key) {
+            app.engine.personal_mut().add_word(form);
+        }
+    }
+    for (key, form) in &local.words {
+        if !merged.words.contains_key(key) {
+            app.engine.personal_mut().remove_word(form);
+        }
+    }
+    save_personal(app);
+    if merged.entries != local.entries {
+        save_translations(app, merged.translations())?;
+    }
+    // there: the file, when this PC had news; and what the two agree on now
+    if report.file_written {
+        std::fs::write(&file, merged.to_text()).map_err(|e| format!("Could not write {}: {e}", file.display()))?;
+    }
+    std::fs::create_dir_all(&dir).ok();
+    std::fs::write(&base_path, merged.to_text()).map_err(|e| format!("Could not write the memory of the sync: {e}"))?;
+    app.sync_seen = (stamp_of(&file), app.words_stamp, app.tr_stamp);
+    Ok(report)
 }
 
 /// The words the user added by hand, for the settings window.
@@ -1264,7 +1359,12 @@ pub(crate) fn import_backup(path: &Path) -> Result<Imported, String> {
     let settings = b.settings.map(|text| Settings::parse(&text));
     let changed = settings.is_some();
     if let Some(new) = settings {
-        update_settings(|current| *current = new);
+        // the sync folder is a path on the PC that made the backup: this PC keeps its own
+        update_settings(|current| {
+            let folder = std::mem::take(&mut current.sync_folder);
+            *current = new;
+            current.sync_folder = folder;
+        });
         settings_window::refresh();
     }
     Ok(Imported { words, translations, settings: changed })

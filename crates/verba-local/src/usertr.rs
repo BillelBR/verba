@@ -35,6 +35,13 @@ pub struct UserEntry {
     pub translations: Vec<String>,
 }
 
+impl UserEntry {
+    /// What makes two entries the same one (the languages and the word, compared leniently as `add` does): for tools that merge lists.
+    pub fn key(&self) -> String {
+        format!("{}>{}\t{}", code(self.from).unwrap_or("?"), code(self.to).unwrap_or("?"), fold(&self.word))
+    }
+}
+
 /// All the entries, in the order they were written.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct UserTranslations {

@@ -545,6 +545,29 @@ fn general(ui: &mut Ui) {
     }
     ui.card_end();
 
+    ui.section("If something does not work");
+    ui.card_begin();
+    let refused = crate::refused_shortcuts();
+    if refused.is_empty() {
+        ui.info_row("Every Verba shortcut is accepted by Windows.", Some("If a shortcut does nothing in one app, that app may use the same keys, or Verba is switched off there (Apps page)."));
+    } else {
+        ui.info_row(
+            &format!("Windows refused: {}.", refused.join(", ")),
+            Some("Another program uses these keys. Choose other ones on the Translate and Writing help pages."),
+        );
+    }
+    if ui.button_row(
+        "report",
+        "Show a report",
+        Some("What Verba found on this PC: keyboards, word lists, dictionary, shortcuts. It has no text you wrote, so you can send it to get help."),
+        "Show report",
+        ButtonStyle::Secondary,
+        true,
+    ) {
+        ui.defer(crate::show_report);
+    }
+    ui.card_end();
+
     ui.section("Backup");
     ui.card_begin();
     if ui.button_row(

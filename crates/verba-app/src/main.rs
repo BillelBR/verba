@@ -19,6 +19,7 @@ use std::sync::{Arc, Mutex};
 use std::sync::atomic::{AtomicBool, AtomicIsize, AtomicU32, AtomicUsize, Ordering};
 
 mod backup;
+mod diagnostics;
 mod fixkeys;
 mod keys;
 mod learning;
@@ -106,6 +107,8 @@ static FIXKEYS_PICKED: Mutex<Option<Option<Picked>>> = Mutex::new(None);
 /// The wrong-keyboard shortcut that is registered with Windows now.
 static FIXKEYS_KEY: Mutex<Option<Binding>> = Mutex::new(None);
 static UNDO_KEY: Mutex<Option<Binding>> = Mutex::new(None);
+/// The shortcuts Windows refused (another program holds the key), by name, for the diagnostics.
+static REFUSED_SHORTCUTS: Mutex<Vec<String>> = Mutex::new(Vec::new());
 /// How many candidates the popup shows now.
 static POPUP_COUNT: AtomicUsize = AtomicUsize::new(0);
 /// The key (virtual key code) whose press the hook kept from the app, so that its release is kept too; 0 when none.
@@ -250,11 +253,13 @@ fn main() {
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
-        if RegisterHotKey(Some(hwnd), HOTKEY_QUIT, mods, 'Q' as u32).is_err() {
+        let quit_ok = RegisterHotKey(Some(hwnd), HOTKEY_QUIT, mods, 'Q' as u32).is_ok();
+        if !quit_ok {
             log("could not register Ctrl+Alt+Shift+Q (another program uses it); use the tray menu to quit");
         }
-        let _ = RegisterHotKey(Some(hwnd), HOTKEY_PAUSE, mods, 'V' as u32);
-        let _ = RegisterHotKey(Some(hwnd), HOTKEY_APP, mods, 'A' as u32);
+        note_shortcut("quit", quit_ok);
+        note_shortcut("pause", RegisterHotKey(Some(hwnd), HOTKEY_PAUSE, mods, 'V' as u32).is_ok());
+        note_shortcut("this app on/off", RegisterHotKey(Some(hwnd), HOTKEY_APP, mods, 'A' as u32).is_ok());
         with_app(|app| sync_translate_hotkey(hwnd, app.settings.keys.translate));
         with_app(|app| sync_fixkeys_hotkey(hwnd, app.settings.keys.fixkeys));
         with_app(|app| sync_undo_hotkey(hwnd, app.settings.keys.undo));
@@ -1258,6 +1263,98 @@ fn sync_undo_hotkey(hwnd: HWND, binding: Binding) {
     sync_hotkey(hwnd, HOTKEY_UNDO, &UNDO_KEY, binding, "undo");
 }
 
+/// Remembers whether Windows accepted a shortcut, for the diagnostics.
+fn note_shortcut(what: &str, ok: bool) {
+    if let Ok(mut refused) = REFUSED_SHORTCUTS.lock() {
+        refused.retain(|w| w != what);
+        if !ok {
+            refused.push(what.to_string());
+        }
+    }
+}
+
+/// The names of the shortcuts Windows refused.
+pub(crate) fn refused_shortcuts() -> Vec<String> {
+    REFUSED_SHORTCUTS.lock().map(|r| r.clone()).unwrap_or_default()
+}
+
+/// A text value of the registry (the name of this Windows), `None` when it is not there.
+fn registry_text(root: windows::Win32::System::Registry::HKEY, key: windows::core::PCWSTR, name: windows::core::PCWSTR) -> Option<String> {
+    unsafe {
+        let mut bytes = 0u32;
+        RegGetValueW(root, key, name, RRF_RT_REG_SZ, None, None, Some(&mut bytes)).ok().ok()?;
+        let mut buf = vec![0u16; (bytes as usize).div_ceil(2) + 1];
+        RegGetValueW(root, key, name, RRF_RT_REG_SZ, None, Some(buf.as_mut_ptr() as *mut _), Some(&mut bytes)).ok().ok()?;
+        let len = buf.iter().position(|u| *u == 0).unwrap_or(buf.len());
+        Some(String::from_utf16_lossy(&buf[..len]))
+    }
+}
+
+/// The facts of the diagnostics report, as they are now.
+fn gather_facts() -> diagnostics::Facts {
+    use windows::Win32::System::Registry::HKEY_LOCAL_MACHINE;
+    let nt = w!(r"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
+    let windows = {
+        let name = registry_text(HKEY_LOCAL_MACHINE, nt, w!("ProductName")).unwrap_or_default();
+        let display = registry_text(HKEY_LOCAL_MACHINE, nt, w!("DisplayVersion")).unwrap_or_default();
+        let build = registry_text(HKEY_LOCAL_MACHINE, nt, w!("CurrentBuild")).unwrap_or_default();
+        format!("{name} {display} (build {build})").replace("  ", " ").trim().to_string()
+    };
+    let layouts = verba_win::layouts::installed().into_iter().map(|l| (l.name, l.lang.map(|g| g.code().to_string()))).collect();
+    let refused = refused_shortcuts();
+    let last_app = LAST_APP.lock().ok().map(|a| a.clone()).filter(|a| !a.is_empty());
+    let mut facts = diagnostics::Facts {
+        version: env!("CARGO_PKG_VERSION").to_string(),
+        build: if cfg!(debug_assertions) { "development" } else { "release" }.to_string(),
+        windows,
+        layouts,
+        dictionary: dictionary_words(),
+        sentence_pairs: sentence_pairs().iter().map(|(f, t)| format!("{} \u{2192} {}", f.code().to_uppercase(), t.code().to_uppercase())).collect(),
+        last_app: last_app.clone(),
+        ..Default::default()
+    };
+    with_app(|app| {
+        for (lang, name) in [(Lang::En, "English"), (Lang::Fr, "French"), (Lang::Ar, "Arabic"), (Lang::Dz, "Darija")] {
+            facts.lists.push((name.to_string(), app.engine.word_count(lang), app.engine.is_enabled(lang)));
+        }
+        facts.my_words = app.engine.personal().added_words().len();
+        facts.my_translations = app.engine.user_translations().len();
+        let s = &app.settings;
+        let on = |b: bool| if b { "on" } else { "off" };
+        facts.settings = vec![
+            format!("suggestions: {}", if s.paused { "paused" } else { "on" }),
+            format!("fix spelling: {}, next word: {}, learn: {}", on(s.correction), on(s.predict_next), on(s.learn)),
+            format!("follow the keyboard language: {}, translate into: {}", on(s.follow_keyboard), s.translate_to.code()),
+            format!("apps list: {} app(s), mode {}", s.apps.len(), if s.app_mode == settings::AppMode::OnlyThese { "only these" } else { "all except" }),
+        ];
+        let k = &s.keys;
+        let key = |name: &str, label: String| (name.to_string(), label, !refused.iter().any(|r| r == name));
+        facts.shortcuts = vec![
+            key("translate", k.translate.label()),
+            key("wrong keyboard", k.fixkeys.label()),
+            key("undo", k.undo.label()),
+            key("quit", "Ctrl+Alt+Shift+Q".to_string()),
+            key("pause", "Ctrl+Alt+Shift+V".to_string()),
+            key("this app on/off", "Ctrl+Alt+Shift+A".to_string()),
+        ];
+        facts.last_app_allowed = last_app.as_deref().map(|a| s.allows_app(a));
+    });
+    facts
+}
+
+/// Writes the diagnostics report next to the settings and opens it in Notepad.
+pub(crate) fn show_report() {
+    let Some(dir) = Settings::dir() else { return };
+    let path = dir.join("report.txt");
+    let _ = std::fs::create_dir_all(&dir);
+    if std::fs::write(&path, diagnostics::render(&gather_facts())).is_ok() {
+        // (a development build run by a test, VERBA_TEST_QUIET=1, only writes the file)
+        if !(cfg!(debug_assertions) && std::env::var("VERBA_TEST_QUIET").is_ok()) {
+            let _ = std::process::Command::new("notepad.exe").arg(&path).spawn();
+        }
+    }
+}
+
 fn sync_hotkey(hwnd: HWND, id: i32, current: &Mutex<Option<Binding>>, binding: Binding, what: &str) {
     let Ok(mut current) = current.lock() else { return };
     if *current == Some(binding) || hwnd.is_invalid() {
@@ -1275,9 +1372,11 @@ fn sync_hotkey(hwnd: HWND, id: i32, current: &Mutex<Option<Binding>>, binding: B
         if binding.mods & keys::MOD_SHIFT != 0 {
             mods |= MOD_SHIFT;
         }
-        if RegisterHotKey(Some(hwnd), id, mods, binding.vk).is_err() {
+        let ok = RegisterHotKey(Some(hwnd), id, mods, binding.vk).is_ok();
+        if !ok {
             log(&format!("could not register the {what} shortcut (another program uses it): choose another in the settings"));
         }
+        note_shortcut(what, ok);
     }
     *current = Some(binding);
 }

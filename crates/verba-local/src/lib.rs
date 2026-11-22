@@ -21,6 +21,7 @@ mod personal;
 pub mod sentence;
 pub mod slang;
 mod spell;
+mod arabizi;
 mod translate;
 mod usertr;
 pub mod wrongkeys;
@@ -33,6 +34,7 @@ pub use nextword::{BuildParams, NextBuilder, NextParams, word_runs};
 pub use nextword::NextTable;
 pub use personal::PersonalDict;
 pub use translate::{Dictionary, Translation};
+pub use arabizi::{ArabiziIndex, arabic_skeleton, looks_like_arabizi};
 pub use usertr::{MAX_ENTRIES as MAX_USER_TRANSLATIONS, UserEntry, UserTranslations};
 #[doc(hidden)]
 pub use personal::UsageParams;
@@ -343,6 +345,8 @@ pub struct LocalEngine {
     dz: Option<DzList>,
     /// The same in Arabic letters. The one `Lang::Dz` switch covers both.
     dz_ar: Option<DzList>,
+    /// The Arabic words by their consonants, for turning Arabizi into Arabic letters: built at the first use (see `arabizi.rs`).
+    arabizi: OnceLock<ArabiziIndex>,
 }
 
 impl LocalEngine {
@@ -360,6 +364,7 @@ impl LocalEngine {
             user_dict: Dictionary::default(),
             dz: None,
             dz_ar: None,
+            arabizi: OnceLock::new(),
         }
     }
 

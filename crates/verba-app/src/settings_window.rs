@@ -332,7 +332,7 @@ fn translate(ui: &mut Ui, s: &mut Settings) {
     let row = ui.key_row(
         "key:fixkeys",
         "Put the selected text right",
-        Some("Typed a paragraph with the English keyboard when you meant Arabic (or French)? Select it, press the shortcut, and Verba finds which keyboard it came from."),
+        Some("Typed a paragraph with the English keyboard when you meant Arabic (or French)? Select it, press the shortcut, and Verba finds which keyboard it came from. It also turns Arabic written with Latin letters and digits (wach rak, 3lach, sa7a) into Arabic letters."),
         &current.label(),
         current == default,
     );

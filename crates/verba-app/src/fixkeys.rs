@@ -56,33 +56,38 @@ const LAST_RESORT: Lang = Lang::Ar;
 /// `text` was selected: how can it be read as typed on the wrong keyboard? `active` is the language of the keyboard that was active when
 /// the shortcut was pressed: of two equal readings the one typed on it comes first, and it is the source when nothing is made of real words.
 pub fn offer(text: &str, installed: &[InstalledLayout], engine: &LocalEngine, active: Option<Lang>) -> Outcome {
+    // Arabic written with Latin letters and digits (`wach rak`, `3lach`): its reading in Arabic letters comes first. It needs no second keyboard.
+    let arabizi = engine.arabizi_to_arabic(text).map(|r| Reading { text: r.text, lang: Lang::Ar, label: ARABIZI_LABEL.to_string() });
     let layouts = layouts_from(installed);
     let mut langs: Vec<Lang> = layouts.iter().map(|l| l.lang).collect();
     langs.sort_by_key(|l| l.code());
     langs.dedup();
     if langs.len() < 2 {
-        return Outcome::NeedTwoLanguages;
+        return match arabizi {
+            Some(reading) => Outcome::Found(vec![reading]),
+            None => Outcome::NeedTwoLanguages,
+        };
     }
     let known = |lang: Lang, word: &str| engine.is_word_of(lang, word);
     let mut found = wrongkeys::candidates(text, &layouts, active, &known);
-    if found.is_empty() && text.chars().any(char::is_alphabetic) && !text.chars().any(verba_core::is_arabic) {
+    if found.is_empty() && arabizi.is_none() && text.chars().any(char::is_alphabetic) && !text.chars().any(verba_core::is_arabic) {
         // letters of another script, and no reading made of real words: the user wants Arabic, so give it, words or not
         found.extend(wrongkeys::forced(text, &layouts, active, LAST_RESORT, &known));
     }
-    if found.is_empty() {
+    let mut readings: Vec<Reading> = arabizi.into_iter().collect();
+    readings.extend(found.into_iter().map(|c| Reading {
+        label: format!("{} \u{2192} {}", layouts[c.from].lang.code().to_uppercase(), layouts[c.to].lang.code().to_uppercase()),
+        lang: layouts[c.to].lang,
+        text: c.text,
+    }));
+    if readings.is_empty() {
         return Outcome::NothingToFix;
     }
-    Outcome::Found(
-        found
-            .into_iter()
-            .map(|c| Reading {
-                label: format!("{} \u{2192} {}", layouts[c.from].lang.code().to_uppercase(), layouts[c.to].lang.code().to_uppercase()),
-                lang: layouts[c.to].lang,
-                text: c.text,
-            })
-            .collect(),
-    )
+    Outcome::Found(readings)
 }
+
+/// The label of the reading of Arabizi, next to the `EN \u{2192} AR` of the wrong-keyboard readings.
+const ARABIZI_LABEL: &str = "Arabizi \u{2192} AR";
 
 #[cfg(test)]
 mod tests {
@@ -117,6 +122,25 @@ mod tests {
             }
             other => panic!("{other:?}"),
         }
+    }
+
+    #[test]
+    fn arabizi_is_offered_in_arabic_letters_even_with_one_keyboard() {
+        let mut e = engine();
+        e.add_dz_seed();
+        // two words of Darija and a digit-letter: Arabizi
+        match offer("wach 3lach", &[], &e, None) {
+            Outcome::Found(found) => {
+                assert_eq!(found.len(), 1);
+                assert_eq!(found[0].label, ARABIZI_LABEL);
+                assert_eq!(found[0].lang, Lang::Ar);
+                assert!(found[0].text.chars().all(|c| c == ' ' || verba_core::is_arabic(c)), "{}", found[0].text);
+                assert_eq!(found[0].text.split(' ').count(), 2);
+            }
+            other => panic!("{other:?}"),
+        }
+        // plain English is not Arabizi: nothing to turn it into
+        assert_eq!(offer("hello world", &[], &e, None), Outcome::NeedTwoLanguages);
     }
 
     #[test]

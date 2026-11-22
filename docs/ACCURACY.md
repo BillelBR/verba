@@ -1605,3 +1605,21 @@ python score.py out.txt                                                         
 - **What was tried and not kept:** endings for the plural and dual of nouns, the tanween and the past tense of verbs in the Arabic lookup (`ون ين ان ا ت وا`). With all of them +0.5 point of words translated, but names became words (`بوكانان` "and was", `تاون` "wye", `جزئين` "punish; reward") and 762 translations that were right changed. With only `ون` and `ين`, tried last and for stems of 4 letters or more: +0.2 point, and by reading 36 of the new matches about a third were wrong (`الكارتون` "hater", `الدرون` "pearl", `لتونتون` "tuna"). A wrong translation is worse than none: not kept.
 - **Why `تطوير` and `تعزيز` were missing:** English Wiktionary does not have an entry for them (they are not in the extract at all); `شيوع` is only listed as a verbal noun of `شاع` in a verb table, a kind of form that the build leaves out. The data is the limit, not the filters.
 - **Not measured:** that the 200 added lines are right (written, not checked by a native speaker); the dictionary on text other than Wikipedia and Tatoeba; the time of the first translation on a slow disk.
+
+## Arabizi to Arabic letters
+
+Select Arabic written with Latin letters and digits (`wach rak, 3lach ma jitch`) and press the wrong-keyboard shortcut: the first reading is the text in Arabic letters, labelled `Arabizi → AR` (`arabizi.rs`). It is offered when a word has a digit-letter inside (`3lach`, `sa7a`) or at least half of the words are Darija words of the Latin seed list; a plain English or French text is not touched, and a word English or French has and Darija does not (`merci`) stays as written.
+
+**Method.** Both sides are cut to their consonants, with the letters that sound alike as one (`kifach` and `كيفاش` are both `ك ف ش`; Latin `s` is `س` or `ص`, `h` is `ه` or `ح`...); the Arabic words of the lists with that skeleton are the candidates, and the best one wins by how common it is (at most 0.4), plus how well the vowel letters agree (`vowel_fit`: a long vowel the Latin does not have is −0.3, at the end of the word −0.6; one it has too is +0.12), plus a bonus for the Darija words written for Verba. When every candidate disagrees too much, or there is none, the letters are written by rules (`a` is `ا`, `i` is `ي`, `ou` is `و`, an `e` is left out): a guess.
+
+**Measured** (`examples/arabizi_check.rs` on `docs/eval/arabizi-pairs.tsv`: 40 phrases, 73 Arabic words, written by the authors, NOT checked by a native speaker, and the weights above were tuned on this very set, so the numbers are optimistic):
+
+| | Words |
+|---|---|
+| Spelled exactly as in the file (vowel marks and hamza on the alef ignored) | **69.9 %** |
+| Right consonants (only long vowels differ) | **95.9 %** |
+| Words found in the lists / spelled by rules | 67 / 6 |
+| Exact, words found in the lists | 73.1 % |
+| Exact, words spelled by rules | 33.3 % |
+
+Before the vowels were looked at (frequency alone) it was 49.3 % exact. The misses are mostly colloquial spellings the lists lack (`معاك`, `نخدم`: the list has `معك`, `نخدمو`), the suffixes `ي` and `و` (`9albi` is `قلبي`, `9albou` is `قلبو`), and a Latin `h` that is `ح`. A single word that is not in the Darija seed and has no digit-letter (`shukran`) is not recognised as Arabizi. The reading is a proposal: choose it with Tab and correct what is wrong.

@@ -443,6 +443,55 @@ impl Dictionary {
     }
 }
 
+/// A text turned from Arabizi into Arabic letters.
+#[derive(Clone, Debug, PartialEq)]
+pub struct ArabiziReading {
+    pub text: String,
+    /// How many words were turned, and for how many of them a word of the lists was found (the others are spelled by rules: a guess).
+    pub words: usize,
+    pub found: usize,
+}
+
+impl LocalEngine {
+    /// The index of Arabic words by consonants: the Arabic list (the commonest words first count most) and the Darija list in Arabic letters
+    /// (counted above all of them). Built at the first use.
+    fn arabizi_index(&self) -> &crate::ArabiziIndex {
+        self.arabizi.get_or_init(|| {
+            let mut words: Vec<(String, f32)> = Vec::new();
+            if let Some(list) = self.list(Lang::Ar) {
+                let max = list.iter_words().map(|(_, c)| c).max().unwrap_or(1).max(1) as f32;
+                // (at most 0.4: how common a word is must not outweigh how well its vowels fit, see `vowel_fit`)
+                let top = (1.0 + max).ln();
+                words.extend(list.iter_words().map(|(w, c)| (w.to_string(), 0.4 * (1.0 + c as f32).ln() / top)));
+            }
+            if let Some(dz) = &self.dz_ar {
+                // the words of Darija written for Verba count more than the others, but not more than how well their vowels fit
+                let max = dz.iter_words().map(|(_, c)| c).max().unwrap_or(1).max(1) as f32;
+                words.extend(dz.iter_words().map(|(w, c)| (w.to_string(), crate::arabizi::SEED + 0.8 + 0.3 * c as f32 / max)));
+            }
+            crate::ArabiziIndex::build(words.into_iter())
+        })
+    }
+
+    fn knows_darija_latin(&self, word: &str) -> bool {
+        self.dz.as_ref().is_some_and(|d| d.contains(&word.to_lowercase()))
+    }
+
+    /// `text` written in Arabizi (Arabic with Latin letters and digits: `wach rak`, `3lach`) turned into Arabic letters, or `None` when it does
+    /// not look like Arabizi (a plain English or French text, a number). A word English or French has and Darija does not stays as it is.
+    pub fn arabizi_to_arabic(&self, text: &str) -> Option<ArabiziReading> {
+        if !crate::looks_like_arabizi(text, |w| self.knows_darija_latin(w)) {
+            return None;
+        }
+        let keep = |w: &str| {
+            let has_digit_letter = w.chars().any(|c| c.is_ascii_digit()) && w.chars().any(|c| c.is_ascii_alphabetic());
+            !has_digit_letter && !self.knows_darija_latin(w) && (self.is_word_of(Lang::En, w) || self.is_word_of(Lang::Fr, w))
+        };
+        let (out, words, found) = self.arabizi_index().convert(text, keep);
+        (words > 0).then_some(ArabiziReading { text: out, words, found })
+    }
+}
+
 /// The answer of the user's own translations and the dictionary's for one word. When both found the word in the same direction, the user's
 /// translations come first, then the dictionary's that are not the same (at most `MAX_TRANSLATIONS`); when the directions differ the user's
 /// answer is the one given, because the person wrote it for this word.

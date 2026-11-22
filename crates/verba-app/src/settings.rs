@@ -155,7 +155,7 @@ impl Settings {
         Self::parse(&Self::path().and_then(|p| std::fs::read_to_string(p).ok()).unwrap_or_default())
     }
 
-    fn parse(text: &str) -> Self {
+    pub(crate) fn parse(text: &str) -> Self {
         let mut s = Self::default();
         for line in text.lines() {
             let Some((key, value)) = line.split_once('=') else { continue };
@@ -211,7 +211,7 @@ impl Settings {
         s
     }
 
-    fn render(&self) -> String {
+    pub(crate) fn render(&self) -> String {
         let theme = match self.theme {
             ThemeMode::Auto => "auto",
             ThemeMode::Light => "light",

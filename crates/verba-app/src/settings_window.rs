@@ -545,6 +545,30 @@ fn general(ui: &mut Ui) {
     }
     ui.card_end();
 
+    ui.section("Backup");
+    ui.card_begin();
+    if ui.button_row(
+        "export",
+        "Save a backup",
+        Some("My words, my translations and the settings in one file you can keep, or open on another PC. What Verba learned from your writing is not in it."),
+        "Save…",
+        ButtonStyle::Secondary,
+        true,
+    ) {
+        ui.defer(export_backup);
+    }
+    if ui.button_row(
+        "import",
+        "Open a backup",
+        Some("Adds the words and translations of a backup file to yours and uses its settings."),
+        "Open…",
+        ButtonStyle::Secondary,
+        true,
+    ) {
+        ui.defer(import_backup);
+    }
+    ui.card_end();
+
     ui.section("About");
     ui.card_begin();
     ui.about_block("Verba", concat!("Version ", env!("CARGO_PKG_VERSION")), "");
@@ -623,6 +647,41 @@ fn add_translation() {
         let (_, from, to) = DIRECTIONS[choice.min(DIRECTIONS.len() - 1)];
         crate::add_my_translation(from, to, &texts[0], &texts[1])
     });
+}
+
+/// A message box with a title and an icon, owned by the settings window.
+fn say(text: &str, icon: windows::Win32::UI::WindowsAndMessaging::MESSAGEBOX_STYLE) {
+    let (t, title) = (wide(text), wide("Verba"));
+    unsafe {
+        MessageBoxW(owner(), PCWSTR(t.as_ptr()), PCWSTR(title.as_ptr()), icon | windows::Win32::UI::WindowsAndMessaging::MB_OK);
+    }
+}
+
+/// "Save a backup": asks for a file and writes it.
+fn export_backup() {
+    let name = "Verba backup.verba-backup";
+    let Some(path) = dialog::choose_file(owner(), true, "Save a Verba backup", name, "Verba backup", crate::backup::EXTENSION) else { return };
+    match crate::export_backup(&path) {
+        Ok((words, translations)) => say(&format!("Saved {words} words and {translations} translations, with the settings, in:\n{}", path.display()), windows::Win32::UI::WindowsAndMessaging::MB_ICONINFORMATION),
+        Err(e) => say(&e, windows::Win32::UI::WindowsAndMessaging::MB_ICONWARNING),
+    }
+}
+
+/// "Open a backup": asks for a file and adds what it holds.
+fn import_backup() {
+    let Some(path) = dialog::choose_file(owner(), false, "Open a Verba backup", "", "Verba backup", crate::backup::EXTENSION) else { return };
+    match crate::import_backup(&path) {
+        Ok(done) => say(
+            &format!(
+                "Added {} new words and {} translations.{}",
+                done.words,
+                done.translations,
+                if done.settings { " The settings of the backup are in use." } else { "" }
+            ),
+            windows::Win32::UI::WindowsAndMessaging::MB_ICONINFORMATION,
+        ),
+        Err(e) => say(&e, windows::Win32::UI::WindowsAndMessaging::MB_ICONWARNING),
+    }
 }
 
 fn confirm_forget() {

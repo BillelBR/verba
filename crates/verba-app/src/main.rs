@@ -18,6 +18,7 @@ use std::time::{Duration, Instant, SystemTime};
 use std::sync::{Arc, Mutex};
 use std::sync::atomic::{AtomicBool, AtomicIsize, AtomicU32, AtomicUsize, Ordering};
 
+mod backup;
 mod fixkeys;
 mod keys;
 mod learning;
@@ -1125,6 +1126,50 @@ fn save_translations(app: &mut App, all: UserTranslations) -> Result<(), String>
     let saved = std::fs::create_dir_all(path.parent().unwrap_or(Path::new("."))).and_then(|_| app.engine.user_translations().save(&path));
     app.tr_stamp = stamp_of(&path);
     saved.map_err(|e| format!("Could not write the file: {e}"))
+}
+
+/// Writes the backup file: the words and translations the user wrote, and the settings. Returns how many words and translations it holds.
+pub(crate) fn export_backup(path: &Path) -> Result<(usize, usize), String> {
+    let (words, translations, settings) = with_app_ret(|app| (app.engine.personal().added_words(), app.engine.user_translations().clone(), app.settings.render()))
+        .ok_or("Verba is busy; try again.")?;
+    std::fs::write(path, backup::render(&words, &translations, &settings)).map_err(|e| format!("Could not write the file: {e}"))?;
+    Ok((words.len(), translations.len()))
+}
+
+/// What reading a backup file changed.
+pub(crate) struct Imported {
+    pub words: usize,
+    pub translations: usize,
+    pub settings: bool,
+}
+
+/// Reads a backup file: its words and translations are added to the ones the person has (a translation of the same word is replaced) and its
+/// settings, when it has them, replace the current ones.
+pub(crate) fn import_backup(path: &Path) -> Result<Imported, String> {
+    let text = std::fs::read_to_string(path).map_err(|e| format!("Could not read the file: {e}"))?;
+    let b = backup::parse(&text).ok_or("This is not a Verba backup file.")?;
+    let (words, translations) = with_app_ret(|app| -> Result<(usize, usize), String> {
+        let mut added = 0;
+        for w in &b.words {
+            added += usize::from(app.engine.personal_mut().add_word(w));
+        }
+        save_personal(app);
+        let mut all = app.engine.user_translations().clone();
+        let mut kept = 0;
+        for e in b.translations.entries() {
+            kept += usize::from(all.add(e.from, e.to, &e.word, &e.translations.join("; ")).is_ok());
+        }
+        save_translations(app, all)?;
+        Ok((added, kept))
+    })
+    .ok_or("Verba is busy; try again.")??;
+    let settings = b.settings.map(|text| Settings::parse(&text));
+    let changed = settings.is_some();
+    if let Some(new) = settings {
+        update_settings(|current| *current = new);
+        settings_window::refresh();
+    }
+    Ok(Imported { words, translations, settings: changed })
 }
 
 /// Opens `my-translations.txt` in Notepad (made with its explanation when it does not exist yet).

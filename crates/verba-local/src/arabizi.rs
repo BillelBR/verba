@@ -236,7 +236,7 @@ fn latin_slots(word: &str) -> Vec<LatSlot> {
                     s.after.push(if g == 'w' { 'u' } else { 'i' });
                 }
             }
-            Part::Hamza | Part::Cons(_) => {}
+            Part::Hamza => {}
         }
     }
     out

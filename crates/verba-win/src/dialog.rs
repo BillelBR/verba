@@ -8,6 +8,8 @@
 //! button and answers `Ok` (the form closes) or `Err(sentence)` (the sentence is shown in red and the form stays open, with the text kept).
 
 use std::cell::RefCell;
+use std::os::windows::ffi::OsStringExt;
+use std::path::PathBuf;
 
 use windows::Win32::Foundation::{COLORREF, HWND, LPARAM, LRESULT, RECT, WPARAM};
 use windows::Win32::Graphics::Gdi::{
@@ -304,6 +306,40 @@ pub fn ask(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn FnMu
             let _ = DeleteObject(HGDIOBJ(font.0));
         }
         saved
+    }
+}
+
+/// The Windows dialog that asks for a file to save (`save`) or to open: its path, or `None` when the person cancelled. `filter_name` and `ext`
+/// (`"Verba backup"`, `"verba-backup"`) make the file type shown; "All files" is always there.
+pub fn choose_file(owner: Option<HWND>, save: bool, title: &str, default_name: &str, filter_name: &str, ext: &str) -> Option<PathBuf> {
+    use windows::Win32::UI::Controls::Dialogs::{
+        GetOpenFileNameW, GetSaveFileNameW, OFN_EXPLORER, OFN_FILEMUSTEXIST, OFN_OVERWRITEPROMPT, OFN_PATHMUSTEXIST, OPENFILENAMEW,
+    };
+    unsafe {
+        let mut buf = [0u16; 1024];
+        for (slot, unit) in buf.iter_mut().zip(default_name.encode_utf16().take(1000)) {
+            *slot = unit;
+        }
+        let filter: Vec<u16> = format!("{filter_name} (*.{ext})\0*.{ext}\0All files (*.*)\0*.*\0\0").encode_utf16().collect();
+        let title = wide(title);
+        let ext = wide(ext);
+        let mut ofn = OPENFILENAMEW {
+            lStructSize: std::mem::size_of::<OPENFILENAMEW>() as u32,
+            hwndOwner: owner.unwrap_or_default(),
+            lpstrFilter: PCWSTR(filter.as_ptr()),
+            lpstrFile: windows::core::PWSTR(buf.as_mut_ptr()),
+            nMaxFile: buf.len() as u32,
+            lpstrTitle: PCWSTR(title.as_ptr()),
+            lpstrDefExt: PCWSTR(ext.as_ptr()),
+            Flags: if save { OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST | OFN_EXPLORER } else { OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_EXPLORER },
+            ..Default::default()
+        };
+        let ok = if save { GetSaveFileNameW(&mut ofn) } else { GetOpenFileNameW(&mut ofn) };
+        if !ok.as_bool() {
+            return None;
+        }
+        let len = buf.iter().position(|u| *u == 0).unwrap_or(buf.len());
+        Some(PathBuf::from(std::ffi::OsString::from_wide(&buf[..len])))
     }
 }
 

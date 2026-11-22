@@ -106,6 +106,16 @@ foreach ($l in $Lang) {
         # the Tatoeba sentences count `weight` times each
         $tsvArgs = @("--tsv", "$tsv@$($extra[$l].weight)", "--tsv", $more)
     }
+    # Arabic: the comments of "Algerian Dialect" (CC BY 4.0; the file made by fetch-dz-ar.ps1) teach the table the words that follow each other in Darija.
+    # Each comment counts 3 times (measured on comments the table was not built from, docs/ACCURACY.md); without the file the table is as before.
+    $dzComments = $null
+    $dzCsv = Join-Path $root "data\dz\ar-youtube\comments.csv"
+    if ($l -eq "ar" -and (Test-Path $dzCsv)) {
+        $dzComments = Join-Path $src "algerian-dialect-comments.txt"
+        Push-Location $root
+        try { cargo run --release -q -p verba-local --example dz_comments -- --csv $dzCsv --out $dzComments } finally { Pop-Location }
+        if (Test-Path $dzComments) { $tsvArgs += @("--tsv", "$dzComments@3") } else { $dzComments = $null }
+    }
     Write-Host "building $l.bigrams.txt ..."
     Push-Location $root
     try {
@@ -114,6 +124,6 @@ foreach ($l in $Lang) {
     } finally {
         Pop-Location
     }
-    if ($Clean) { Remove-Item $tsv; if ($more) { Remove-Item $more } }
+    if ($Clean) { Remove-Item $tsv; if ($more) { Remove-Item $more }; if ($dzComments) { Remove-Item $dzComments } }
 }
 Write-Host "done: $dir"

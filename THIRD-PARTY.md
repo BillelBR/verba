@@ -20,7 +20,7 @@ All of them allow free use, modification and redistribution. Only `windows` and 
 |---|---|
 | Word-frequency lists (English, French, Arabic) from [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords), built from OpenSubtitles | **CC-BY-SA-4.0** |
 | Optional list of Algerian Arabizi words (`scripts/fetch-dz.ps1`) built from the [NArabizi treebank](https://universaldependencies.org/treebanks/qaf_arabizi/) (Seddah et al. 2020; Riabi et al. 2023) | **CC BY-SA 4.0** |
-| Optional list of Algerian words in Arabic letters (`scripts/fetch-dz-ar.ps1`) built from the Mendeley Data set [Algerian Dialect](https://data.mendeley.com/datasets/zzwg3nnhsz/2) (Benmounah and Boulesnane, doi 10.17632/zzwg3nnhsz.2) | **CC BY 4.0** |
+| List of Algerian words in Arabic letters (`scripts/fetch-dz-ar.ps1`, installed as `data/words/dz-ar.txt` since 0.11.1) built from the Mendeley Data set [Algerian Dialect](https://data.mendeley.com/datasets/zzwg3nnhsz/2) (Benmounah and Boulesnane, doi 10.17632/zzwg3nnhsz.2); word counts only, no comment | **CC BY 4.0** (attribution, changes indicated) |
 
 They are **not part of the source repository** (`scripts/fetch-data.ps1` downloads them) and they do not change the license of Verba's code.
 The Windows installer ships them as separate files in `data\words\` with a notice (`WORD-LISTS-LICENSE.txt`).
@@ -32,6 +32,7 @@ See [docs/DATA.md](docs/DATA.md).
 | What | License |
 |---|---|
 | Next-word counts (English, French, Arabic) built by `scripts/fetch-bigrams.ps1` from sentences of [Tatoeba](https://tatoeba.org), (c) Tatoeba contributors | **CC BY 2.0 FR** (attribution) |
+| Next-word counts (Arabic) also built from the comments of the [Algerian Dialect](https://data.mendeley.com/datasets/zzwg3nnhsz/2) set (Benmounah and Boulesnane, doi 10.17632/zzwg3nnhsz.2), since 0.11.1; counts only, no comment | **CC BY 4.0** |
 | Next-word counts (Arabic) also built from 100 000 sentences of Arabic [Wikipedia](https://www.wikipedia.org), (c) Wikipedia contributors, as collected by the [Leipzig Corpora Collection](https://wortschatz.uni-leipzig.de) | **CC BY-SA 4.0** (attribution, share alike); counts only, no sentence is stored. See docs/DATA.md for the open license point about the collection |
 
 The tables hold counts only, no sentence. They are not part of the source repository. A copy of a table must keep the attribution above.

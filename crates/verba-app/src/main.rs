@@ -230,7 +230,7 @@ fn main() {
                 engine.set_user_translations(UserTranslations::load(path));
             }
             let tr_stamp = tr_file.as_deref().and_then(stamp_of);
-            engine.add_dz_seed();
+            // (Darija: the seed lists, and `dz-ar.txt` of the data folder when the installer put it there; see `load_engine`)
             (engine, files, words_stamp, tr_file, tr_stamp)
         };
         let (mut engine, files, words_stamp, tr_file, tr_stamp) =
@@ -320,12 +320,19 @@ fn load_engine() -> LocalEngine {
         if let Ok(engine) = LocalEngine::load_dir(&dir) {
             if !engine.languages().is_empty() {
                 log(&format!("word lists: {} ({:?})", dir.display(), engine.languages()));
+                // the seed lists of Darija, and the words of real Algerian comments (`dz-ar.txt`) when they are in the folder
+                let mut engine = engine;
+                if engine.load_dz(&dir).is_err() {
+                    engine.add_dz_seed();
+                }
                 return engine;
             }
         }
     }
     log("no word lists found: run scripts/fetch-data.ps1");
-    LocalEngine::new()
+    let mut engine = LocalEngine::new();
+    engine.add_dz_seed();
+    engine
 }
 
 fn log(text: &str) {

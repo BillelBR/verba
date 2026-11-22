@@ -61,6 +61,12 @@ if (-not ((Test-Path (Join-Path $words "en.bigrams.txt")) -and (Test-Path (Join-
     & (Join-Path $PSScriptRoot "fetch-bigrams.ps1") -Clean
     if (-not (Test-Path (Join-Path $words "ar.bigrams.txt"))) { Fail "the next-word tables could not be built (data\words\*.bigrams.txt)" }
 }
+# the words of real Algerian comments in Arabic letters (Darija; CC BY 4.0, downloads 12 MB and counts the words). The installer is built without
+# it when it cannot be made: Darija then has only the words written for Verba.
+if (-not (Test-Path (Join-Path $words "dz-ar.txt"))) {
+    Write-Host "building the list of Algerian words in Arabic letters ..."
+    try { & (Join-Path $PSScriptRoot "fetch-dz-ar.ps1") } catch { Write-Warning "dz-ar.txt could not be built: $_" }
+}
 # the bilingual dictionary for word translation (built from Wiktionary data; downloads about 650 MB, streams it and deletes it; about 1 to 5 minutes)
 if (-not (Test-Path (Join-Path $words "dict.txt"))) {
     Write-Host "building the word-translation dictionary ..."

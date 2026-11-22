@@ -472,9 +472,14 @@ impl LocalEngine {
                 words.extend(list.iter_words().map(|(w, c)| (w.to_string(), 0.4 * (1.0 + c as f32).ln() / top)));
             }
             if let Some(dz) = &self.dz_ar {
-                // the words of Darija written for Verba count more than the others, but not more than how well their vowels fit
+                // the words of Darija written for Verba count more than the others, but not more than how well their vowels fit; the words
+                // of the real comments (`dz-ar.txt`) are only a little above the Arabic list: they hold names and misspellings too
+                let seed = crate::DzList::seed_ar();
                 let max = dz.iter_words().map(|(_, c)| c).max().unwrap_or(1).max(1) as f32;
-                words.extend(dz.iter_words().map(|(w, c)| (w.to_string(), crate::arabizi::SEED + 0.8 + 0.3 * c as f32 / max)));
+                words.extend(dz.iter_words().map(|(w, c)| {
+                    let share = c as f32 / max;
+                    (w.to_string(), if seed.contains(w) { crate::arabizi::SEED + 0.8 + 0.3 * share } else { 0.3 + 0.2 * share })
+                }));
             }
             crate::ArabiziIndex::build(words.into_iter())
         })

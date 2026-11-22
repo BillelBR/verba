@@ -1623,3 +1623,21 @@ Select Arabic written with Latin letters and digits (`wach rak, 3lach ma jitch`)
 | Exact, words spelled by rules | 33.3 % |
 
 Before the vowels were looked at (frequency alone) it was 49.3 % exact. The misses are mostly colloquial spellings the lists lack (`معاك`, `نخدم`: the list has `معك`, `نخدمو`), the suffixes `ي` and `و` (`9albi` is `قلبي`, `9albou` is `قلبو`), and a Latin `h` that is `ح`. A single word that is not in the Darija seed and has no digit-letter (`shukran`) is not recognised as Arabizi. The reading is a proposal: choose it with Tab and correct what is wrong.
+
+## Version 0.11.1: more Algerian Darija in Arabic letters
+
+Two things were missing, found by typing `راني` with Darija on (the popup offered `رانا رانيش`, then nothing after the space): the program never loaded the list of real Algerian words (`dz-ar.txt`, until now an optional download that no release carried: only the seed was loaded), and the next-word table knew no Darija (`واش`, `راني`, `ماشي` were not even contexts).
+
+**1. `dz-ar.txt` is installed and loaded** (`LocalEngine::load_dz` at start, the seed when the file is absent). Built from all 45 000 comments of "Algerian Dialect" (CC BY 4.0, [DATA.md](DATA.md)): 6 536 words that the 50 000-word Arabic list lacks and that occur at least 4 times, counts only. Measured before (see "Algerian Darija in Arabic letters" above, list built from comments 5 001 to 25 000 and measured on the sealed comments 25 001 to 45 000): the Darija lists know 50.3 % of the words (40.4 % with the seed alone), exact word in the top 3 after 3 letters 21.4 % against 17.5 %. The shipped list uses all the comments, so it cannot be measured on sealed ones. It costs 92 KB (the time to load it was not measured). Its words count only a little above the Arabic list in the Arabizi reading (they hold names and misspellings), which kept that reading at 69.9 % exact (it fell to 58.9 % when they counted as much as the seed).
+
+**2. The next-word table learns Darija.** `ar.bigrams.txt` is also built from the comments (each counted 3 times, as Tatoeba's are counted 6 times), and the words of the Darija seed are exempt from the rule that drops a word the corpus holds far more often than the subtitle list does ("a trait of the corpus", like `Tom`): that rule dropped `واش`, `راني`, `ماشي` as traits of a corpus of comments (`NextBuilder::keep_word`). Measured on the sealed comments (`nextword_accuracy --lang ar`, train on the shipped sources plus comments 1 to 25 000, held-out sentences from comments 25 001 to 45 000, 4 903 positions):
+
+| Table built from | Next word shown | Top-1 | Top-3 |
+|---|---|---|---|
+| the shipped sources (Tatoeba, Wikipedia) | 46.8 % of positions | 2.3 % | 3.4 % |
+| + comments, each 3 times | 55.0 % | 4.1 % | 6.5 % |
+| **+ comments and the Darija words kept** | **66.4 %** | **7.1 %** | **10.1 %** |
+
+The everyday messages written by hand (Modern Standard Arabic, 217 positions) are not worse: top-3 28.6 % to 29.5 %. After the change `راني ` gives `حابة نشوف في`, `واش راك ` gives `دير تهدر تقول`, `خويا ` gives `لعزيز ربي محمد`. The table grows from 1.4 MB to 1.9 MB.
+
+**Not measured, and what to know.** The comments are about politics, football and religion: the table and the list are thin for everyday speech, and 10 % top-3 is a low number in absolute terms (the text is varied). Nobody checked the words: some are names, some misspellings. Darija stays off until it is switched on in Languages, and only then do its words and next words appear; with it on, Modern Standard Arabic typists see a Darija word in under 2 % of the prefixes of ordinary words (measured with the seed, above).

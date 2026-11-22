@@ -389,6 +389,8 @@ pub struct NextBuilder {
     /// The words of every sentence as ids, runs separated by `BREAK`.
     flat: Vec<u32>,
     seen: HashSet<u64>,
+    /// Words that are never taken for a trait of the corpus (see `keep_word`).
+    keep: HashSet<String>,
 }
 
 fn hash64(s: &str) -> u64 {
@@ -410,7 +412,15 @@ impl NextBuilder {
             counts: Vec::new(),
             flat: Vec::new(),
             seen: HashSet::new(),
+            keep: HashSet::new(),
         }
+    }
+
+    /// A word that the corpus holds far more often than the reference list does is taken for a trait of the corpus (`Tom`) and never predicted.
+    /// A word given here is exempt: it is a real word whose corpus is another kind of text than the reference (the words of Algerian Darija
+    /// in comments, which the subtitle list of Modern Standard Arabic holds rarely). The word is compared as the corpus writes it (cleaned, lower case).
+    pub fn keep_word(&mut self, word: &str) {
+        self.keep.insert(word.to_string());
     }
 
     /// Adds one sentence. A sentence that was added before (same words, any capitals) is skipped. Returns whether it was new.
@@ -484,6 +494,9 @@ impl NextBuilder {
                 }
                 if c < p.min_word_count {
                     return false;
+                }
+                if self.keep.contains(w) {
+                    return true;
                 }
                 let theirs = reference.share_of(w);
                 if theirs <= 0.0 {

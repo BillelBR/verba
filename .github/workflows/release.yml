@@ -41,6 +41,13 @@ jobs:
         shell: pwsh
         run: ./scripts/fetch-data.ps1
 
+      # The words of real Algerian comments in Arabic letters (Darija), CC BY 4.0. If the download fails the release goes on without them:
+      # Darija then has only the words written for Verba.
+      - name: Build the list of Algerian words in Arabic letters
+        shell: pwsh
+        continue-on-error: true
+        run: ./scripts/fetch-dz-ar.ps1
+
       - name: Build the next-word tables
         shell: pwsh
         run: ./scripts/fetch-bigrams.ps1 -Clean

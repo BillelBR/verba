@@ -16,9 +16,18 @@ OpenSubtitles corpus (https://opus.nlpl.eu/OpenSubtitles2018.php).
 The lists are separate files, and they keep that license. Verba's own program is not covered by it.
 You may replace them with your own lists in the same "word count" format.
 
+dz-ar.txt (when it is there) lists words of Algerian Arabic (Darija) written in Arabic letters, with how often they occur. It was counted
+from the dataset "Algerian Dialect" by Zakaria Benmounah and Abdennour Boulesnane (Mendeley Data, V2, 2023, doi 10.17632/zzwg3nnhsz.2,
+https://data.mendeley.com/datasets/zzwg3nnhsz/2), comments of Algerian press channels on YouTube.
+
+    License of the dataset: Creative Commons Attribution 4.0 (CC BY 4.0), https://creativecommons.org/licenses/by/4.0/
+
+Changed: only the words that occur at least four times and that the Arabic list above lacks were kept, with their counts. The file holds no
+comment and no sentence. The authors of the dataset do not endorse Verba.
+
 The next-word tables (en.bigrams.txt, fr.bigrams.txt, ar.bigrams.txt) count which word follows which. They were built
 from sentences of Tatoeba (https://tatoeba.org), (c) Tatoeba contributors, license Creative Commons Attribution 2.0 France
-(CC BY 2.0 FR, https://creativecommons.org/licenses/by/2.0/fr/). The tables hold counts of word pairs only, no sentence.
+(CC BY 2.0 FR, https://creativecommons.org/licenses/by/2.0/fr/). The Arabic table also counts word pairs of the comments of the "Algerian Dialect" dataset named above (CC BY 4.0). The tables hold counts of word pairs only, no sentence.
 
 The word-translation dictionary (dict.txt) lists translations between English, French and Arabic. It was built from Wiktionary
 (https://en.wiktionary.org), (c) Wiktionary contributors, as extracted by wiktextract (https://kaikki.org, Tatu Ylonen).

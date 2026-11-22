@@ -25,7 +25,7 @@ fn main() {
     let pairs = arg(&args, "--pairs").unwrap_or_else(|| "docs/eval/arabizi-pairs.tsv".into());
     let show = args.iter().any(|a| a == "--show");
     let mut engine = LocalEngine::load_dir(&dir).expect("the folder");
-    engine.add_dz_seed();
+    if args.iter().any(|a| a == "--dz-ar") { engine.load_dz(&dir).expect("dz lists"); } else { engine.add_dz_seed(); }
     let (mut words, mut exact, mut skeleton, mut found, mut found_exact, mut rules, mut rules_exact) = (0, 0, 0, 0, 0, 0, 0);
     let t = Instant::now();
     let mut first = true;

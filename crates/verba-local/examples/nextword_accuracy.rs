@@ -289,6 +289,12 @@ fn main() {
 
     let t0 = Instant::now();
     let mut builder = NextBuilder::new(a.lang);
+    if a.lang == Lang::Ar {
+        // as the shipped table is built: the words of Algerian Darija are not a trait of a corpus of comments
+        for (word, _) in verba_local::DzList::seed_ar().iter_words() {
+            builder.keep_word(word);
+        }
+    }
     let mut held: Vec<&str> = Vec::new();
     let mut train: Vec<(&str, usize)> = Vec::new();
     // the table is built from every sentence of the training files that is not held out; the questions are the held-out sentences of one file

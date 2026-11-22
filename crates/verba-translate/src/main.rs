@@ -8,6 +8,7 @@
 //! verba-translate serve --models <folder> [--threads 4] [--idle-secs 600]
 //! verba-translate translate <models folder> <ar-en> "text"      (one sentence, for a quick look)
 //! verba-translate bench <models folder> <ar-en> <threads> <beam> <runs> "sentence" ...
+//! verba-translate batch <models folder> <ar-en> <beam> <input.txt> <output.txt> [--raw]    (one text per line, as the program translates it)
 //! ```
 //!
 //! The models are OPUS-MT networks converted to int8 for CTranslate2, one folder per direction (`ar-en`, `en-ar`, ...), each with
@@ -33,6 +34,29 @@ const KEEP_LOADED: usize = 2;
 const MAX_DECODING_LENGTH: usize = 256;
 
 type Model = Translator<Tokenizer>;
+
+/// Decoding options for an experiment: `VERBA_TR_LENGTH_PENALTY`, `VERBA_TR_COVERAGE_PENALTY`, `VERBA_TR_REPETITION_PENALTY`,
+/// `VERBA_TR_PATIENCE`, and `VERBA_TR_DISABLE_UNK=0` to allow the unknown piece again. Without them the options are the library's defaults,
+/// except that the unknown piece is never written (see `translate`).
+fn tuned(mut options: TranslationOptions<String, String>) -> TranslationOptions<String, String> {
+    let number = |name: &str| std::env::var(name).ok().and_then(|v| v.parse::<f32>().ok());
+    if let Some(v) = number("VERBA_TR_LENGTH_PENALTY") {
+        options.length_penalty = v;
+    }
+    if let Some(v) = number("VERBA_TR_COVERAGE_PENALTY") {
+        options.coverage_penalty = v;
+    }
+    if let Some(v) = number("VERBA_TR_REPETITION_PENALTY") {
+        options.repetition_penalty = v;
+    }
+    if let Some(v) = number("VERBA_TR_PATIENCE") {
+        options.patience = v;
+    }
+    if std::env::var("VERBA_TR_DISABLE_UNK").is_ok_and(|v| v == "0") {
+        options.disable_unk = false;
+    }
+    options
+}
 
 struct Engine {
     models_dir: PathBuf,
@@ -81,7 +105,16 @@ impl Engine {
         }
         let (model, used) = self.loaded.get_mut(pair).ok_or_else(|| anyhow!("model vanished"))?;
         *used = Instant::now();
-        let options = TranslationOptions::<String, String> { beam_size: beam, max_decoding_length: MAX_DECODING_LENGTH, ..Default::default() };
+        // `disable_unk`: the network cannot write a letter like `á`, `é`, `ö` or a sign like `–` or `°` (its output vocabulary lacks them),
+        // so where one belonged it wrote the unknown piece, and the answer had `Fern⁇ndez`, `6⁇`, `⁇ C` (25 of the 1 012 sentences of
+        // FLORES-200). With the unknown piece forbidden it writes the best piece it has: `Fernandez`, `35-40`, `degrees Celsius`. The scores
+        // do not move (docs/ACCURACY.md, "Sentence translation: FLORES-200").
+        let options = tuned(TranslationOptions::<String, String> {
+            beam_size: beam,
+            max_decoding_length: MAX_DECODING_LENGTH,
+            disable_unk: true,
+            ..Default::default()
+        });
         let answers = if pair.ends_with("-ar") {
             let prefixes: Vec<Vec<&str>> = chunks.iter().map(|_| vec![ARABIC_TARGET_TOKEN]).collect();
             model.translate_batch_with_source_prefix(chunks, &prefixes, &options, None)?
@@ -161,6 +194,44 @@ fn bench(args: &[String]) -> Result<()> {
     Ok(())
 }
 
+/// Translates a file, one text per line, the way the program does it: the line is cut into sentences, the chat abbreviations and the spoken
+/// Arabic words are replaced (not with `--raw`), the sentences go to the network in batches. For measuring (docs/ACCURACY.md).
+fn batch(args: &[String]) -> Result<()> {
+    let (models, pair, beam, input, output) = match args {
+        [models, pair, beam, input, output, ..] => (models, pair, beam.parse::<usize>()?, input, output),
+        _ => return Err(anyhow!("usage: verba-translate batch <models folder> <pair> <beam> <input.txt> <output.txt> [--raw]")),
+    };
+    let raw = args.iter().any(|a| a == "--raw");
+    let text = std::fs::read_to_string(input).with_context(|| format!("cannot read {input}"))?;
+    let lines: Vec<&str> = text.lines().collect();
+    let mut engine = Engine::new(PathBuf::from(models), std::thread::available_parallelism().map_or(4, |n| n.get().min(8)));
+    let slang = verba_local::slang::shipped();
+    let from_arabic = pair.starts_with("ar");
+    let t = Instant::now();
+    let mut out = String::new();
+    for (i, line) in lines.iter().enumerate() {
+        let translated = verba_local::sentence::translate_with(line, |chunks| {
+            let prepared: Vec<String> = if raw {
+                chunks.to_vec()
+            } else if from_arabic {
+                chunks.iter().map(|c| verba_local::colloquial::shipped().expand(&slang.expand_into(c, verba_core::Lang::Ar))).collect()
+            } else {
+                chunks.iter().map(|c| slang.expand(c)).collect()
+            };
+            engine.translate(pair, beam, &prepared).map_err(|e| format!("{e:#}"))
+        });
+        // an empty line stays an empty line; a failure is written as an empty line too and counted
+        out.push_str(translated.unwrap_or_default().replace('\n', " ").trim());
+        out.push('\n');
+        if (i + 1) % 100 == 0 {
+            eprintln!("{} of {} lines, {:.0} s", i + 1, lines.len(), t.elapsed().as_secs_f64());
+        }
+    }
+    std::fs::write(output, out).with_context(|| format!("cannot write {output}"))?;
+    println!("{} lines in {:.0} s -> {output}", lines.len(), t.elapsed().as_secs_f64());
+    Ok(())
+}
+
 fn main() -> Result<()> {
     let args: Vec<String> = std::env::args().skip(1).collect();
     match args.first().map(String::as_str) {
@@ -182,6 +253,20 @@ fn main() -> Result<()> {
             Ok(())
         }
         Some("bench") => bench(&args[1..]),
+        Some("batch") => batch(&args[1..]),
+        Some("tokens") => {
+            // verba-translate tokens <models folder> <pair> <text>...: the pieces the source side makes of each text (`<unk>`: a character
+            // the model does not know)
+            let [_, models, pair, texts @ ..] = args.as_slice() else {
+                return Err(anyhow!("usage: verba-translate tokens <models folder> <pair> <text>..."));
+            };
+            let tokenizer = Tokenizer::new(Path::new(models).join(pair)).context("cannot read source.spm")?;
+            for text in texts {
+                let pieces = ct2rs::Tokenizer::encode(&tokenizer, text).map_err(|e| anyhow!("{e}"))?;
+                println!("{text}\t{}", pieces.join(" "));
+            }
+            Ok(())
+        }
         _ => Err(anyhow!("usage: verba-translate serve --models <folder> | translate <models> <pair> <text> | bench ...")),
     }
 }

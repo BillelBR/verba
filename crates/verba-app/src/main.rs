@@ -21,6 +21,7 @@ use std::sync::atomic::{AtomicBool, AtomicIsize, AtomicU32, AtomicUsize, Orderin
 mod backup;
 mod diagnostics;
 mod fixkeys;
+mod update;
 mod keys;
 mod learning;
 mod sentences;
@@ -70,6 +71,8 @@ const WM_NOTICE_END: u32 = WM_APP + 7;
 const WM_SENTENCE: u32 = WM_APP + 8;
 /// The reader thread read the selection to put right (typed with the wrong keyboard): it is waiting in `FIXKEYS_PICKED`.
 const WM_FIXKEYS: u32 = WM_APP + 9;
+/// The answer of a check for a newer version arrived (see `update.rs`).
+const WM_UPDATE: u32 = WM_APP + 10;
 /// wParam of `WM_ACCEPT` that means "the highlighted one" (a click sends the number of the candidate instead).
 const ACCEPT_HIGHLIGHTED: usize = usize::MAX;
 /// How often the worker thread looks at the app being typed in.
@@ -107,6 +110,9 @@ static FIXKEYS_PICKED: Mutex<Option<Option<Picked>>> = Mutex::new(None);
 /// The wrong-keyboard shortcut that is registered with Windows now.
 static FIXKEYS_KEY: Mutex<Option<Binding>> = Mutex::new(None);
 static UNDO_KEY: Mutex<Option<Binding>> = Mutex::new(None);
+/// What the thread that asked for a newer version found: whether the person asked (a message box answers) or the daily check did (a short
+/// notice, and only when there is news), and `Ok(Some(tag))` for a newer version, `Ok(None)` for none, or the reason it could not be told.
+static UPDATE_DONE: Mutex<Option<(bool, Result<Option<String>, String>)>> = Mutex::new(None);
 /// The shortcuts Windows refused (another program holds the key), by name, for the diagnostics.
 static REFUSED_SHORTCUTS: Mutex<Vec<String>> = Mutex::new(Vec::new());
 /// How many candidates the popup shows now.
@@ -272,6 +278,11 @@ fn main() {
             log("keyboard hook failed: Tab and Esc will not work");
         }
 
+        // the daily check for a newer version, when the person turned it on (a test never goes to the network)
+        let quiet_test = cfg!(debug_assertions) && std::env::var("VERBA_TEST_QUIET").is_ok();
+        if !quiet_test && with_app_ret(|app| app.settings.check_updates).unwrap_or(false) {
+            check_for_update_if_due();
+        }
         // (a development build can open the settings window by itself, VERBA_TEST_SETTINGS=1, to look at it)
         if cfg!(debug_assertions) && std::env::var("VERBA_TEST_SETTINGS").is_ok() {
             open_settings();
@@ -414,6 +425,18 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
             let picked = PICKED.lock().ok().and_then(|mut p| p.take());
             if let Some(picked) = picked {
                 with_app(|app| show_translation(app, picked));
+            }
+            LRESULT(0)
+        }
+        WM_UPDATE => {
+            let done = UPDATE_DONE.lock().ok().and_then(|mut d| d.take());
+            if let Some((asked, result)) = done {
+                if asked {
+                    settings_window::show_update_result(result);
+                } else if let Ok(Some(tag)) = result {
+                    let text = format!("Verba {tag} is available. Settings > General has the link.");
+                    with_app(|app| notice(app, None, &text));
+                }
             }
             LRESULT(0)
         }
@@ -1307,6 +1330,34 @@ fn registry_text(root: windows::Win32::System::Registry::HKEY, key: windows::cor
         RegGetValueW(root, key, name, RRF_RT_REG_SZ, None, Some(buf.as_mut_ptr() as *mut _), Some(&mut bytes)).ok().ok()?;
         let len = buf.iter().position(|u| *u == 0).unwrap_or(buf.len());
         Some(String::from_utf16_lossy(&buf[..len]))
+    }
+}
+
+/// Asks the releases page whether a newer version exists, on another thread; the answer comes back as `WM_UPDATE`. `asked` is whether the
+/// person pressed the button (then the answer is always shown).
+pub(crate) fn check_for_update(asked: bool) {
+    std::thread::spawn(move || {
+        let result = update::check(env!("CARGO_PKG_VERSION"));
+        if let Ok(mut done) = UPDATE_DONE.lock() {
+            *done = Some((asked, result));
+        }
+        let controller = CONTROLLER.load(Ordering::SeqCst);
+        if controller != 0 {
+            unsafe {
+                let _ = PostMessageW(Some(HWND(controller as *mut _)), WM_UPDATE, WPARAM(0), LPARAM(0));
+            }
+        }
+    });
+}
+
+/// With the daily check turned on: asks at start when the last answer is more than a day old.
+fn check_for_update_if_due() {
+    let Some(stamp_file) = Settings::dir().map(|d| d.join("update-check.txt")) else { return };
+    let due = stamp_of(&stamp_file).and_then(|t| t.elapsed().ok()).is_none_or(|age| age > Duration::from_secs(24 * 3600));
+    if due {
+        let _ = std::fs::create_dir_all(stamp_file.parent().unwrap_or(Path::new(".")));
+        let _ = std::fs::write(&stamp_file, "The time of this file is when Verba last asked whether a newer version exists.\n");
+        check_for_update(false);
     }
 }
 

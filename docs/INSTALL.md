@@ -85,7 +85,7 @@ Why the warning exists and what can remove it: [SIGNING.md](SIGNING.md).
 ### Privacy
 
 Verba reads only the few letters before the caret in the text box you are typing in, never in password boxes, and by default it keeps nothing.
-It sends nothing over the network: it has no network code.
+It sends nothing over the network, with one exception that is off until you turn it on: *General > Updates*. Then Verba asks the releases page of the project on GitHub (through Windows' own `curl.exe`) which version is the latest, once a day or when you press *Check now*. The request has no text of yours, no identifier and nothing about your PC beyond what any web request carries (your address and the name "Verba-update-check"); nothing is downloaded: a newer version only shows a link.
 
 Two options, both **off** until you turn them on in the settings, keep something on your own PC:
 

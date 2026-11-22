@@ -98,7 +98,7 @@ fn draw(ui: &mut Ui) {
         3 => keyboard(ui, &mut s),
         4 => apps(ui, &mut s),
         5 => appearance(ui, &mut s),
-        _ => general(ui),
+        _ => general(ui, &mut s),
     }
 
     if s != before {
@@ -520,7 +520,7 @@ fn appearance(ui: &mut Ui, s: &mut Settings) {
     ui.card_end();
 }
 
-fn general(ui: &mut Ui) {
+fn general(ui: &mut Ui, s: &mut Settings) {
     ui.page_begin("General", "Starting Verba, checking a text field, and about this program.");
     ui.section("Start");
     ui.card_begin();
@@ -552,6 +552,27 @@ fn general(ui: &mut Ui) {
         true,
     ) {
         ui.defer(crate::field_check);
+    }
+    ui.card_end();
+
+    ui.section("Updates");
+    ui.card_begin();
+    ui.toggle_row(
+        "updates",
+        "Check for a new version once a day",
+        Some("Verba asks the project's releases page on GitHub which version is the latest, and says so when there is one. It sends nothing else and downloads nothing. It is the only thing Verba does on the network, so it is off until you turn it on."),
+        &mut s.check_updates,
+        true,
+    );
+    if ui.button_row(
+        "update-now",
+        "Check now",
+        Some("Asks once, and tells you the answer."),
+        "Check now",
+        ButtonStyle::Secondary,
+        true,
+    ) {
+        ui.defer(|| crate::check_for_update(true));
     }
     ui.card_end();
 
@@ -706,6 +727,26 @@ fn look_up() {
             None => dialog::Reply::Error(format!("The dictionary has no translation for \u{201C}{word}\u{201D}.")),
         }
     });
+}
+
+/// What a check for a newer version found, said to the person who asked: with a button to open the page of the new version.
+pub fn show_update_result(result: Result<Option<String>, String>) {
+    use windows::Win32::UI::WindowsAndMessaging::{MB_ICONINFORMATION, MB_ICONWARNING};
+    match result {
+        Ok(Some(tag)) => {
+            let text = wide(&format!("Verba {tag} is available (this is {}).\n\nOpen its page to download it?", env!("CARGO_PKG_VERSION")));
+            let title = wide("Verba");
+            let answer = unsafe { MessageBoxW(owner(), PCWSTR(text.as_ptr()), PCWSTR(title.as_ptr()), MB_YESNO | MB_ICONQUESTION) };
+            if answer == IDYES {
+                let page = wide(&crate::update::release_page(&tag));
+                unsafe {
+                    ShellExecuteW(None, w!("open"), PCWSTR(page.as_ptr()), None, None, SW_SHOW);
+                }
+            }
+        }
+        Ok(None) => say(&format!("Verba {} is the latest version.", env!("CARGO_PKG_VERSION")), MB_ICONINFORMATION),
+        Err(e) => say(&e, MB_ICONWARNING),
+    }
 }
 
 /// A message box with a title and an icon, owned by the settings window.

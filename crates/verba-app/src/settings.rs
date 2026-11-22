@@ -54,6 +54,9 @@ pub struct Settings {
     pub predict_next: bool,
     /// Learn the words the user types, on this PC only, to offer them later (off until the user turns it on).
     pub learn: bool,
+    /// Ask the project's releases page once a day whether a newer Verba exists (off until the user turns it on: it is the only thing that
+    /// goes over the network).
+    pub check_updates: bool,
     /// The keys that drive the popup: accept, previous, next, close (Tab, left, right and Esc unless the user changed them).
     pub keys: Keys,
     /// The language a word is translated into (a word in that language goes to the next one: English, then French, then Arabic).
@@ -80,6 +83,7 @@ impl Default for Settings {
             correction: false,
             predict_next: false,
             learn: false,
+            check_updates: false,
             keys: Keys::default(),
             translate_to: Lang::En,
             follow_keyboard: true,
@@ -177,6 +181,7 @@ impl Settings {
                 "correction" => s.correction = on,
                 "predict_next" => s.predict_next = on,
                 "learn" => s.learn = on,
+                "check_updates" => s.check_updates = on,
                 "key_accept" => s.keys.accept = Binding::parse(value).unwrap_or(Keys::default().accept),
                 "key_prev" => s.keys.prev = Binding::parse(value).unwrap_or(Keys::default().prev),
                 "key_next" => s.keys.next = Binding::parse(value).unwrap_or(Keys::default().next),
@@ -220,7 +225,7 @@ impl Settings {
         let flag = |b: bool| if b { "1" } else { "0" };
         let mode = if self.app_mode == AppMode::OnlyThese { "only" } else { "except" };
         format!(
-            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\nkey_fixkeys={}\nkey_undo={}\ntranslate_to={}\nfollow_keyboard={}\nline_break={}\napp_mode={mode}\napps={}\n",
+            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\ncheck_updates={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\nkey_fixkeys={}\nkey_undo={}\ntranslate_to={}\nfollow_keyboard={}\nline_break={}\napp_mode={mode}\napps={}\n",
             flag(self.english),
             flag(self.french),
             flag(self.arabic),
@@ -229,6 +234,7 @@ impl Settings {
             flag(self.correction),
             flag(self.predict_next),
             flag(self.learn),
+            flag(self.check_updates),
             self.keys.get(Action::Accept).render(),
             self.keys.get(Action::Prev).render(),
             self.keys.get(Action::Next).render(),
@@ -316,6 +322,14 @@ mod tests {
         assert!(!d.predict_next && !d.learn);
         let s = Settings::parse("predict_next=1\nlearn=1");
         assert!(s.predict_next && s.learn);
+    }
+
+    #[test]
+    fn the_update_check_is_off_until_the_user_turns_it_on_and_survives_a_save() {
+        assert!(!Settings::default().check_updates);
+        let mut s = Settings::default();
+        s.check_updates = true;
+        assert!(Settings::parse(&s.render()).check_updates);
     }
 
     #[test]

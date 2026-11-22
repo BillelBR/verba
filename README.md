@@ -58,7 +58,7 @@ one switch, off until it is switched on, with built-in word lists for both scrip
 ## Principles
 
 - **Private by default.** Nothing you type leaves your computer unless you choose an online engine (none exists yet).
-- **Works offline.** The default engine is local, with no internet and no account.
+- **Works offline.** The default engine is local, with no internet and no account. The one request it can make is the optional check for a newer version (off by default, General > Updates).
 - **No subscription.** Free for personal and other noncommercial use, and the source is public. Using it for work needs a commercial license ([COMMERCIAL.md](COMMERCIAL.md)). If you want a cloud model later, you bring your own API key.
 - **Every major language.** Engines and data are built per language, starting with English, French and Arabic.
 - **Engines are plugins.** A local engine or an API engine can be swapped without touching the rest of the app.
@@ -67,7 +67,7 @@ one switch, off until it is switched on, with built-in word lists for both scrip
 
 - Only the **few letters just before the caret**, from the text field that has the focus, through Windows' accessibility interface (UI Automation).
 - **Never password fields.**
-- It **keeps nothing**: no log, no file, no network.
+- It **keeps nothing**: no log, no file, no network (but the optional, off-by-default check for a newer version, which asks GitHub for the name of the latest release and sends nothing else).
 - The keyboard hook looks at **one thing**: whether the key is one of your popup keys (Tab, the arrows and Esc by default) while the popup is open. Other keys pass untouched.
 - Because it uses the accessibility interface, some browsers and apps (Chromium-based ones) may switch on their accessibility mode when Verba runs, which can cost a little speed in them.
 

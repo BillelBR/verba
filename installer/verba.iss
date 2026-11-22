@@ -48,6 +48,7 @@ RestartApplications=no
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "french"; MessagesFile: "compiler:Languages\French.isl"
+Name: "arabic"; MessagesFile: "compiler:Languages\Arabic.isl"
 
 [CustomMessages]
 english.TaskAutostart=Start Verba when Windows starts
@@ -60,6 +61,11 @@ french.TaskSentences=Traduction de phrases, arabe et anglais (environ 330 Mo sur
 french.TaskGroupOptions=Options :
 french.LaunchVerba=Lancer Verba
 french.AskDeleteSettings=Supprimer aussi vos réglages Verba (thème, langues et liste de programmes choisis) ?
+arabic.TaskAutostart=تشغيل Verba عند بدء Windows
+arabic.TaskSentences=ترجمة الجمل بين العربية والإنجليزية (حوالي 330 ميغابايت على القرص)
+arabic.TaskGroupOptions=خيارات:
+arabic.LaunchVerba=تشغيل Verba
+arabic.AskDeleteSettings=هل تريد حذف إعدادات Verba أيضًا (السمة واللغات وقائمة البرامج التي اخترتها)؟
 
 [Tasks]
 Name: "autostart"; Description: "{cm:TaskAutostart}"; GroupDescription: "{cm:TaskGroupOptions}"

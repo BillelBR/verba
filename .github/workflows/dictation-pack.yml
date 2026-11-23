@@ -1,21 +1,25 @@
 name: Dictation pack
 
-# Builds the Algerian Darija dictation pack and publishes it as the files of a release (default tag: "dictation-darija-v1"), where the "Dictation"
-# page of Verba downloads it from. The pack is Whisper small with the LoRA adapter EL-ANKA-Lite (algerian-nlp, MIT) merged in, converted to
-# CTranslate2 with int8 weights (about 250 MB): see scripts/build-darija-pack.py. The English and Arabic packs are not built here: their
-# files are downloaded from the repositories of Systran and OpenAI (see crates/verba-app/src/dictation.rs).
+# Builds a dictation pack and publishes it as the files of a release, where the "Dictation" page of Verba downloads it from. Every pack is a
+# Whisper small model converted to CTranslate2 with int8 weights (about 250 MB; see scripts/convert-hf-whisper.py and scripts/build-darija-pack.py):
 #
-# Run it by pushing a tag that starts with "dictation-darija-v", or by hand (Actions > Dictation pack > Run workflow). The catalogue of
-# dictation.rs holds the size and the SHA-256 of each file: after a run, copy them from SHA256SUMS.txt of the release.
+#   dictation-ar-v1       Arabic: OpenAI Whisper small (multilingual), Apache-2.0
+#   dictation-en-v1       English: OpenAI Whisper small.en, Apache-2.0
+#   dictation-darija-v1   Algerian Darija: Whisper small with the LoRA adapter EL-ANKA-Lite (algerian-nlp, MIT) merged in
+#
+# Run it by pushing a tag with one of those names (the number may grow), or by hand (Actions > Dictation pack > Run workflow, with the tag as the
+# input). The catalogue of crates/verba-app/src/dictation.rs holds the size and the SHA-256 of each file: after a run, copy them from SHA256SUMS.txt of the release.
 
 on:
   push:
     tags:
+      - "dictation-ar-v*"
+      - "dictation-en-v*"
       - "dictation-darija-v*"
   workflow_dispatch:
     inputs:
       tag:
-        description: "Name of the release that holds the pack"
+        description: "Name of the release that holds the pack (dictation-ar-v1, dictation-en-v1 or dictation-darija-v1)"
         default: "dictation-darija-v1"
 
 permissions:
@@ -24,6 +28,8 @@ permissions:
 jobs:
   pack:
     runs-on: ubuntu-latest
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
 
@@ -39,25 +45,39 @@ jobs:
 
       - name: Build the pack
         timeout-minutes: 40
-        run: python scripts/build-darija-pack.py out --adapter algerian-nlp/EL-ANKA-Lite --adapter-rev d36d9f940e251359351e38171dda6ae23d25b91a
+        run: |
+          case "$TAG" in
+            dictation-darija-*)
+              python scripts/build-darija-pack.py out --adapter algerian-nlp/EL-ANKA-Lite --adapter-rev d36d9f940e251359351e38171dda6ae23d25b91a
+              printf '%s\n' "Verba dictation pack: Algerian Darija." \
+                "Base model: openai/whisper-small, revision 973afd24965f72e36ca33b3055d56a652f456b4d (Apache-2.0)." \
+                "Adapter: algerian-nlp/EL-ANKA-Lite, revision d36d9f940e251359351e38171dda6ae23d25b91a (MIT), LoRA merged into the base model." \
+                "Changed: merged, converted to CTranslate2 with int8 weights (ctranslate2 4.9.1)." > out/pack/SOURCE.txt ;;
+            dictation-ar-*)
+              python scripts/convert-hf-whisper.py openai/whisper-small out --revision 973afd24965f72e36ca33b3055d56a652f456b4d
+              printf '%s\n' "Verba dictation pack: Arabic." \
+                "Model: openai/whisper-small, revision 973afd24965f72e36ca33b3055d56a652f456b4d (Apache-2.0), multilingual, used for Arabic." \
+                "Changed: converted to CTranslate2 with int8 weights (ctranslate2 4.9.1)." > out/pack/SOURCE.txt ;;
+            dictation-en-*)
+              python scripts/convert-hf-whisper.py openai/whisper-small.en out --revision e8727524f962ee844a7319d92be39ac1bd25655a
+              printf '%s\n' "Verba dictation pack: English." \
+                "Model: openai/whisper-small.en, revision e8727524f962ee844a7319d92be39ac1bd25655a (Apache-2.0), trained on English." \
+                "Changed: converted to CTranslate2 with int8 weights (ctranslate2 4.9.1)." > out/pack/SOURCE.txt ;;
+            *)
+              echo "unknown pack: $TAG"; exit 1 ;;
+          esac
 
-      - name: Checksums and source
+      - name: Checksums
         run: |
           cd out/pack
-          cat > SOURCE.txt <<'EOF'
-          Verba dictation pack: Algerian Darija.
-          Base model: openai/whisper-small, revision 973afd24965f72e36ca33b3055d56a652f456b4d (Apache-2.0).
-          Adapter: algerian-nlp/EL-ANKA-Lite, revision d36d9f940e251359351e38171dda6ae23d25b91a (MIT), LoRA merged into the base model.
-          Changed: merged, converted to CTranslate2 with int8 weights (ctranslate2 4.9.1).
-          EOF
           sha256sum config.json model.bin preprocessor_config.json tokenizer.json vocabulary.json | tee SHA256SUMS.txt
           ls -l
 
       - name: Publish the pack
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ inputs.tag || github.ref_name }}
-          name: Dictation pack, Algerian Darija (${{ inputs.tag || github.ref_name }})
+          tag_name: ${{ env.TAG }}
+          name: Dictation pack (${{ env.TAG }})
           prerelease: true
           fail_on_unmatched_files: true
           files: |
@@ -69,7 +89,5 @@ jobs:
             out/pack/SHA256SUMS.txt
             out/pack/SOURCE.txt
           body: |
-            The Algerian Darija dictation pack of Verba, downloaded by *Settings > Dictation* (not by hand, and not part of the Verba installer).
-
-            Whisper small (OpenAI, Apache-2.0) with the LoRA adapter EL-ANKA-Lite (algerian-nlp, MIT) merged in, converted to int8 for CTranslate2. See `SOURCE.txt`.
-            Measured on 60 utterances of real Algerian speech it makes 76 % word errors (the Arabic pack: 93 %): see docs/ACCURACY.md.
+            A dictation pack of Verba, downloaded by *Settings > Dictation* (not by hand, and not part of the Verba installer). See `SOURCE.txt` for the model, its revision and its licence, and `SHA256SUMS.txt` for the checksums that Verba checks.
+            Accuracy and the way it was measured: docs/ACCURACY.md.

@@ -1151,19 +1151,23 @@ fn undo_last_fix(app: &mut App) {
 /// The pack that writes the next dictation down: the one the setting names, or the one of the keyboard that is in use. An error is a sentence for the person.
 fn pick_pack(app: &App) -> Result<&'static dictation::Pack, String> {
     use settings::DictationLanguage;
-    let wanted = match app.settings.dictation_language {
-        DictationLanguage::Arabic => Some("ar"),
-        DictationLanguage::English => Some("en"),
+    // the packs that may write it, the best first: Arabic text is written by the Darija pack when Algerian Darija is on in Languages (or chosen here),
+    // else by the Arabic pack, and by the Darija pack when that is the only Arabic one installed
+    let wanted: &[&str] = match app.settings.dictation_language {
+        DictationLanguage::Arabic => &["ar"],
+        DictationLanguage::Darija => &["dz"],
+        DictationLanguage::English => &["en"],
         DictationLanguage::Auto => match app.last_layout {
-            Some(Lang::Ar) => Some("ar"),
-            Some(Lang::En) => Some("en"),
-            _ => None,
+            Some(Lang::Ar) if app.settings.darija => &["dz", "ar"],
+            Some(Lang::Ar) => &["ar", "dz"],
+            Some(Lang::En) => &["en"],
+            _ => &[],
         },
     };
     let ready: Vec<&'static dictation::Pack> = dictation::PACKS.iter().filter(|p| dictation::installed(p)).collect();
-    match wanted {
-        Some(id) => ready.iter().copied().find(|p| p.id == id).ok_or_else(|| {
-            let title = dictation::pack(id).map_or("", |p| p.title);
+    match wanted.first() {
+        Some(first) => wanted.iter().find_map(|id| ready.iter().copied().find(|p| p.id == *id)).ok_or_else(|| {
+            let title = dictation::pack(first).map_or("", |p| p.title);
             format!("The {title} dictation pack is not installed: Settings, Dictation, Download.")
         }),
         // another keyboard (French, German...) or none: the only pack that is installed

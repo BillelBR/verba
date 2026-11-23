@@ -55,6 +55,8 @@ impl Pack {
 /// docs/ACCURACY.md (`scripts/` has no tool for it: download, hash, paste; the first file of each pack is the smallest, so a wrong address fails fast).
 /// Arabic: `Systran/faster-whisper-small` (OpenAI Whisper small, multilingual, written for Arabic). English: `Systran/faster-whisper-small.en`
 /// (Whisper small trained on English alone). Both MIT; the preprocessing settings come from `openai/whisper-small` (Apache-2.0).
+/// Algerian Darija: Whisper small with the adapter EL-ANKA-Lite merged in and converted to int8, built by `.github/workflows/dictation-pack.yml` and
+/// published as the files of the release `dictation-darija-v1` of this repository (it also writes Whisper's language "ar").
 pub static PACKS: &[Pack] = &[
     Pack {
         id: "ar",
@@ -80,6 +82,19 @@ pub static PACKS: &[Pack] = &[
             PackFile { name: "tokenizer.json", url: "https://huggingface.co/Systran/faster-whisper-small.en/resolve/d1d751a5f8271d482d14ca55d9e2deeebbae577f/tokenizer.json", bytes: 2128466, sha256: "929c5252409436dce1b38a75d1abbcb5e132d170d8e324e4e04ed915fa2d22df" },
             PackFile { name: "vocabulary.txt", url: "https://huggingface.co/Systran/faster-whisper-small.en/resolve/d1d751a5f8271d482d14ca55d9e2deeebbae577f/vocabulary.txt", bytes: 422309, sha256: "ff77588746d3a2595d32ab5b69ffd7b95ce2441ac57533cb66fc3eb575a115cf" },
             PackFile { name: "model.bin", url: "https://huggingface.co/Systran/faster-whisper-small.en/resolve/d1d751a5f8271d482d14ca55d9e2deeebbae577f/model.bin", bytes: 483545366, sha256: "62b2a45b05ee59acb4a5341b33ee35e041395d378d418a18acfe4c9e768ee37a" },
+        ],
+    },
+    Pack {
+        id: "dz",
+        title: "Algerian Darija",
+        language: "ar",
+        folder: "whisper-small-darija",
+        files: &[
+            PackFile { name: "config.json", url: "https://github.com/BillelBR/verba/releases/download/dictation-darija-v1/config.json", bytes: 2370, sha256: "b55496ac7940a7ae47d2c01eab40edfd8701feec1229d9cce3b40014383fb828" },
+            PackFile { name: "preprocessor_config.json", url: "https://github.com/BillelBR/verba/releases/download/dictation-darija-v1/preprocessor_config.json", bytes: 184990, sha256: "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666" },
+            PackFile { name: "tokenizer.json", url: "https://github.com/BillelBR/verba/releases/download/dictation-darija-v1/tokenizer.json", bytes: 3930494, sha256: "7b469ff15eb7816315aa45eec391f5943d639b9d73d110f5c003df5192fd54e3" },
+            PackFile { name: "vocabulary.json", url: "https://github.com/BillelBR/verba/releases/download/dictation-darija-v1/vocabulary.json", bytes: 1068103, sha256: "5ad28279db5e546349708b9a74736e2c018737ac5a600f1048f1f26c99b85b47" },
+            PackFile { name: "model.bin", url: "https://github.com/BillelBR/verba/releases/download/dictation-darija-v1/model.bin", bytes: 248203797, sha256: "6e18b09c9457ab283ed82422f473138b99624007b7eaab741e5a090e426a5aa3" },
         ],
     },
 ];
@@ -626,15 +641,23 @@ mod tests {
 
     #[test]
     fn the_catalogue_is_well_formed_and_pinned() {
-        assert!(pack("ar").is_some() && pack("en").is_some() && pack("fr").is_none());
+        assert!(pack("ar").is_some() && pack("en").is_some() && pack("dz").is_some() && pack("fr").is_none());
         for p in PACKS {
-            assert_eq!(p.language, p.id);
+            // the language Whisper is told: the Darija pack writes Arabic
+            assert!(p.language == "ar" || p.language == "en", "{}", p.id);
+            assert_eq!(p.language == "ar", p.id != "en");
             assert!(p.files.iter().any(|f| f.name == "model.bin") && p.files.iter().any(|f| f.name == "preprocessor_config.json"), "{}", p.id);
             for f in p.files {
-                assert!(f.url.starts_with("https://huggingface.co/") && f.url.ends_with(f.name), "{}", f.url);
-                // pinned to a revision (40 hex digits), never to `main`
-                let rev = f.url.split("/resolve/").nth(1).and_then(|r| r.split('/').next()).unwrap_or("");
-                assert!(rev.len() == 40 && rev.chars().all(|c| c.is_ascii_hexdigit()), "{}", f.url);
+                assert!(f.url.ends_with(f.name), "{}", f.url);
+                if p.id == "dz" {
+                    // the files of a release of this repository, named by its tag
+                    assert!(f.url.starts_with("https://github.com/BillelBR/verba/releases/download/dictation-darija-v"), "{}", f.url);
+                } else {
+                    // pinned to a revision (40 hex digits), never to `main`
+                    assert!(f.url.starts_with("https://huggingface.co/"), "{}", f.url);
+                    let rev = f.url.split("/resolve/").nth(1).and_then(|r| r.split('/').next()).unwrap_or("");
+                    assert!(rev.len() == 40 && rev.chars().all(|c| c.is_ascii_hexdigit()), "{}", f.url);
+                }
                 assert!(f.sha256.len() == 64 && f.sha256.chars().all(|c| c.is_ascii_hexdigit()), "{}", f.name);
                 assert!(f.bytes > 0);
             }
@@ -644,6 +667,11 @@ mod tests {
             let mb = p.total_bytes() / 1_000_000;
             assert!((100..700).contains(&mb), "{} is {mb} MB", p.id);
         }
+        // two packs may share a folder in no case
+        let mut folders: Vec<&str> = PACKS.iter().map(|p| p.folder).collect();
+        folders.sort();
+        folders.dedup();
+        assert_eq!(folders.len(), PACKS.len());
     }
 
     #[test]

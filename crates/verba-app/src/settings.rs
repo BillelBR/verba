@@ -45,6 +45,8 @@ pub enum DictationLanguage {
     /// The language of the keyboard that is in use (English or Arabic; another keyboard uses the only pack that is installed).
     Auto,
     Arabic,
+    /// Algerian Darija (its own pack).
+    Darija,
     English,
 }
 
@@ -53,6 +55,7 @@ impl DictationLanguage {
         match self {
             Self::Auto => "auto",
             Self::Arabic => "ar",
+            Self::Darija => "dz",
             Self::English => "en",
         }
     }
@@ -60,6 +63,7 @@ impl DictationLanguage {
     pub fn parse(value: &str) -> Self {
         match value.trim() {
             "ar" => Self::Arabic,
+            "dz" => Self::Darija,
             "en" => Self::English,
             _ => Self::Auto,
         }
@@ -392,6 +396,9 @@ mod tests {
         assert_eq!(back.dictation_language, DictationLanguage::Arabic);
         assert_eq!(back.keys.dictate, s.keys.dictate);
         assert_eq!(DictationLanguage::parse("nonsense"), DictationLanguage::Auto);
+        for l in [DictationLanguage::Auto, DictationLanguage::Arabic, DictationLanguage::Darija, DictationLanguage::English] {
+            assert_eq!(DictationLanguage::parse(l.code()), l, "{}", l.code());
+        }
         assert_eq!(Settings::parse("key_dictate=D\n").keys.dictate, Keys::default().dictate, "a plain key cannot be a shortcut for every app");
     }
 

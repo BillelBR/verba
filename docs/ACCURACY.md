@@ -1701,6 +1701,8 @@ The Arabic pack is Whisper small for Modern Standard Arabic and does not know Da
 | Model | WER | CER | Pack size |
 |---|---|---|---|
 | Whisper small, the Arabic pack (no Darija) | 92.7 % | 42.2 % | 484 MB (fp16) |
-| EL-ANKA-Lite merged, int8 | **76.3 %** | **29.0 %** | 248 MB |
+| `MohammedNasri/whisper-algerian-dialect`, int8 (its card says 23 % on Casablanca: not reproduced) | 92.7 % | 44.8 % | 248 MB |
+| `khier12/800min_whisper_small_FT_Algerian_Dialect`, int8 | 89.2 % | 47.8 % | 248 MB |
+| **`algerian-nlp/EL-ANKA-Lite` merged, int8 (the Darija pack)** | **76.3 %** | **29.0 %** | **248 MB** |
 
-Both are poor in absolute terms: Darija has no standard spelling (`بسيف` against `بالسيف` counts as a wrong word) and the audio is conversational, so these numbers say "the meaning is usually there, many words need a fix". Other candidates were being converted and measured on the same 60 utterances when this was written; their results go here when done. To be decided: which model becomes the Darija pack, and where its files are hosted (the pack catalogue pins files by address and SHA-256; a release asset built by a workflow is the plan, since the owner's repository is public).
+Both are poor in absolute terms: Darija has no standard spelling (`بسيف` against `بالسيف` counts as a wrong word) and the audio is conversational, so these numbers say "the meaning is usually there, many words need a fix". **Chosen: EL-ANKA-Lite**, the only one that is clearly better than the Arabic pack on real Algerian speech. The medium model of the same authors (`EL-ANKA`, 764 M parameters) was not tried: its card reports under 1 % on non-independent data, it would be about 770 MB in int8 and expected to be about three times slower (not measured). Its files are built by the workflow `dictation-pack.yml` (pushing a tag `dictation-darija-v1`) and published as the release of that name; the catalogue of `dictation.rs` pins each file by size and SHA-256 taken from the release.

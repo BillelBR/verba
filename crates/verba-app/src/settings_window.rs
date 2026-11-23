@@ -462,7 +462,8 @@ fn dictation_page(ui: &mut Ui, s: &mut Settings) {
             }
         } else {
             let desc = match pack.id {
-                "ar" => "Writes Modern Standard Arabic well enough to correct (about one word in four needs a fix on clear speech); Algerian Darija is weaker. Needs a microphone.",
+                "ar" => "Writes Modern Standard Arabic well enough to correct (about one word in four needs a fix on clear speech); Algerian Darija is not understood. Needs a microphone.",
+                "dz" => "Experimental. Understands Algerian spoken Arabic much better than the Arabic pack, but on real conversations about three words in four still need a fix (Darija has no standard spelling). Needs a microphone.",
                 _ => "Writes English well (about one word in eighteen needs a fix on clear speech). Needs a microphone.",
             };
             if ui.button_row(&format!("dict-get-{}", pack.id), &format!("Download the {} pack", pack.title), Some(&format!("{desc} {size} to download, once.")), &format!("Download ({size})"), ButtonStyle::Primary, !busy) {
@@ -502,18 +503,20 @@ fn dictation_page(ui: &mut Ui, s: &mut Settings) {
     let mut which = match s.dictation_language {
         crate::settings::DictationLanguage::Auto => 0,
         crate::settings::DictationLanguage::Arabic => 1,
-        crate::settings::DictationLanguage::English => 2,
+        crate::settings::DictationLanguage::Darija => 2,
+        crate::settings::DictationLanguage::English => 3,
     };
     if ui.segmented_row(
         "dict-language",
         "Language to write",
-        Some("\u{201C}Keyboard\u{201D} writes in the language of the keyboard you are typing with (English or Arabic); the other two always use that pack."),
-        &["Keyboard", "Arabic", "English"],
+        Some("\u{201C}Keyboard\u{201D} writes in the language of the keyboard you are typing with (English, or Arabic: with the Darija pack when Algerian Darija is on in Languages, else the Arabic pack); the others always use their pack."),
+        &["Keyboard", "Arabic", "Darija", "English"],
         &mut which,
     ) {
         s.dictation_language = match which {
             1 => crate::settings::DictationLanguage::Arabic,
-            2 => crate::settings::DictationLanguage::English,
+            2 => crate::settings::DictationLanguage::Darija,
+            3 => crate::settings::DictationLanguage::English,
             _ => crate::settings::DictationLanguage::Auto,
         };
     }

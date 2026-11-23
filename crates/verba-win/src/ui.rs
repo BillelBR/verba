@@ -11,14 +11,15 @@
 
 use std::cell::RefCell;
 use std::collections::HashMap;
+use std::sync::Arc;
 use std::time::Instant;
 
 use windows::Win32::Foundation::{HWND, LPARAM, LRESULT, RECT, WPARAM};
 use windows::Win32::Graphics::Direct2D::Common::{
-    D2D_RECT_F, D2D_SIZE_U, D2D1_ALPHA_MODE_UNKNOWN, D2D1_COLOR_F, D2D1_GRADIENT_STOP, D2D1_PIXEL_FORMAT,
+    D2D_RECT_F, D2D_SIZE_U, D2D1_ALPHA_MODE_PREMULTIPLIED, D2D1_ALPHA_MODE_UNKNOWN, D2D1_COLOR_F, D2D1_GRADIENT_STOP, D2D1_PIXEL_FORMAT,
 };
 use windows::Win32::Graphics::Direct2D::{
-    D2D1_ANTIALIAS_MODE_ALIASED, D2D1_CAP_STYLE_ROUND, D2D1_DASH_STYLE_SOLID, D2D1_DRAW_TEXT_OPTIONS_NONE, D2D1_ELLIPSE,
+    D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, D2D1_BITMAP_PROPERTIES, ID2D1Bitmap, D2D1_ANTIALIAS_MODE_ALIASED, D2D1_CAP_STYLE_ROUND, D2D1_DASH_STYLE_SOLID, D2D1_DRAW_TEXT_OPTIONS_NONE, D2D1_ELLIPSE,
     D2D1_EXTEND_MODE_CLAMP, D2D1_FACTORY_TYPE_SINGLE_THREADED, D2D1_FEATURE_LEVEL_DEFAULT, D2D1_GAMMA_2_2, D2D1_HWND_RENDER_TARGET_PROPERTIES,
     D2D1_LINE_JOIN_ROUND, D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES, D2D1_PRESENT_OPTIONS_NONE, D2D1_RENDER_TARGET_PROPERTIES,
     D2D1_RENDER_TARGET_TYPE_DEFAULT, D2D1_RENDER_TARGET_USAGE_NONE, D2D1_ROUNDED_RECT, D2D1_STROKE_STYLE_PROPERTIES, D2D1CreateFactory,
@@ -27,10 +28,10 @@ use windows::Win32::Graphics::Direct2D::{
 use windows::Win32::Graphics::Gdi::{BeginPaint, EndPaint, InvalidateRect, PAINTSTRUCT};
 use windows::Win32::Graphics::DirectWrite::{
     DWRITE_FACTORY_TYPE_SHARED, DWRITE_FONT_STRETCH_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_WEIGHT_SEMI_BOLD,
-    DWRITE_TEXT_METRICS, DWriteCreateFactory, IDWriteFactory, IDWriteTextLayout,
+    DWRITE_HIT_TEST_METRICS, DWRITE_TEXT_METRICS, DWriteCreateFactory, IDWriteFactory, IDWriteTextLayout,
 };
 use windows::Win32::Graphics::Dwm::{DWMWA_USE_IMMERSIVE_DARK_MODE, DwmSetWindowAttribute};
-use windows::Win32::Graphics::Dxgi::Common::DXGI_FORMAT_UNKNOWN;
+use windows::Win32::Graphics::Dxgi::Common::{DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_UNKNOWN};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::UI::HiDpi::{AdjustWindowRectExForDpi, DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, GetDpiForSystem, SetProcessDpiAwarenessContext};
 use windows::Win32::UI::Input::KeyboardAndMouse::{
@@ -40,7 +41,7 @@ use windows::Win32::UI::Input::KeyboardAndMouse::{
 use windows::Win32::UI::WindowsAndMessaging::{
     CreateWindowExW, DefWindowProcW, DestroyWindow, GetClientRect, GetSystemMetrics, HICON, IDC_ARROW, IDC_HAND, IsWindow, KillTimer, LoadCursorW,
     RegisterClassW, SM_CXSCREEN, SM_CYSCREEN, SW_SHOW, SW_SHOWNOACTIVATE, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, SWP_SHOWWINDOW, SetCursor, SetForegroundWindow, SetTimer,
-    SetWindowPos, ShowWindow, WINDOW_EX_STYLE, WM_CLOSE, WM_DESTROY, WM_ERASEBKGND, WM_KEYDOWN, WM_LBUTTONDOWN, WM_LBUTTONUP, WM_MOUSEMOVE,
+    SetWindowPos, ShowWindow, WINDOW_EX_STYLE, WM_CHAR, WM_CLOSE, WM_DESTROY, WM_ERASEBKGND, WM_KEYDOWN, WM_LBUTTONDOWN, WM_LBUTTONUP, WM_MOUSEMOVE,
     WM_PAINT, WM_SETCURSOR, WM_SIZE, WM_SYSCHAR, WM_SYSKEYDOWN, WM_TIMER, WNDCLASSW, WS_CAPTION, WS_MINIMIZEBOX, WS_OVERLAPPED, WS_SYSMENU,
 };
 use windows::core::{BOOL, PCWSTR, w};
@@ -177,6 +178,8 @@ enum Cmd {
     Text { layout: IDWriteTextLayout, x: f32, y: f32, color: Col },
     /// The logo: the blue disc with the white V.
     Logo { c: (f32, f32), r: f32 },
+    /// A picture (a program's icon), drawn into `r`; `key` is what its Direct2D bitmap is remembered by.
+    Image { r: R, key: u64, icon: Arc<crate::IconPixels> },
     Clip(R),
     Unclip,
 }
@@ -253,6 +256,12 @@ struct Input {
     captured: Option<(u32, u8)>,
     /// Esc was pressed while a key row was waiting: give up.
     capture_cancel: bool,
+    /// Characters typed since the last frame (a backspace is `\u{8}`).
+    chars: Vec<char>,
+    /// The first half of a character that Windows sends as two UTF-16 units.
+    high_surrogate: Option<u16>,
+    /// Esc was pressed while a text field with text in it had the focus: empty it.
+    esc: bool,
 }
 
 struct UiState {
@@ -276,7 +285,10 @@ struct UiState {
     reveal: Option<R>,
     /// The key row waiting for the user to press a key.
     capture: Option<u64>,
+    /// A text field with text in it has the focus: Esc empties it instead of closing the window.
+    esc_clears: bool,
     last: Instant,
+    born: Instant,
 }
 
 impl UiState {
@@ -299,7 +311,9 @@ impl UiState {
             hand: false,
             reveal: None,
             capture: None,
+            esc_clears: false,
             last: Instant::now(),
+            born: Instant::now(),
         }
     }
 }
@@ -689,9 +703,10 @@ impl<'a> Ui<'a> {
         self.button_shape(id_of(name), b, label, style, enabled).clicked
     }
 
-    /// A row of a list of programs: a round tile with the first letter of the name (a shade of the accent colour, a different one for each program), the name,
-    /// a quieter line under it, and a switch at the right. `value` is whether it is on. Returns true when the switch was flipped.
-    pub fn app_row(&mut self, name: &str, title: &str, subtitle: &str, value: &mut bool, enabled: bool) -> bool {
+    /// A row of a list of programs: the program's icon (`icon`: what its bitmap is remembered by, and the pixels) or, when there is none yet, a round tile with
+    /// the first letter of the name (a shade of the accent colour, a different one for each program), the name, a quieter line under it, and a switch at the right.
+    /// `value` is whether it is on. Returns true when the switch was flipped.
+    pub fn app_row(&mut self, name: &str, title: &str, subtitle: &str, icon: Option<(u64, Arc<crate::IconPixels>)>, value: &mut bool, enabled: bool) -> bool {
         let id = id_of(name);
         let p = self.p;
         let (x, w) = (self.content_x(), self.content_w());
@@ -713,11 +728,15 @@ impl<'a> Ui<'a> {
         // the tile: its shade comes from the name, so that a program keeps its colour
         let shade = (title.bytes().fold(0u32, |h, b| h.wrapping_mul(31).wrapping_add(b as u32)) % 6) as f32 * 0.1;
         let tile = R::new(r.x + ROW_PAD_X, r.y + (h - 36.0) / 2.0, 36.0, 36.0);
-        self.push(Cmd::Circle { c: (tile.x + 18.0, tile.y + 18.0), r: 18.0, fill: Some(with_alpha(mix(p.accent, p.text, shade), if p.dark { 0.26 } else { 0.16 })), stroke: None });
-        let initial: String = title.chars().find(|c| c.is_alphanumeric()).map(|c| c.to_uppercase().collect()).unwrap_or_else(|| "?".to_string());
-        let (iw, ih) = self.measure(&initial, 15.0, Font::Semibold, 40.0);
-        let ink = if p.dark { mix(p.accent, p.text, 0.35) } else { mix(p.accent, p.text, shade * 0.6) };
-        self.text(tile.x + (36.0 - iw) / 2.0, tile.y + (36.0 - ih) / 2.0, &initial, 15.0, Font::Semibold, ink, 40.0);
+        if let Some((key, pixels)) = icon {
+            self.push(Cmd::Image { r: tile.inset(2.0), key, icon: pixels });
+        } else {
+            self.push(Cmd::Circle { c: (tile.x + 18.0, tile.y + 18.0), r: 18.0, fill: Some(with_alpha(mix(p.accent, p.text, shade), if p.dark { 0.26 } else { 0.16 })), stroke: None });
+            let initial: String = title.chars().find(|c| c.is_alphanumeric()).map(|c| c.to_uppercase().collect()).unwrap_or_else(|| "?".to_string());
+            let (iw, ih) = self.measure(&initial, 15.0, Font::Semibold, 40.0);
+            let ink = if p.dark { mix(p.accent, p.text, 0.35) } else { mix(p.accent, p.text, shade * 0.6) };
+            self.text(tile.x + (36.0 - iw) / 2.0, tile.y + (36.0 - ih) / 2.0, &initial, 15.0, Font::Semibold, ink, 40.0);
+        }
         // the texts
         let tx = tile.right() + 14.0;
         let text_w = (r.right() - ROW_PAD_X - 44.0 - 16.0 - tx).max(80.0);
@@ -738,6 +757,94 @@ impl<'a> Ui<'a> {
             *value = !*value;
         }
         resp.clicked
+    }
+
+    /// A one-line text field in a row of a card, with a magnifying glass, a grey hint while it is empty and a cross that empties it. `value` is the text; the
+    /// field takes what is typed while it has the focus (click it first). Esc empties it (a second Esc closes the window). Returns true when the text changed.
+    pub fn text_field(&mut self, name: &str, hint: &str, value: &mut String) -> bool {
+        const MAX_CHARS: usize = 80;
+        let id = id_of(name);
+        let p = self.p;
+        let (x, w) = (self.content_x(), self.content_w());
+        if let Some(card) = &mut self.card {
+            if !card.first {
+                self.main.push(Cmd::Rect { r: R::new(x + ROW_PAD_X, self.cy, w - 2.0 * ROW_PAD_X, 1.0), radius: 0.0, fill: Some(with_alpha(p.border, 0.8)), stroke: None });
+            }
+            card.first = false;
+        }
+        let row = R::new(x, self.cy, w, 58.0);
+        let field = R::new(x + ROW_PAD_X, row.y + 9.0, w - 2.0 * ROW_PAD_X, 40.0);
+        let has = !value.is_empty();
+        let cross = R::new(field.right() - 34.0, field.y + 6.0, 28.0, 28.0);
+        let body = if has { R::new(field.x, field.y, field.w - 40.0, field.h) } else { field };
+        let resp = self.hit(id, body, true);
+        self.s.hand = false;
+        let focused = resp.focused;
+        let mut changed = false;
+        if focused {
+            self.s.animating = true;
+            for &ch in &self.input.chars {
+                if ch == '\u{8}' {
+                    changed |= value.pop().is_some();
+                } else if value.chars().count() < MAX_CHARS {
+                    value.push(ch);
+                    changed = true;
+                }
+            }
+            if self.input.esc && has && !changed {
+                value.clear();
+                changed = true;
+            }
+        }
+        self.s.esc_clears = self.s.esc_clears || focused && !value.is_empty();
+        if has {
+            let rc = self.hit(id ^ 0xC1EA, cross, true);
+            if rc.clicked {
+                value.clear();
+                changed = true;
+                self.s.focus = Some(id);
+            }
+            if rc.hover {
+                self.push(Cmd::Rect { r: cross, radius: 6.0, fill: Some(p.hover), stroke: None });
+            }
+        }
+        // the frame
+        self.push(Cmd::Rect { r: field, radius: 8.0, fill: Some(p.field), stroke: Some((if focused { p.accent } else { p.border }, if focused { 1.6 } else { 1.0 })) });
+        self.glyph(R::new(field.x + 6.0, field.y, 30.0, field.h), '\u{E721}', 14.0, if focused { p.accent } else { p.muted });
+        let tx = field.x + 42.0;
+        let avail = field.w - 42.0 - if !value.is_empty() { 42.0 } else { 12.0 };
+        let mut caret_x = tx;
+        if value.is_empty() {
+            let (_, th) = self.measure(hint, 14.0, Font::Text, avail);
+            self.text(tx, field.y + (field.h - th) / 2.0, hint, 14.0, Font::Text, with_alpha(p.muted, 0.85), avail);
+        } else {
+            let (layout, tw, th) = self.g.layout(value, 14.0, Font::Text, 4000.0);
+            // a text longer than the field shows its end
+            let shift = (tw - avail).max(0.0);
+            let n = value.encode_utf16().count() as u32;
+            let mut hx = 0.0f32;
+            let mut hy = 0.0f32;
+            let mut m = DWRITE_HIT_TEST_METRICS::default();
+            unsafe {
+                if layout.HitTestTextPosition(n.saturating_sub(1), true, &mut hx, &mut hy, &mut m).is_err() {
+                    hx = tw;
+                }
+            }
+            caret_x = tx - shift + hx;
+            self.push(Cmd::Clip(R::new(tx - 1.0, field.y, avail + 2.0, field.h)));
+            self.push(Cmd::Text { layout, x: tx - shift, y: field.y + (field.h - th) / 2.0, color: p.text });
+            self.push(Cmd::Unclip);
+        }
+        if has {
+            self.glyph(cross, '\u{E711}', 10.0, p.muted);
+        }
+        // the caret blinks, and stays still while the text changes
+        let phase = (self.s.born.elapsed().as_millis() / 530) % 2 == 0;
+        if focused && (phase || changed) {
+            self.push(Cmd::Rect { r: R::new(caret_x.clamp(tx - 1.0, tx + avail), field.y + 11.0, 1.5, field.h - 22.0), radius: 0.75, fill: Some(p.text), stroke: None });
+        }
+        self.cy += 58.0;
+        changed
     }
 
     /// A row with a title, a description, a progress bar under them (`fraction` from 0 to 1) and a button at the right (a "Cancel" while it works).
@@ -1151,6 +1258,8 @@ struct Ctx {
     factory: ID2D1Factory,
     gfx: Gfx,
     target: Option<ID2D1HwndRenderTarget>,
+    /// The bitmaps of the pictures drawn so far, by their key (they belong to the render target: emptied when it is made again).
+    bitmaps: RefCell<HashMap<u64, ID2D1Bitmap>>,
     ui: UiState,
     input: Input,
     draw: Box<dyn FnMut(&mut Ui)>,
@@ -1209,6 +1318,7 @@ pub fn open(cfg: Config, draw: Box<dyn FnMut(&mut Ui)>) -> Option<HWND> {
             factory,
             gfx: Gfx { dwrite, cache: HashMap::new() },
             target: None,
+            bitmaps: RefCell::new(HashMap::new()),
             ui: UiState::new(),
             input: Input::default(),
             draw,
@@ -1295,6 +1405,7 @@ unsafe extern "system" fn wndproc(hwnd: HWND, msg: u32, wp: WPARAM, lp: LPARAM) 
                 with_ctx(|c| {
                     c.dpi = new_dpi;
                     c.target = None;
+                    c.bitmaps.borrow_mut().clear();
                     c.gfx.cache.clear();
                 });
                 let _ = SetWindowPos(hwnd, None, r.left, r.top, r.right - r.left, r.bottom - r.top, SWP_NOZORDER);
@@ -1363,6 +1474,30 @@ unsafe extern "system" fn wndproc(hwnd: HWND, msg: u32, wp: WPARAM, lp: LPARAM) 
                 }
                 DefWindowProcW(hwnd, msg, wp, lp)
             }
+            WM_CHAR => {
+                let unit = wp.0 as u16;
+                with_ctx(|c| {
+                    match unit {
+                        0xD800..=0xDBFF => c.input.high_surrogate = Some(unit),
+                        0xDC00..=0xDFFF => {
+                            if let Some(high) = c.input.high_surrogate.take() {
+                                if let Some(Ok(ch)) = char::decode_utf16([high, unit]).next() {
+                                    c.input.chars.push(ch);
+                                }
+                            }
+                        }
+                        8 => c.input.chars.push('\u{8}'),
+                        u if u >= 0x20 && u != 0x7F => {
+                            if let Some(Ok(ch)) = char::decode_utf16([u]).next() {
+                                c.input.chars.push(ch);
+                            }
+                        }
+                        _ => {}
+                    }
+                });
+                let _ = InvalidateRect(Some(hwnd), None, false);
+                LRESULT(0)
+            }
             WM_KEYDOWN => {
                 if capture_key(hwnd, wp.0 as u32) {
                     return LRESULT(0);
@@ -1383,7 +1518,17 @@ unsafe extern "system" fn wndproc(hwnd: HWND, msg: u32, wp: WPARAM, lp: LPARAM) 
                     _ => handled = false,
                 });
                 if vk == VK_ESCAPE.0 {
-                    let _ = DestroyWindow(hwnd);
+                    // a text field with text in it takes the Esc first: it empties itself
+                    let clears = with_ctx(|c| {
+                        c.input.esc = c.ui.esc_clears;
+                        c.ui.esc_clears
+                    })
+                    .unwrap_or(false);
+                    if clears {
+                        let _ = InvalidateRect(Some(hwnd), None, false);
+                    } else {
+                        let _ = DestroyWindow(hwnd);
+                    }
                     return LRESULT(0);
                 }
                 if handled {
@@ -1462,6 +1607,7 @@ fn paint(hwnd: HWND) {
     let mut again = false;
     unsafe {
         if ctx.target.is_none() {
+            ctx.bitmaps.borrow_mut().clear();
             ctx.target = make_target(&mut ctx);
         }
         // the colours: Windows' own theme may change while the window is open
@@ -1482,6 +1628,7 @@ fn paint(hwnd: HWND) {
             ctx.ui.last = now;
             FRAME_DT.with(|d| d.set(dt));
             ctx.ui.hand = false;
+            ctx.ui.esc_clears = false;
             ctx.ui.hover = None;
             ctx.ui.animating = false;
             ctx.ui.order_next.clear();
@@ -1596,6 +1743,8 @@ fn paint(hwnd: HWND) {
             ctx.input.down_key = false;
             ctx.input.captured = None;
             ctx.input.capture_cancel = false;
+            ctx.input.chars.clear();
+            ctx.input.esc = false;
             if released {
                 ctx.ui.active = None;
             }
@@ -1655,7 +1804,7 @@ fn render(ctx: &Ctx, target: &ID2D1HwndRenderTarget, side: &[Cmd], main: &[Cmd],
         let view = R::new(SIDEBAR_W, 0.0, width - SIDEBAR_W, height);
         target.PushAxisAlignedClip(&view.d2d(), D2D1_ANTIALIAS_MODE_ALIASED);
         target.SetTransform(&Matrix3x2 { M11: 1.0, M12: 0.0, M21: 0.0, M22: 1.0, M31: 0.0, M32: -ctx.ui.scroll });
-        run(target, &brush, round.as_ref(), main);
+        run(target, &brush, round.as_ref(), &ctx.bitmaps, main);
         target.SetTransform(&Matrix3x2::identity());
         // a thin scroll bar when the page is longer than the window
         if ctx.ui.content_h > height + 1.0 {
@@ -1674,12 +1823,12 @@ fn render(ctx: &Ctx, target: &ID2D1HwndRenderTarget, side: &[Cmd], main: &[Cmd],
             target.FillRoundedRectangle(&D2D1_ROUNDED_RECT { rect: r.d2d(), radiusX: w / 2.0, radiusY: w / 2.0 }, &brush);
         }
         target.PopAxisAlignedClip();
-        run(target, &brush, round.as_ref(), side);
+        run(target, &brush, round.as_ref(), &ctx.bitmaps, side);
         let _ = target.EndDraw(None, None);
     }
 }
 
-fn run(t: &ID2D1HwndRenderTarget, brush: &ID2D1SolidColorBrush, round: Option<&ID2D1StrokeStyle>, cmds: &[Cmd]) {
+fn run(t: &ID2D1HwndRenderTarget, brush: &ID2D1SolidColorBrush, round: Option<&ID2D1StrokeStyle>, bitmaps: &RefCell<HashMap<u64, ID2D1Bitmap>>, cmds: &[Cmd]) {
     unsafe {
         for c in cmds {
             match c {
@@ -1717,11 +1866,42 @@ fn run(t: &ID2D1HwndRenderTarget, brush: &ID2D1SolidColorBrush, round: Option<&I
                     t.DrawTextLayout(Vector2::new(*x, *y), layout, brush, D2D1_DRAW_TEXT_OPTIONS_NONE);
                 }
                 Cmd::Logo { c, r } => draw_logo(t, brush, round, *c, *r),
+                Cmd::Image { r, key, icon } => {
+                    let mut cache = bitmaps.borrow_mut();
+                    if !cache.contains_key(key) {
+                        if let Some(b) = make_bitmap(t, icon) {
+                            cache.insert(*key, b);
+                        }
+                    }
+                    if let Some(b) = cache.get(key) {
+                        t.DrawBitmap(b, Some(&r.d2d()), 1.0, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, None);
+                    }
+                }
                 Cmd::Clip(r) => t.PushAxisAlignedClip(&r.d2d(), D2D1_ANTIALIAS_MODE_ALIASED),
                 Cmd::Unclip => t.PopAxisAlignedClip(),
             }
         }
     }
+}
+
+/// A Direct2D bitmap of a picture (it wants the colours multiplied by the alpha).
+fn make_bitmap(t: &ID2D1HwndRenderTarget, icon: &crate::IconPixels) -> Option<ID2D1Bitmap> {
+    let mut px = icon.bgra.clone();
+    if icon.width == 0 || icon.height == 0 || px.len() != (icon.width * icon.height * 4) as usize {
+        return None;
+    }
+    for p in px.chunks_exact_mut(4) {
+        let a = p[3] as u32;
+        for c in &mut p[..3] {
+            *c = ((*c as u32 * a + 127) / 255) as u8;
+        }
+    }
+    let props = D2D1_BITMAP_PROPERTIES {
+        pixelFormat: D2D1_PIXEL_FORMAT { format: DXGI_FORMAT_B8G8R8A8_UNORM, alphaMode: D2D1_ALPHA_MODE_PREMULTIPLIED },
+        dpiX: 96.0,
+        dpiY: 96.0,
+    };
+    unsafe { t.CreateBitmap(D2D_SIZE_U { width: icon.width, height: icon.height }, Some(px.as_ptr() as *const std::ffi::c_void), icon.width * 4, &props).ok() }
 }
 
 /// The logo of the icon: a blue disc (a soft gradient) with a white V of two thick strokes.

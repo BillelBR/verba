@@ -9,7 +9,7 @@ pub mod overlay;
 pub mod splash;
 pub mod ui;
 
-pub use apps::{InstalledApp, describe_foreground, exe_of_window, foreground_app, installed_apps, keyboard_lang, running_apps};
+pub use apps::{IconPixels, InstalledApp, describe_foreground, exe_of_window, foreground_app, icon_pixels, installed_apps, keyboard_lang, path_of_window, running_apps, running_programs};
 pub use focus::{Anchor, AnchorKind, Locator, Picked, Snapshot};
 pub use look::{Look, Theme, system_accent};
 pub use overlay::Overlay;

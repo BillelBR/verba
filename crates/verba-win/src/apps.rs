@@ -14,6 +14,11 @@ use windows::core::{BOOL, PWSTR};
 
 /// The program file name of a window's process, in lower case (`chrome.exe`).
 pub fn exe_of_window(hwnd: HWND) -> Option<String> {
+    path_of_window(hwnd).and_then(|full| full.rsplit('\\').next().map(|s| s.to_lowercase()))
+}
+
+/// The full path of the program of a window's process (`C:\Program Files\Google\Chrome\Application\chrome.exe`).
+pub fn path_of_window(hwnd: HWND) -> Option<String> {
     unsafe {
         let mut pid = 0u32;
         GetWindowThreadProcessId(hwnd, Some(&mut pid));
@@ -26,8 +31,7 @@ pub fn exe_of_window(hwnd: HWND) -> Option<String> {
         let ok = QueryFullProcessImageNameW(process, PROCESS_NAME_WIN32, PWSTR(buf.as_mut_ptr()), &mut len);
         let _ = CloseHandle(process);
         ok.ok()?;
-        let full = String::from_utf16_lossy(&buf[..len as usize]);
-        full.rsplit('\\').next().map(|s| s.to_lowercase())
+        Some(String::from_utf16_lossy(&buf[..len as usize]))
     }
 }
 
@@ -88,6 +92,31 @@ pub fn keyboard_lang() -> Option<Lang> {
     }
 }
 
+/// The programs that have a window on the screen right now with their full path, one entry for each program (no Verba): for lists that show icons.
+pub fn running_programs() -> Vec<(String, String)> {
+    unsafe extern "system" fn each(hwnd: HWND, lp: LPARAM) -> BOOL {
+        unsafe {
+            let apps = &mut *(lp.0 as *mut Vec<(String, String)>);
+            let owned = GetWindow(hwnd, GW_OWNER).map(|o| !o.is_invalid()).unwrap_or(false);
+            let tool = GetWindowLongW(hwnd, GWL_EXSTYLE) as u32 & WS_EX_TOOLWINDOW.0 != 0;
+            if IsWindowVisible(hwnd).as_bool() && !owned && !tool && GetWindowTextLengthW(hwnd) > 0 && !is_taskbar(hwnd) {
+                if let Some(path) = path_of_window(hwnd) {
+                    let exe = path.rsplit('\\').next().unwrap_or("").to_lowercase();
+                    if !exe.is_empty() && exe != "verba.exe" && !apps.iter().any(|(e, _)| *e == exe) {
+                        apps.push((exe, path));
+                    }
+                }
+            }
+        }
+        true.into()
+    }
+    let mut apps: Vec<(String, String)> = Vec::new();
+    unsafe {
+        let _ = EnumWindows(Some(each), LPARAM(&mut apps as *mut Vec<(String, String)> as isize));
+    }
+    apps
+}
+
 /// The programs that have a window on the screen right now (sorted, without repeats, without Verba): for "choose an app" lists.
 pub fn running_apps() -> Vec<String> {
     unsafe extern "system" fn each(hwnd: HWND, lp: LPARAM) -> BOOL {
@@ -121,6 +150,8 @@ pub struct InstalledApp {
     pub name: String,
     /// The program's file name in lower case (`chrome.exe`): what Verba's list of programs holds.
     pub exe: String,
+    /// The full path of the program (where its icon is read).
+    pub path: String,
 }
 
 /// The programs installed on this PC that have a shortcut in the Start menu (the ones of every user and the ones of this user), with the name of the shortcut and the
@@ -156,7 +187,7 @@ pub fn installed_apps() -> Vec<InstalledApp> {
     for d in &dirs {
         shortcuts(d, 0, &mut files);
     }
-    let mut found: HashMap<String, String> = HashMap::new();
+    let mut found: HashMap<String, (String, String)> = HashMap::new();
     unsafe {
         let com = CoInitializeEx(None, COINIT_APARTMENTTHREADED).is_ok();
         for file in &files {
@@ -179,17 +210,17 @@ pub fn installed_apps() -> Vec<InstalledApp> {
             let target = String::from_utf16_lossy(&buf[..len]);
             let Some(exe) = target.rsplit('\\').next().map(str::to_lowercase) else { continue };
             // shortcuts of Windows that open a panel through a helper (Administrative Tools starts `control.exe`) are not programs
-            if !exe.ends_with(".exe") || is_not_a_program(&exe) || matches!(exe.as_str(), "control.exe" | "mmc.exe" | "rundll32.exe" | "msiexec.exe" | "wscript.exe" | "cscript.exe") {
+            if !exe.ends_with(".exe") || is_not_a_program(&exe) || matches!(exe.as_str(), "control.exe" | "mmc.exe" | "rundll32.exe" | "msiexec.exe" | "wscript.exe" | "cscript.exe" | "explorer.exe") {
                 continue;
             }
             // the first name found for a program is kept (the files are not in any order, so the shortest is: `Chrome` before `Chrome (2)`)
-            found.entry(exe).and_modify(|n| if name.len() < n.len() { *n = name.clone() }).or_insert(name);
+            found.entry(exe).and_modify(|n| if name.len() < n.0.len() { *n = (name.clone(), target.clone()) }).or_insert((name, target));
         }
         if com {
             CoUninitialize();
         }
     }
-    let mut apps: Vec<InstalledApp> = found.into_iter().map(|(exe, name)| InstalledApp { name, exe }).filter(|a| a.exe != "verba.exe").collect();
+    let mut apps: Vec<InstalledApp> = found.into_iter().map(|(exe, (name, path))| InstalledApp { name, exe, path }).filter(|a| a.exe != "verba.exe").collect();
     apps.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()).then(a.exe.cmp(&b.exe)));
     apps
 }
@@ -226,5 +257,96 @@ mod tests {
         let mut seen = std::collections::HashSet::new();
         assert!(apps.iter().all(|a| seen.insert(a.exe.clone())), "one entry for each program");
         println!("{} programs, the first ones: {:?}", apps.len(), apps.iter().take(5).collect::<Vec<_>>());
+    }
+}
+
+/// The picture of a program's icon: `width` by `height` pixels, blue, green, red and alpha bytes one after the other (the colours not premultiplied).
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct IconPixels {
+    pub width: u32,
+    pub height: u32,
+    pub bgra: Vec<u8>,
+}
+
+/// The large icon (32 by 32) of a program file, as pixels. `None` when the file has none or cannot be read. Call it from a thread of its own.
+pub fn icon_pixels(path: &str) -> Option<IconPixels> {
+    use windows::Win32::System::Com::{COINIT_APARTMENTTHREADED, CoInitializeEx, CoUninitialize};
+    unsafe {
+        // the shell's icon handlers want COM on the thread
+        let com = CoInitializeEx(None, COINIT_APARTMENTTHREADED).is_ok();
+        let icon = icon_pixels_of(path);
+        if com {
+            CoUninitialize();
+        }
+        icon
+    }
+}
+
+unsafe fn icon_pixels_of(path: &str) -> Option<IconPixels> {
+    use std::ffi::c_void;
+    use windows::Win32::Graphics::Gdi::{
+        BI_RGB, BITMAP, BITMAPINFO, BITMAPINFOHEADER, CreateCompatibleDC, DIB_RGB_COLORS, DeleteDC, DeleteObject, GetDIBits, GetObjectW, HGDIOBJ,
+    };
+    use windows::Win32::Storage::FileSystem::FILE_FLAGS_AND_ATTRIBUTES;
+    use windows::Win32::UI::Shell::{SHFILEINFOW, SHGFI_ICON, SHGFI_LARGEICON, SHGetFileInfoW};
+    use windows::Win32::UI::WindowsAndMessaging::{DestroyIcon, GetIconInfo, ICONINFO};
+    use windows::core::PCWSTR;
+    unsafe {
+        let wide: Vec<u16> = path.encode_utf16().chain(std::iter::once(0)).collect();
+        let mut info = SHFILEINFOW::default();
+        let got = SHGetFileInfoW(PCWSTR(wide.as_ptr()), FILE_FLAGS_AND_ATTRIBUTES(0), Some(&mut info), std::mem::size_of::<SHFILEINFOW>() as u32, SHGFI_ICON | SHGFI_LARGEICON);
+        if got == 0 || info.hIcon.is_invalid() {
+            return None;
+        }
+        let mut icon = ICONINFO::default();
+        let mut result = None;
+        if GetIconInfo(info.hIcon, &mut icon).is_ok() {
+            let mut bm = BITMAP::default();
+            let colour = if icon.hbmColor.is_invalid() { icon.hbmMask } else { icon.hbmColor };
+            if GetObjectW(HGDIOBJ(colour.0), std::mem::size_of::<BITMAP>() as i32, Some(&mut bm as *mut _ as *mut c_void)) != 0 && bm.bmWidth > 0 && bm.bmHeight > 0 {
+                let (w, h) = (bm.bmWidth as usize, bm.bmHeight as usize);
+                // an icon without a colour bitmap has a mask of double height (the mask, then the picture): not handled, the colour bitmap is what is read
+                let hdc = CreateCompatibleDC(None);
+                let read = |bitmap: windows::Win32::Graphics::Gdi::HBITMAP| -> Option<Vec<u8>> {
+                    let mut bmi = BITMAPINFO {
+                        bmiHeader: BITMAPINFOHEADER {
+                            biSize: std::mem::size_of::<BITMAPINFOHEADER>() as u32,
+                            biWidth: w as i32,
+                            biHeight: -(h as i32),
+                            biPlanes: 1,
+                            biBitCount: 32,
+                            biCompression: BI_RGB.0,
+                            ..Default::default()
+                        },
+                        ..Default::default()
+                    };
+                    let mut buf = vec![0u8; w * h * 4];
+                    let lines = GetDIBits(hdc, bitmap, 0, h as u32, Some(buf.as_mut_ptr() as *mut c_void), &mut bmi, DIB_RGB_COLORS);
+                    (lines != 0).then_some(buf)
+                };
+                if !icon.hbmColor.is_invalid() {
+                    if let Some(mut pixels) = read(icon.hbmColor) {
+                        // an old icon has no alpha: its mask says what is transparent (a white pixel of the mask)
+                        if pixels.chunks_exact(4).all(|p| p[3] == 0) {
+                            if let Some(mask) = read(icon.hbmMask) {
+                                for (p, m) in pixels.chunks_exact_mut(4).zip(mask.chunks_exact(4)) {
+                                    p[3] = if m[0] == 0 { 255 } else { 0 };
+                                }
+                            }
+                        }
+                        result = Some(IconPixels { width: w as u32, height: h as u32, bgra: pixels });
+                    }
+                }
+                let _ = DeleteDC(hdc);
+            }
+            if !icon.hbmColor.is_invalid() {
+                let _ = DeleteObject(HGDIOBJ(icon.hbmColor.0));
+            }
+            if !icon.hbmMask.is_invalid() {
+                let _ = DeleteObject(HGDIOBJ(icon.hbmMask.0));
+            }
+        }
+        let _ = DestroyIcon(info.hIcon);
+        result
     }
 }

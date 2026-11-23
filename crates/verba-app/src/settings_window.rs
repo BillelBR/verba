@@ -620,15 +620,13 @@ fn apps(ui: &mut Ui, s: &mut Settings) {
     app_list::ensure_loaded(crate::refresh_settings_soon);
     let filter = APP_FILTER.with(|f| f.borrow().clone());
 
-    // finding a program, and adding one that is not in the list
+    // searching the list, and adding a program that is not in it
     ui.card_begin();
-    if filter.is_empty() {
-        if ui.button_row("app-find", "Find a program", Some("Type a part of its name."), "Find\u{2026}", ButtonStyle::Secondary, true) {
-            ui.defer(find_program);
-        }
-    } else if ui.button_row("app-clear", &format!("Showing the programs with \u{201C}{filter}\u{201D}"), Some("Only these are listed below."), "Show all", ButtonStyle::Secondary, true) {
-        ui.defer(|| APP_FILTER.with(|f| f.borrow_mut().clear()));
+    let mut typed = filter.clone();
+    if ui.text_field("app-search", "Search the programs", &mut typed) {
+        APP_FILTER.with(|f| *f.borrow_mut() = typed.clone());
     }
+    let filter = typed;
     if ui.button_row("app-add", "A program that is not in the list", Some("Type the name of its file, for example notepad.exe: Verba then asks for its switch here."), "Add by name\u{2026}", ButtonStyle::Secondary, true) {
         ui.defer(add_program_by_name);
     }
@@ -647,7 +645,8 @@ fn apps(ui: &mut Ui, s: &mut Settings) {
         if locked {
             note.push_str("   \u{00B7}   always off: it protects your passwords");
         }
-        if ui.app_row(&format!("app:{}", row.exe), &row.name, &note, &mut on, !locked) {
+        let icon = row.icon.clone().map(|px| (verba_win::ui::id_of(&row.exe), px));
+        if ui.app_row(&format!("app:{}", row.exe), &row.name, &note, icon, &mut on, !locked) {
             *flipped = Some((row.exe.clone(), on));
         }
     };
@@ -714,26 +713,6 @@ fn apps(ui: &mut Ui, s: &mut Settings) {
 thread_local! {
     /// What the person typed to find a program in the Apps page (empty: all of them).
     static APP_FILTER: std::cell::RefCell<String> = const { std::cell::RefCell::new(String::new()) };
-}
-
-/// "Find a program": asks for a part of its name.
-fn find_program() {
-    let current = APP_FILTER.with(|f| f.borrow().clone());
-    let form = Form {
-        title: "Find a program",
-        intro: "Type a part of the name of the program (or of its file).",
-        choice: None,
-        fields: &[Field { label: "Name", rtl: None, lines: 1 }],
-        initial: &[current.as_str()],
-        ok_label: "Find",
-        result_lines: 0,
-        cancel_label: None,
-        activate: true,
-    };
-    dialog::ask(owner(), theme(), &form, &mut |_, texts| {
-        APP_FILTER.with(|f| *f.borrow_mut() = texts[0].trim().to_string());
-        Ok(())
-    });
 }
 
 /// "A program that is not in the list": asks for the name of its file and adds it with Verba switched off (or on, in "only these").

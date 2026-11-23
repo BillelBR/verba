@@ -1734,3 +1734,7 @@ English is 0.6 point worse (8 words of 1 322), Arabic 1.7 points better: within 
 **Quick translation window** (Ctrl+Alt+Space): `quick_translate` in `main.rs`, tested on a word (`كتاب`: book, letter, writer, bookmaker, record), a Latin word (`hello`: five Arabic words), Arabic sentences (`Thank you for everything.`) and an English one; a request for French on an Arabic sentence is answered word by word, not with English. **A translator that never answers** (`crates/verba-translate/examples/hang.rs`) gives its answer after 18 seconds, word by word.
 
 **Apps page:** programs found in the Start menu on this PC: 95 with a name and a file (`installed_apps`, Start menu shortcuts, 1.2 s); Microsoft Store programs are not found until they are open, and Windows' own hosts are hidden. Not measured: a PC with many programs.
+
+## Version 0.13.1: icons and a search box on the Apps page
+
+Each program of the Apps page shows its own icon (read from its file by a worker thread, a few at a time, after the list appears; a program whose icon cannot be read keeps the letter tile). The "Find" dialog is replaced by a search box in the page that filters while typing. `explorer.exe` is shown as "File Explorer" (its Start-menu shortcut was named "Windows Software Development Kit"). Checked on this PC by looking at the window: 95 icons read, all rows drawn; not measured: the time to read the icons on a PC with many programs.

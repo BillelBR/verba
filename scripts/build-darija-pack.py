@@ -41,6 +41,8 @@ merged = os.path.join(a.out, "merged")
 os.makedirs(merged, exist_ok=True)
 model.save_pretrained(merged, safe_serialization=True)
 WhisperProcessor.from_pretrained(base_dir).save_pretrained(merged)
+# newer versions of transformers write the processor settings elsewhere: the converter wants this file next to the model
+shutil.copy(os.path.join(base_dir, "preprocessor_config.json"), os.path.join(merged, "preprocessor_config.json"))
 
 pack = os.path.join(a.out, "pack")
 if os.path.isdir(pack):
@@ -50,6 +52,7 @@ subprocess.run(
      "--copy_files", "tokenizer.json", "preprocessor_config.json"],
     check=True,
 )
+# the model of Whisper is read by Verba through `tokenizer.json`, `preprocessor_config.json`, `config.json` and `model.bin`; `vocabulary.json` is the converter's own
 for name in sorted(os.listdir(pack)):
     path = os.path.join(pack, name)
     h = hashlib.sha256(open(path, "rb").read()).hexdigest()

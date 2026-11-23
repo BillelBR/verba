@@ -1,0 +1,75 @@
+name: Dictation pack
+
+# Builds the Algerian Darija dictation pack and publishes it as the files of a release (default tag: "dictation-darija-v1"), where the "Dictation"
+# page of Verba downloads it from. The pack is Whisper small with the LoRA adapter EL-ANKA-Lite (algerian-nlp, MIT) merged in, converted to
+# CTranslate2 with int8 weights (about 250 MB): see scripts/build-darija-pack.py. The English and Arabic packs are not built here: their
+# files are downloaded from the repositories of Systran and OpenAI (see crates/verba-app/src/dictation.rs).
+#
+# Run it by pushing a tag that starts with "dictation-darija-v", or by hand (Actions > Dictation pack > Run workflow). The catalogue of
+# dictation.rs holds the size and the SHA-256 of each file: after a run, copy them from SHA256SUMS.txt of the release.
+
+on:
+  push:
+    tags:
+      - "dictation-darija-v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Name of the release that holds the pack"
+        default: "dictation-darija-v1"
+
+permissions:
+  contents: write
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install the converter
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "torch==2.15.0" --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install "transformers==5.24.0" "peft==0.22.0" "ctranslate2==4.9.1" "safetensors==0.8.0" "huggingface_hub==2.4.0" sentencepiece accelerate
+
+      - name: Build the pack
+        timeout-minutes: 40
+        run: python scripts/build-darija-pack.py out --adapter algerian-nlp/EL-ANKA-Lite --adapter-rev d36d9f940e251359351e38171dda6ae23d25b91a
+
+      - name: Checksums and source
+        run: |
+          cd out/pack
+          cat > SOURCE.txt <<'EOF'
+          Verba dictation pack: Algerian Darija.
+          Base model: openai/whisper-small, revision 973afd24965f72e36ca33b3055d56a652f456b4d (Apache-2.0).
+          Adapter: algerian-nlp/EL-ANKA-Lite, revision d36d9f940e251359351e38171dda6ae23d25b91a (MIT), LoRA merged into the base model.
+          Changed: merged, converted to CTranslate2 with int8 weights (ctranslate2 4.9.1).
+          EOF
+          sha256sum config.json model.bin preprocessor_config.json tokenizer.json vocabulary.json | tee SHA256SUMS.txt
+          ls -l
+
+      - name: Publish the pack
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag || github.ref_name }}
+          name: Dictation pack, Algerian Darija (${{ inputs.tag || github.ref_name }})
+          prerelease: true
+          fail_on_unmatched_files: true
+          files: |
+            out/pack/config.json
+            out/pack/model.bin
+            out/pack/preprocessor_config.json
+            out/pack/tokenizer.json
+            out/pack/vocabulary.json
+            out/pack/SHA256SUMS.txt
+            out/pack/SOURCE.txt
+          body: |
+            The Algerian Darija dictation pack of Verba, downloaded by *Settings > Dictation* (not by hand, and not part of the Verba installer).
+
+            Whisper small (OpenAI, Apache-2.0) with the LoRA adapter EL-ANKA-Lite (algerian-nlp, MIT) merged in, converted to int8 for CTranslate2. See `SOURCE.txt`.
+            Measured on 60 utterances of real Algerian speech it makes 76 % word errors (the Arabic pack: 93 %): see docs/ACCURACY.md.

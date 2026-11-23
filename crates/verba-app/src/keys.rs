@@ -126,6 +126,8 @@ pub struct Keys {
     pub undo: Binding,
     /// The shortcut that starts and ends a dictation, in every app.
     pub dictate: Binding,
+    /// The shortcut that opens the quick translation window, in every app.
+    pub quick: Binding,
 }
 
 /// Tab picks, the left and right arrows move, Esc closes.
@@ -138,6 +140,7 @@ pub const DEFAULT_KEYS: Keys = Keys {
     fixkeys: Binding::new(0x4B, MOD_CTRL | MOD_ALT),   // Ctrl+Alt+K (K for keyboard)
     undo: Binding::new(0x5A, MOD_CTRL | MOD_ALT),      // Ctrl+Alt+Z
     dictate: Binding::new(0x44, MOD_CTRL | MOD_ALT),   // Ctrl+Alt+D
+    quick: Binding::new(VK_SPACE, MOD_CTRL | MOD_ALT), // Ctrl+Alt+Space
 };
 
 impl Default for Keys {
@@ -248,6 +251,14 @@ mod tests {
         assert_eq!(k.undo.label(), "Ctrl+Alt+Z");
         assert!(k.undo != k.translate && k.undo != k.fixkeys && k.translate != k.fixkeys);
         assert!(Binding::usable_hotkey(k.undo.vk, k.undo.mods));
+    }
+
+    #[test]
+    fn the_quick_window_shortcut_is_its_own_and_usable() {
+        let k = Keys::default();
+        assert_eq!(k.quick.label(), "Ctrl+Alt+Space");
+        assert!(k.quick != k.translate && k.quick != k.fixkeys && k.quick != k.undo && k.quick != k.dictate);
+        assert!(Binding::usable_hotkey(k.quick.vk, k.quick.mods));
     }
 
     #[test]

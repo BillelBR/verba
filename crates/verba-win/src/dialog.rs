@@ -34,7 +34,7 @@ use windows::Win32::UI::Input::KeyboardAndMouse::{EnableWindow, GetFocus, Releas
 use windows::Win32::UI::WindowsAndMessaging::{
     CreateWindowExW, DefWindowProcW, DestroyWindow, DispatchMessageW, GWL_EXSTYLE, GetClientRect, GetCursorPos, GetForegroundWindow,
     GetMessageW, GetWindowLongPtrW, GetWindowRect, GetWindowTextLengthW, GetWindowTextW, HMENU, IDC_ARROW, IsDialogMessageW, IsWindow, KillTimer,
-    LoadCursorW, MSG, PostQuitMessage, RegisterClassW, SW_SHOW, SW_HIDE, SW_SHOWNOACTIVATE, SWP_FRAMECHANGED, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, SendMessageW,
+    GetSystemMetrics, LoadCursorW, MSG, PostQuitMessage, SM_CXSCREEN, SM_CYSCREEN, RegisterClassW, SW_SHOW, SW_HIDE, SW_SHOWNOACTIVATE, SWP_FRAMECHANGED, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, SendMessageW,
     SetForegroundWindow, SetTimer, SetWindowLongPtrW, SetWindowPos, SetWindowTextW, ShowWindow, TranslateMessage, WINDOW_EX_STYLE, WINDOW_STYLE, WM_CLOSE,
     WM_COMMAND, WM_CTLCOLOREDIT, WM_CTLCOLORLISTBOX, WM_CTLCOLORSTATIC, WM_ERASEBKGND, WM_KEYDOWN, WM_LBUTTONDOWN, WM_MOUSEMOVE, WM_PAINT, WM_SETFONT, WM_TIMER,
     WindowFromPoint, WNDCLASSW, WS_CAPTION, WS_CHILD, WS_CLIPCHILDREN, WS_EX_NOACTIVATE, WS_EX_TOOLWINDOW, WS_EX_TOPMOST, WS_POPUP, WS_SYSMENU,
@@ -50,6 +50,8 @@ pub struct Field<'a> {
     pub label: &'a str,
     /// Writes right to left when this answers true for the chosen option of the drop-down (an Arabic word).
     pub rtl: Option<fn(usize) -> bool>,
+    /// How many lines the box shows (1 is a single line; more is a box for several lines, where Enter still presses the button).
+    pub lines: usize,
 }
 
 /// What the form asks.
@@ -85,6 +87,9 @@ const EX_RIGHT: isize = 0x0000_1000;
 const EX_RTLREADING: isize = 0x0000_2000;
 const EX_LEFTSCROLLBAR: isize = 0x0000_4000;
 const ES_AUTOHSCROLL: u32 = 0x0080;
+const ES_MULTILINE: u32 = 0x0004;
+const ES_AUTOVSCROLL: u32 = 0x0040;
+const ES_READONLY: u32 = 0x0800;
 const BS_OWNERDRAW: u32 = 0x000B;
 const SS_LEFT: u32 = 0x0000;
 const EN_SETFOCUS: u32 = 0x0100;
@@ -452,9 +457,11 @@ pub fn ask_with(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn
             y += 22 + FIELD_H + 16;
         }
         let mut field_y = Vec::new();
-        for _ in form.fields {
+        // a box of several lines is taller by 20 for each one more
+        let field_h = |f: &Field| FIELD_H + (f.lines.max(1) as i32 - 1) * 20;
+        for f in form.fields {
             field_y.push(y);
-            y += 22 + FIELD_H + 16;
+            y += 22 + field_h(f) + 16;
         }
         let result_y = y;
         let result_h = form.result_lines as i32 * 20 + 24;
@@ -472,7 +479,8 @@ pub fn ask_with(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn
         let mut frame = RECT { left: 0, top: 0, right: client_w, bottom: client_h };
         let _ = AdjustWindowRectExForDpi(&mut frame, style, false, WINDOW_EX_STYLE(0), dpi as u32);
         let (ww, wh) = (frame.right - frame.left, frame.bottom - frame.top);
-        let (mut x0, mut y0) = (200, 200);
+        // in the middle of the screen, a little above the centre, when there is no window to be in the middle of
+        let (mut x0, mut y0) = ((GetSystemMetrics(SM_CXSCREEN) - ww) / 2, (GetSystemMetrics(SM_CYSCREEN) - wh) / 3);
         let mut owner_rect = RECT::default();
         if let Some(o) = owner {
             if GetWindowRect(o, &mut owner_rect).is_ok() {
@@ -529,14 +537,17 @@ pub fn ask_with(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn
         for (i, f) in form.fields.iter().enumerate() {
             label(f.label, field_y[i]);
             let top = field_y[i] + 22;
-            frames.push(RECT { left: s(MARGIN), top: s(top), right: s(MARGIN + inner), bottom: s(top + FIELD_H) });
+            frames.push(RECT { left: s(MARGIN), top: s(top), right: s(MARGIN + inner), bottom: s(top + field_h(f)) });
             // the text box sits inside its frame (no border of its own: the frame is drawn behind it)
-            edits.push(control(w!("EDIT"), "", ES_AUTOHSCROLL | WS_TABSTOP.0, 0, ID_EDIT + i as i32, pick(font_body), MARGIN + 12, top + 9, inner - 24, 20));
+            let lines = f.lines.max(1) as i32;
+            let style = if lines > 1 { ES_MULTILINE | ES_AUTOVSCROLL } else { ES_AUTOHSCROLL };
+            edits.push(control(w!("EDIT"), "", style | WS_TABSTOP.0, 0, ID_EDIT + i as i32, pick(font_body), MARGIN + 12, top + 9, inner - 24, 20 * lines));
         }
         let mut card = None;
         let result = (form.result_lines > 0).then(|| {
             card = Some(RECT { left: s(MARGIN), top: s(result_y), right: s(MARGIN + inner), bottom: s(result_y + result_h) });
-            control(w!("STATIC"), "", SS_LEFT, 0, -1, pick(font_body), MARGIN + 14, result_y + 12, inner - 28, form.result_lines as i32 * 20)
+            // a read-only box, not a label: the person can select the text and copy it
+            control(w!("EDIT"), "", ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL | WS_TABSTOP.0, 0, -1, pick(font_body), MARGIN + 14, result_y + 12, inner - 28, form.result_lines as i32 * 20)
         });
         let error = control(w!("STATIC"), "", SS_LEFT, 0, -1, pick(font_intro), MARGIN, error_y, inner, 36);
         let ok_w = 112;
@@ -640,8 +651,10 @@ pub fn ask_with(owner: Option<HWND>, theme: Theme, form: &Form, accept: &mut dyn
                     }
                     Reply::Show(text) => {
                         if let Some(r) = result {
-                            let t = wide(&text);
+                            // a box of several lines wants \r\n, and the text goes right to left when it starts with Arabic
+                            let t = wide(&text.replace("\r\n", "\n").replace('\n', "\r\n"));
                             let _ = SetWindowTextW(r, PCWSTR(t.as_ptr()));
+                            set_rtl(r, text.chars().find(|c| c.is_alphabetic()).is_some_and(verba_core::is_arabic));
                         }
                         let _ = SetWindowTextW(error, PCWSTR(wide("").as_ptr()));
                     }
@@ -931,6 +944,19 @@ fn text_of(h: HWND) -> String {
         let mut buf = vec![0u16; len + 1];
         let n = GetWindowTextW(h, &mut buf).max(0) as usize;
         String::from_utf16_lossy(&buf[..n])
+    }
+}
+
+/// Writes a box right to left (aligned to the right, scroll bar at the left) or left to right.
+fn set_rtl(edit: HWND, rtl: bool) {
+    unsafe {
+        let ex = GetWindowLongPtrW(edit, GWL_EXSTYLE);
+        let bits = EX_RIGHT | EX_RTLREADING | EX_LEFTSCROLLBAR;
+        let new = if rtl { ex | bits } else { ex & !bits };
+        if new != ex {
+            SetWindowLongPtrW(edit, GWL_EXSTYLE, new);
+            let _ = SetWindowPos(edit, None, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+        }
     }
 }
 

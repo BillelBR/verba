@@ -9,8 +9,8 @@ fn main() {
     let theme = if args.get(1).map(String::as_str) == Some("dark") { Theme::Dark } else { Theme::Light };
     let options = ["Arabic \u{2192} English", "English \u{2192} Arabic", "French \u{2192} English"];
     let word = args.get(2).map(String::as_str) == Some("word");
-    let translation_fields = [Field { label: "Word", rtl: Some(|i| i == 0) }, Field { label: "Translation", rtl: Some(|i| i == 1) }];
-    let word_fields = [Field { label: "Word", rtl: None }];
+    let translation_fields = [Field { label: "Word", rtl: Some(|i| i == 0), lines: 1 }, Field { label: "Translation", rtl: Some(|i| i == 1), lines: 1 }];
+    let word_fields = [Field { label: "Word", rtl: None, lines: 1 }];
     let form = if word {
         Form { title: "Add a word", intro: "One word, 2 to 40 letters. Verba will not flag it as a typo.", choice: None, fields: &word_fields, initial: &["Snow"], ok_label: "Add", result_lines: 0, cancel_label: None, activate: false }
     } else {
@@ -33,7 +33,7 @@ fn main() {
         return;
     }
     if args.get(2).map(String::as_str) == Some("lookup") {
-        let lookup_fields = [Field { label: "Word", rtl: None }];
+        let lookup_fields = [Field { label: "Word", rtl: None, lines: 1 }];
         let form = Form {
             title: "Look up a word",
             intro: "A word in English, French, Arabic, or Algerian Darija in Latin letters.",

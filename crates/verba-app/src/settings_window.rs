@@ -38,6 +38,8 @@ thread_local! {
     static UNDO_PROBLEM: Cell<Option<&'static str>> = const { Cell::new(None) };
     /// The same for the dictation shortcut.
     static DICTATE_PROBLEM: Cell<Option<&'static str>> = const { Cell::new(None) };
+    /// The same for the quick window's shortcut.
+    static QUICK_PROBLEM: Cell<Option<&'static str>> = const { Cell::new(None) };
     /// Whether "Start with Windows" is on: asked of the registry once, not at every frame.
     static AUTOSTART: Cell<Option<bool>> = const { Cell::new(None) };
 }
@@ -324,6 +326,39 @@ fn translate(ui: &mut Ui, s: &mut Settings) {
     ui.note('\u{E946}', "Press the shortcut: the translations appear above the text. Choose with the arrow keys, put one in with Tab, close with Esc.");
     ui.card_end();
     if let Some(problem) = TRANSLATE_PROBLEM.with(|p| p.get()) {
+        ui.card_begin();
+        ui.note('\u{E783}', problem);
+        ui.card_end();
+    }
+
+    ui.section("Quick window");
+    ui.card_begin();
+    let current = s.keys.quick;
+    let default = Keys::default().quick;
+    let row = ui.key_row(
+        "key:quick",
+        "Open the quick translation window",
+        Some("A small window in every app: type or paste a word, a sentence or a few lines, choose the language and read the translation. Nothing has to be selected, and the result can be copied."),
+        &current.label(),
+        current == default,
+    );
+    if let Some((vk, mods)) = row.captured {
+        let b = Binding::new(vk, mods);
+        if !Binding::usable_hotkey(vk, mods) {
+            QUICK_PROBLEM.with(|p| p.set(Some("A shortcut that works in every app needs Ctrl or Alt together with another key.")));
+        } else if b == s.keys.translate || b == s.keys.fixkeys || b == s.keys.undo || b == s.keys.dictate {
+            QUICK_PROBLEM.with(|p| p.set(Some("That key already has another job: choose another one.")));
+        } else {
+            s.keys.quick = b;
+            QUICK_PROBLEM.with(|p| p.set(None));
+        }
+    }
+    if row.reset {
+        s.keys.quick = default;
+        QUICK_PROBLEM.with(|p| p.set(None));
+    }
+    ui.card_end();
+    if let Some(problem) = QUICK_PROBLEM.with(|p| p.get()) {
         ui.card_begin();
         ui.note('\u{E783}', problem);
         ui.card_end();
@@ -800,7 +835,7 @@ fn add_word() {
         title: "Add a word",
         intro: "One word, 2 to 40 letters. Verba will not flag it as a typo and will offer it when you type its first letters.",
         choice: None,
-        fields: &[Field { label: "Word", rtl: None }],
+        fields: &[Field { label: "Word", rtl: None, lines: 1 }],
         initial: &[],
         ok_label: "Add",
         result_lines: 0,
@@ -834,8 +869,8 @@ fn add_translation() {
         intro: "When you translate this word, your translations come first. Write several separated by ; (at most 5).",
         choice: Some(("Translate", &names)),
         fields: &[
-            Field { label: "Word", rtl: Some(|i| DIRECTIONS[i].1 == Lang::Ar) },
-            Field { label: "Translation", rtl: Some(|i| DIRECTIONS[i].2 == Lang::Ar) },
+            Field { label: "Word", rtl: Some(|i| DIRECTIONS[i].1 == Lang::Ar), lines: 1 },
+            Field { label: "Translation", rtl: Some(|i| DIRECTIONS[i].2 == Lang::Ar), lines: 1 },
         ],
         initial: &[],
         ok_label: "Add",
@@ -855,7 +890,7 @@ fn look_up() {
         title: "Look up a word",
         intro: "A word in English, French, Arabic, or Algerian Darija in Latin letters.",
         choice: None,
-        fields: &[Field { label: "Word", rtl: None }],
+        fields: &[Field { label: "Word", rtl: None, lines: 1 }],
         initial: &[],
         ok_label: "Look up",
         result_lines: 6,

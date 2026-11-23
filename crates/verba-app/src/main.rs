@@ -92,6 +92,7 @@ const HOTKEY_TRANSLATE: i32 = 4;
 const HOTKEY_FIXKEYS: i32 = 5;
 const HOTKEY_UNDO: i32 = 6;
 const HOTKEY_DICTATE: i32 = 7;
+const HOTKEY_QUICK: i32 = 8;
 const CMD_PAUSE: usize = 1001;
 const CMD_QUIT: usize = 1002;
 const CMD_APP: usize = 1003;
@@ -120,6 +121,9 @@ static FIXKEYS_PICKED: Mutex<Option<Option<Picked>>> = Mutex::new(None);
 static FIXKEYS_KEY: Mutex<Option<Binding>> = Mutex::new(None);
 static UNDO_KEY: Mutex<Option<Binding>> = Mutex::new(None);
 static DICTATE_KEY: Mutex<Option<Binding>> = Mutex::new(None);
+static QUICK_KEY: Mutex<Option<Binding>> = Mutex::new(None);
+/// The quick window is open (a second press of its key does not open another).
+static QUICK_OPEN: AtomicBool = AtomicBool::new(false);
 /// What the thread that wrote a dictation down found: the text, or why not.
 static DICTATED: Mutex<Option<Result<String, String>>> = Mutex::new(None);
 /// What the thread that asked for a newer version found: whether the person asked (a message box answers) or the daily check did (a short
@@ -297,6 +301,7 @@ fn main() {
         with_app(|app| sync_fixkeys_hotkey(hwnd, app.settings.keys.fixkeys));
         with_app(|app| sync_undo_hotkey(hwnd, app.settings.keys.undo));
         with_app(|app| sync_dictate_hotkey(hwnd, app.settings.keys.dictate));
+        with_app(|app| sync_quick_hotkey(hwnd, app.settings.keys.quick));
 
         with_app(|app| app.overlay.set_click_target(hwnd, WM_ACCEPT));
         add_tray(hwnd);
@@ -316,7 +321,12 @@ fn main() {
         if cfg!(debug_assertions) {
             if let Ok(what) = std::env::var("VERBA_TEST_DICTATION") {
                 let exe = app_sentences_exe();
-                std::thread::spawn(move || test_dictation(&what, exe));
+                if what.starts_with("quick:") {
+                    // the quick window's translation reads the app, which only this thread can: it runs here
+                    test_dictation(&what, exe);
+                } else {
+                    std::thread::spawn(move || test_dictation(&what, exe));
+                }
             }
         }
         // (a development build run by a test syncs once at start, VERBA_TEST_SYNC=1, and writes what happened to `sync-test.txt`)
@@ -348,6 +358,7 @@ fn main() {
         let _ = UnregisterHotKey(Some(hwnd), HOTKEY_APP);
         let _ = UnregisterHotKey(Some(hwnd), HOTKEY_UNDO);
         let _ = UnregisterHotKey(Some(hwnd), HOTKEY_DICTATE);
+        let _ = UnregisterHotKey(Some(hwnd), HOTKEY_QUICK);
     }
 }
 
@@ -443,6 +454,8 @@ unsafe extern "system" fn controller_proc(hwnd: HWND, msg: u32, wp: WPARAM, lp: 
                 HOTKEY_UNDO => with_app(undo_last_fix),
                 // starts a dictation, or ends the one being recorded
                 HOTKEY_DICTATE => with_app(toggle_dictation),
+                // the quick translation window (it runs its own message loop: not inside the borrow of the app)
+                HOTKEY_QUICK => quick_window(),
                 _ => {}
             }
             LRESULT(0)
@@ -1146,6 +1159,92 @@ fn undo_last_fix(app: &mut App) {
     notice(app, None, &text);
 }
 
+// ───────────── the quick window ─────────────
+
+/// The names of the languages in the quick window's drop-down, in the order of `quick_translate`'s `choice`.
+const QUICK_LANGUAGES: [&str; 4] = ["Automatic", "English", "Fran\u{E7}ais", "\u{627}\u{644}\u{639}\u{631}\u{628}\u{64A}\u{629}"];
+
+/// The window of Ctrl+Alt+Space: type or paste a word, a sentence or a few lines, choose the language, read the translation (and select it, to copy it).
+/// It needs nothing selected in another program.
+fn quick_window() {
+    use verba_win::dialog::{self, Field, Form, Reply};
+    if QUICK_OPEN.swap(true, Ordering::SeqCst) {
+        return;
+    }
+    let theme = APP.with(|a| a.try_borrow().ok().and_then(|b| b.as_ref().map(|app| look_for(&app.settings).theme))).unwrap_or(Theme::Dark);
+    // (a development build run by a test shows the window without taking the focus, and may start it with a text: VERBA_TEST_QUIET, VERBA_TEST_QUICK_TEXT)
+    let quiet = cfg!(debug_assertions) && std::env::var("VERBA_TEST_QUIET").is_ok();
+    let prefilled = if cfg!(debug_assertions) { std::env::var("VERBA_TEST_QUICK_TEXT").unwrap_or_default() } else { String::new() };
+    let initial = [prefilled.as_str()];
+    let form = Form {
+        title: "Quick translation",
+        intro: "Type or paste a word, a sentence or a few lines, then press Enter. A word shows several translations. The result can be selected and copied.",
+        choice: Some(("Translate into", &QUICK_LANGUAGES)),
+        fields: &[Field { label: "Text", rtl: None, lines: 3 }],
+        initial: if prefilled.is_empty() { &[] } else { &initial },
+        ok_label: "Translate",
+        result_lines: 7,
+        cancel_label: Some("Close"),
+        activate: !quiet,
+    };
+    dialog::ask_with(None, theme, &form, &mut |choice, texts| match quick_translate(&texts[0], choice) {
+        Ok(text) => Reply::Show(text),
+        Err(why) => Reply::Error(why),
+    });
+    QUICK_OPEN.store(false, Ordering::SeqCst);
+}
+
+/// The translation shown by the quick window: a word (or two or three) from the dictionary with its several translations, a sentence from the
+/// sentence translator, and when that is not there or fails, word by word. `choice` is the drop-down: 0 automatic (Arabic goes to the language chosen in the
+/// settings, anything else to Arabic), 1 English, 2 French, 3 Arabic. The first line says the direction.
+fn quick_translate(text: &str, choice: usize) -> Result<String, String> {
+    let text = text.trim();
+    if text.is_empty() {
+        return Err("Type or paste the text first.".to_string());
+    }
+    let arabic = text.chars().any(verba_core::is_arabic);
+    let (translate_to, translator) = with_app_ret(|app| (app.settings.translate_to, Arc::clone(&app.sentences))).ok_or("Verba is busy; try again.")?;
+    let to = match choice {
+        1 => Lang::En,
+        2 => Lang::Fr,
+        3 => Lang::Ar,
+        _ if arabic => {
+            if translate_to == Lang::Ar { Lang::En } else { translate_to }
+        }
+        _ => Lang::Ar,
+    };
+    let name = |l: Lang| match l {
+        Lang::En => "English",
+        Lang::Fr => "French",
+        Lang::Ar => "Arabic",
+        Lang::Dz => "Darija",
+    };
+    // Latin text going to English is taken for French (it is not English), going elsewhere for English
+    let hint = if arabic { Some(Lang::Ar) } else if to == Lang::En { Some(Lang::Fr) } else { Some(Lang::En) };
+    // a word or two: the dictionary says more than a sentence translator does
+    if text.split_whitespace().count() <= 3 && text.chars().count() <= 40 {
+        let found = with_app_ret(|app| app.engine.translate_word_limited(text, &[to], hint, 8)).flatten();
+        if let Some(t) = found.filter(|t| t.to == to && t.from != t.to) {
+            let list: Vec<&str> = t.candidates.iter().map(|c| c.text.as_str()).collect();
+            return Ok(format!("{} \u{2192} {}\n{}", name(t.from), name(t.to), list.join("  \u{B7}  ")));
+        }
+    }
+    // a sentence: the translator (Arabic and English), when it has the pair and answers
+    let installed = translator.installed();
+    // (only when it goes where the person chose: it knows Arabic and English, so a request for French is not answered with English)
+    if let Some((from, into)) = verba_local::sentence::pair_for(text, None, to, &installed).filter(|(_, into)| *into == to) {
+        if let Ok(out) = translator.translate(from, into, text) {
+            if !out.trim().is_empty() {
+                return Ok(format!("{} \u{2192} {}\n{}", name(from), name(into), out.trim()));
+            }
+        }
+    }
+    // else word by word
+    let reading = with_app_ret(|app| app.engine.translate_words(text, to, hint)).flatten().ok_or("Verba found no translation for this text.")?;
+    let from = if arabic { Lang::Ar } else { hint.unwrap_or(Lang::En) };
+    Ok(format!("{} \u{2192} {}, word by word\n{}", name(from), name(to), reading.text))
+}
+
 // ───────────── dictation ─────────────
 
 /// The pack that writes the next dictation down: the one the setting names, or the one of the keyboard that is in use. An error is a sentence for the person.
@@ -1324,6 +1423,11 @@ fn test_dictation(what: &str, exe: Option<PathBuf>) {
                 }
                 Err(why) => say(format!("cannot read the file: {why}")),
             }
+        }
+        (Some("quick"), Some(choice), Some(text)) => {
+            let t = Instant::now();
+            let answer = quick_translate(text, choice.parse().unwrap_or(0));
+            say(format!("({:.1}s) {answer:?}", t.elapsed().as_secs_f32()));
         }
         (Some("mic"), _, _) => match dictation::Recorder::start() {
             Ok(mut r) => {
@@ -1709,6 +1813,7 @@ pub(crate) fn update_settings(change: impl FnOnce(&mut Settings)) {
         sync_fixkeys_hotkey(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _), app.settings.keys.fixkeys);
         sync_undo_hotkey(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _), app.settings.keys.undo);
         sync_dictate_hotkey(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _), app.settings.keys.dictate);
+        sync_quick_hotkey(HWND(CONTROLLER.load(Ordering::SeqCst) as *mut _), app.settings.keys.quick);
         if !app.settings.learn {
             app.learn_buf.clear();
             app.learn_words = 0;
@@ -1732,6 +1837,11 @@ fn sync_translate_hotkey(hwnd: HWND, binding: Binding) {
 /// The same for the shortcut that puts right text typed with the wrong keyboard.
 fn sync_fixkeys_hotkey(hwnd: HWND, binding: Binding) {
     sync_hotkey(hwnd, HOTKEY_FIXKEYS, &FIXKEYS_KEY, binding, "wrong keyboard");
+}
+
+/// The same for the shortcut that opens the quick translation window.
+fn sync_quick_hotkey(hwnd: HWND, binding: Binding) {
+    sync_hotkey(hwnd, HOTKEY_QUICK, &QUICK_KEY, binding, "quick window");
 }
 
 /// The same for the shortcut that starts and ends a dictation.

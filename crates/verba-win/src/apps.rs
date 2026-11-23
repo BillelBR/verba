@@ -113,3 +113,118 @@ pub fn running_apps() -> Vec<String> {
     apps.dedup();
     apps
 }
+
+/// A program found in the Start menu.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct InstalledApp {
+    /// The name the Start menu shows (`Google Chrome`).
+    pub name: String,
+    /// The program's file name in lower case (`chrome.exe`): what Verba's list of programs holds.
+    pub exe: String,
+}
+
+/// The programs installed on this PC that have a shortcut in the Start menu (the ones of every user and the ones of this user), with the name of the shortcut and the
+/// file name of what it starts. Uninstallers, help files and the like are left out; programs of the Microsoft Store (they have no shortcut file) are not
+/// found until they are open. Sorted by name, one entry for each program. It reads the shortcut files (a second or two on a PC with many programs),
+/// so call it from a thread of its own.
+pub fn installed_apps() -> Vec<InstalledApp> {
+    use std::collections::HashMap;
+    use std::path::{Path, PathBuf};
+    use windows::Win32::System::Com::{CLSCTX_INPROC_SERVER, COINIT_APARTMENTTHREADED, CoCreateInstance, CoInitializeEx, CoUninitialize, IPersistFile, STGM};
+    use windows::Win32::UI::Shell::{IShellLinkW, ShellLink};
+    use windows::core::{Interface, PCWSTR};
+
+    fn shortcuts(dir: &Path, depth: usize, out: &mut Vec<PathBuf>) {
+        let Ok(entries) = std::fs::read_dir(dir) else { return };
+        for e in entries.flatten() {
+            let path = e.path();
+            if path.is_dir() && depth < 5 {
+                shortcuts(&path, depth + 1, out);
+            } else if path.extension().is_some_and(|x| x.eq_ignore_ascii_case("lnk")) {
+                out.push(path);
+            }
+        }
+    }
+
+    let mut dirs: Vec<PathBuf> = Vec::new();
+    for var in ["ProgramData", "APPDATA"] {
+        if let Some(p) = std::env::var_os(var) {
+            dirs.push(PathBuf::from(p).join(r"Microsoft\Windows\Start Menu\Programs"));
+        }
+    }
+    let mut files = Vec::new();
+    for d in &dirs {
+        shortcuts(d, 0, &mut files);
+    }
+    let mut found: HashMap<String, String> = HashMap::new();
+    unsafe {
+        let com = CoInitializeEx(None, COINIT_APARTMENTTHREADED).is_ok();
+        for file in &files {
+            let name = file.file_stem().map(|s| s.to_string_lossy().to_string()).unwrap_or_default();
+            if is_not_a_program(&name) {
+                continue;
+            }
+            let Ok(link) = CoCreateInstance::<_, IShellLinkW>(&ShellLink, None, CLSCTX_INPROC_SERVER) else { continue };
+            let Ok(persist) = link.cast::<IPersistFile>() else { continue };
+            let wide: Vec<u16> = file.as_os_str().to_string_lossy().encode_utf16().chain(std::iter::once(0)).collect();
+            if persist.Load(PCWSTR(wide.as_ptr()), STGM(0)).is_err() {
+                continue;
+            }
+            let mut buf = [0u16; 520];
+            let mut data = windows::Win32::Storage::FileSystem::WIN32_FIND_DATAW::default();
+            if link.GetPath(&mut buf, &mut data, 0).is_err() {
+                continue;
+            }
+            let len = buf.iter().position(|u| *u == 0).unwrap_or(buf.len());
+            let target = String::from_utf16_lossy(&buf[..len]);
+            let Some(exe) = target.rsplit('\\').next().map(str::to_lowercase) else { continue };
+            // shortcuts of Windows that open a panel through a helper (Administrative Tools starts `control.exe`) are not programs
+            if !exe.ends_with(".exe") || is_not_a_program(&exe) || matches!(exe.as_str(), "control.exe" | "mmc.exe" | "rundll32.exe" | "msiexec.exe" | "wscript.exe" | "cscript.exe") {
+                continue;
+            }
+            // the first name found for a program is kept (the files are not in any order, so the shortest is: `Chrome` before `Chrome (2)`)
+            found.entry(exe).and_modify(|n| if name.len() < n.len() { *n = name.clone() }).or_insert(name);
+        }
+        if com {
+            CoUninitialize();
+        }
+    }
+    let mut apps: Vec<InstalledApp> = found.into_iter().map(|(exe, name)| InstalledApp { name, exe }).filter(|a| a.exe != "verba.exe").collect();
+    apps.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()).then(a.exe.cmp(&b.exe)));
+    apps
+}
+
+/// Shortcuts and files that are not programs a person types in: uninstallers, help, license, website links, setup helpers.
+fn is_not_a_program(name: &str) -> bool {
+    let n = name.to_lowercase();
+    ["uninstall", "unins0", "unins1", "uninst", "readme", "read me", "release notes", "license", "help", "website", "web site", "documentation", "setup", "installer", "updater", "crashpad", "report"]
+        .iter()
+        .any(|w| n.contains(w))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn what_is_not_a_program_is_left_out() {
+        for n in ["Uninstall Notepad++", "unins000.exe", "Read me", "Readme", "Visit our website", "Help and support", "License Agreement", "Setup.exe"] {
+            assert!(is_not_a_program(n), "{n}");
+        }
+        for n in ["Google Chrome", "Notepad++", "Microsoft Word", "chrome.exe", "WINWORD.EXE", "Telegram", "Spotify"] {
+            assert!(!is_not_a_program(n), "{n}");
+        }
+    }
+
+    #[test]
+    fn the_start_menu_of_this_pc_gives_programs_with_a_name_and_a_file() {
+        let apps = installed_apps();
+        // every PC with Windows has some (and none is Verba, an uninstaller or a file that is not a program)
+        for a in &apps {
+            assert!(a.exe.ends_with(".exe") && !a.name.is_empty() && a.exe != "verba.exe", "{a:?}");
+        }
+        let mut seen = std::collections::HashSet::new();
+        assert!(apps.iter().all(|a| seen.insert(a.exe.clone())), "one entry for each program");
+        println!("{} programs, the first ones: {:?}", apps.len(), apps.iter().take(5).collect::<Vec<_>>());
+    }
+}

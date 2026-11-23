@@ -9,23 +9,18 @@ use std::sync::atomic::{AtomicIsize, Ordering};
 
 use verba_core::Lang;
 use verba_win::dialog::{self, Field, Form};
-use verba_win::running_apps;
 use verba_win::ui::{self, ButtonStyle, Config, ListEntry, Ui};
 use verba_win::{Look, Theme};
-use windows::Win32::Foundation::{HWND, POINT};
+use windows::Win32::Foundation::HWND;
 use windows::Win32::UI::Shell::ShellExecuteW;
-use windows::Win32::UI::WindowsAndMessaging::{
-    AppendMenuW, CreatePopupMenu, DestroyMenu, GetCursorPos, HICON, MF_GRAYED, MF_STRING, SW_SHOW,
-    TPM_LEFTALIGN, TPM_RETURNCMD, TPM_TOPALIGN, TrackPopupMenu,
-};
+use windows::Win32::UI::WindowsAndMessaging::{HICON, SW_SHOW};
 use windows::core::{PCWSTR, w};
 
 use crate::keys::{Action, Binding, Keys};
-use crate::settings::{ALWAYS_OFF, AppMode, Settings, ThemeMode};
+use crate::settings::{AppMode, Settings, ThemeMode};
 
-/// The window being shown (0 when there is none): the menu of running programs needs it as its owner.
+/// The window being shown (0 when there is none): the forms and messages it opens need it as their owner.
 static WINDOW: AtomicIsize = AtomicIsize::new(0);
-const MENU_APP_BASE: usize = 3000;
 
 thread_local! {
     /// Why the last key the user pressed was not taken (shown on the Keyboard page until the next good key).
@@ -620,39 +615,147 @@ fn keyboard(ui: &mut Ui, s: &mut Settings) {
 }
 
 fn apps(ui: &mut Ui, s: &mut Settings) {
-    ui.page_begin("Apps", "Choose the programs where Verba works.");
-    ui.section("Where Verba works");
+    use crate::app_list;
+    ui.page_begin("Apps", "Verba works in every program unless you switch it off here. Every program of this PC that Verba can find is listed, with a switch.");
+    app_list::ensure_loaded(crate::refresh_settings_soon);
+    let filter = APP_FILTER.with(|f| f.borrow().clone());
+
+    // finding a program, and adding one that is not in the list
     ui.card_begin();
-    let mut mode = if s.app_mode == AppMode::OnlyThese { 1 } else { 0 };
+    if filter.is_empty() {
+        if ui.button_row("app-find", "Find a program", Some("Type a part of its name."), "Find\u{2026}", ButtonStyle::Secondary, true) {
+            ui.defer(find_program);
+        }
+    } else if ui.button_row("app-clear", &format!("Showing the programs with \u{201C}{filter}\u{201D}"), Some("Only these are listed below."), "Show all", ButtonStyle::Secondary, true) {
+        ui.defer(|| APP_FILTER.with(|f| f.borrow_mut().clear()));
+    }
+    if ui.button_row("app-add", "A program that is not in the list", Some("Type the name of its file, for example notepad.exe: Verba then asks for its switch here."), "Add by name\u{2026}", ButtonStyle::Secondary, true) {
+        ui.defer(add_program_by_name);
+    }
+    ui.card_end();
+
+    let only = s.app_mode == AppMode::OnlyThese;
+    let rows = app_list::rows(s, &filter);
+    let mut flipped: Option<(String, bool)> = None;
+    let show = |ui: &mut Ui, row: &app_list::Row, s: &Settings, flipped: &mut Option<(String, bool)>| {
+        let locked = app_list::always_off(&row.exe);
+        let mut on = s.allows_app(&row.exe);
+        let mut note = row.exe.clone();
+        if row.running {
+            note.push_str("   \u{00B7}   open now");
+        }
+        if locked {
+            note.push_str("   \u{00B7}   always off: it protects your passwords");
+        }
+        if ui.app_row(&format!("app:{}", row.exe), &row.name, &note, &mut on, !locked) {
+            *flipped = Some((row.exe.clone(), on));
+        }
+    };
+
+    if app_list::loading() && rows.is_empty() {
+        ui.card_begin();
+        ui.info_row("Looking for the programs of this PC\u{2026}", Some("It takes a second or two."));
+        ui.card_end();
+    }
+    // the programs the user changed come first: the ones that are off (or, in "only these", the ones that are on)
+    let changed: Vec<&app_list::Row> = rows.iter().filter(|r| s.apps.contains(&r.exe)).collect();
+    if !changed.is_empty() {
+        ui.section(if only { "Switched on by you" } else { "Switched off by you" });
+        ui.card_begin();
+        for row in &changed {
+            show(ui, row, s, &mut flipped);
+        }
+        ui.card_end();
+    }
+    let open: Vec<&app_list::Row> = rows.iter().filter(|r| r.running && !s.apps.contains(&r.exe)).collect();
+    if filter.is_empty() && !open.is_empty() {
+        ui.section("Open now");
+        ui.card_begin();
+        for row in &open {
+            show(ui, row, s, &mut flipped);
+        }
+        ui.card_end();
+    }
+    let rest: Vec<&app_list::Row> = rows.iter().filter(|r| !s.apps.contains(&r.exe) && (!filter.is_empty() || !r.running)).collect();
+    if !rest.is_empty() {
+        ui.section(if filter.is_empty() { "All programs" } else { "Results" });
+        ui.card_begin();
+        for row in &rest {
+            show(ui, row, s, &mut flipped);
+        }
+        ui.card_end();
+    } else if !filter.is_empty() && changed.is_empty() {
+        ui.card_begin();
+        ui.info_row("No program has this in its name.", Some("A program that is not in the list can be added by the name of its file."));
+        ui.card_end();
+    }
+    if let Some((exe, on)) = flipped {
+        s.set_app(&exe, on);
+    }
+
+    ui.section("How the list works");
+    ui.card_begin();
+    let mut mode = if only { 1 } else { 0 };
     if ui.segmented_row(
         "mode",
         "Verba works",
-        Some("The list below holds the apps this rule applies to. Switching starts a new list."),
-        &["Everywhere except the listed apps", "Only in the listed apps"],
+        Some("\u{201C}Everywhere except\u{201D}: on by default, you switch programs off. \u{201C}Only in\u{201D}: off by default, you switch programs on. Changing it starts a new list."),
+        &["Everywhere except the ones I switch off", "Only in the ones I switch on"],
         &mut mode,
     ) {
         // switching the meaning of the list starts a new list: the old one meant the opposite
         s.app_mode = if mode == 1 { AppMode::OnlyThese } else { AppMode::AllExcept };
         s.apps.clear();
     }
+    ui.note('\u{E72E}', "Password managers and Verba itself are always off, whatever you choose. Programs of the Microsoft Store appear here when they are open.");
     ui.card_end();
+}
 
-    ui.section(if s.app_mode == AppMode::OnlyThese { "Apps where Verba works" } else { "Apps where Verba is off" });
-    ui.card_begin();
-    let items = s.apps.clone();
-    if let Some(i) = ui.removable_list("apps", &items, "No app in the list yet.") {
-        let app = items[i].clone();
-        // "all except": the app leaves the list of the ones that are off; "only these": it leaves the ones that are on
-        s.set_app(&app, s.app_mode == AppMode::AllExcept);
-    }
-    if ui.button_row("add", "Add an app", Some("Choose one of the programs that are open now."), "Add a running app…", ButtonStyle::Primary, true) {
-        ui.defer(add_app);
-    }
-    ui.card_end();
+thread_local! {
+    /// What the person typed to find a program in the Apps page (empty: all of them).
+    static APP_FILTER: std::cell::RefCell<String> = const { std::cell::RefCell::new(String::new()) };
+}
 
-    ui.card_begin();
-    ui.note('\u{E72E}', "Password managers and Verba itself are always off, whatever you choose.");
-    ui.card_end();
+/// "Find a program": asks for a part of its name.
+fn find_program() {
+    let current = APP_FILTER.with(|f| f.borrow().clone());
+    let form = Form {
+        title: "Find a program",
+        intro: "Type a part of the name of the program (or of its file).",
+        choice: None,
+        fields: &[Field { label: "Name", rtl: None, lines: 1 }],
+        initial: &[current.as_str()],
+        ok_label: "Find",
+        result_lines: 0,
+        cancel_label: None,
+        activate: true,
+    };
+    dialog::ask(owner(), theme(), &form, &mut |_, texts| {
+        APP_FILTER.with(|f| *f.borrow_mut() = texts[0].trim().to_string());
+        Ok(())
+    });
+}
+
+/// "A program that is not in the list": asks for the name of its file and adds it with Verba switched off (or on, in "only these").
+fn add_program_by_name() {
+    let form = Form {
+        title: "Add a program",
+        intro: "The name of the program's file, for example notepad.exe. It is added with Verba switched off in it (switched on, when the list is \u{201C}only in\u{201D}).",
+        choice: None,
+        fields: &[Field { label: "File name", rtl: None, lines: 1 }],
+        initial: &[],
+        ok_label: "Add",
+        result_lines: 0,
+        cancel_label: None,
+        activate: true,
+    };
+    dialog::ask(owner(), theme(), &form, &mut |_, texts| match crate::app_list::typed_exe(&texts[0]) {
+        Some(exe) => {
+            crate::update_settings(|s| s.set_app(&exe, s.app_mode == AppMode::OnlyThese));
+            Ok(())
+        }
+        None => Err("This is not the name of a program file.".to_string()),
+    });
 }
 
 fn appearance(ui: &mut Ui, s: &mut Settings) {
@@ -1034,30 +1137,3 @@ fn open_doc(name: &str) {
     }
 }
 
-/// The running programs in a pop-up list at the pointer; the one chosen goes on the list.
-fn add_app() {
-    let settings = crate::current_settings();
-    let picked = unsafe {
-        let apps = running_apps();
-        let Ok(menu) = CreatePopupMenu() else { return };
-        for (i, app) in apps.iter().enumerate() {
-            let listed = settings.apps.contains(app);
-            let always_off = ALWAYS_OFF.contains(&app.as_str());
-            let flags = if listed || always_off { MF_STRING | MF_GRAYED } else { MF_STRING };
-            let text = wide(app);
-            let _ = AppendMenuW(menu, flags, MENU_APP_BASE + i, PCWSTR(text.as_ptr()));
-        }
-        if apps.is_empty() {
-            let _ = AppendMenuW(menu, MF_STRING | MF_GRAYED, MENU_APP_BASE, w!("(no app with a window)"));
-        }
-        let mut at = POINT::default();
-        let _ = GetCursorPos(&mut at);
-        let chosen = TrackPopupMenu(menu, TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RETURNCMD, at.x, at.y, None, owner().unwrap_or_default(), None);
-        let _ = DestroyMenu(menu);
-        (chosen.0 as usize).checked_sub(MENU_APP_BASE).and_then(|i| apps.get(i).cloned())
-    };
-    if let Some(app) = picked {
-        // "all except": the app goes on the list of the ones that are off; "only these": on the list of the ones that are on
-        crate::update_settings(|s| s.set_app(&app, s.app_mode == AppMode::OnlyThese));
-    }
-}

@@ -689,6 +689,57 @@ impl<'a> Ui<'a> {
         self.button_shape(id_of(name), b, label, style, enabled).clicked
     }
 
+    /// A row of a list of programs: a round tile with the first letter of the name (a shade of the accent colour, a different one for each program), the name,
+    /// a quieter line under it, and a switch at the right. `value` is whether it is on. Returns true when the switch was flipped.
+    pub fn app_row(&mut self, name: &str, title: &str, subtitle: &str, value: &mut bool, enabled: bool) -> bool {
+        let id = id_of(name);
+        let p = self.p;
+        let (x, w) = (self.content_x(), self.content_w());
+        let h = 58.0;
+        if let Some(card) = &mut self.card {
+            if !card.first {
+                self.main.push(Cmd::Rect { r: R::new(x + ROW_PAD_X, self.cy, w - 2.0 * ROW_PAD_X, 1.0), radius: 0.0, fill: Some(with_alpha(p.border, 0.8)), stroke: None });
+            }
+            card.first = false;
+        }
+        let r = R::new(x, self.cy, w, h);
+        let resp = self.hit(id, r, enabled);
+        if resp.hover && enabled {
+            let a = self.anim(id ^ 0x11, 1.0, 0.1);
+            self.main_background(r, with_alpha(p.hover, 0.6 * a));
+        } else {
+            self.s.anim.remove(&(id ^ 0x11));
+        }
+        // the tile: its shade comes from the name, so that a program keeps its colour
+        let shade = (title.bytes().fold(0u32, |h, b| h.wrapping_mul(31).wrapping_add(b as u32)) % 6) as f32 * 0.1;
+        let tile = R::new(r.x + ROW_PAD_X, r.y + (h - 36.0) / 2.0, 36.0, 36.0);
+        self.push(Cmd::Circle { c: (tile.x + 18.0, tile.y + 18.0), r: 18.0, fill: Some(with_alpha(mix(p.accent, p.text, shade), if p.dark { 0.26 } else { 0.16 })), stroke: None });
+        let initial: String = title.chars().find(|c| c.is_alphanumeric()).map(|c| c.to_uppercase().collect()).unwrap_or_else(|| "?".to_string());
+        let (iw, ih) = self.measure(&initial, 15.0, Font::Semibold, 40.0);
+        let ink = if p.dark { mix(p.accent, p.text, 0.35) } else { mix(p.accent, p.text, shade * 0.6) };
+        self.text(tile.x + (36.0 - iw) / 2.0, tile.y + (36.0 - ih) / 2.0, &initial, 15.0, Font::Semibold, ink, 40.0);
+        // the texts
+        let tx = tile.right() + 14.0;
+        let text_w = (r.right() - ROW_PAD_X - 44.0 - 16.0 - tx).max(80.0);
+        let (_, t1) = self.measure(title, 14.0, Font::Semibold, text_w);
+        let (_, t2) = self.measure(subtitle, 12.0, Font::Text, text_w);
+        let top = r.y + (h - (t1 + 2.0 + t2)) / 2.0;
+        self.text(tx, top, title, 14.0, Font::Semibold, p.text, text_w);
+        self.text(tx, top + t1 + 2.0, subtitle, 12.0, Font::Text, p.muted, text_w);
+        if !enabled {
+            self.main_background(r, with_alpha(p.card, 0.45));
+        }
+        self.toggle_switch(id, R::new(r.right() - ROW_PAD_X - 44.0, r.y + (h - 22.0) / 2.0, 44.0, 22.0), *value, enabled);
+        if resp.focused && self.s.focus_visible {
+            self.focus_ring(r.inset(2.0), 6.0);
+        }
+        self.cy += h;
+        if resp.clicked {
+            *value = !*value;
+        }
+        resp.clicked
+    }
+
     /// A row with a title, a description, a progress bar under them (`fraction` from 0 to 1) and a button at the right (a "Cancel" while it works).
     /// Returns true when the button was pressed.
     pub fn progress_row(&mut self, name: &str, title: &str, desc: Option<&str>, fraction: f32, label: &str, style: ButtonStyle) -> bool {

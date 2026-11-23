@@ -18,6 +18,7 @@ use std::time::{Duration, Instant, SystemTime};
 use std::sync::{Arc, Mutex};
 use std::sync::atomic::{AtomicBool, AtomicIsize, AtomicU32, AtomicUsize, Ordering};
 
+mod app_list;
 mod backup;
 mod diagnostics;
 mod dictation;
@@ -1442,6 +1443,16 @@ fn test_dictation(what: &str, exe: Option<PathBuf>) {
             Err(why) => say(format!("microphone: {why}")),
         },
         _ => say(format!("unknown: {what}")),
+    }
+}
+
+/// Asks the settings window to draw again from another thread (the list of programs is ready).
+pub(crate) fn refresh_settings_soon() {
+    let controller = CONTROLLER.load(Ordering::SeqCst);
+    if controller != 0 {
+        unsafe {
+            let _ = PostMessageW(Some(HWND(controller as *mut _)), WM_DICTATION, WPARAM(0), LPARAM(0));
+        }
     }
 }
 

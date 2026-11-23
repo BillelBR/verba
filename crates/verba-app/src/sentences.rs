@@ -20,9 +20,12 @@ const CREATE_NO_WINDOW: u32 = 0x0800_0000;
 /// Threads the network may use: more gave nothing in the measurements (4 and 8 threads took the same time).
 const THREADS: &str = "4";
 const IDLE_SECS: &str = "600";
-/// A request that has no answer after this long is given up: the translator is stopped and the request fails (the program that wrote the
-/// request then translates word by word). A sentence takes a second or two; the first one also loads the model (a few seconds).
-const ANSWER_WITHIN: Duration = Duration::from_secs(45);
+/// How long a request may wait for its answer before it is given up: the translator is stopped and the request fails (the program that wrote the
+/// request then translates word by word, or says it cannot). A sentence takes a second or two and the first one also loads the model (a few seconds):
+/// 15 seconds, and one more for every 25 characters of a long text, at most a minute.
+pub fn answer_within(chars: usize) -> Duration {
+    Duration::from_secs((15 + chars as u64 / 25).min(60))
+}
 
 struct Session {
     child: Child,
@@ -112,9 +115,10 @@ impl Translator {
             let session = slot.as_mut().ok_or("no translator")?;
             // a watchdog: when the translator is alive but does not answer, it is stopped, which ends the read below with an error
             let handle = session.child.as_raw_handle() as usize;
+            let limit = answer_within(request.chunks.iter().map(|c| c.chars().count()).sum());
             let (done, waiting) = mpsc::channel::<()>();
             let watchdog = std::thread::spawn(move || {
-                if matches!(waiting.recv_timeout(ANSWER_WITHIN), Err(RecvTimeoutError::Timeout)) {
+                if matches!(waiting.recv_timeout(limit), Err(RecvTimeoutError::Timeout)) {
                     unsafe {
                         let _ = windows::Win32::System::Threading::TerminateProcess(windows::Win32::Foundation::HANDLE(handle as *mut _), 1);
                     }
@@ -173,6 +177,14 @@ mod tests {
     /// Needs the built translator and the models (`scripts/build-translate.ps1`, `scripts/fetch-models.ps1`):
     ///   cargo test -p verba-app sentences -- --ignored --nocapture
     /// It starts the real program and translates; no keys are sent and no window is touched.
+    #[test]
+    fn the_time_a_request_may_take_grows_with_the_text_and_has_an_end() {
+        assert_eq!(answer_within(10), Duration::from_secs(15));
+        assert_eq!(answer_within(500), Duration::from_secs(35));
+        assert_eq!(answer_within(1200), Duration::from_secs(60), "a minute at most");
+        assert_eq!(answer_within(1_000_000), Duration::from_secs(60));
+    }
+
     #[test]
     #[ignore = "needs target/mt/release/verba-translate.exe and the ar-en and en-ar models in models/"]
     fn the_real_translator_answers_and_comes_back_after_it_was_stopped() {

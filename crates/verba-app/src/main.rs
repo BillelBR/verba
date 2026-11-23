@@ -931,7 +931,8 @@ fn show_sentence(app: &mut App, seq: usize, from: Lang, to: Lang, result: Result
             let text = std::mem::take(&mut app.sentence_text);
             let shown = anchor.is_some_and(|a| show_words(app, a, &text, from, to));
             if !shown {
-                notice(app, anchor, "The sentence could not be translated.");
+                // neither the translator nor the dictionary could: it is said, the popup does not stay on "Translating..."
+                notice(app, anchor, "Verba cannot translate this text.");
             }
         }
     }

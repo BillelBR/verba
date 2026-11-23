@@ -127,6 +127,29 @@ fn writing(ui: &mut Ui, s: &mut Settings) {
     );
     ui.card_end();
 
+    ui.section("For programmers");
+    ui.card_begin();
+    let mut dev = match s.dev {
+        crate::settings::DevMode::Off => 0,
+        crate::settings::DevMode::Programs => 1,
+        crate::settings::DevMode::Everywhere => 2,
+    };
+    if ui.segmented_row(
+        "dev-mode",
+        "Developer suggestions",
+        Some("Suggests what programmers type: the words of code (keywords, functions, methods) and the commands of a terminal with their options. \u{201C}In coding programs\u{201D} is for editors and terminals (VS Code, Visual Studio, JetBrains, Windows Terminal, PowerShell, Sublime, Notepad++ and others)."),
+        &["Off", "In coding programs", "Everywhere"],
+        &mut dev,
+    ) {
+        s.dev = match dev {
+            1 => crate::settings::DevMode::Programs,
+            2 => crate::settings::DevMode::Everywhere,
+            _ => crate::settings::DevMode::Off,
+        };
+    }
+    ui.note('\u{E943}', "Rust, Python, JavaScript and TypeScript, Java, C#, Go, PHP, C and C++, SQL, HTML, CSS, Bash and PowerShell, with the commands git, npm, cargo, docker, kubectl and about a hundred and thirty more. After \u{201C}git \u{201D} it offers the subcommands, after \u{201C}git commit -\u{201D} the options. It reads the lines before the cursor to guess the language.");
+    ui.card_end();
+
     ui.section("Undo");
     ui.card_begin();
     let current = s.keys.undo;

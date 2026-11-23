@@ -39,6 +39,90 @@ pub enum AppMode {
     OnlyThese,
 }
 
+/// Where the suggestions for programmers (words of code, commands of a terminal) are offered.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum DevMode {
+    Off,
+    /// Only in the programs that are made for code or commands (editors, terminals).
+    Programs,
+    /// In every program Verba works in.
+    Everywhere,
+}
+
+impl DevMode {
+    pub fn code(self) -> &'static str {
+        match self {
+            Self::Off => "off",
+            Self::Programs => "programs",
+            Self::Everywhere => "everywhere",
+        }
+    }
+
+    pub fn parse(value: &str) -> Self {
+        match value.trim() {
+            "programs" => Self::Programs,
+            "everywhere" => Self::Everywhere,
+            _ => Self::Off,
+        }
+    }
+}
+
+/// The programs made for code and commands: editors, development environments, terminals (file names in lower case).
+pub const DEV_PROGRAMS: &[&str] = &[
+    "code.exe",
+    "code - insiders.exe",
+    "code-insiders.exe",
+    "vscodium.exe",
+    "cursor.exe",
+    "windsurf.exe",
+    "zed.exe",
+    "devenv.exe",
+    "rider64.exe",
+    "idea64.exe",
+    "pycharm64.exe",
+    "webstorm64.exe",
+    "clion64.exe",
+    "goland64.exe",
+    "phpstorm64.exe",
+    "rubymine64.exe",
+    "datagrip64.exe",
+    "studio64.exe",
+    "eclipse.exe",
+    "netbeans64.exe",
+    "sublime_text.exe",
+    "notepad++.exe",
+    "atom.exe",
+    "gvim.exe",
+    "nvim-qt.exe",
+    "emacs.exe",
+    "windowsterminal.exe",
+    "wt.exe",
+    "cmd.exe",
+    "powershell.exe",
+    "pwsh.exe",
+    "powershell_ise.exe",
+    "conhost.exe",
+    "openconsole.exe",
+    "mintty.exe",
+    "alacritty.exe",
+    "wezterm-gui.exe",
+    "tabby.exe",
+    "hyper.exe",
+    "putty.exe",
+    "kitty.exe",
+    "ssms.exe",
+    "dbeaver.exe",
+    "postman.exe",
+    "insomnia.exe",
+    "githubdesktop.exe",
+    "sourcetree.exe",
+    "fork.exe",
+    "gitkraken.exe",
+    "arduino ide.exe",
+    "positron.exe",
+    "jupyter-lab.exe",
+];
+
 /// Which language is dictated.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum DictationLanguage {
@@ -104,6 +188,8 @@ pub struct Settings {
     pub app_mode: AppMode,
     /// Program file names, lower case (`chrome.exe`).
     pub apps: Vec<String>,
+    /// Suggestions for programmers: the words of code, the commands of a terminal and their options.
+    pub dev: DevMode,
 }
 
 impl Default for Settings {
@@ -127,6 +213,7 @@ impl Default for Settings {
             line_break_shift: false,
             app_mode: AppMode::AllExcept,
             apps: Vec::new(),
+            dev: DevMode::Off,
         }
     }
 }
@@ -148,6 +235,15 @@ impl Settings {
             Lang::Fr => self.french = on,
             Lang::Ar => self.arabic = on,
             Lang::Dz => self.darija = on,
+        }
+    }
+
+    /// Whether the suggestions for programmers are offered in this program.
+    pub fn dev_active(&self, exe: &str) -> bool {
+        match self.dev {
+            DevMode::Off => false,
+            DevMode::Everywhere => true,
+            DevMode::Programs => DEV_PROGRAMS.contains(&exe.to_lowercase().as_str()),
         }
     }
 
@@ -221,6 +317,7 @@ impl Settings {
                 "check_updates" => s.check_updates = on,
                 "sync_folder" => s.sync_folder = value.trim().to_string(),
                 "dictation_language" => s.dictation_language = DictationLanguage::parse(value),
+                "dev" => s.dev = DevMode::parse(value),
                 "key_quick" => {
                     s.keys.quick = Binding::parse(value).filter(|b| Binding::usable_hotkey(b.vk, b.mods)).unwrap_or(Keys::default().quick)
                 }
@@ -270,7 +367,7 @@ impl Settings {
         let flag = |b: bool| if b { "1" } else { "0" };
         let mode = if self.app_mode == AppMode::OnlyThese { "only" } else { "except" };
         format!(
-            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\ncheck_updates={}\nsync_folder={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\nkey_fixkeys={}\nkey_undo={}\ndictation_language={}\nkey_dictate={}\nkey_quick={}\ntranslate_to={}\nfollow_keyboard={}\nline_break={}\napp_mode={mode}\napps={}\n",
+            "theme={theme}\nenglish={}\nfrench={}\narabic={}\ndarija={}\npaused={}\ncorrection={}\npredict_next={}\nlearn={}\ncheck_updates={}\nsync_folder={}\nkey_accept={}\nkey_prev={}\nkey_next={}\nkey_close={}\nkey_translate={}\nkey_fixkeys={}\nkey_undo={}\ndictation_language={}\nkey_dictate={}\nkey_quick={}\ntranslate_to={}\nfollow_keyboard={}\nline_break={}\ndev={}\napp_mode={mode}\napps={}\n",
             flag(self.english),
             flag(self.french),
             flag(self.arabic),
@@ -294,6 +391,7 @@ impl Settings {
             self.translate_to.code(),
             flag(self.follow_keyboard),
             if self.line_break_shift { "shift" } else { "enter" },
+            self.dev.code(),
             self.apps.join(";")
         )
     }
@@ -352,11 +450,23 @@ mod tests {
 
     #[test]
     fn settings_survive_a_save_and_a_load() {
-        let mut s = Settings { theme: ThemeMode::Dark, follow_keyboard: false, correction: true, predict_next: true, learn: true, app_mode: AppMode::OnlyThese, ..Settings::default() };
+        let mut s = Settings { theme: ThemeMode::Dark, follow_keyboard: false, correction: true, predict_next: true, learn: true, app_mode: AppMode::OnlyThese, dev: DevMode::Programs, ..Settings::default() };
         s.set_lang(Lang::Fr, false);
         s.set_app("code.exe", true);
         s.set_app("slack.exe", true);
         assert_eq!(Settings::parse(&s.render()), s);
+    }
+
+    #[test]
+    fn developer_suggestions_are_off_until_chosen_and_follow_the_program() {
+        assert_eq!(Settings::default().dev, DevMode::Off);
+        assert!(!Settings::default().dev_active("code.exe"));
+        let programs = Settings::parse("dev=programs");
+        assert!(programs.dev_active("Code.exe") && programs.dev_active("WindowsTerminal.exe") && !programs.dev_active("chrome.exe"));
+        let everywhere = Settings::parse("dev=everywhere");
+        assert!(everywhere.dev_active("chrome.exe"));
+        assert_eq!(Settings::parse("dev=nonsense").dev, DevMode::Off);
+        assert!(DEV_PROGRAMS.iter().all(|p| *p == p.to_lowercase()));
     }
 
     #[test]

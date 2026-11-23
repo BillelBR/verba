@@ -1486,7 +1486,7 @@ checksum = "81e544489bf3d8ef66c953931f56617f423cd4b5494be343d9b9d3dda037b9a3"
 
 [[package]]
 name = "verba-app"
-version = "0.13.1"
+version = "0.14.0"
 dependencies = [
  "verba-core",
  "verba-local",
@@ -1497,18 +1497,18 @@ dependencies = [
 
 [[package]]
 name = "verba-core"
-version = "0.13.1"
+version = "0.14.0"
 
 [[package]]
 name = "verba-local"
-version = "0.13.1"
+version = "0.14.0"
 dependencies = [
  "verba-core",
 ]
 
 [[package]]
 name = "verba-translate"
-version = "0.13.1"
+version = "0.14.0"
 dependencies = [
  "anyhow",
  "ct2rs",
@@ -1518,7 +1518,7 @@ dependencies = [
 
 [[package]]
 name = "verba-win"
-version = "0.13.1"
+version = "0.14.0"
 dependencies = [
  "verba-core",
  "windows",

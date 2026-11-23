@@ -160,6 +160,10 @@ struct App {
     shown: Vec<Suggestion>,
     /// How many characters of the word are typed already (they are replaced when a suggestion is accepted).
     typed_len: usize,
+    /// The popup shows suggestions for programmers: they bring their own trailing space (or none), unlike the words of a language.
+    dev_shown: bool,
+    /// How much each programming language has been seen in the text lately (for the suggestions for programmers).
+    dev_votes: Vec<(String, f32)>,
     /// The text for which the user pressed Esc: stay closed until it changes.
     dismissed: Option<String>,
     /// The text before the caret at the last reading (what Esc remembers).
@@ -287,7 +291,7 @@ fn main() {
 
         APP.with(|a| {
             *a.borrow_mut() =
-                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, pair_labels: Vec::new(), sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, tr_file, tr_stamp, last_check: Instant::now(), last_fix: None, sentence_text: String::new(), sentence_ctx: None, sentence_langs: None, sync_seen: (None, None, None), sync_checked: Instant::now() - Duration::from_secs(3600), recorder: None, dictation_pack: None, dictation_busy: false, last_layout: None });
+                Some(App { overlay, engine, settings, icon_on, icon_off, shown: Vec::new(), typed_len: 0, dev_shown: false, dev_votes: Vec::new(), dismissed: None, last_text: String::new(), fix: None, selected: 0, anchor: None, lead: None, translating: None, pair_labels: Vec::new(), sentences: Arc::new(sentences::Translator::find()), sentence_seq: 0, notice: false, notice_seq: 0, learn_buf: String::new(), learn_words: 0, files, words_stamp, tr_file, tr_stamp, last_check: Instant::now(), last_fix: None, sentence_text: String::new(), sentence_ctx: None, sentence_langs: None, sync_seen: (None, None, None), sync_checked: Instant::now() - Duration::from_secs(3600), recorder: None, dictation_pack: None, dictation_busy: false, last_layout: None });
         });
 
         let mods = MOD_CONTROL | MOD_ALT | MOD_SHIFT | MOD_NOREPEAT;
@@ -741,6 +745,7 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
         return;
     }
     app.translating = None;
+    app.dev_shown = false;
     // the selection may be gone: a translation still on its way is for text that is no longer there
     if !same_selection {
         app.sentence_seq += 1;
@@ -776,6 +781,36 @@ fn apply(app: &mut App, snap: Option<Snapshot>) {
         // another layout (German, say), or "guess from the letters" is chosen
         _ => app.engine.suggest(&snap.before_caret, 3),
     };
+    // programmers: the words of code and the commands of a terminal (when the user chose them for this program)
+    if app.settings.dev_active(&snap.app) {
+        let dev = verba_local::dev::shipped();
+        for vote in &mut app.dev_votes {
+            vote.1 *= 0.92;
+        }
+        for (tag, n) in dev.languages_in(&snap.before_caret) {
+            match app.dev_votes.iter_mut().find(|v| v.0 == tag) {
+                Some(v) => v.1 += n as f32,
+                None => app.dev_votes.push((tag, n as f32)),
+            }
+        }
+        app.dev_votes.retain(|v| v.1 > 0.05);
+        if let Some(hit) = dev.suggest(&snap.before_caret, &app.dev_votes, 3) {
+            let mut list: Vec<Suggestion> = hit.choices.iter().map(|text| Suggestion { text: text.clone(), lang: Lang::En }).collect();
+            // room left: the usual words for the same part of the word follow
+            if hit.typed > 0 && hit.typed == current_word(&snap.before_caret).chars().count() {
+                for s in &found {
+                    if list.len() < 3 && !list.iter().any(|d| d.text.trim_end() == s.text) {
+                        list.push(Suggestion { text: format!("{} ", s.text), lang: s.lang });
+                    }
+                }
+            }
+            app.fix = None;
+            app.typed_len = hit.typed;
+            app.dev_shown = true;
+            present(app, snap.anchor, list, Some("Dev".to_string()));
+            return;
+        }
+    }
     log(&format!("engine: {} suggestions (keyboard: {:?})", found.len(), snap.layout));
     if found.is_empty() {
         // no word is being typed: if the one just finished looks misspelled, offer the fix (only when the user turned it on)
@@ -1134,6 +1169,8 @@ fn accept(app: &mut App, index: usize) {
         // a translation replaces the selected word (typing over it) or the word before the caret, and adds nothing
         (Some(erase), _) => (*erase, chosen.text.clone()),
         (None, Some(fix)) => (fix.erase, format!("{}{}", chosen.text, fix.trailing)),
+        // the words for programmers bring their own space (a keyword, a command) or none (a function)
+        (None, None) if app.dev_shown => (app.typed_len, chosen.text.clone()),
         (None, None) => (app.typed_len, format!("{} ", chosen.text)),
     };
     hide(app);

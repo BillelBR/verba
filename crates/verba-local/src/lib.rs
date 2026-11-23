@@ -14,6 +14,7 @@
 
 mod clean;
 pub mod colloquial;
+pub mod dev;
 mod dz;
 mod fold;
 mod nextword;

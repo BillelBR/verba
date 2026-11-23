@@ -1706,3 +1706,31 @@ The Arabic pack is Whisper small for Modern Standard Arabic and does not know Da
 | **`algerian-nlp/EL-ANKA-Lite` merged, int8 (the Darija pack)** | **76.3 %** | **29.0 %** | **248 MB** |
 
 Both are poor in absolute terms: Darija has no standard spelling (`بسيف` against `بالسيف` counts as a wrong word) and the audio is conversational, so these numbers say "the meaning is usually there, many words need a fix". **Chosen: EL-ANKA-Lite**, the only one that is clearly better than the Arabic pack on real Algerian speech. The medium model of the same authors (`EL-ANKA`, 764 M parameters) was not tried: its card reports under 1 % on non-independent data, it would be about 770 MB in int8 and expected to be about three times slower (not measured). Its files are built by the workflow `dictation-pack.yml` (pushing a tag `dictation-darija-v1`) and published as the release of that name; the catalogue of `dictation.rs` pins each file by size and SHA-256 taken from the release.
+
+## Version 0.13.0: int8 dictation packs, a French list of 150 000 words, more Darija words, the Apps page and the quick window
+
+**Dictation packs in int8.** The Arabic and English packs were the fp16 files of Systran's repositories (486 MB each). They are now Whisper small converted by the workflow `dictation-pack.yml` to CTranslate2 with int8 weights (253 MB each, like the Darija pack), from `openai/whisper-small` and `openai/whisper-small.en` at pinned revisions. Measured on the same 60 FLEURS utterances, with the files of the conversion made on this PC (the files of the workflow have the same `model.bin`, checked byte for byte by their SHA-256):
+
+| Pack | Before (fp16 files, int8 at load) | int8 files |
+|---|---|---|
+| Arabic (WER / CER) | 27.6 % / 8.3 % | **25.9 % / 7.9 %** |
+| English (WER / CER) | 5.4 % / 3.1 % | 6.0 % / 3.5 % |
+
+English is 0.6 point worse (8 words of 1 322), Arabic 1.7 points better: within what such a difference between two runs of conversion can be; the size is halved. With the program (about 400 MB, measured at the time of the first estimate) and two packs the installed size is about 900 MB; with three packs about 1.15 GB. A download of a pack through the program's own code and the writing down of a recording with it were checked for both (English and Arabic sentences came out right or nearly).
+
+**French list: 50 000 words to 150 000** (`list_cap`, `scripts/fetch-data.ps1`). Measured on the 1 012 French sentences of FLORES (`devtest`, not used to build anything; `realtext_accuracy`, lists only):
+
+| List | Words of the text it has | Letters saved | Memory of the French list |
+|---|---|---|---|
+| 50 000 | 95.5 % | 41.6 % | 12 MB |
+| 100 000 | 98.1 % | 42.7 % | 24 MB |
+| **150 000** | **98.8 %** | **43.0 %** | 36 MB |
+| 250 000 | 99.3 % | 43.3 % | 61 MB |
+
+150 000 as for English: most of the gain, a third of the memory of 250 000. The shipped engine (`--shipped`) loads in 1.31 s and takes 59.5 MB (50.3 MB before with the French list at 50 000 and the lists of 0.10.7). The spelling correction is unchanged (it keeps its dictionary of the first 50 000 lines): right word first 63.9 % and among three 68.7 %, a correction offered 76.3 %, the same as with the shorter list; but a bigger list hides more typos that happen to be words (**2.6 % of the typos against 1.6 %**). The "answers as before" check changed 5 of 4 189 answers (0.1 %).
+
+**Darija dictionary: 104 more words** (`seed/dz-ar-dict.txt`, now 367 words): everyday words of spoken Algerian that the authors know (`كاش`, `هدرة`, `بلاك`, `بالاك`, `هاو`, `تبغي`, `نوصل`, `قالي`, `بغيت`, `رجعت`...), with English and French, not checked by a native speaker. They did not move the coverage of the Algerian comments (88.3 % of their words have a translation, 70.3 % of the distinct ones): the comments are about other things, so this is not a measurement of their use.
+
+**Quick translation window** (Ctrl+Alt+Space): `quick_translate` in `main.rs`, tested on a word (`كتاب`: book, letter, writer, bookmaker, record), a Latin word (`hello`: five Arabic words), Arabic sentences (`Thank you for everything.`) and an English one; a request for French on an Arabic sentence is answered word by word, not with English. **A translator that never answers** (`crates/verba-translate/examples/hang.rs`) gives its answer after 18 seconds, word by word.
+
+**Apps page:** programs found in the Start menu on this PC: 95 with a name and a file (`installed_apps`, Start menu shortcuts, 1.2 s); Microsoft Store programs are not found until they are open, and Windows' own hosts are hidden. Not measured: a PC with many programs.

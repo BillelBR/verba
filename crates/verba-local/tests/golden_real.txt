@@ -653,7 +653,7 @@ en	poss	possible:en|possibly:en|possibility:en
 en	so	some:en|something:en|sorry:en
 -	I would so	some:en|something:en|sorry:en
 en	sou	sounds:en|sound:en|soul:en
--	I would sou	sounds:en|sound:en|sous:fr
+-	I would sou	sounds:en|sound:en|soul:en
 en	soun	sounds:en|sound:en|sounded:en
 -	I would soun	sounds:en|sound:en|sounded:en
 en	la	last:en|later:en|late:en
@@ -2251,7 +2251,7 @@ fr	gr	grand:fr|gros:fr|grande:fr
 fr	gra	grand:fr|grande:fr|grave:fr
 -	I would gra	grand:fr|grab:en|grace:en
 fr	grav	grave:fr|graves:fr|gravité:fr
--	I would grav	grave:fr|gravity:en|graves:en
+-	I would grav	grave:en|gravity:en|graves:en
 fr	ho	homme:fr|hommes:fr|honneur:fr
 fr	hon	honneur:fr|honte:fr|honnête:fr
 fr	honn	honneur:fr|honnête:fr|honnêtement:fr
@@ -2275,7 +2275,7 @@ fr	bo	bon:fr|bonne:fr|bonjour:fr
 -	I would bo	boy:en|bon:fr|both:en
 fr	bon	bonne:fr|bonjour:fr|bonsoir:fr
 -	I would bon	bonne:fr|bonjour:fr|bones:en
-fr	bons	bonsoir:fr|bonshommes:fr
+fr	bons	bonsoir:fr|bonshommes:fr|bonsaï:fr
 -	I would bons	bonsoir:fr|bonsai:en|bonshommes:fr
 fr	ve	veux:fr|veut:fr|venir:fr
 fr	ven	venir:fr|venu:fr|venez:fr
@@ -2668,7 +2668,7 @@ fr	fa	fait:fr|faire:fr|fais:fr
 fr	fai	fait:fr|faire:fr|fais:fr
 fr	fais	faisait:fr|faisais:fr|faisons:fr
 fr	nu	nuit:fr|numéro:fr|nulle:fr
--	I would nu	number:en|nuit:fr|numéro:fr
+-	I would nu	number:en|nuit:fr|nurse:en
 fr	nul	nulle:fr|nuls:fr|nulles:fr
 -	I would nul	nulle:fr|nuls:fr|null:en
 fr	null	nulle:fr|nulles:fr|nullement:fr
@@ -2709,7 +2709,7 @@ fr	blag	blague:fr|blagues:fr|blaguais:fr
 -	I would blag	blague:fr|blagues:fr|blaguais:fr
 fr	au	aussi:fr|autre:fr|aux:fr
 fr	aur	aurais:fr|aurait:fr|aura:fr
-fr	aure	aurez:fr|aurevoir:fr|auréole:fr
+fr	aure	aurez:fr|aurevoir:fr
 fr	co	comme:fr|comment:fr|connais:fr
 -	I would co	come:en|could:en|comme:fr
 fr	con	connais:fr|contre:fr|confiance:fr

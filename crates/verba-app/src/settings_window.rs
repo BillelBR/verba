@@ -494,7 +494,7 @@ fn dictation_page(ui: &mut Ui, s: &mut Settings) {
             let desc = match pack.id {
                 "ar" => "Writes Modern Standard Arabic well enough to correct (about one word in four needs a fix on clear speech); Algerian Darija is not understood. Needs a microphone.",
                 "dz" => "Experimental. Understands Algerian spoken Arabic much better than the Arabic pack, but on real conversations about three words in four still need a fix (Darija has no standard spelling). Needs a microphone.",
-                _ => "Writes English well (about one word in eighteen needs a fix on clear speech). Needs a microphone.",
+                _ => "Writes English well (about one word in seventeen needs a fix on clear speech). Needs a microphone.",
             };
             if ui.button_row(&format!("dict-get-{}", pack.id), &format!("Download the {} pack", pack.title), Some(&format!("{desc} {size} to download, once.")), &format!("Download ({size})"), ButtonStyle::Primary, !busy) {
                 let id = pack.id;

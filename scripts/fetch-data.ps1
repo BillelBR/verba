@@ -28,7 +28,7 @@ New-Item -ItemType Directory -Force $dir | Out-Null
 $base = "https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018"
 # How many lines of each list are kept (the most frequent ones). English and Arabic are longer than French: measured on real text, a longer
 # list finds more rare words (docs/ACCURACY.md, "Size of the lists"). The engine cuts each list again to `list_cap` (crates/verba-local/src/lib.rs).
-$keep = @{ en = 150000; fr = 50000; ar = 300000 }
+$keep = @{ en = 150000; fr = 150000; ar = 300000 }
 $utf8 = New-Object System.Text.UTF8Encoding($false)
 foreach ($lang in "en", "fr", "ar") {
     $out = Join-Path $dir "$lang.txt"

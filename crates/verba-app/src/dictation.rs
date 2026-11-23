@@ -42,6 +42,8 @@ pub struct Pack {
     pub language: &'static str,
     /// The folder under `%APPDATA%\\Verba\\dictation`.
     pub folder: &'static str,
+    /// Folders of an earlier form of this pack (the fp16 files of 0.12.0, twice as big): taken off the disk when this one is installed or removed.
+    pub legacy: &'static [&'static str],
     pub files: &'static [PackFile],
 }
 
@@ -51,37 +53,38 @@ impl Pack {
     }
 }
 
-/// The packs. The files are pinned to a revision of their repository, with the size and the SHA-256 measured on the copies used for
-/// docs/ACCURACY.md (`scripts/` has no tool for it: download, hash, paste; the first file of each pack is the smallest, so a wrong address fails fast).
-/// Arabic: `Systran/faster-whisper-small` (OpenAI Whisper small, multilingual, written for Arabic). English: `Systran/faster-whisper-small.en`
-/// (Whisper small trained on English alone). Both MIT; the preprocessing settings come from `openai/whisper-small` (Apache-2.0).
-/// Algerian Darija: Whisper small with the adapter EL-ANKA-Lite merged in and converted to int8, built by `.github/workflows/dictation-pack.yml` and
-/// published as the files of the release `dictation-darija-v1` of this repository (it also writes Whisper's language "ar").
+/// The packs: each is Whisper small converted to CTranslate2 with int8 weights (about 250 MB), built by `.github/workflows/dictation-pack.yml` and published as
+/// the files of a release of this repository (`dictation-ar-v1`, `dictation-en-v1`, `dictation-darija-v1`). The size and the SHA-256 of each file are those of
+/// its `SHA256SUMS.txt`; Verba checks them after the download. Arabic: OpenAI Whisper small (multilingual, written for Arabic). English: Whisper small.en.
+/// Algerian Darija: Whisper small with the adapter EL-ANKA-Lite merged in (it also writes Whisper's language "ar"). Until 0.12.0 Arabic and English were
+/// the fp16 files of Systran's repositories (486 MB each; `legacy` names their folders).
 pub static PACKS: &[Pack] = &[
     Pack {
         id: "ar",
         title: "Arabic",
         language: "ar",
-        folder: "whisper-small",
+        folder: "whisper-small-ar-int8",
+        legacy: &["whisper-small"],
         files: &[
-            PackFile { name: "config.json", url: "https://huggingface.co/Systran/faster-whisper-small/resolve/536b0662742c02347bc0e980a01041f333bce120/config.json", bytes: 2370, sha256: "b55496ac7940a7ae47d2c01eab40edfd8701feec1229d9cce3b40014383fb828" },
-            PackFile { name: "preprocessor_config.json", url: "https://huggingface.co/openai/whisper-small/resolve/973afd24965f72e36ca33b3055d56a652f456b4d/preprocessor_config.json", bytes: 184990, sha256: "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666" },
-            PackFile { name: "tokenizer.json", url: "https://huggingface.co/Systran/faster-whisper-small/resolve/536b0662742c02347bc0e980a01041f333bce120/tokenizer.json", bytes: 2203239, sha256: "fb7b63191e9bb045082c79fd742a3106a12c99513ab30df4a0d47fa6cb6fd0ab" },
-            PackFile { name: "vocabulary.txt", url: "https://huggingface.co/Systran/faster-whisper-small/resolve/536b0662742c02347bc0e980a01041f333bce120/vocabulary.txt", bytes: 459861, sha256: "34ce3fe1c5041027b3f8d42912270993f986dbc4bb34cf27f951e34a1e453913" },
-            PackFile { name: "model.bin", url: "https://huggingface.co/Systran/faster-whisper-small/resolve/536b0662742c02347bc0e980a01041f333bce120/model.bin", bytes: 483546902, sha256: "3e305921506d8872816023e4c273e75d2419fb89b24da97b4fe7bce14170d671" },
+            PackFile { name: "config.json", url: "https://github.com/BillelBR/verba/releases/download/dictation-ar-v1/config.json", bytes: 2370, sha256: "b55496ac7940a7ae47d2c01eab40edfd8701feec1229d9cce3b40014383fb828" },
+            PackFile { name: "preprocessor_config.json", url: "https://github.com/BillelBR/verba/releases/download/dictation-ar-v1/preprocessor_config.json", bytes: 184990, sha256: "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666" },
+            PackFile { name: "tokenizer.json", url: "https://github.com/BillelBR/verba/releases/download/dictation-ar-v1/tokenizer.json", bytes: 2480466, sha256: "27fc476bfe7f17299480be2273fc0608e4d5a99aba2ab5dec5374b4482d1a566" },
+            PackFile { name: "vocabulary.json", url: "https://github.com/BillelBR/verba/releases/download/dictation-ar-v1/vocabulary.json", bytes: 1068103, sha256: "5ad28279db5e546349708b9a74736e2c018737ac5a600f1048f1f26c99b85b47" },
+            PackFile { name: "model.bin", url: "https://github.com/BillelBR/verba/releases/download/dictation-ar-v1/model.bin", bytes: 248203797, sha256: "ca732cb1379efc49417d028465f543d83a39de2c61f3027678de103dc404ce73" },
         ],
     },
     Pack {
         id: "en",
         title: "English",
         language: "en",
-        folder: "whisper-small-en",
+        folder: "whisper-small-en-int8",
+        legacy: &["whisper-small-en"],
         files: &[
-            PackFile { name: "config.json", url: "https://huggingface.co/Systran/faster-whisper-small.en/resolve/d1d751a5f8271d482d14ca55d9e2deeebbae577f/config.json", bytes: 2657, sha256: "666a9605530ac1f61fa8177f3702b4dacec9966749e42610839fcc32661d5fae" },
-            PackFile { name: "preprocessor_config.json", url: "https://huggingface.co/openai/whisper-small.en/resolve/e8727524f962ee844a7319d92be39ac1bd25655a/preprocessor_config.json", bytes: 184990, sha256: "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666" },
-            PackFile { name: "tokenizer.json", url: "https://huggingface.co/Systran/faster-whisper-small.en/resolve/d1d751a5f8271d482d14ca55d9e2deeebbae577f/tokenizer.json", bytes: 2128466, sha256: "929c5252409436dce1b38a75d1abbcb5e132d170d8e324e4e04ed915fa2d22df" },
-            PackFile { name: "vocabulary.txt", url: "https://huggingface.co/Systran/faster-whisper-small.en/resolve/d1d751a5f8271d482d14ca55d9e2deeebbae577f/vocabulary.txt", bytes: 422309, sha256: "ff77588746d3a2595d32ab5b69ffd7b95ce2441ac57533cb66fc3eb575a115cf" },
-            PackFile { name: "model.bin", url: "https://huggingface.co/Systran/faster-whisper-small.en/resolve/d1d751a5f8271d482d14ca55d9e2deeebbae577f/model.bin", bytes: 483545366, sha256: "62b2a45b05ee59acb4a5341b33ee35e041395d378d418a18acfe4c9e768ee37a" },
+            PackFile { name: "config.json", url: "https://github.com/BillelBR/verba/releases/download/dictation-en-v1/config.json", bytes: 1577, sha256: "915c0b430e7c2fa2d21b7f02ce020968329b80ad83769c57ab303b97feac755d" },
+            PackFile { name: "preprocessor_config.json", url: "https://github.com/BillelBR/verba/releases/download/dictation-en-v1/preprocessor_config.json", bytes: 184990, sha256: "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666" },
+            PackFile { name: "tokenizer.json", url: "https://github.com/BillelBR/verba/releases/download/dictation-en-v1/tokenizer.json", bytes: 2405679, sha256: "5eb60cec1e77aeeb6869a2bb5a8e01a84c3fe5d072d75369343021fe6f5310d0" },
+            PackFile { name: "vocabulary.json", url: "https://github.com/BillelBR/verba/releases/download/dictation-en-v1/vocabulary.json", bytes: 825480, sha256: "4dadfee7c4a871665f65c06037f5f5ec893fb2d7f5eb4cf11063618e31dbe11a" },
+            PackFile { name: "model.bin", url: "https://github.com/BillelBR/verba/releases/download/dictation-en-v1/model.bin", bytes: 248203025, sha256: "d543950bad3a1e63b5bea4defe4d1cf0df707b5483ea4078b51c5ae9f5826492" },
         ],
     },
     Pack {
@@ -89,6 +92,7 @@ pub static PACKS: &[Pack] = &[
         title: "Algerian Darija",
         language: "ar",
         folder: "whisper-small-darija",
+        legacy: &[],
         files: &[
             PackFile { name: "config.json", url: "https://github.com/BillelBR/verba/releases/download/dictation-darija-v1/config.json", bytes: 2370, sha256: "b55496ac7940a7ae47d2c01eab40edfd8701feec1229d9cce3b40014383fb828" },
             PackFile { name: "preprocessor_config.json", url: "https://github.com/BillelBR/verba/releases/download/dictation-darija-v1/preprocessor_config.json", bytes: 184990, sha256: "9b5cd03a36fbb8a627c64d98a5b5b126ead95a77720723944487311f0110b666" },
@@ -118,10 +122,20 @@ pub fn installed(pack: &Pack) -> bool {
     dir.join(".verified").is_file() && pack.files.iter().all(|f| std::fs::metadata(dir.join(f.name)).is_ok_and(|m| m.len() == f.bytes))
 }
 
-/// Takes the pack off the disk.
+/// Takes the pack off the disk (and the files of an earlier form of it).
 pub fn remove(pack: &Pack) {
     if let Some(dir) = pack_dir(pack) {
         let _ = std::fs::remove_dir_all(dir);
+    }
+    remove_legacy(pack);
+}
+
+/// Takes the folders of the earlier forms of a pack off the disk.
+fn remove_legacy(pack: &Pack) {
+    if let Some(root) = root() {
+        for old in pack.legacy {
+            let _ = std::fs::remove_dir_all(root.join(old));
+        }
     }
 }
 
@@ -238,6 +252,8 @@ pub fn start_download(pack: &'static Pack, notify: impl Fn() + Send + 'static) -
         match result {
             Ok(()) => {
                 let _ = std::fs::write(dir.join(".verified"), "Every file of this pack had the size and the SHA-256 it should have.\n");
+                // the earlier, bigger form of this pack is no use any more
+                remove_legacy(pack);
                 if let Ok(mut p) = PROGRESS.lock() {
                     *p = None;
                 }
@@ -649,15 +665,9 @@ mod tests {
             assert!(p.files.iter().any(|f| f.name == "model.bin") && p.files.iter().any(|f| f.name == "preprocessor_config.json"), "{}", p.id);
             for f in p.files {
                 assert!(f.url.ends_with(f.name), "{}", f.url);
-                if p.id == "dz" {
-                    // the files of a release of this repository, named by its tag
-                    assert!(f.url.starts_with("https://github.com/BillelBR/verba/releases/download/dictation-darija-v"), "{}", f.url);
-                } else {
-                    // pinned to a revision (40 hex digits), never to `main`
-                    assert!(f.url.starts_with("https://huggingface.co/"), "{}", f.url);
-                    let rev = f.url.split("/resolve/").nth(1).and_then(|r| r.split('/').next()).unwrap_or("");
-                    assert!(rev.len() == 40 && rev.chars().all(|c| c.is_ascii_hexdigit()), "{}", f.url);
-                }
+                // the files of a release of this repository, named by the pack's own tag
+                let tag = format!("https://github.com/BillelBR/verba/releases/download/dictation-{}-v", if p.id == "dz" { "darija" } else { p.id });
+                assert!(f.url.starts_with(&tag), "{}", f.url);
                 assert!(f.sha256.len() == 64 && f.sha256.chars().all(|c| c.is_ascii_hexdigit()), "{}", f.name);
                 assert!(f.bytes > 0);
             }
@@ -666,6 +676,12 @@ mod tests {
         for p in PACKS {
             let mb = p.total_bytes() / 1_000_000;
             assert!((100..700).contains(&mb), "{} is {mb} MB", p.id);
+        }
+        // the earlier forms of the Arabic and English packs are known and are not the folder of any pack
+        for p in PACKS {
+            for old in p.legacy {
+                assert!(PACKS.iter().all(|q| q.folder != *old), "{old}");
+            }
         }
         // two packs may share a folder in no case
         let mut folders: Vec<&str> = PACKS.iter().map(|p| p.folder).collect();
@@ -690,7 +706,7 @@ mod tests {
     fn a_pack_is_installed_only_when_every_file_is_there_whole_and_was_verified() {
         // a small pack of our own in a temporary folder
         static FILES: &[PackFile] = &[PackFile { name: "a.bin", url: "https://example.org/x/resolve/0000000000000000000000000000000000000000/a.bin", bytes: 3, sha256: "" }];
-        static PACK: Pack = Pack { id: "xx", title: "Test", language: "xx", folder: "verba-test-pack", files: FILES };
+        static PACK: Pack = Pack { id: "xx", title: "Test", language: "xx", folder: "verba-test-pack", legacy: &[], files: FILES };
         let tmp = std::env::temp_dir().join(format!("verba-appdata-{}", std::process::id()));
         std::fs::create_dir_all(&tmp).unwrap();
         // `Settings::dir` reads APPDATA: this test points it at the temporary folder (the other tests do not read it)

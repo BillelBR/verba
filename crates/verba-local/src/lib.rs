@@ -78,11 +78,11 @@ struct Entry {
 
 /// How many words of a language's list the suggestions use (the most frequent ones, after the cleaning). English and Arabic have more than
 /// French: measured on real text (`examples/realtext_accuracy.rs`, docs/ACCURACY.md), a longer list finds more rare words (Arabic most;
-/// English 100 000 and Arabic 150 000 were the sizes of 0.10.5, 150 000 and 300 000 are those of 0.10.7), and the spelling correction does not change, because
+/// English 100 000 and Arabic 150 000 were the sizes of 0.10.5, 150 000 and 300 000 are those of 0.10.7; French was 50 000 until 0.12.1 and is 150 000 since), and the spelling correction does not change, because
 /// it keeps its dictionary of 50 000 lines (`WordList::spell_min_count`).
 pub const fn list_cap(lang: Lang) -> usize {
     match lang {
-        Lang::En => 150_000,
+        Lang::En | Lang::Fr => 150_000,
         Lang::Ar => 300_000,
         _ => 50_000,
     }

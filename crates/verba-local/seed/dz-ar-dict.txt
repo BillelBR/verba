@@ -530,3 +530,211 @@ ar>en	هدرت	I talked
 ar>fr	هدرت	j'ai parlé
 ar>en	حبيت	I liked; I wanted
 ar>fr	حبيت	j'ai aimé; j'ai voulu
+ar>en	كاش	some; any
+ar>fr	كاش	quelque; un
+ar>en	حاجة	thing; something
+ar>fr	حاجة	chose; quelque chose
+ar>en	هدرة	talk; word
+ar>fr	هدرة	parole; discussion
+ar>en	بلاصة	place
+ar>fr	بلاصة	endroit; place
+ar>en	خاوة	brothers
+ar>fr	خاوة	frères
+ar>en	يما	mom
+ar>fr	يما	maman
+ar>en	عمي	uncle; sir (respectful)
+ar>fr	عمي	oncle; monsieur
+ar>en	خالتي	my aunt
+ar>fr	خالتي	ma tante
+ar>en	وليدات	kids
+ar>fr	وليدات	enfants
+ar>en	بنية	girl
+ar>fr	بنية	fille
+ar>en	شاب	young man; guy
+ar>fr	شاب	jeune homme; mec
+ar>en	راجل	man; husband
+ar>fr	راجل	homme; mari
+ar>en	مرا	woman; wife
+ar>fr	مرا	femme; épouse
+ar>en	صاحبي	my friend
+ar>fr	صاحبي	mon ami
+ar>en	صحابي	my friends
+ar>fr	صحابي	mes amis
+ar>en	جاري	my neighbour
+ar>fr	جاري	mon voisin
+ar>en	فلوس	money
+ar>fr	فلوس	argent
+ar>en	دراهم	money
+ar>fr	دراهم	argent
+ar>en	سيمانة	week
+ar>fr	سيمانة	semaine
+ar>en	لبارح	yesterday
+ar>fr	لبارح	hier
+ar>en	دوك	now
+ar>fr	دوك	maintenant
+ar>en	مبعد	later; afterwards
+ar>fr	مبعد	plus tard; après
+ar>en	مبسوط	happy; glad
+ar>fr	مبسوط	content; heureux
+ar>en	زعفان	angry; upset
+ar>fr	زعفان	fâché; énervé
+ar>en	عيان	tired; sick
+ar>fr	عيان	fatigué; malade
+ar>en	غي	only; just
+ar>fr	غي	seulement; juste
+ar>en	كيما	like; as
+ar>fr	كيما	comme
+ar>en	زعما	supposedly; as if
+ar>fr	زعما	soi-disant; genre
+ar>en	بلاك	maybe
+ar>fr	بلاك	peut-être
+ar>en	تما	there
+ar>fr	تما	là-bas
+ar>en	قدام	in front; ahead
+ar>fr	قدام	devant; en avant
+ar>en	ورا	behind; after
+ar>fr	ورا	derrière; après
+ar>en	حدا	next to; beside
+ar>fr	حدا	à côté de
+ar>en	بالاك	careful; watch out
+ar>fr	بالاك	attention
+ar>en	واه	yes
+ar>fr	واه	oui
+ar>en	هاكا	like this; that way
+ar>fr	هاكا	comme ça
+ar>en	هكا	like this; that way
+ar>fr	هكا	comme ça
+ar>en	هاك	here you are; take it
+ar>fr	هاك	tiens; voilà
+ar>en	هاو	here is; there he is
+ar>fr	هاو	voici; le voilà
+ar>en	زيد	more; add; again
+ar>fr	زيد	encore; ajoute
+ar>en	كمل	finish; continue
+ar>fr	كمل	finis; continue
+ar>en	استنى	wait
+ar>fr	استنى	attends
+ar>en	روح	go (imperative); soul
+ar>fr	روح	va; âme
+ar>en	دير	do; make; put
+ar>fr	دير	fais; mets
+ar>en	جيب	bring; get
+ar>fr	جيب	apporte
+ar>en	خلي	leave; let
+ar>fr	خلي	laisse
+ar>en	حط	put
+ar>fr	حط	mets
+ar>en	تبغي	you want
+ar>fr	تبغي	tu veux
+ar>en	يبغي	he wants
+ar>fr	يبغي	il veut
+ar>en	نخرج	I go out
+ar>fr	نخرج	je sors
+ar>en	ندخل	I enter
+ar>fr	ندخل	j'entre
+ar>en	نوصل	I arrive
+ar>fr	نوصل	j'arrive
+ar>en	نرجع	I come back
+ar>fr	نرجع	je reviens
+ar>en	نبدا	I start
+ar>fr	نبدا	je commence
+ar>en	نكمل	I finish; I continue
+ar>fr	نكمل	je finis; je continue
+ar>en	نسمع	I hear; I listen
+ar>fr	نسمع	j'entends; j'écoute
+ar>en	نفهم	I understand
+ar>fr	نفهم	je comprends
+ar>en	نعاون	I help
+ar>fr	نعاون	j'aide
+ar>en	نلقى	I find
+ar>fr	نلقى	je trouve
+ar>en	نخاف	I am afraid
+ar>fr	نخاف	j'ai peur
+ar>en	نضحك	I laugh
+ar>fr	نضحك	je ris
+ar>en	نلعب	I play
+ar>fr	نلعب	je joue
+ar>en	نسافر	I travel
+ar>fr	نسافر	je voyage
+ar>en	نتلاقاو	we meet
+ar>fr	نتلاقاو	nous nous retrouvons
+ar>en	نعرفك	I know you
+ar>fr	نعرفك	je te connais
+ar>en	تقدر	you can
+ar>fr	تقدر	tu peux
+ar>en	تحب	you like; you love
+ar>fr	تحب	tu aimes
+ar>en	تخدم	you work
+ar>fr	تخدم	tu travailles
+ar>en	تهدر	you talk
+ar>fr	تهدر	tu parles
+ar>en	تجي	you come
+ar>fr	تجي	tu viens
+ar>en	تروح	you go
+ar>fr	تروح	tu vas
+ar>en	تشوف	you see
+ar>fr	تشوف	tu vois
+ar>en	تعرف	you know
+ar>fr	تعرف	tu sais
+ar>en	يجي	he comes
+ar>fr	يجي	il vient
+ar>en	يروح	he goes
+ar>fr	يروح	il va
+ar>en	يخدم	he works
+ar>fr	يخدم	il travaille
+ar>en	يهدر	he talks
+ar>fr	يهدر	il parle
+ar>en	يقدر	he can
+ar>fr	يقدر	il peut
+ar>en	يعرف	he knows
+ar>fr	يعرف	il sait
+ar>en	قالي	he told me
+ar>fr	قالي	il m'a dit
+ar>en	قاللي	he told me
+ar>fr	قاللي	il m'a dit
+ar>en	جاني	he came to me
+ar>fr	جاني	il est venu chez moi
+ar>en	عطاني	he gave me
+ar>fr	عطاني	il m'a donné
+ar>en	شفتو	I saw him; you saw (pl.)
+ar>fr	شفتو	je l'ai vu; vous avez vu
+ar>en	شفتك	I saw you
+ar>fr	شفتك	je t'ai vu
+ar>en	كنت	I was; you were
+ar>fr	كنت	j'étais; tu étais
+ar>en	كان	he was; there was
+ar>fr	كان	il était; il y avait
+ar>en	راح	he went; he is gone
+ar>fr	راح	il est parti
+ar>en	جا	he came
+ar>fr	جا	il est venu
+ar>en	دار	he did; house
+ar>fr	دار	il a fait; maison
+ar>en	قعد	he stayed; he sat
+ar>fr	قعد	il est resté; il s'est assis
+ar>en	بغيت	I wanted
+ar>fr	بغيت	j'ai voulu
+ar>en	قدرت	I could
+ar>fr	قدرت	j'ai pu
+ar>en	فهمت	I understood
+ar>fr	فهمت	j'ai compris
+ar>en	سمعت	I heard
+ar>fr	سمعت	j'ai entendu
+ar>en	لقيت	I found
+ar>fr	لقيت	j'ai trouvé
+ar>en	نسيت	I forgot
+ar>fr	نسيت	j'ai oublié
+ar>en	تعبت	I am tired; I got tired
+ar>fr	تعبت	je suis fatigué
+ar>en	فرحت	I was happy
+ar>fr	فرحت	j'étais content
+ar>en	مشيت	I went
+ar>fr	مشيت	je suis allé
+ar>en	وصلت	I arrived
+ar>fr	وصلت	je suis arrivé
+ar>en	رجعت	I came back
+ar>fr	رجعت	je suis revenu
+ar>en	خرجت	I went out
+ar>fr	خرجت	je suis sorti
+ar>en	دخلت	I entered
+ar>fr	دخلت	je suis entré

@@ -1,14 +1,14 @@
 ﻿; Inno Setup 6.3 or later script for Verba.
 ;
 ; Build it with scripts\build-installer.ps1 (which passes the version), or by hand:
-;     ISCC.exe /DAppVersion=0.14.0 installer\verba.iss
+;     ISCC.exe /DAppVersion=0.14.1 installer\verba.iss
 ; Output: dist\Verba-Setup-<version>.exe
 ;
 ; Per-user by default (no administrator rights needed); the "dialog" override lets the user choose
 ; to install for all users instead.
 
 #ifndef AppVersion
-  #define AppVersion "0.14.0"
+  #define AppVersion "0.14.1"
 #endif
 
 [Setup]

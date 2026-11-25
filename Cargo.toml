@@ -8,7 +8,7 @@ default-members = ["crates/verba-app", "crates/verba-core", "crates/verba-local"
 exclude = ["spike"]
 
 [workspace.package]
-version = "0.14.0"
+version = "0.14.1"
 edition = "2024"
 license = "PolyForm-Noncommercial-1.0.0"
 repository = "https://github.com/BillelBR/verba"

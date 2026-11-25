@@ -12,6 +12,9 @@ use windows::Win32::Globalization::{GetLocaleInfoW, LOCALE_SENGLISHLANGUAGENAME}
 pub const SHIFT: u8 = 1;
 /// AltGr (Ctrl+Alt) held with the key (the same number as `verba_local::wrongkeys::ALTGR`).
 pub const ALTGR: u8 = 2;
+/// Caps Lock on, no Shift: what the key gives while the light is on. On a French keyboard it is a shift lock (the digit row gives digits, `;` gives `.`),
+/// on an English one it only turns the letters into capitals. It is listed only for the keys where it changes what the key gives.
+pub const CAPS: u8 = 4;
 
 /// One installed layout and what its keys give.
 #[derive(Clone, Debug)]
@@ -53,11 +56,12 @@ fn name_of(hkl: HKL) -> String {
     format!("{language} {layout_id:04X}{lang_id:04X}")
 }
 
-/// What the keys of one layout give: the plain key, with Shift, with AltGr, with both. A dead key (the French circumflex) gives its own
-/// character. A key that gives a control character (Ctrl+Alt on a layout without AltGr) or nothing is left out.
+/// What the keys of one layout give: the plain key, with Shift, with AltGr, with both, and with Caps Lock on (only where that differs from the
+/// plain key). A dead key (the French circumflex) gives its own character. A key that gives a control character (Ctrl+Alt on a layout without
+/// AltGr) or nothing is left out.
 pub fn keys_of(hkl: HKL) -> Vec<(u16, u8, String)> {
     let mut out = Vec::new();
-    for mods in [0, SHIFT, ALTGR, SHIFT | ALTGR] {
+    for mods in [0, SHIFT, ALTGR, SHIFT | ALTGR, CAPS] {
         for scan in scan_codes() {
             let vk = unsafe { MapVirtualKeyExW(scan as u32, MAPVK_VSC_TO_VK_EX, Some(hkl)) };
             if vk == 0 {
@@ -71,6 +75,9 @@ pub fn keys_of(hkl: HKL) -> Vec<(u16, u8, String)> {
                 state[0x11] = 0x80; // VK_CONTROL
                 state[0x12] = 0x80; // VK_MENU
             }
+            if mods & CAPS != 0 {
+                state[0x14] = 0x01; // VK_CAPITAL, on
+            }
             let mut buf = [0u16; 8];
             let n = unsafe { ToUnicodeEx(vk, scan as u32, &state, &mut buf, 4, Some(hkl)) };
             // n < 0: a dead key, whose own character is in the buffer
@@ -80,6 +87,10 @@ pub fn keys_of(hkl: HKL) -> Vec<(u16, u8, String)> {
             }
             let text = String::from_utf16_lossy(&buf[..len]);
             if !text.chars().any(char::is_control) {
+                // Caps Lock matters only where it changes the key
+                if mods == CAPS && out.iter().any(|(s, m, t)| *s == scan && *m == 0 && *t == text) {
+                    continue;
+                }
                 out.push((scan, mods, text));
             }
         }

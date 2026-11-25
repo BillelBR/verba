@@ -51,6 +51,16 @@ impl KeyMap {
         self.longest = self.longest.max(text.chars().count());
     }
 
+    /// Tells that, with Caps Lock on, the key `scan` gives `text` (and no Shift held). The text is then read as that plain key: a capital letter, or on a
+    /// French keyboard a `.` that is the `;` key, came from the key without Shift. It replaces what the same text was before (the key with Shift).
+    pub fn insert_caps(&mut self, scan: u16, text: &str) {
+        if text.is_empty() || text.chars().any(char::is_control) {
+            return;
+        }
+        self.by_text.insert(text.to_string(), Key { scan, mods: 0 });
+        self.longest = self.longest.max(text.chars().count());
+    }
+
     /// How unlikely it is that `text` was typed on this layout: a character that no key gives costs 2, one that needs AltGr costs 1
     /// (people rarely type with it). Spaces and line breaks are free. A text typed on the English keyboard has `[`, `]` and `;` that the
     /// French layout only gives with AltGr or not at all, and a text typed on the French one has `ù` and `è` that the English layout lacks.

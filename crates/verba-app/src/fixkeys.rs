@@ -50,6 +50,40 @@ pub fn layouts_from(installed: &[InstalledLayout]) -> Vec<Layout> {
         .collect()
 }
 
+/// The same tables for text typed with Caps Lock on: a capital letter (or, on a French keyboard, a `.` that is the `;` key) is read as the key
+/// without Shift, so the other layout gives its plain letter, not the shifted one (a diacritic, a bracket).
+pub fn caps_layouts_from(installed: &[InstalledLayout]) -> Vec<Layout> {
+    use verba_win::layouts::{CAPS, SHIFT};
+    installed
+        .iter()
+        .filter_map(|l| {
+            let lang = l.lang?;
+            let mut map = KeyMap::new();
+            for (scan, mods, text) in l.keys.iter().filter(|(_, m, _)| *m != CAPS) {
+                map.insert(Key { scan: *scan, mods: *mods }, text);
+            }
+            for (scan, _, text) in l.keys.iter().filter(|(_, m, _)| *m == CAPS) {
+                map.insert_caps(*scan, text);
+            }
+            // a layout whose Caps Lock only changes letters says nothing for them: its capitals are the keys with Shift, plain while the light is on
+            for (scan, _, text) in l.keys.iter().filter(|(_, m, _)| *m == SHIFT) {
+                let capital_of_plain = l.keys.iter().any(|(s, m, t)| *s == *scan && *m == 0 && t.to_uppercase() == *text && t != text);
+                let has_caps_entry = l.keys.iter().any(|(s, m, _)| *s == *scan && *m == CAPS);
+                if capital_of_plain && !has_caps_entry {
+                    map.insert_caps(*scan, text);
+                }
+            }
+            (!map.is_empty()).then(|| Layout { name: l.name.clone(), lang, map })
+        })
+        .collect()
+}
+
+/// Whether the letters of `text` are all capitals (at least two Latin letters): typed with Caps Lock on, most likely.
+fn all_capitals(text: &str) -> bool {
+    let letters: Vec<char> = text.chars().filter(|c| c.is_alphabetic() && !verba_core::is_arabic(*c)).collect();
+    letters.len() >= 2 && letters.iter().all(|c| c.is_uppercase())
+}
+
 /// The language the user wants a text in when no reading is made of real words (a name, a dialect word that the lists lack): Arabic.
 const LAST_RESORT: Lang = Lang::Ar;
 
@@ -69,6 +103,23 @@ pub fn offer(text: &str, installed: &[InstalledLayout], engine: &LocalEngine, ac
         };
     }
     let known = |lang: Lang, word: &str| engine.is_word_of(lang, word);
+    // text in capitals was most likely typed with Caps Lock on: read it as the plain keys first (with Shift every letter would come out as a diacritic or a bracket)
+    if all_capitals(text) {
+        let caps = caps_layouts_from(installed);
+        let mut by_caps = wrongkeys::candidates(text, &caps, active, &known);
+        if by_caps.is_empty() && arabizi.is_none() && !text.chars().any(verba_core::is_arabic) {
+            by_caps.extend(wrongkeys::forced(text, &caps, active, LAST_RESORT, &known));
+        }
+        if !by_caps.is_empty() {
+            let mut readings: Vec<Reading> = arabizi.into_iter().collect();
+            readings.extend(by_caps.into_iter().map(|c| Reading {
+                label: format!("{} \u{2192} {}", caps[c.from].lang.code().to_uppercase(), caps[c.to].lang.code().to_uppercase()),
+                lang: caps[c.to].lang,
+                text: c.text,
+            }));
+            return Outcome::Found(readings);
+        }
+    }
     let mut found = wrongkeys::candidates(text, &layouts, active, &known);
     if found.is_empty() && arabizi.is_none() && text.chars().any(char::is_alphabetic) && !text.chars().any(verba_core::is_arabic) {
         // letters of another script, and no reading made of real words: the user wants Arabic, so give it, words or not
@@ -472,5 +523,51 @@ mod tests {
     fn the_modifier_numbers_of_windows_and_of_the_engine_are_the_same() {
         assert_eq!(verba_win::layouts::SHIFT, wrongkeys::SHIFT);
         assert_eq!(verba_win::layouts::ALTGR, wrongkeys::ALTGR);
+    }
+
+    /// A layout with a Shift row (the capitals of `plain`), the keys that Caps Lock changes, (scan, text), and more plain keys.
+    fn layout_with_shift(lang: Lang, plain: &str, caps: &[(u16, &str)], extra_plain: &[(u16, &str)]) -> InstalledLayout {
+        let mut l = layout(Some(lang), plain);
+        for (i, c) in plain.chars().enumerate() {
+            l.keys.push((0x10 + i as u16, verba_win::layouts::SHIFT, c.to_uppercase().collect()));
+        }
+        for (scan, text) in extra_plain {
+            l.keys.push((*scan, 0, text.to_string()));
+        }
+        for (scan, text) in caps {
+            l.keys.push((*scan, verba_win::layouts::CAPS, text.to_string()));
+        }
+        l
+    }
+
+    #[test]
+    fn text_in_capitals_is_read_as_the_plain_keys() {
+        // Arabic typed on an English keyboard with Caps Lock on: `QWERT YTUQ`, not the shifted layer of the Arabic keys
+        let mut ar = layout(Some(Lang::Ar), AR);
+        ar.keys.push((0x10, verba_win::layouts::SHIFT, "\u{64E}".to_string())); // a diacritic on Shift+key
+        let installed = vec![layout_with_shift(Lang::En, EN, &[], &[]), ar];
+        match offer("QWERT YTUQ", &installed, &engine(), None) {
+            Outcome::Found(found) => assert_eq!((found[0].text.as_str(), found[0].label.as_str()), ("مرحبا عالم", "EN \u{2192} AR")),
+            other => panic!("{other:?}"),
+        }
+        assert!(!all_capitals("Qwert"));
+        assert!(all_capitals("QWERT"));
+        assert!(!all_capitals("Q 12"), "one letter is not enough to say");
+    }
+
+    #[test]
+    fn on_a_french_keyboard_caps_lock_is_a_shift_lock() {
+        // the key 0x32 gives `;` and with Caps Lock `.`; on the Arabic layout it gives waw: a `.` of French capitals is waw
+        let fr = layout_with_shift(Lang::Fr, EN, &[(0x32, ".")], &[(0x32, ";")]);
+        let ar = layout_with_shift(Lang::Ar, AR, &[], &[(0x32, "و")]);
+        let installed = vec![fr, ar];
+        let caps = caps_layouts_from(&installed);
+        let (f, a) = (&caps[0], &caps[1]);
+        assert_eq!(wrongkeys::convert(".", &f.map, &a.map), "و");
+        // and the capitals are the plain keys
+        assert_eq!(wrongkeys::convert("Q", &f.map, &a.map), "م");
+        // without Caps Lock the same `.` is not a key of the French layout at all
+        let plain = layouts_from(&installed);
+        assert_eq!(wrongkeys::convert(".", &plain[0].map, &plain[1].map), ".");
     }
 }
